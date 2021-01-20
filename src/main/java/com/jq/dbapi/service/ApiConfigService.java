@@ -42,4 +42,8 @@ public class ApiConfigService {
     public List<ApiConfig> getAll() {
         return apiConfigMapper.selectList(null);
     }
+
+    public ApiConfig getConfig(String path) {
+       return  apiConfigMapper.selectByPath(path);
+    }
 }
