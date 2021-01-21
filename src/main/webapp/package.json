@@ -1,5 +1,5 @@
 {
-  "name": "kafkaui",
+  "name": "dbApi",
   "version": "0.1.0",
   "private": true,
   "scripts": {
