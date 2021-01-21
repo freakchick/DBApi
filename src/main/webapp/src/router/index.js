@@ -8,6 +8,7 @@ import time from '../components/tool/time'
 
 import datasource from '../components/datasource/datasource'
 import api from '../components/api/api'
+import apiAdd from '../components/api/add'
 
 Vue.use(VueRouter)
 
@@ -20,7 +21,8 @@ const routes = [
             {path: '/tool/time', name: 'time', component: time},
 
             {path: '/datasource', name: 'datasource', component: datasource},
-            {path: '/api', name: 'api', component: api}
+            {path: '/api', name: 'api', component: api},
+            {path: '/api/add', name: 'apiAdd', component: apiAdd}
         ]
     }
 ]

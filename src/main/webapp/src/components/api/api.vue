@@ -1,5 +1,8 @@
 <template>
   <div>
+    <router-link to='/api/add'>
+      <button>创建api</button>
+    </router-link>
     <el-button @click="dialogVisible = true">创建api</el-button>
 
     <!--    <el-table :data="tableData">-->
@@ -15,11 +18,6 @@
     <!--    </el-table>-->
 
     <el-dialog title="添加api" :visible.sync="dialogVisible">
-
-
-      <el-input type="textarea" v-model="sql" placeholder="请输入sql"></el-input>
-      <el-button>解析参数</el-button>
-
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
