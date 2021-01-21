@@ -7,7 +7,7 @@ import VueAxios from 'vue-axios'
 import qs from 'qs'
 
 import VueClipboard from 'vue-clipboard2'
-import store from './store'
+// import store from './store'
 
 Vue.config.productionTip = false
 
@@ -38,6 +38,6 @@ axios.interceptors.request.use(config => {
 
 new Vue({
     router,
-    store,
+    // store,
     render: h => h(App)
 }).$mount('#app')

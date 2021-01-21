@@ -13,6 +13,17 @@
             active-text-color="#01293b"
             router>
 
+          <el-menu-item index="/datasource">
+            <template slot="title">
+              <span class="">数据源</span>
+            </template>
+          </el-menu-item>
+
+          <el-submenu index="2">
+            <template slot="title">
+              <span class="">api</span>
+            </template>
+          </el-submenu>
           <el-submenu index="8">
             <template slot="title">
               <span class="">工具</span>
