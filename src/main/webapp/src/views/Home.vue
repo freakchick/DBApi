@@ -19,18 +19,18 @@
             </template>
           </el-menu-item>
 
-          <el-submenu index="2">
+          <el-menu-item index="/api">
             <template slot="title">
               <span class="">api</span>
             </template>
-          </el-submenu>
-          <el-submenu index="8">
-            <template slot="title">
-              <span class="">工具</span>
-            </template>
-            <el-menu-item index="/tool/json">JSON</el-menu-item>
-            <el-menu-item index="/tool/time">时间戳</el-menu-item>
-          </el-submenu>
+          </el-menu-item>
+<!--          <el-submenu index="8">-->
+<!--            <template slot="title">-->
+<!--              <span class="">工具</span>-->
+<!--            </template>-->
+<!--            <el-menu-item index="/tool/json">JSON</el-menu-item>-->
+<!--            <el-menu-item index="/tool/time">时间戳</el-menu-item>-->
+<!--          </el-submenu>-->
           <el-submenu index="9">
             <template slot="title">
               <span class="">关于</span>

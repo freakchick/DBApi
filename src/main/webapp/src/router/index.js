@@ -7,6 +7,7 @@ import json from '../components/tool/json'
 import time from '../components/tool/time'
 
 import datasource from '../components/datasource/datasource'
+import api from '../components/api/api'
 
 Vue.use(VueRouter)
 
@@ -18,7 +19,8 @@ const routes = [
             {path: '/tool/json', name: 'json', component: json},
             {path: '/tool/time', name: 'time', component: time},
 
-            {path: '/datasource', name: 'datasource', component: datasource}
+            {path: '/datasource', name: 'datasource', component: datasource},
+            {path: '/api', name: 'api', component: api}
         ]
     }
 ]
