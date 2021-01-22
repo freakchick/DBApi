@@ -7,12 +7,8 @@
     <el-table :data="tableData">
       <el-table-column label="名称">
         <template slot-scope="scope">
-          <el-tag type="success" size="mini" effect="dark" v-if="scope.row.status == 1">
-            <i class="iconfont icon-on_line1"></i>
-          </el-tag>
-          <el-tag type="info" size="mini" effect="dark" v-else>
-            <i class="iconfont icon-off_line"></i>
-          </el-tag>
+          <i class="iconfont icon-on_line1 circle" v-if="scope.row.status == 1"></i>
+          <i class="iconfont icon-off_line circle" v-else></i>
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
@@ -20,7 +16,7 @@
       <el-table-column prop="path" label="路径"></el-table-column>
       <el-table-column label="参数">
         <template slot-scope="scope">
-          <el-tag type="success" v-for="item in scope.row.p" size="mini" effect="dark" :title="item.type">
+          <el-tag type="primary" v-for="item in scope.row.p" size="mini" effect="dark" :title="item.type" class="tag">
             {{ item.name }}
           </el-tag>
         </template>
@@ -39,7 +35,8 @@
                      circle><i class="iconfont icon-off_line1"></i>
           </el-button>
 
-          <el-button size="mini" v-if="scope.row.status == 1" type="primary" @click="httpTest(scope.row.id)" title="请求测试"
+          <el-button size="mini" v-if="scope.row.status == 1" type="primary" @click="httpTest(scope.row.id)"
+                     title="请求测试"
                      circle><i class="iconfont icon-HTTPRequest" style="font-size: 14px"></i>
           </el-button>
         </template>
@@ -114,5 +111,15 @@ export default {
 </script>
 
 <style scoped>
+.circle {
+  border-radius: 10px;
+  font-size: 18px;
+  background-color: #05566b;
+  padding: 3px;
+  color: #fff;
+}
 
+.tag {
+  margin-right: 5px;
+}
 </style>

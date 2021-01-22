@@ -21,7 +21,11 @@
         <el-form-item label="数据库">
           <el-select v-model="type" placeholder="请选择" @change="selectDB">
             <el-option v-for="item in options" :key="item.label" :label="item.label" :value="item.label">
-              <span style="float: left">{{ item.label }}</span>
+              <i class="iconfont icon-my-SQL" v-if="item.label == 'mysql'"></i>
+              <i class="iconfont icon-postgre-sql" v-if="item.label == 'postgreSql'"></i>
+              <i class="iconfont icon-hive" v-if="item.label == 'hive'"></i>
+              <i class="iconfont icon-SQLServer" v-if="item.label == 'sqlServer'"></i>
+              <span>{{ item.label }}</span>
             </el-option>
           </el-select>
         </el-form-item>
@@ -142,6 +146,14 @@ export default {
   font-family: 'Consolas', Helvetica, Arial, sans-serif;
   /*font-size: 18px;*/
 }
-
+i {
+  color: #0698a5;
+  /*background-color: #0698a5;*/
+  font-size: 18px;
+  font-weight: 700;
+  margin-right: 5px;
+  /*padding: 2px;*/
+  /*border-radius: 10px;*/
+}
 
 </style>
