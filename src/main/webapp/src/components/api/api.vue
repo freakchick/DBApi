@@ -31,15 +31,15 @@
                      circle></el-button>
           <el-button plain size="mini" type="danger" @click="handleDelete(scope.row.id)" icon="el-icon-delete"
                      circle></el-button>
-          <el-button size="mini" v-if="scope.row.status == 0" type="success" @click="online(scope.row.id)"
-                     circle><i class="iconfont icon-on_line1"></i>
+          <el-button size="mini" v-if="scope.row.status == 0" type="primary" @click="online(scope.row.id)" title="上线"
+                     circle><i class="iconfont icon-on_line2"></i>
           </el-button>
 
-          <el-button size="mini" v-if="scope.row.status == 1" type="info" @click="offline(scope.row.id)"
-                     circle><i class="iconfont icon-off_line"></i>
+          <el-button size="mini" v-if="scope.row.status == 1" type="primary" @click="offline(scope.row.id)" title="下线"
+                     circle><i class="iconfont icon-off_line1"></i>
           </el-button>
 
-          <el-button size="mini" v-if="scope.row.status == 1" type="primary" @click="httpTest(scope.row.id)"
+          <el-button size="mini" v-if="scope.row.status == 1" type="primary" @click="httpTest(scope.row.id)" title="请求测试"
                      circle><i class="iconfont icon-HTTPRequest" style="font-size: 14px"></i>
           </el-button>
         </template>

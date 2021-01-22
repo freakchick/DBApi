@@ -15,14 +15,16 @@
     <h4>请求示例：</h4>
     <el-collapse accordion>
       <el-collapse-item title="shell" name="1">
-        <div>#re = requests.post("http://localhost:12345/dolphinscheduler//realtime/summary/publish", {"key": 7,"hashkey": 7})
 
-
-          print(re.text)</div>
       </el-collapse-item>
       <el-collapse-item title="python" name="2">
-        <div>控制反馈：通过界面样式和交互动效让用户可以清晰的感知自己的操作；</div>
-        <div>页面反馈：操作后，通过页面元素的变化清晰地展现当前状态。</div>
+        <codemirror
+            ref="mycode"
+            :value="curCode"
+            :options="cmOptions"
+            class="code"
+
+        ></codemirror>
       </el-collapse-item>
       <el-collapse-item title="java" name="3">
         <div>简化流程：设计简洁直观的操作流程；</div>
@@ -38,6 +40,11 @@
 </template>
 
 <script>
+import { codemirror } from 'vue-codemirror';
+import 'codemirror/theme/ambiance.css'; // 这里引入的是主题样式，根据设置的theme的主题引入，一定要引入！！
+require('codemirror/mode/javascript/javascript'); // 这里引入的模式的js，根据设置的mode引入，一定要引入！！
+
+
 export default {
   name: "request",
   data() {
@@ -46,7 +53,14 @@ export default {
       params: [],
       path: null,
       address: null,
-      response: null
+      response: null,
+      curCode: 'import aa',
+      cmOptions: {
+        value: 'aaaa',
+        mode: 'text/javascript',
+        theme: 'ambiance',
+        readOnly: false
+      }
     }
   },
   methods: {
@@ -75,7 +89,7 @@ export default {
           {url: url, "params": JSON.stringify(p)}
       ).then((response) => {
         console.log(response.data)
-        if (response.data.success){
+        if (response.data.success) {
           this.response = response.data.data
         }
       }).catch((error) => {
@@ -87,6 +101,7 @@ export default {
       this.response = JSON.stringify(o, null, 4)
     },
   },
+  components: { codemirror },
   created() {
     this.getDetail(this.$route.query.id)
     this.getAddress()

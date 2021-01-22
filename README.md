@@ -1,37 +1,19 @@
 # dbApi
 
-#### 介绍
-根据sql直接生成http api，只需要编写sql，就可以生成api服务，支持mysql/postgresql/hive/sqlserver/
+## 介绍
+- 快捷生成http接口服务，零代码开发，只需编写sql，就可以生成api服务。是数据库的上层应用，方便企业数据资产对外发布http服务
+- 支持mysql/postgresql/hive/sqlserver/
+- 目前仅支持查询类sql
+- 部署简便，不需要连数据库，只有一个jar包启动即可
 
-#### 软件架构
-软件架构说明
+## 软件架构
+- 采用B/S架构，springboot + vue.js 前后端分离开发
+- 考虑到部署的简便性，最后打包是整合打到一个完整的jar包里
+- 考虑到部署的简便性，使用sqlite数据库
 
+## 安装教程
 
-#### 安装教程
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### 使用说明
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### 参与贡献
-
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
-
-
-#### 特技
-
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+- 依赖java环境，需要安装jdk8+
+- 下在 dbApi.jar 和数据库文件data.db, 放在同级目录
+- java -jar dbApi.jar 一键启动
+- 浏览器访问 http://localhost:8520/

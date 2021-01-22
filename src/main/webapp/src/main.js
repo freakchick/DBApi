@@ -6,6 +6,10 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import qs from 'qs'
 
+import VueCodeMirror from 'vue-codemirror';
+import 'codemirror/lib/codemirror.css'
+Vue.use(VueCodeMirror);
+
 import VueClipboard from 'vue-clipboard2'
 // import store from './store'
 
