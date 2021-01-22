@@ -1,16 +1,21 @@
 package com.jq.dbapi.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jq.dbapi.domain.ApiConfig;
 import com.jq.dbapi.service.ApiConfigService;
+import com.jq.dbapi.util.HttpUtil;
+import com.jq.dbapi.util.IPUtil;
 import com.jq.dbapi.util.SqlParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -76,6 +81,22 @@ public class ApiConfigController {
     public ApiConfig offline(@PathVariable Integer id) {
         apiConfigService.offline(id);
         return null;
+    }
+
+    @Value("${server.port}")
+    String port;
+
+    @RequestMapping("/getIPPort")
+    public String getIPPort() {
+        String ip = IPUtil.getIpAddress();
+        return ip + ":" + port;
+    }
+
+    @RequestMapping("/request")
+    public JSONObject request(String url, String params) {
+        Map<String, String> map = JSON.parseObject(params, Map.class);
+        JSONObject post = HttpUtil.post(url, map);
+        return post;
     }
 
 }

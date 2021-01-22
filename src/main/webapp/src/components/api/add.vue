@@ -9,7 +9,9 @@
       </el-form-item>
       <el-form-item label="请求路径">
         <el-input v-model="path" class="my">
-          <template slot="prepend">http://ip:port/api/</template>
+          <template slot="prepend">
+            <span style="margin: 0 -14px">http://{{ address }}/api/</span>
+          </template>
         </el-input>
       </el-form-item>
 
@@ -57,7 +59,8 @@ export default {
       path: null,
       sql: 'select name,age from user where id > $minId and id < $maxId',
       params: [],
-      datasources: []
+      datasources: [],
+      address: null
     }
   },
   methods: {
@@ -88,11 +91,19 @@ export default {
       }).catch((error) => {
         this.$message.error("查询所有数据源失败")
       })
+    },
+    getAddress() {
+      this.axios.post("/apiConfig/getIPPort").then((response) => {
+        this.address = response.data
+      }).catch((error) => {
+        this.$message.error("失败")
+      })
     }
 
   },
   created() {
     this.getAllSource()
+    this.getAddress()
   }
 }
 </script>

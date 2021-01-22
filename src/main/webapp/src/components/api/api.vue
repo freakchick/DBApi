@@ -31,22 +31,23 @@
                      circle></el-button>
           <el-button plain size="mini" type="danger" @click="handleDelete(scope.row.id)" icon="el-icon-delete"
                      circle></el-button>
-          <el-button  size="mini" v-if="scope.row.status == 0" type="success" @click="online(scope.row.id)"
+          <el-button size="mini" v-if="scope.row.status == 0" type="success" @click="online(scope.row.id)"
                      circle><i class="iconfont icon-on_line1"></i>
           </el-button>
 
-          <el-button  size="mini"  v-if="scope.row.status == 1" type="info" @click="offline(scope.row.id)"
+          <el-button size="mini" v-if="scope.row.status == 1" type="info" @click="offline(scope.row.id)"
                      circle><i class="iconfont icon-off_line"></i>
           </el-button>
 
-          <el-button  size="mini"  v-if="scope.row.status == 1" type="primary" @click="httpTest(scope.row.id)"
+          <el-button size="mini" v-if="scope.row.status == 1" type="primary" @click="httpTest(scope.row.id)"
                      circle><i class="iconfont icon-HTTPRequest" style="font-size: 14px"></i>
           </el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <el-dialog title="添加api" :visible.sync="dialogVisible">
+    <el-dialog title="请求测试api" :visible.sync="dialogVisible">
+
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -100,6 +101,9 @@ export default {
       }).catch((error) => {
         this.$message.error("失败")
       })
+    },
+    httpTest(id) {
+      this.$router.push({path: '/api/request', query: {id: id}});
     }
   },
 
