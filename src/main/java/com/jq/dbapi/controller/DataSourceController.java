@@ -4,11 +4,14 @@ import com.jq.dbapi.domain.DataSource;
 import com.jq.dbapi.service.DataSourceService;
 import com.jq.dbapi.util.JdbcUtil;
 import com.jq.dbapi.util.ResponseDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -17,6 +20,7 @@ import java.util.List;
  * @author: jiangqiang
  * @create: 2021-01-20 10:43
  **/
+@Slf4j
 @RestController
 @RequestMapping("/datasource")
 public class DataSourceController {
@@ -53,12 +57,21 @@ public class DataSourceController {
 
     @RequestMapping("/connect")
     public ResponseDto connect(DataSource dataSource) {
+        Connection connection = null;
         try {
-            JdbcUtil.getConnection(dataSource);
+            connection = JdbcUtil.getConnection(dataSource);
             return ResponseDto.success(null);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
             return ResponseDto.fail(e.getMessage());
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    log.error(e.getMessage());
+                }
+            }
         }
     }
 }
