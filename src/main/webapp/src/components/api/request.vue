@@ -10,6 +10,10 @@
     </el-form>
     <el-button @click="request">请求</el-button>
 
+    <el-input type="textarea" v-model="response"></el-input>
+
+    <h4>请求示例：</h4>
+
   </div>
 </template>
 
@@ -21,7 +25,8 @@ export default {
       api: {},
       params: [],
       path: null,
-      address: null
+      address: null,
+      response: null
     }
   },
   methods: {
@@ -50,6 +55,9 @@ export default {
           {url: url, "params": JSON.stringify(p)}
       ).then((response) => {
         console.log(response.data)
+        if (response.data.success){
+          this.response = response.data.data
+        }
       }).catch((error) => {
         this.$message.error("失败")
       })

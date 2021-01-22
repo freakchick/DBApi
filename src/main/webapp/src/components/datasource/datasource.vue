@@ -44,6 +44,7 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="connect">连接测试</el-button>
          <el-button type="primary" @click="dialogVisible = false;add()">确 定</el-button>
       </span>
     </el-dialog>
@@ -99,6 +100,21 @@ export default {
         this.$message.error("添加失败")
       })
     },
+    connect() {
+      this.axios.post("/datasource/connect", {
+        "url": this.url,
+        "username": this.username,
+        "password": this.password,
+        "type": this.type
+      }).then((response) => {
+        if (response.data.success)
+          this.$message.success("成功")
+        else
+          this.$message.error(response.data.msg)
+      }).catch((error) => {
+        this.$message.error("失败")
+      })
+    },
     getAllSource() {
       this.axios.post("/datasource/getAll").then((response) => {
         this.tableData = response.data
@@ -106,8 +122,8 @@ export default {
         this.$message.error("查询所有数据源失败")
       })
     },
-    handleDelete(row){
-      this.axios.post("/datasource/delete/"+row.id).then((response) => {
+    handleDelete(row) {
+      this.axios.post("/datasource/delete/" + row.id).then((response) => {
         this.$message.success("删除成功")
         this.getAllSource()
       }).catch((error) => {

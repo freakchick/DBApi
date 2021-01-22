@@ -12,12 +12,12 @@ import lombok.Data;
 public class ResponseDto {
     String msg;
     Object data;
-    boolean sucess;
+    boolean success;
 
     public static  ResponseDto success(Object data){
         ResponseDto dto = new ResponseDto();
         dto.setData(data);
-        dto.setSucess(true);
+        dto.setSuccess(true);
         dto.setMsg("接口访问成功");
         return dto;
 
@@ -25,7 +25,7 @@ public class ResponseDto {
 
     public static  ResponseDto  fail(String msg){
         ResponseDto dto = new ResponseDto();
-        dto.setSucess(false);
+        dto.setSuccess(false);
         dto.setMsg(msg);
         return dto;
 

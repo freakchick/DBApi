@@ -61,7 +61,7 @@ public class ApiService {
             int columnCount = rs.getMetaData().getColumnCount();
 
             List<String> columns = new ArrayList<>();
-            for (int i = 0; i < columnCount; i++) {
+            for (int i = 1; i <= columnCount; i++) {
                 String columnName = rs.getMetaData().getColumnLabel(i);
                 columns.add(columnName);
             }
@@ -80,6 +80,7 @@ public class ApiService {
             }
             return ResponseDto.success(list);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseDto.fail(e.getMessage());
         } finally {
             try {
