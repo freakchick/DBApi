@@ -6,6 +6,7 @@ import com.jq.dbapi.service.ApiConfigService;
 import com.jq.dbapi.util.SqlParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,6 +42,40 @@ public class ApiConfigController {
             return jsonObject;
         }).collect(Collectors.toList());
         return collect;
+    }
+
+    @RequestMapping("/getAll")
+    public List<ApiConfig> getAll() {
+        return apiConfigService.getAll();
+    }
+
+    @RequestMapping("/detail/{id}")
+    public ApiConfig detail(@PathVariable Integer id) {
+        return apiConfigService.detail(id);
+    }
+
+    @RequestMapping("/delete/{id}")
+    public ApiConfig delete(@PathVariable Integer id) {
+        apiConfigService.delete(id);
+        return null;
+    }
+
+    @RequestMapping("/update")
+    public ApiConfig update(ApiConfig apiConfig) {
+        apiConfigService.update(apiConfig);
+        return null;
+    }
+
+    @RequestMapping("/online/{id}")
+    public ApiConfig online(@PathVariable Integer id) {
+        apiConfigService.online(id);
+        return null;
+    }
+
+    @RequestMapping("/offline/{id}")
+    public ApiConfig offline(@PathVariable Integer id) {
+        apiConfigService.offline(id);
+        return null;
     }
 
 }

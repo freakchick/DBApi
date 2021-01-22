@@ -47,4 +47,17 @@ public class ApiConfigService {
     public ApiConfig getConfig(String path) {
        return  apiConfigMapper.selectByPath(path);
     }
+
+    public void online(Integer id) {
+        ApiConfig apiConfig = apiConfigMapper.selectById(id);
+        apiConfig.setStatus(1);
+        apiConfigMapper.updateById(apiConfig);
+    }
+
+    public void offline(Integer id) {
+
+        ApiConfig apiConfig = apiConfigMapper.selectById(id);
+        apiConfig.setStatus(0);
+        apiConfigMapper.updateById(apiConfig);
+    }
 }
