@@ -22,6 +22,7 @@ public class ApiConfigService {
 
     @Transactional
     public void add(ApiConfig apiConfig) {
+        apiConfig.setStatus(0);
         apiConfigMapper.insert(apiConfig);
     }
 

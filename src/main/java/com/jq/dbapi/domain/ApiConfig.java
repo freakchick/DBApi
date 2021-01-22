@@ -21,6 +21,12 @@ public class ApiConfig {
     Integer id;
 
     @TableField
+    String name;
+
+    @TableField
+    String note;
+
+    @TableField
     String path;
 
     @TableField(value = "datasource_id")
