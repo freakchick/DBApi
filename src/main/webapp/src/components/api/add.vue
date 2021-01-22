@@ -77,7 +77,7 @@ export default {
         sql: this.sql,
         params: JSON.stringify(this.params)
       }).then((response) => {
-
+        this.$message.success("保存成功")
       }).catch((error) => {
         this.$message.error("失败")
       })
