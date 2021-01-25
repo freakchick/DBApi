@@ -9,10 +9,8 @@
         <el-input v-model="detail.note"></el-input>
       </el-form-item>
       <el-form-item label="请求地址">
-        <el-input v-model="detail.path" class="my" placeholder="输入请求路径">
-          <template slot="prepend">
-            <span style="margin: 0 -14px">http://{{ address }}/api/</span>
-          </template>
+        <el-input v-model="'http://'+address+'/api/'+detail.path" class="my" placeholder="输入请求路径">
+
         </el-input>
       </el-form-item>
 

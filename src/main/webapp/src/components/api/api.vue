@@ -23,24 +23,27 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button plain size="mini" type="warning" @click="handleEdit(scope.row.id)" icon="el-icon-edit"
-                     circle></el-button>
-          <el-button plain size="mini" type="danger" @click="handleDelete(scope.row.id)" icon="el-icon-delete"
-                     circle></el-button>
-          <el-button size="mini" v-if="scope.row.status == 0" type="primary" @click="online(scope.row.id)" title="上线"
-                     circle><i class="iconfont icon-on_line2"></i>
+          <el-button plain size="mini" type="warning" @click="handleEdit(scope.row.id)" circle>
+            <i class="el-icon-edit"></i>
+          </el-button>
+          <el-button plain size="mini" type="danger" @click="handleDelete(scope.row.id)" circle>
+            <i class="el-icon-delete"></i>
+          </el-button>
+          <el-button plain size="mini" type="info" @click="detail(scope.row.id)" circle><i class="iconfont icon-detail"></i>
           </el-button>
 
-          <el-button size="mini" v-if="scope.row.status == 1" type="primary" @click="offline(scope.row.id)" title="下线"
-                     circle><i class="iconfont icon-off_line1"></i>
+          <el-button plain size="mini" v-if="scope.row.status == 0" type="warning" @click="online(scope.row.id)" title="上线" circle>
+            <i class="iconfont icon-on_line2"></i>
           </el-button>
 
-          <el-button size="mini" v-if="scope.row.status == 1" type="primary" @click="httpTest(scope.row.id)"
-                     title="请求测试"
-                     circle><i class="iconfont icon-HTTPRequest" style="font-size: 14px"></i>
+          <el-button plain size="mini" v-if="scope.row.status == 1" type="info" @click="offline(scope.row.id)" title="下线" circle>
+            <i class="iconfont icon-off_line1"></i>
           </el-button>
-          <el-button size="mini" type="primary" @click="detail(scope.row.id)" circle><i class="iconfont icon-detail"></i>
+
+          <el-button plain size="mini" v-if="scope.row.status == 1" type="primary" @click="httpTest(scope.row.id)" title="请求测试" circle>
+            <i class="iconfont icon-HTTPRequest" ></i>
           </el-button>
+
         </template>
       </el-table-column>
     </el-table>
@@ -107,7 +110,7 @@ export default {
     detail(id) {
       this.$router.push({path: '/api/detail', query: {id: id}});
     },
-    handleEdit(id){
+    handleEdit(id) {
       this.$router.push({path: '/api/edit', query: {id: id}});
     }
   },
@@ -119,6 +122,10 @@ export default {
 </script>
 
 <style scoped>
+i{
+  font-size: 14px;
+}
+
 .circle {
   border-radius: 10px;
   font-size: 18px;
