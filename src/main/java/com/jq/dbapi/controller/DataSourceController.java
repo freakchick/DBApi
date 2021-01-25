@@ -44,9 +44,8 @@ public class DataSourceController {
     }
 
     @RequestMapping("/delete/{id}")
-    public DataSource delete(@PathVariable Integer id) {
-        dataSourceService.delete(id);
-        return null;
+    public ResponseDto delete(@PathVariable Integer id) {
+        return dataSourceService.delete(id);
     }
 
     @RequestMapping("/update")
@@ -60,7 +59,7 @@ public class DataSourceController {
         Connection connection = null;
         try {
             connection = JdbcUtil.getConnection(dataSource);
-            return ResponseDto.success(null);
+            return ResponseDto.apiSuccess(null);
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseDto.fail(e.getMessage());

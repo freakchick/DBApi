@@ -78,7 +78,7 @@ public class ApiService {
                 });
                 list.add(jo);
             }
-            return ResponseDto.success(list);
+            return ResponseDto.apiSuccess(list);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.fail(e.getMessage());

@@ -1,7 +1,9 @@
 package com.jq.dbapi.service;
 
+import com.jq.dbapi.dao.ApiConfigMapper;
 import com.jq.dbapi.dao.DataSourceMapper;
 import com.jq.dbapi.domain.DataSource;
+import com.jq.dbapi.util.ResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,8 @@ public class DataSourceService {
 
     @Autowired
     DataSourceMapper dataSourceMapper;
+    @Autowired
+    ApiConfigMapper apiConfigMapper;
 
     @Transactional
     public void add(DataSource dataSource) {
@@ -33,11 +37,20 @@ public class DataSourceService {
     }
 
     @Transactional
-    public void delete(Integer id) {
-        dataSourceMapper.deleteById(id);
+    public ResponseDto delete(Integer id) {
+        int i = apiConfigMapper.countByDatasoure(id);
+        if (i==0){
+            dataSourceMapper.deleteById(id);
+            return ResponseDto.success("删除成功");
+        }else{
+            return ResponseDto.fail("该数据源已经被使用，不可删除");
+        }
     }
 
     public DataSource detail(Integer id) {
+
+
+
         DataSource dataSource = dataSourceMapper.selectById(id);
         return dataSource;
     }

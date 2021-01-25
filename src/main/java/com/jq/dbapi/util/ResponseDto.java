@@ -14,7 +14,7 @@ public class ResponseDto {
     Object data;
     boolean success;
 
-    public static  ResponseDto success(Object data){
+    public static ResponseDto apiSuccess(Object data) {
         ResponseDto dto = new ResponseDto();
         dto.setData(data);
         dto.setSuccess(true);
@@ -23,7 +23,16 @@ public class ResponseDto {
 
     }
 
-    public static  ResponseDto  fail(String msg){
+    public static ResponseDto success(String msg) {
+        ResponseDto dto = new ResponseDto();
+        dto.setData(null);
+        dto.setSuccess(true);
+        dto.setMsg(msg);
+        return dto;
+
+    }
+
+    public static ResponseDto fail(String msg) {
         ResponseDto dto = new ResponseDto();
         dto.setSuccess(false);
         dto.setMsg(msg);
