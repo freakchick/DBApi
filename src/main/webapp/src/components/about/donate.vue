@@ -5,7 +5,7 @@
 
         </div>
         <div>
-            <el-link type="primary" href="https://gitee.com/freakchicken/kafka-ui-lite" target="_blank">开源地址</el-link>
+            <el-link type="primary" href="https://gitee.com/freakchicken/db-api" target="_blank">开源地址</el-link>
         </div>
     </div>
 </template>

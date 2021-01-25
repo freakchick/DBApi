@@ -83,6 +83,7 @@ export default {
     },
     handleDelete(id) {
       this.axios.post("/apiConfig/delete/" + id).then((response) => {
+        this.$message.success("删除成功")
         this.getAllApis()
       }).catch((error) => {
         this.$message.error("删除失败")

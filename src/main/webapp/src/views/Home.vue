@@ -24,32 +24,19 @@
               <span class="">api</span>
             </template>
           </el-menu-item>
-<!--          <el-submenu index="8">-->
-<!--            <template slot="title">-->
-<!--              <span class="">工具</span>-->
-<!--            </template>-->
-<!--            <el-menu-item index="/tool/json">JSON</el-menu-item>-->
-<!--            <el-menu-item index="/tool/time">时间戳</el-menu-item>-->
-<!--          </el-submenu>-->
+
           <el-submenu index="9">
             <template slot="title">
               <span class="">关于</span>
             </template>
             <el-menu-item index="/about/donate">捐赠</el-menu-item>
-            <el-menu-item index="/about/authority">权限设置</el-menu-item>
-            <!--            <el-menu-item index="/about/opensource"></el-menu-item>-->
-            <!--            <el-menu-item index="/about/contact">联系作者</el-menu-item>-->
+
           </el-submenu>
         </el-menu>
 
       </el-header>
       <el-main>
-        <!--        <el-breadcrumb separator-class="el-icon-arrow-right">-->
-        <!--          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>-->
-        <!--          <el-breadcrumb-item>活动管理</el-breadcrumb-item>-->
-        <!--          <el-breadcrumb-item>活动列表</el-breadcrumb-item>-->
-        <!--          <el-breadcrumb-item>活动详情</el-breadcrumb-item>-->
-        <!--        </el-breadcrumb>-->
+
         <router-view></router-view>
       </el-main>
       <!--      <el-footer>Footer</el-footer>-->

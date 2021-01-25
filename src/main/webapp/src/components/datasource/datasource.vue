@@ -9,7 +9,7 @@
       <!--      <el-table-column prop="url" label="地址"></el-table-column>-->
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="handleEdit( scope.row)">编辑</el-button>
+          <!--          <el-button size="mini" @click="handleEdit( scope.row)">编辑</el-button>-->
           <el-button size="mini" type="danger" @click="handleDelete( scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -128,7 +128,11 @@ export default {
     },
     handleDelete(row) {
       this.axios.post("/datasource/delete/" + row.id).then((response) => {
-        this.$message.success("删除成功")
+        if (response.data.success) {
+          this.$message.success("删除成功")
+        } else {
+          this.$message.error(response.data.msg)
+        }
         this.getAllSource()
       }).catch((error) => {
         this.$message.error("删除失败")
@@ -146,6 +150,7 @@ export default {
   font-family: 'Consolas', Helvetica, Arial, sans-serif;
   /*font-size: 18px;*/
 }
+
 i {
   color: #0698a5;
   /*background-color: #0698a5;*/
