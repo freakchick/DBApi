@@ -5,7 +5,7 @@ import {
     // Pagination,
     Link,
     Dialog,
-    Autocomplete,
+    // Autocomplete,
     // Dropdown,
     // DropdownMenu,
     // DropdownItem,
@@ -14,13 +14,13 @@ import {
     MenuItem,
     MenuItemGroup,
     Input,
-    InputNumber,
-    Radio,
-    RadioGroup,
-    RadioButton,
-    Checkbox,
-    CheckboxButton,
-    CheckboxGroup,
+    // InputNumber,
+    // Radio,
+    // RadioGroup,
+    // RadioButton,
+    // Checkbox,
+    // CheckboxButton,
+    // CheckboxGroup,
     // Switch,
     Select,
     Option,
@@ -29,25 +29,25 @@ import {
     ButtonGroup,
     Table,
     TableColumn,
-    DatePicker,
+    // DatePicker,
     // TimeSelect,
     // TimePicker,
     Popover,
     Popconfirm,
     Tooltip,
-    Breadcrumb,
-    BreadcrumbItem,
+    // Breadcrumb,
+    // BreadcrumbItem,
     Form,
     FormItem,
-    Tabs,
-    TabPane,
+    // Tabs,
+    // TabPane,
     Tag,
-    Tree,
-    Alert,
+    // Tree,
+    // Alert,
     // Slider,
     // Icon,
-    Row,
-    Col,
+    // Row,
+    // Col,
     // Upload,
     // Progress,
     // Spinner,
@@ -67,7 +67,7 @@ import {
     Header,
     Aside,
     Main,
-    Footer,
+    // Footer,
     // Timeline,
     // TimelineItem,
     // Link,
@@ -86,7 +86,7 @@ import {
 // Vue.use(Pagination);
 Vue.use(Link);
 Vue.use(Dialog);
-Vue.use(Autocomplete);
+// Vue.use(Autocomplete);
 // Vue.use(Dropdown);
 // Vue.use(DropdownMenu);
 // Vue.use(DropdownItem);
@@ -95,14 +95,14 @@ Vue.use(Submenu);
 Vue.use(MenuItem);
 Vue.use(MenuItemGroup);
 Vue.use(Input);
-Vue.use(InputNumber);
-Vue.use(Radio);
-Vue.use(RadioGroup);
-Vue.use(RadioButton);
-Vue.use(Checkbox);
+// Vue.use(InputNumber);
+// Vue.use(Radio);
+// Vue.use(RadioGroup);
+// Vue.use(RadioButton);
+// Vue.use(Checkbox);
 
-Vue.use(CheckboxButton);
-Vue.use(CheckboxGroup);
+// Vue.use(CheckboxButton);
+// Vue.use(CheckboxGroup);
 // Vue.use(Switch);
 
 
@@ -114,29 +114,29 @@ Vue.use(ButtonGroup);
 Vue.use(Table);
 Vue.use(TableColumn);
 
-Vue.use(DatePicker);
+// Vue.use(DatePicker);
 // Vue.use(TimeSelect);
 // Vue.use(TimePicker);
 Vue.use(Popover);
 Vue.use(Popconfirm );
 
 Vue.use(Tooltip);
-Vue.use(Breadcrumb);
-Vue.use(BreadcrumbItem);
+// Vue.use(Breadcrumb);
+// Vue.use(BreadcrumbItem);
 
 Vue.use(Form);
 Vue.use(FormItem);
-Vue.use(Tree);
+// Vue.use(Tree);
 //
-Vue.use(Tabs);
-Vue.use(TabPane);
+// Vue.use(Tabs);
+// Vue.use(TabPane);
 Vue.use(Tag);
 //
-Vue.use(Alert);
+// Vue.use(Alert);
 // Vue.use(Slider);
 // Vue.use(Icon);
-Vue.use(Row);
-Vue.use(Col);
+// Vue.use(Row);
+// Vue.use(Col);
 // Vue.use(Upload);
 // Vue.use(Progress);
 // Vue.use(Spinner);
@@ -156,7 +156,7 @@ Vue.use(Container);
 Vue.use(Header);
 Vue.use(Aside);
 Vue.use(Main);
-Vue.use(Footer);
+// Vue.use(Footer);
 /*
 Vue.use(Timeline);
 Vue.use(TimelineItem);
