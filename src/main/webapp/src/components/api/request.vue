@@ -1,5 +1,6 @@
 <template>
   <div>
+    <el-button icon="el-icon-d-arrow-left" type="info" plain @click="$router.go(-1)" size="small">返回</el-button>
     <h2>接口请求测试</h2>
     <h4>接口地址：</h4>
     <div class="path">http://{{ address }}/api/{{ path }}</div>
@@ -121,6 +122,7 @@ export default {
 }
 h2{
   margin-bottom : 25px;
+  text-align: center;
 }
 
 h4{

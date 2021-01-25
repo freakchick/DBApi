@@ -1,5 +1,6 @@
 <template>
   <div>
+    <el-button icon="el-icon-d-arrow-left" type="info" plain @click="$router.go(-1)" size="small">返回</el-button>
     <h2>创建api</h2>
     <el-form label-width="100px">
       <el-form-item label="api名称">
@@ -117,6 +118,7 @@ export default {
 
 h2{
   margin-bottom : 25px;
+  text-align: center;
 }
 
 h4{
