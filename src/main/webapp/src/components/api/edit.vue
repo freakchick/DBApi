@@ -1,15 +1,15 @@
 <template>
   <div>
-    <h2>api详情</h2>
+    <h2>修改api</h2>
     <el-form label-width="100px">
       <el-form-item label="api名称">
-        <el-input v-model="detail.name"></el-input>
+        <el-input v-model="name"></el-input>
       </el-form-item>
       <el-form-item label="描述">
-        <el-input v-model="detail.note"></el-input>
+        <el-input v-model="note"></el-input>
       </el-form-item>
-      <el-form-item label="请求地址">
-        <el-input v-model="detail.path" class="my" placeholder="输入请求路径">
+      <el-form-item label="请求路径">
+        <el-input v-model="path" class="my" placeholder="输入请求路径">
           <template slot="prepend">
             <span style="margin: 0 -14px">http://{{ address }}/api/</span>
           </template>
@@ -17,15 +17,16 @@
       </el-form-item>
 
       <el-form-item label="数据源">
-        <el-select v-model="detail.datasourceId" placeholder="请选择">
+        <el-select v-model="datasourceId" placeholder="请选择">
           <el-option v-for="item in datasources" :key="item.id" :label="item.name" :value="item.id">
             <span style="float: left">{{ item.name }}</span>
           </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="sql">
-        <el-input type="textarea" v-model="detail.sql" :autosize="{ minRows: 5, maxRows: 20 }" placeholder="请输入sql"
+        <el-input type="textarea" v-model="sql" :autosize="{ minRows: 5, maxRows: 20 }" placeholder="请输入sql"
                   class="my"></el-input>
+        <el-button @click="parseParams" style="margin :10px 0">解析参数</el-button>
       </el-form-item>
       <el-form-item label="请求参数">
         <el-table :data="params" size="mini" border stripe>
@@ -44,23 +45,50 @@
 
 
     </el-form>
+    <el-button @click="save">保存</el-button>
 
   </div>
 </template>
 
 <script>
 export default {
-  name: "detail",
+  name: "edit",
   data() {
     return {
-      detail: null,
+      id: null,
+      datasourceId: null,
+      name: null,
+      note: null,
+      path: null,
+      sql: 'select name,age from user where id > $minId and id < $maxId',
+      params: [],
       datasources: [],
-      address: null,
-      params: []
+      address: null
     }
   },
   methods: {
-
+    parseParams() {
+      this.axios.post("/apiConfig/parseParam", {sql: this.sql}).then((response) => {
+        this.params = response.data
+      }).catch((error) => {
+        this.$message.error("失败")
+      })
+    },
+    save() {
+      this.axios.post("/apiConfig/update", {
+        id: this.id,
+        name: this.name,
+        note: this.note,
+        path: this.path,
+        datasourceId: this.datasourceId,
+        sql: this.sql,
+        params: JSON.stringify(this.params)
+      }).then((response) => {
+        this.$message.success("保存成功")
+      }).catch((error) => {
+        this.$message.error("失败")
+      })
+    },
     getAllSource() {
       this.axios.post("/datasource/getAll").then((response) => {
         this.datasources = response.data
@@ -76,8 +104,13 @@ export default {
       })
     },
     getDetail(id) {
+      this.id = id
       this.axios.post("/apiConfig/detail/" + id).then((response) => {
-        this.detail = response.data
+        this.name = response.data.name
+        this.note = response.data.note
+        this.path = response.data.path
+        this.sql = response.data.sql
+        this.datasourceId = response.data.datasourceId
         this.params = JSON.parse(response.data.params)
         console.log(this.params)
       }).catch((error) => {

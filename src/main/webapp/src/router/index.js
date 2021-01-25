@@ -9,6 +9,7 @@ import time from '../components/tool/time'
 import datasource from '../components/datasource/datasource'
 import api from '../components/api/api'
 import apiAdd from '../components/api/add'
+import apiEdit from '../components/api/edit'
 import detail from '../components/api/detail'
 import request from '../components/api/request'
 
@@ -25,6 +26,7 @@ const routes = [
             {path: '/datasource', name: 'datasource', component: datasource},
             {path: '/api', name: 'api', component: api},
             {path: '/api/add', name: 'apiAdd', component: apiAdd},
+            {path: '/api/edit', name: 'apiEdit', component: apiEdit},
             {path: '/api/detail', name: 'detail', component: detail},
             {path: '/api/request', name: 'request', component: request}
         ]

@@ -106,6 +106,9 @@ export default {
     },
     detail(id) {
       this.$router.push({path: '/api/detail', query: {id: id}});
+    },
+    handleEdit(id){
+      this.$router.push({path: '/api/edit', query: {id: id}});
     }
   },
 
@@ -126,7 +129,7 @@ export default {
 }
 
 .red {
-  color: #f60505;
+  color: #737373;
 }
 
 .tag {
