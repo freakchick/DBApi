@@ -67,9 +67,8 @@ public class ApiConfigController {
     }
 
     @RequestMapping("/update")
-    public ApiConfig update(ApiConfig apiConfig) {
-        apiConfigService.update(apiConfig);
-        return null;
+    public ResponseDto update(ApiConfig apiConfig) {
+        return apiConfigService.update(apiConfig);
     }
 
     @RequestMapping("/online/{id}")

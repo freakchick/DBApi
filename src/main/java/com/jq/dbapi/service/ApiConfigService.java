@@ -25,20 +25,28 @@ public class ApiConfigService {
     public ResponseDto add(ApiConfig apiConfig) {
 
         int size = apiConfigMapper.selectCountByPath(apiConfig.getPath());
-        if (size>0){
-            return ResponseDto.fail("该路径已被使用");
-        }else{
+        if (size > 0) {
+            return ResponseDto.fail("该路径已被使用，请修改请求路径再保存");
+        } else {
             apiConfig.setStatus(0);
             apiConfigMapper.insert(apiConfig);
             return ResponseDto.success("添加成功");
         }
 
-
     }
 
     @Transactional
-    public void update(ApiConfig apiConfig) {
-        apiConfigMapper.updateById(apiConfig);
+    public ResponseDto update(ApiConfig apiConfig) {
+
+        int size = apiConfigMapper.selectCountByPathWhenUpdate(apiConfig.getPath(), apiConfig.getId());
+        if (size > 0) {
+            return ResponseDto.fail("该路径已被使用，请修改请求路径再保存");
+        } else {
+            apiConfig.setStatus(0);
+            apiConfigMapper.updateById(apiConfig);
+            return ResponseDto.success("修改成功");
+        }
+
     }
 
     @Transactional
@@ -55,7 +63,7 @@ public class ApiConfigService {
     }
 
     public ApiConfig getConfig(String path) {
-       return  apiConfigMapper.selectByPathOnline(path);
+        return apiConfigMapper.selectByPathOnline(path);
     }
 
     public void online(Integer id) {
