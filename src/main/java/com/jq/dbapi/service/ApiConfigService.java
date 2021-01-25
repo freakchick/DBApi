@@ -2,6 +2,7 @@ package com.jq.dbapi.service;
 
 import com.jq.dbapi.dao.ApiConfigMapper;
 import com.jq.dbapi.domain.ApiConfig;
+import com.jq.dbapi.util.ResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,9 +22,18 @@ public class ApiConfigService {
     ApiConfigMapper apiConfigMapper;
 
     @Transactional
-    public void add(ApiConfig apiConfig) {
-        apiConfig.setStatus(0);
-        apiConfigMapper.insert(apiConfig);
+    public ResponseDto add(ApiConfig apiConfig) {
+
+        int size = apiConfigMapper.selectCountByPath(apiConfig.getPath());
+        if (size>0){
+            return ResponseDto.fail("该路径已被使用");
+        }else{
+            apiConfig.setStatus(0);
+            apiConfigMapper.insert(apiConfig);
+            return ResponseDto.success("添加成功");
+        }
+
+
     }
 
     @Transactional
@@ -45,7 +55,7 @@ public class ApiConfigService {
     }
 
     public ApiConfig getConfig(String path) {
-       return  apiConfigMapper.selectByPath(path);
+       return  apiConfigMapper.selectByPathOnline(path);
     }
 
     public void online(Integer id) {

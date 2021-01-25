@@ -82,7 +82,12 @@ export default {
         sql: this.sql,
         params: JSON.stringify(this.params)
       }).then((response) => {
-        this.$message.success("保存成功")
+        if (response.data.success) {
+          this.$message.success(response.data.msg)
+        } else {
+          this.$message.error(response.data.msg)
+        }
+
       }).catch((error) => {
         this.$message.error("失败")
       })
@@ -116,12 +121,12 @@ export default {
   /*font-size: 18px;*/
 }
 
-h2{
-  margin-bottom : 25px;
+h2 {
+  margin-bottom: 25px;
   text-align: center;
 }
 
-h4{
+h4 {
   margin: 10px 0;
 }
 </style>

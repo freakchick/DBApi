@@ -6,6 +6,7 @@ import com.jq.dbapi.domain.ApiConfig;
 import com.jq.dbapi.service.ApiConfigService;
 import com.jq.dbapi.util.HttpUtil;
 import com.jq.dbapi.util.IPUtil;
+import com.jq.dbapi.util.ResponseDto;
 import com.jq.dbapi.util.SqlParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +34,8 @@ public class ApiConfigController {
     ApiConfigService apiConfigService;
 
     @RequestMapping("/add")
-    public void add(ApiConfig apiConfig) {
-        apiConfigService.add(apiConfig);
+    public ResponseDto add(ApiConfig apiConfig) {
+        return apiConfigService.add(apiConfig);
     }
 
     @RequestMapping("/parseParam")
