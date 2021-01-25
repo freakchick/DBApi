@@ -62,7 +62,8 @@ public class ApiConfigController {
 
     @RequestMapping("/delete/{id}")
     public ApiConfig delete(@PathVariable Integer id) {
-        apiConfigService.delete(id);
+        String path = apiConfigService.getPath(id);
+        apiConfigService.delete(id, path);
         return null;
     }
 
@@ -73,13 +74,15 @@ public class ApiConfigController {
 
     @RequestMapping("/online/{id}")
     public ApiConfig online(@PathVariable Integer id) {
-        apiConfigService.online(id);
+        String path = apiConfigService.getPath(id);
+        apiConfigService.online(id, path);
         return null;
     }
 
     @RequestMapping("/offline/{id}")
     public ApiConfig offline(@PathVariable Integer id) {
-        apiConfigService.offline(id);
+        String path = apiConfigService.getPath(id);
+        apiConfigService.offline(id, path);
         return null;
     }
 

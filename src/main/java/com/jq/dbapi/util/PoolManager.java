@@ -54,7 +54,7 @@ public class PoolManager {
     public static DruidPooledConnection getPooledConnection(DataSource ds) throws SQLException {
         DruidDataSource pool = PoolManager.getPool(ds);
         DruidPooledConnection connection = pool.getConnection();
-        log.info("获取连接成功");
+//        log.info("获取连接成功");
         return connection;
     }
 }

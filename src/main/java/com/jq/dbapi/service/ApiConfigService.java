@@ -3,7 +3,10 @@ package com.jq.dbapi.service;
 import com.jq.dbapi.dao.ApiConfigMapper;
 import com.jq.dbapi.domain.ApiConfig;
 import com.jq.dbapi.util.ResponseDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +18,7 @@ import java.util.List;
  * @author: jiangqiang
  * @create: 2021-01-19 17:27
  **/
+@Slf4j
 @Service
 public class ApiConfigService {
 
@@ -35,6 +39,7 @@ public class ApiConfigService {
 
     }
 
+    @CacheEvict(value = "api", key = "#apiConfig.path")
     @Transactional
     public ResponseDto update(ApiConfig apiConfig) {
 
@@ -49,8 +54,9 @@ public class ApiConfigService {
 
     }
 
+    @CacheEvict(value = "api", key = "#path")
     @Transactional
-    public void delete(Integer id) {
+    public void delete(Integer id, String path) {
         apiConfigMapper.deleteById(id);
     }
 
@@ -62,20 +68,28 @@ public class ApiConfigService {
         return apiConfigMapper.selectList(null);
     }
 
+    @Cacheable(value = "api", key = "#path", unless = "#result == null")
     public ApiConfig getConfig(String path) {
+        log.info("执行sql查询api参数");
         return apiConfigMapper.selectByPathOnline(path);
     }
 
-    public void online(Integer id) {
+    @CacheEvict(value = "api", key = "#path")
+    public void online(int id, String path) {
         ApiConfig apiConfig = apiConfigMapper.selectById(id);
         apiConfig.setStatus(1);
         apiConfigMapper.updateById(apiConfig);
     }
 
-    public void offline(Integer id) {
+    @CacheEvict(value = "api", key = "#path")
+    public void offline(int id, String path) {
 
         ApiConfig apiConfig = apiConfigMapper.selectById(id);
         apiConfig.setStatus(0);
         apiConfigMapper.updateById(apiConfig);
+    }
+
+    public String getPath(Integer id) {
+        return apiConfigMapper.selectById(id).getPath();
     }
 }

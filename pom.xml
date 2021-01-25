@@ -127,7 +127,7 @@
 
     <build>
         <finalName>dbApi-${project.version}</finalName>
-  <!--      <resources>
+        <resources>
             <resource>
                 <directory>${basedir}</directory>
                 <filtering>false</filtering>
@@ -137,7 +137,7 @@
                 <targetPath>${project.build.directory}</targetPath>
 
             </resource>
-        </resources>-->
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

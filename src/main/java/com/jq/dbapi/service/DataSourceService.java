@@ -6,6 +6,8 @@ import com.jq.dbapi.domain.DataSource;
 import com.jq.dbapi.util.ResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +38,7 @@ public class DataSourceService {
         dataSourceMapper.updateById(dataSource);
     }
 
+    @CacheEvict(value = "datasource", key = "#id")
     @Transactional
     public ResponseDto delete(Integer id) {
         int i = apiConfigMapper.countByDatasoure(id);
@@ -47,10 +50,8 @@ public class DataSourceService {
         }
     }
 
+    @Cacheable(value = "datasource", key = "#id", unless = "#result == null")
     public DataSource detail(Integer id) {
-
-
-
         DataSource dataSource = dataSourceMapper.selectById(id);
         return dataSource;
     }

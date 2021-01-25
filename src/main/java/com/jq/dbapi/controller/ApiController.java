@@ -49,7 +49,7 @@ public class ApiController {
 
             //生成真实的sql
             String sql = apiService.buildSql(request, config);
-            log.info("执行sql: {}", sql);
+//            log.info("执行sql: {}", sql);
             return apiService.executeSql(sql, datasource);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
