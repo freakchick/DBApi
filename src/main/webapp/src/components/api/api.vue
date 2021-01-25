@@ -7,8 +7,8 @@
     <el-table :data="tableData">
       <el-table-column label="名称">
         <template slot-scope="scope">
-          <i class="iconfont icon-on_line1 circle" v-if="scope.row.status == 1"></i>
-          <i class="iconfont icon-off_line circle" v-else></i>
+          <i class="iconfont icon-on_line1 circle" v-if="scope.row.status == 1" title="已上线"></i>
+          <i class="iconfont icon-off_line circle red" v-else title="未上线"></i>
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
@@ -38,6 +38,8 @@
           <el-button size="mini" v-if="scope.row.status == 1" type="primary" @click="httpTest(scope.row.id)"
                      title="请求测试"
                      circle><i class="iconfont icon-HTTPRequest" style="font-size: 14px"></i>
+          </el-button>
+          <el-button size="mini" type="primary" @click="detail(scope.row.id)" circle><i class="iconfont icon-detail"></i>
           </el-button>
         </template>
       </el-table-column>
@@ -101,6 +103,9 @@ export default {
     },
     httpTest(id) {
       this.$router.push({path: '/api/request', query: {id: id}});
+    },
+    detail(id) {
+      this.$router.push({path: '/api/detail', query: {id: id}});
     }
   },
 
@@ -114,9 +119,14 @@ export default {
 .circle {
   border-radius: 10px;
   font-size: 18px;
-  background-color: #05566b;
+  font-weight: 700;
+  /*background-color: #05566b;*/
   padding: 3px;
-  color: #fff;
+  color: #38be2e;
+}
+
+.red {
+  color: #f60505;
 }
 
 .tag {
