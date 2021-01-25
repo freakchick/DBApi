@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h2>创建api</h2>
     <el-form label-width="100px">
       <el-form-item label="api名称">
         <el-input v-model="name"></el-input>
@@ -8,7 +9,7 @@
         <el-input v-model="note"></el-input>
       </el-form-item>
       <el-form-item label="请求路径">
-        <el-input v-model="path" class="my">
+        <el-input v-model="path" class="my" placeholder="输入请求路径">
           <template slot="prepend">
             <span style="margin: 0 -14px">http://{{ address }}/api/</span>
           </template>
@@ -23,8 +24,8 @@
         </el-select>
       </el-form-item>
       <el-form-item label="sql">
-        <el-input type="textarea" v-model="sql" placeholder="请输入sql"></el-input>
-        <el-button @click="parseParams">解析参数</el-button>
+        <el-input type="textarea" v-model="sql" :autosize="{ minRows: 5, maxRows: 20 }" placeholder="请输入sql" class="my"></el-input>
+        <el-button @click="parseParams" style="margin :10px 0">解析参数</el-button>
       </el-form-item>
       <el-form-item label="请求参数">
         <el-table :data="params" size="mini" border stripe>
@@ -109,5 +110,16 @@ export default {
 </script>
 
 <style scoped>
+.my >>> .el-textarea__inner {
+  font-family: 'Consolas', Helvetica, Arial, sans-serif;
+  /*font-size: 18px;*/
+}
 
+h2{
+  margin-bottom : 25px;
+}
+
+h4{
+  margin: 10px 0;
+}
 </style>
