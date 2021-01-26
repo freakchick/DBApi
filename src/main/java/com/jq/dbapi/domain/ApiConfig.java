@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-
 /**
  * @program: dbApi
  * @description:
@@ -17,7 +16,7 @@ import lombok.Data;
 @TableName(value = "api_config")
 public class ApiConfig {
 
-    @TableId(value = "id",type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     Integer id;
 
     @TableField
@@ -34,6 +33,9 @@ public class ApiConfig {
 
     @TableField
     String sql;
+
+    @TableField(value = "real_sql")
+    String realSql;
 
     @TableField
     String params;

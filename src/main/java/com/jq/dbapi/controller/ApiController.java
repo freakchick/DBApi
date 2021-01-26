@@ -48,13 +48,9 @@ public class ApiController {
                 return ResponseDto.fail("数据源不存在！！");
             }
 
-            //生成真实的sql
-            String sql = apiService.buildSql(request, config);
-            log.info("执行sql: {}", sql);
-
             List<Object> sqlParam = apiService.getSqlParam(request, config);
 
-            return apiService.executeSql(sql, datasource, sqlParam);
+            return apiService.executeSql(config.getRealSql(), datasource, sqlParam);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return ResponseDto.fail(e.getMessage());

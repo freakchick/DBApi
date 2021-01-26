@@ -1,5 +1,8 @@
 package com.jq.dbapi.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.jq.dbapi.dao.ApiConfigMapper;
 import com.jq.dbapi.domain.ApiConfig;
 import com.jq.dbapi.util.ResponseDto;
@@ -32,6 +35,8 @@ public class ApiConfigService {
         if (size > 0) {
             return ResponseDto.fail("该路径已被使用，请修改请求路径再保存");
         } else {
+
+            apiConfig.setRealSql(buildSql(apiConfig));
             apiConfig.setStatus(0);
             apiConfigMapper.insert(apiConfig);
             return ResponseDto.success("添加成功");
@@ -47,6 +52,7 @@ public class ApiConfigService {
         if (size > 0) {
             return ResponseDto.fail("该路径已被使用，请修改请求路径再保存");
         } else {
+            apiConfig.setRealSql(buildSql(apiConfig));
             apiConfig.setStatus(0);
             apiConfigMapper.updateById(apiConfig);
             return ResponseDto.success("修改成功");
@@ -91,5 +97,17 @@ public class ApiConfigService {
 
     public String getPath(Integer id) {
         return apiConfigMapper.selectById(id).getPath();
+    }
+
+    public String buildSql(ApiConfig config) {
+        String sql = config.getSql();
+        JSONArray requestParams = JSON.parseArray(config.getParams());
+        for (int i = 0; i < requestParams.size(); i++) {
+            JSONObject jo = requestParams.getJSONObject(i);
+            String name = jo.getString("name");
+            String old = '$' + name;
+            sql = sql.replace(old, "?");
+        }
+        return sql;
     }
 }

@@ -35,34 +35,10 @@ public class ApiService {
         for (int i = 0; i < requestParams.size(); i++) {
             JSONObject jo = requestParams.getJSONObject(i);
             String name = jo.getString("name");
-
             String value = request.getParameter(name);
             list.add(value);
         }
         return list;
-    }
-
-    public String buildSql(HttpServletRequest request, ApiConfig config) {
-        String sql = config.getSql();
-
-        JSONArray requestParams = JSON.parseArray(config.getParams());
-        for (int i = 0; i < requestParams.size(); i++) {
-            JSONObject jo = requestParams.getJSONObject(i);
-            String name = jo.getString("name");
-//            String type = jo.getString("type");
-            String old = '$' + name;
-
-//            String value = request.getParameter(name);
-
-//            //不是数字类型的值要加单引号
-//            if (!"number".equals(type)) {
-//                value = String.format("'%s'", value);
-//            }
-
-            sql = sql.replace(old, "?");
-        }
-
-        return sql;
     }
 
     public ResponseDto executeSql(String sql, DataSource datasource, List<Object> sqlParam) {
@@ -72,6 +48,7 @@ public class ApiService {
             connection = PoolManager.getPooledConnection(datasource);
             PreparedStatement statement = connection.prepareStatement(sql);
 
+            //参数注入
             for (int i = 1; i <= sqlParam.size(); i++) {
                 statement.setObject(i, sqlParam.get(i - 1));
             }
