@@ -4,6 +4,7 @@ import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.dialect.hive.visitor.HiveSchemaStatVisitor;
 import com.alibaba.druid.sql.dialect.mysql.visitor.MySqlSchemaStatVisitor;
+import com.alibaba.druid.sql.dialect.oracle.visitor.OracleSchemaStatVisitor;
 import com.alibaba.druid.sql.dialect.postgresql.visitor.PGSchemaStatVisitor;
 import com.alibaba.druid.sql.dialect.sqlserver.visitor.SQLServerSchemaStatVisitor;
 import com.alibaba.druid.sql.visitor.SchemaStatVisitor;
@@ -84,6 +85,7 @@ public class SqlParser {
                 visitor = new PGSchemaStatVisitor();
                 break;
             case JdbcConstants.MYSQL:
+            case JdbcConstants.MARIADB:
                 visitor = new MySqlSchemaStatVisitor();
                 break;
             case JdbcConstants.HIVE:
@@ -91,6 +93,9 @@ public class SqlParser {
                 break;
             case JdbcConstants.SQL_SERVER:
                 visitor = new SQLServerSchemaStatVisitor();
+                break;
+            case JdbcConstants.ORACLE:
+                visitor = new OracleSchemaStatVisitor();
                 break;
 
         }
