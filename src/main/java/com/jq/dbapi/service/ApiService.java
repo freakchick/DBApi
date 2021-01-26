@@ -28,6 +28,20 @@ import java.util.List;
 @Slf4j
 public class ApiService {
 
+    public List<Object> getSqlParam(HttpServletRequest request, ApiConfig config) {
+        List<Object> list = new ArrayList<>();
+
+        JSONArray requestParams = JSON.parseArray(config.getParams());
+        for (int i = 0; i < requestParams.size(); i++) {
+            JSONObject jo = requestParams.getJSONObject(i);
+            String name = jo.getString("name");
+
+            String value = request.getParameter(name);
+            list.add(value);
+        }
+        return list;
+    }
+
     public String buildSql(HttpServletRequest request, ApiConfig config) {
         String sql = config.getSql();
 
@@ -35,29 +49,34 @@ public class ApiService {
         for (int i = 0; i < requestParams.size(); i++) {
             JSONObject jo = requestParams.getJSONObject(i);
             String name = jo.getString("name");
-            String type = jo.getString("type");
+//            String type = jo.getString("type");
             String old = '$' + name;
 
-            String value = request.getParameter(name);
+//            String value = request.getParameter(name);
 
-            //不是数字类型的值要加单引号
-            if (!"number".equals(type)) {
-                value = String.format("'%s'", value);
-            }
+//            //不是数字类型的值要加单引号
+//            if (!"number".equals(type)) {
+//                value = String.format("'%s'", value);
+//            }
 
-            sql = sql.replace(old, value);
+            sql = sql.replace(old, "?");
         }
 
         return sql;
     }
 
-    public ResponseDto executeSql(String sql, DataSource datasource) {
+    public ResponseDto executeSql(String sql, DataSource datasource, List<Object> sqlParam) {
         DruidPooledConnection connection = null;
         try {
 
             connection = PoolManager.getPooledConnection(datasource);
             PreparedStatement statement = connection.prepareStatement(sql);
+
+            for (int i = 1; i <= sqlParam.size(); i++) {
+                statement.setObject(i, sqlParam.get(i - 1));
+            }
             ResultSet rs = statement.executeQuery();
+
             int columnCount = rs.getMetaData().getColumnCount();
 
             List<String> columns = new ArrayList<>();

@@ -24,9 +24,9 @@
           <el-select v-model="type" placeholder="请选择" @change="selectDB">
             <el-option v-for="item in options" :key="item.label" :label="item.label" :value="item.label">
               <i class="iconfont icon-my-SQL" v-if="item.label == 'mysql'"></i>
-              <i class="iconfont icon-postgre-sql" v-if="item.label == 'postgreSql'"></i>
+              <i class="iconfont icon-postgre-sql" v-if="item.label == 'postgresql'"></i>
               <i class="iconfont icon-hive" v-if="item.label == 'hive'"></i>
-              <i class="iconfont icon-SQLServer" v-if="item.label == 'sqlServer'"></i>
+              <i class="iconfont icon-SQLServer" v-if="item.label == 'sqlserver'"></i>
               <span>{{ item.label }}</span>
             </el-option>
           </el-select>
@@ -67,7 +67,7 @@ export default {
       tableData: [],
       type: null,
       dialogVisible: false,
-      options: [{label: 'mysql'}, {label: 'postgreSql'}, {label: 'hive'}, {label: 'sqlServer'}],
+      options: [{label: 'mysql'}, {label: 'postgresql'}, {label: 'hive'}, {label: 'sqlserver'}],
       url: null,
       username: null,
       password: null,
@@ -83,11 +83,11 @@ export default {
       console.log(this.type)
       if (this.type == 'mysql') {
         this.url = 'jdbc:mysql://localhost:3306/db?useSSL=false&characterEncoding=UTF-8&serverTimezone=GMT%2B8'
-      } else if (this.type == 'postgreSql') {
+      } else if (this.type == 'postgresql') {
         this.url = 'jdbc:postgresql://localhost:5432/db'
       } else if (this.type == 'hive') {
         this.url = 'jdbc:hive2://localhost:10000/db'
-      } else if (this.type == 'sqlServer') {
+      } else if (this.type == 'sqlserver') {
         this.url = 'jdbc:microsoft:sqlserver://localhost:1433;databaseName=db'
       }
     },

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @program: dbApi
@@ -49,8 +50,11 @@ public class ApiController {
 
             //生成真实的sql
             String sql = apiService.buildSql(request, config);
-//            log.info("执行sql: {}", sql);
-            return apiService.executeSql(sql, datasource);
+            log.info("执行sql: {}", sql);
+
+            List<Object> sqlParam = apiService.getSqlParam(request, config);
+
+            return apiService.executeSql(sql, datasource, sqlParam);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return ResponseDto.fail(e.getMessage());

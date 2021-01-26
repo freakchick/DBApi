@@ -1,5 +1,6 @@
 package com.jq.dbapi.util;
 
+import com.alibaba.druid.util.JdbcConstants;
 import com.jq.dbapi.domain.DataSource;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,16 +18,16 @@ public class JdbcUtil {
     public static Connection getConnection(DataSource ds) throws SQLException, ClassNotFoundException {
         String url = ds.getUrl();
         switch (ds.getType()) {
-            case "mysql":
+            case JdbcConstants.MYSQL:
                 Class.forName("com.mysql.jdbc.Driver");
                 break;
-            case "postgreSql":
+            case JdbcConstants.POSTGRESQL:
                 Class.forName("org.postgresql.Driver");
                 break;
-            case "hive":
+            case JdbcConstants.HIVE:
                 Class.forName("org.apache.hive.jdbc.HiveDriver");
                 break;
-            case "sqlServer":
+            case JdbcConstants.SQL_SERVER:
                 Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
                 break;
             default:

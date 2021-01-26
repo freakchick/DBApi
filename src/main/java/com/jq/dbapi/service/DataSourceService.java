@@ -60,4 +60,8 @@ public class DataSourceService {
         List<DataSource> list = dataSourceMapper.selectList(null);
         return list;
     }
+
+    public String getDBType(Integer id) {
+        return dataSourceMapper.selectById(id).getType();
+    }
 }

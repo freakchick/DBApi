@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jq.dbapi.domain.ApiConfig;
 import com.jq.dbapi.service.ApiConfigService;
+import com.jq.dbapi.service.DataSourceService;
 import com.jq.dbapi.util.HttpUtil;
 import com.jq.dbapi.util.IPUtil;
 import com.jq.dbapi.util.ResponseDto;
@@ -33,21 +34,30 @@ public class ApiConfigController {
     @Autowired
     ApiConfigService apiConfigService;
 
+    @Autowired
+    DataSourceService dataSourceService;
+
     @RequestMapping("/add")
     public ResponseDto add(ApiConfig apiConfig) {
         return apiConfigService.add(apiConfig);
     }
 
     @RequestMapping("/parseParam")
-    public List<JSONObject> parseParam(String sql) {
-        List<String> requestParam = SqlParser.getRequestParam(sql);
-        List<JSONObject> collect = requestParam.stream().map(t -> {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("name", t);
-            jsonObject.put("type", "string");
-            return jsonObject;
-        }).collect(Collectors.toList());
-        return collect;
+    public ResponseDto parseParam(String sql, Integer datasourceId) {
+        try {
+            String dbType = dataSourceService.getDBType(datasourceId);
+            List<String> requestParam = SqlParser.getRequestParam(sql, dbType);
+            List<JSONObject> collect = requestParam.stream().map(t -> {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("name", t);
+                jsonObject.put("type", "string");
+                return jsonObject;
+            }).collect(Collectors.toList());
+            return ResponseDto.apiSuccess(collect);
+        } catch (Exception e) {
+            return ResponseDto.fail(e.getMessage());
+        }
+
     }
 
     @RequestMapping("/getAll")

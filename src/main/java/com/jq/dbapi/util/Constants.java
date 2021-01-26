@@ -7,10 +7,10 @@ package com.jq.dbapi.util;
  * @create: 2021-01-20 10:00
  **/
 public class Constants {
-
-    public static String MYSQL = "mysql";
-    public static String PG = "postgresql";
-    public static String HIVE = "hive";
-    public static String SQLSERVER = "sqlserver";
+//
+//    public static String MYSQL = "mysql";
+//    public static String PG = "postgresql";
+//    public static String HIVE = "hive";
+//    public static String SQLSERVER = "sqlserver";
 
 }

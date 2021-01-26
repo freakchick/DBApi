@@ -67,8 +67,16 @@ export default {
   },
   methods: {
     parseParams() {
-      this.axios.post("/apiConfig/parseParam", {sql: this.sql}).then((response) => {
-        this.params = response.data
+      if (this.datasourceId == null){
+        this.$message.warning("请先选择数据源，解析sql参数需要获取数据库类型")
+        return
+      }
+      this.axios.post("/apiConfig/parseParam", {sql: this.sql, datasourceId: this.datasourceId}).then((response) => {
+        if (response.data.success) {
+          this.params = response.data.data
+        } else {
+          this.$message.error(response.data.msg)
+        }
       }).catch((error) => {
         this.$message.error("失败")
       })
