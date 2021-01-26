@@ -1,6 +1,5 @@
 package com.jq.dbapi.util;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
@@ -50,7 +49,7 @@ public class HttpUtil {
             HttpEntity responseEntity = response.getEntity();
             String responseString = EntityUtils.toString(responseEntity);
 
-            System.out.println(responseString);
+//            System.out.println(responseString);
             result.put("success", true);
             result.put("data", responseString);
 
@@ -75,10 +74,5 @@ public class HttpUtil {
                 e.printStackTrace();
             }
         }
-    }
-
-    public static void main(String[] args) {
-        Map<String, String> map = JSON.parseObject("{\"id\":\"10\"}", Map.class);
-        post("http://10.1.254.113:28091/api/jiangqiang1", map);
     }
 }
