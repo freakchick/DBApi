@@ -107,7 +107,7 @@ http://localhost:8520
 
 ## sql编写规范
 
-1.  sql中传入的字符串和日期类型参数不需要单引号包裹
+-  sql中传入的字符串和日期类型参数不需要单引号包裹
 比如以下sql就是错误的:
 ```
 select * from user where name =  '$userName'
@@ -117,7 +117,7 @@ select * from user where name =  '$userName'
 select * from user where name =  $userName
 ```
 
-2.  不能有两个以上相同的参数名
+-  不能有两个以上相同的参数名
 比如以下sql就是错误的:
 ```
 select id,name from table1 where id = $id
