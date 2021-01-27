@@ -12,43 +12,49 @@
       </el-form-item>
 
     </el-form>
-    <el-button @click="request">发送请求</el-button>
+    <el-button @click="request" >发送请求</el-button>
 
     <h4>返回结果：</h4>
-    <el-input type="textarea" v-model="response" :autosize="{ minRows: 5, maxRows: 20 }" class="my"></el-input>
-    <el-button @click="format" style="margin:10px 0">格式化json</el-button>
-<!--    <h4>请求示例：</h4>-->
-<!--    <el-collapse accordion>-->
-<!--      <el-collapse-item title="shell" name="1">-->
 
-<!--      </el-collapse-item>-->
-<!--      <el-collapse-item title="python" name="2">-->
-<!--        <codemirror-->
-<!--            ref="mycode"-->
-<!--            :value="curCode"-->
-<!--            :options="cmOptions"-->
-<!--            class="code"-->
+    <el-table :data="tableData" v-show="showTable" size="mini">
+      <el-table-column :prop="item" :label="item" v-for="item in keys" :key="item"></el-table-column>
+    </el-table>
+    <el-input type="textarea" v-model="response" :autosize="{ minRows: 5, maxRows: 20 }" class="my" v-show="!showTable"></el-input>
 
-<!--        ></codemirror>-->
-<!--      </el-collapse-item>-->
-<!--      <el-collapse-item title="java" name="3">-->
-<!--        <div>简化流程：设计简洁直观的操作流程；</div>-->
-<!--        <div>清晰明确：语言表达清晰且表意明确，让用户快速理解进而作出决策；</div>-->
-<!--        <div>帮助用户识别：界面简单直白，让用户快速识别而非回忆，减少用户记忆负担。</div>-->
-<!--      </el-collapse-item>-->
-<!--      <el-collapse-item title="javascript" name="4">-->
-<!--        <div>用户决策：根据场景可给予用户操作建议或安全提示，但不能代替用户进行决策；</div>-->
-<!--        <div>结果可控：用户可以自由的进行操作，包括撤销、回退和终止当前操作等。</div>-->
-<!--      </el-collapse-item>-->
-<!--    </el-collapse>-->
+    <el-button size="small" @click="format" class="button">格式化json</el-button>
+    <el-button size="small" @click="tableShow" class="button">表格展示</el-button>
+    <el-button size="small" @click="tableHide" class="button">原始数据</el-button>
+    <!--    <h4>请求示例：</h4>-->
+    <!--    <el-collapse accordion>-->
+    <!--      <el-collapse-item title="shell" name="1">-->
+
+    <!--      </el-collapse-item>-->
+    <!--      <el-collapse-item title="python" name="2">-->
+    <!--        <codemirror-->
+    <!--            ref="mycode"-->
+    <!--            :value="curCode"-->
+    <!--            :options="cmOptions"-->
+    <!--            class="code"-->
+
+    <!--        ></codemirror>-->
+    <!--      </el-collapse-item>-->
+    <!--      <el-collapse-item title="java" name="3">-->
+    <!--        <div>简化流程：设计简洁直观的操作流程；</div>-->
+    <!--        <div>清晰明确：语言表达清晰且表意明确，让用户快速理解进而作出决策；</div>-->
+    <!--        <div>帮助用户识别：界面简单直白，让用户快速识别而非回忆，减少用户记忆负担。</div>-->
+    <!--      </el-collapse-item>-->
+    <!--      <el-collapse-item title="javascript" name="4">-->
+    <!--        <div>用户决策：根据场景可给予用户操作建议或安全提示，但不能代替用户进行决策；</div>-->
+    <!--        <div>结果可控：用户可以自由的进行操作，包括撤销、回退和终止当前操作等。</div>-->
+    <!--      </el-collapse-item>-->
+    <!--    </el-collapse>-->
   </div>
 </template>
 
 <script>
-import { codemirror } from 'vue-codemirror';
+import {codemirror} from 'vue-codemirror';
 import 'codemirror/theme/ambiance.css'; // 这里引入的是主题样式，根据设置的theme的主题引入，一定要引入！！
 require('codemirror/mode/javascript/javascript'); // 这里引入的模式的js，根据设置的mode引入，一定要引入！！
-
 
 export default {
   name: "request",
@@ -65,7 +71,10 @@ export default {
         mode: 'text/javascript',
         theme: 'ambiance',
         readOnly: false
-      }
+      },
+      keys: [],
+      tableData: [],
+      showTable: false
     }
   },
   methods: {
@@ -93,9 +102,10 @@ export default {
       this.axios.post("/apiConfig/request",
           {url: url, "params": JSON.stringify(p)}
       ).then((response) => {
-        console.log(response.data)
+        this.showTable = false
         if (response.data.success) {
           this.response = response.data.data
+
         }
       }).catch((error) => {
         this.$message.error("失败")
@@ -105,8 +115,27 @@ export default {
       const o = JSON.parse(this.response)
       this.response = JSON.stringify(o, null, 4)
     },
+    tableShow() {
+      if (this.response == null)
+        return
+      let obj = JSON.parse(this.response);
+      if (obj.success) {
+        this.tableData = obj.data
+        if (obj.data.length > 0) {
+          this.keys = (Object.keys(obj.data[0]))
+        } else {
+          return
+        }
+      } else {
+        return
+      }
+      this.showTable = true
+    },
+    tableHide(){
+      this.showTable = false
+    }
   },
-  components: { codemirror },
+  components: {codemirror},
   created() {
     this.getDetail(this.$route.query.id)
     this.getAddress()
@@ -120,19 +149,23 @@ export default {
   font-family: 'Consolas', Helvetica, Arial, sans-serif;
   /*font-size: 18px;*/
 }
-h2{
-  margin-bottom : 25px;
+
+h2 {
+  margin-bottom: 25px;
   text-align: center;
 }
 
-h4{
+h4 {
   margin: 10px 0;
 }
 
-.path{
+.path {
   font-size: 18px;
-  border: 1px solid ;
+  border: 1px solid;
   padding: 5px;
 
+}
+.button{
+  margin: 10px 10px 10px 0;
 }
 </style>
