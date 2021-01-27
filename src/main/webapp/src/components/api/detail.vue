@@ -27,18 +27,7 @@
                   class="my"></el-input>
       </el-form-item>
       <el-form-item label="请求参数">
-        <el-table :data="params" size="mini" border stripe>
-          <el-table-column prop="name" label="参数名称"></el-table-column>
-          <el-table-column label="数据类型">
-            <template slot-scope="scope">
-              <el-select v-model="scope.row.type">
-                <el-option label="string" value="string"></el-option>
-                <el-option label="number" value="number"></el-option>
-                <el-option label="date" value="date"></el-option>
-              </el-select>
-            </template>
-          </el-table-column>
-        </el-table>
+        <el-tag type="success" v-for="(item,index) in params" :key="index" effect="dark" class="tag">{{item.name}}</el-tag>
       </el-form-item>
 
 
@@ -106,5 +95,9 @@ h2 {
 
 h4 {
   margin: 10px 0;
+}
+.tag{
+  margin-right: 10px;
+  font-width: 700;
 }
 </style>
