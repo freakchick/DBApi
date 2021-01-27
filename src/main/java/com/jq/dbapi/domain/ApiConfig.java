@@ -42,4 +42,7 @@ public class ApiConfig {
 
     @TableField
     Integer status;
+
+    @TableField(value = "is_select")
+    Integer isSelect;
 }

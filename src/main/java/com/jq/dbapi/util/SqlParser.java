@@ -2,6 +2,7 @@ package com.jq.dbapi.util;
 
 import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.sql.ast.SQLStatement;
+import com.alibaba.druid.sql.ast.statement.SQLSelectStatement;
 import com.alibaba.druid.sql.dialect.hive.visitor.HiveSchemaStatVisitor;
 import com.alibaba.druid.sql.dialect.mysql.visitor.MySqlSchemaStatVisitor;
 import com.alibaba.druid.sql.dialect.oracle.visitor.OracleSchemaStatVisitor;
@@ -10,12 +11,10 @@ import com.alibaba.druid.sql.dialect.sqlserver.visitor.SQLServerSchemaStatVisito
 import com.alibaba.druid.sql.visitor.SchemaStatVisitor;
 import com.alibaba.druid.stat.TableStat;
 import com.alibaba.druid.util.JdbcConstants;
-import com.alibaba.fastjson.JSON;
-import org.apache.commons.io.FileUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
@@ -27,25 +26,29 @@ import java.util.stream.Collectors;
  * @author: jiangqiang
  * @create: 2020-08-31 17:28
  **/
+@Slf4j
 public class SqlParser {
     private static final Logger logger = LoggerFactory.getLogger(SqlParser.class);
 
-//
-//    public static void isSelect(String sql) {
-//        String dbType = JdbcConstants.MYSQL;
-//
-//        List<SQLStatement> stmtList = SQLUtils.parseStatements(sql, dbType);
-//
-//        SQLStatement stmt = stmtList.get(0);
-//
-//        try {
-//            SQLSelectStatement sqlSelectStatement = (SQLSelectStatement) stmt;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//    }
+    /**
+     * 1是查询类sql; 2是非查询类sql
+     * @param sql
+     * @param dbType
+     * @return
+     */
+    public static Integer isSelect(String sql, String dbType) {
+
+        try {
+            List<SQLStatement> stmtList = SQLUtils.parseStatements(sql, dbType);
+            SQLStatement stmt = stmtList.get(0);
+            SQLSelectStatement sqlSelectStatement = (SQLSelectStatement) stmt;
+            return 1;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return 0;
+        }
+
+    }
 
 //    public static void getLimit(String sql) {
 //        String dbType = JdbcConstants.MYSQL;
@@ -115,7 +118,7 @@ public class SqlParser {
         Collection<TableStat.Column> columns = visitor.getColumns();
         List<String> list = columns.stream().filter(t -> {
 
-            return t.isWhere() && t.getName().startsWith("$");
+            return t.getName().startsWith("$");
         })
                 .map(t -> t.getName().substring(1)).collect(Collectors.toList());
 

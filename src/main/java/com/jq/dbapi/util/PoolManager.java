@@ -23,10 +23,12 @@ public class PoolManager {
 
     private static Lock lock = new ReentrantLock();
 
+    private static Lock deleteLock = new ReentrantLock();
+
     //所有数据源的连接池存在map里
     static Map<Integer, DruidDataSource> map = new HashMap<>();
 
-    public static DruidDataSource getPool(DataSource ds) {
+    public static DruidDataSource getJdbcConnectionPool(DataSource ds) {
         if (map.containsKey(ds.getId())) {
             return map.get(ds.getId());
         } else {
@@ -35,12 +37,13 @@ public class PoolManager {
                 log.info(Thread.currentThread().getName() + "获取锁");
                 if (!map.containsKey(ds.getId())) {
                     DruidDataSource druidDataSource = new DruidDataSource();
+                    druidDataSource.setName(ds.getName());
                     druidDataSource.setUrl(ds.getUrl());
                     druidDataSource.setUsername(ds.getUsername());
                     druidDataSource.setPassword(ds.getPassword());
                     druidDataSource.setDriverClassName(ds.getClassName());
                     map.put(ds.getId(), druidDataSource);
-                    log.info("创建Druid连接池成功：{}", JSON.toJSONString(ds));
+                    log.info("创建Druid连接池成功：{}", ds.getName());
                 }
                 return map.get(ds.getId());
             } catch (Exception e) {
@@ -51,8 +54,25 @@ public class PoolManager {
         }
     }
 
+    //删除数据库连接池
+    public static void removeJdbcConnectionPool(Integer id) {
+        deleteLock.lock();
+        try {
+            DruidDataSource druidDataSource = map.get(id);
+            if (druidDataSource != null) {
+                druidDataSource.close();
+                map.remove(id);
+            }
+        } catch (Exception e) {
+            log.error(e.toString());
+        } finally {
+            deleteLock.unlock();
+        }
+
+    }
+
     public static DruidPooledConnection getPooledConnection(DataSource ds) throws SQLException {
-        DruidDataSource pool = PoolManager.getPool(ds);
+        DruidDataSource pool = PoolManager.getJdbcConnectionPool(ds);
         DruidPooledConnection connection = pool.getConnection();
 //        log.info("获取连接成功");
         return connection;

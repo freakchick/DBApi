@@ -20,7 +20,12 @@
       <el-form-item label="数据源">
         <el-select v-model="datasourceId" placeholder="请选择">
           <el-option v-for="item in datasources" :key="item.id" :label="item.name" :value="item.id">
-            <span style="float: left">{{ item.name }}</span>
+            <i class="iconfont icon-my-SQL" v-if="item.type == 'mysql'"></i>
+            <i class="iconfont icon-postgre-sql" v-if="item.type == 'postgresql'"></i>
+            <i class="iconfont icon-hive" v-if="item.type == 'hive'"></i>
+            <i class="iconfont icon-SQLServer" v-if="item.type == 'sqlserver'"></i>
+            <span>{{ item.name }}</span>
+<!--            <span style="float: left">{{ item.name }}</span>-->
           </el-option>
         </el-select>
       </el-form-item>
@@ -62,7 +67,8 @@ export default {
       sql: 'select name,age from user where id > $minId and id < $maxId',
       params: [],
       datasources: [],
-      address: null
+      address: null,
+      sqlType:null
     }
   },
   methods: {
@@ -136,5 +142,15 @@ h2 {
 
 h4 {
   margin: 10px 0;
+}
+
+i {
+  color: #0698a5;
+  /*background-color: #0698a5;*/
+  font-size: 18px;
+  font-weight: 700;
+  margin-right: 5px;
+  /*padding: 2px;*/
+  /*border-radius: 10px;*/
 }
 </style>

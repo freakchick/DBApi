@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jq.dbapi.dao.ApiConfigMapper;
+import com.jq.dbapi.dao.DataSourceMapper;
 import com.jq.dbapi.domain.ApiConfig;
 import com.jq.dbapi.util.ResponseDto;
+import com.jq.dbapi.util.SqlParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -28,6 +30,9 @@ public class ApiConfigService {
     @Autowired
     ApiConfigMapper apiConfigMapper;
 
+    @Autowired
+    DataSourceMapper dataSourceMapper;
+
     @Transactional
     public ResponseDto add(ApiConfig apiConfig) {
 
@@ -38,6 +43,11 @@ public class ApiConfigService {
 
             apiConfig.setRealSql(buildSql(apiConfig));
             apiConfig.setStatus(0);
+
+            String type = dataSourceMapper.selectById(apiConfig.getDatasourceId()).getType();
+            int select = SqlParser.isSelect(apiConfig.getSql(), type);
+            apiConfig.setIsSelect(select);
+
             apiConfigMapper.insert(apiConfig);
             return ResponseDto.success("添加成功");
         }
@@ -54,6 +64,11 @@ public class ApiConfigService {
         } else {
             apiConfig.setRealSql(buildSql(apiConfig));
             apiConfig.setStatus(0);
+
+            String type = dataSourceMapper.selectById(apiConfig.getDatasourceId()).getType();
+            int select = SqlParser.isSelect(apiConfig.getSql(), type);
+            apiConfig.setIsSelect(select);
+
             apiConfigMapper.updateById(apiConfig);
             return ResponseDto.success("修改成功");
         }

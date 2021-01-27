@@ -50,7 +50,7 @@ public class ApiController {
 
             List<Object> sqlParam = apiService.getSqlParam(request, config);
 
-            return apiService.executeSql(config.getRealSql(), datasource, sqlParam);
+            return apiService.executeSql(config, datasource, sqlParam);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return ResponseDto.fail(e.getMessage());

@@ -41,7 +41,8 @@ public class ApiService {
         return list;
     }
 
-    public ResponseDto executeSql(String sql, DataSource datasource, List<Object> sqlParam) {
+    public ResponseDto executeSql(ApiConfig apiConfig, DataSource datasource, List<Object> sqlParam) {
+        String sql = apiConfig.getRealSql();
         DruidPooledConnection connection = null;
         try {
 
@@ -52,29 +53,35 @@ public class ApiService {
             for (int i = 1; i <= sqlParam.size(); i++) {
                 statement.setObject(i, sqlParam.get(i - 1));
             }
-            ResultSet rs = statement.executeQuery();
 
-            int columnCount = rs.getMetaData().getColumnCount();
+            if (apiConfig.getIsSelect() == 1) {
+                ResultSet rs = statement.executeQuery();
 
-            List<String> columns = new ArrayList<>();
-            for (int i = 1; i <= columnCount; i++) {
-                String columnName = rs.getMetaData().getColumnLabel(i);
-                columns.add(columnName);
+                int columnCount = rs.getMetaData().getColumnCount();
+
+                List<String> columns = new ArrayList<>();
+                for (int i = 1; i <= columnCount; i++) {
+                    String columnName = rs.getMetaData().getColumnLabel(i);
+                    columns.add(columnName);
+                }
+                List<JSONObject> list = new ArrayList<>();
+                while (rs.next()) {
+                    JSONObject jo = new JSONObject();
+                    columns.stream().forEach(t -> {
+                        try {
+                            Object value = rs.getObject(t);
+                            jo.put(t, value);
+                        } catch (SQLException throwables) {
+                            throwables.printStackTrace();
+                        }
+                    });
+                    list.add(jo);
+                }
+                return ResponseDto.apiSuccess(list);
+            } else {
+                int rs = statement.executeUpdate();
+                return ResponseDto.apiSuccess(rs);
             }
-            List<JSONObject> list = new ArrayList<>();
-            while (rs.next()) {
-                JSONObject jo = new JSONObject();
-                columns.stream().forEach(t -> {
-                    try {
-                        Object value = rs.getObject(t);
-                        jo.put(t, value);
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
-                    }
-                });
-                list.add(jo);
-            }
-            return ResponseDto.apiSuccess(list);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.fail(e.getMessage());
