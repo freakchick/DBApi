@@ -80,7 +80,7 @@ public class ApiService {
                 return ResponseDto.apiSuccess(list);
             } else {
                 int rs = statement.executeUpdate();
-                return ResponseDto.apiSuccess(rs);
+                return ResponseDto.apiSuccess("数据库修改数据行数： " + rs);
             }
         } catch (Exception e) {
             e.printStackTrace();

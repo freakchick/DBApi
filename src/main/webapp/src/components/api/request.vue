@@ -12,7 +12,7 @@
       </el-form-item>
 
     </el-form>
-    <el-button @click="request" >发送请求</el-button>
+    <el-button @click="request">发送请求</el-button>
 
     <h4>返回结果：</h4>
 
@@ -22,8 +22,8 @@
     <el-input type="textarea" v-model="response" :autosize="{ minRows: 5, maxRows: 20 }" class="my" v-show="!showTable"></el-input>
 
     <el-button size="small" @click="format" class="button">格式化json</el-button>
-    <el-button size="small" @click="tableShow" class="button">表格展示</el-button>
-    <el-button size="small" @click="tableHide" class="button">原始数据</el-button>
+    <el-button size="small" @click="tableShow" class="button" v-if="isSelect == 1">表格展示</el-button>
+    <el-button size="small" @click="tableHide" class="button" v-if="isSelect == 1">原始数据</el-button>
     <!--    <h4>请求示例：</h4>-->
     <!--    <el-collapse accordion>-->
     <!--      <el-collapse-item title="shell" name="1">-->
@@ -65,13 +65,15 @@ export default {
       path: null,
       address: null,
       response: null,
-      curCode: 'import aa',
-      cmOptions: {
-        value: 'aaaa',
-        mode: 'text/javascript',
-        theme: 'ambiance',
-        readOnly: false
-      },
+      isSelect: null,
+
+      // curCode: 'import aa',
+      // cmOptions: {
+      //   value: 'aaaa',
+      //   mode: 'text/javascript',
+      //   theme: 'ambiance',
+      //   readOnly: false
+      // },
       keys: [],
       tableData: [],
       showTable: false
@@ -82,6 +84,7 @@ export default {
       this.axios.post("/apiConfig/detail/" + id).then((response) => {
         this.path = response.data.path
         this.params = JSON.parse(response.data.params)
+        this.isSelect = response.data.isSelect
       }).catch((error) => {
         this.$message.error("失败")
       })
@@ -131,7 +134,7 @@ export default {
       }
       this.showTable = true
     },
-    tableHide(){
+    tableHide() {
       this.showTable = false
     }
   },
@@ -165,7 +168,8 @@ h4 {
   padding: 5px;
 
 }
-.button{
+
+.button {
   margin: 10px 10px 10px 0;
 }
 </style>
