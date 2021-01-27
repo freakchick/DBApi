@@ -2,12 +2,15 @@
 
 ## 介绍
 - 快速生成数据库的http接口服务，零代码开发，只需编写sql，就可以生成http api服务。是数据库的上层应用，方便数据库数据对外发布http服务
-- 使用场景：BI报表、数据可视化大屏的后端接口快速开发；前端程序员快速开发接口进行接口联调；企业数据资产对外快速发布http服务及统一管理
+## 使用场景
+- BI报表、数据可视化大屏的后端接口快速开发；
+- 前端程序员快速开发后端接口进行接口联调；
+- 企业数据资产对外快速发布http服务及统一管理
 
 ## 特点
 - 支持动态添加、修改api；支持api上线、下线管理
-- 支持多数据源连接，支持动态添加、修改、删除数据库地址账户信息
-- 支持多种类型数据库，包括mysql、 sqlserver、 postgreSql、 hive、 maridb 、oracle
+- 支持多数据源连接，支持动态添加、修改、删除数据库地址
+- 支持多种类型数据库，包括mysql、 sqlserver、 postgreSql、 hive、 maridb
 - 支持接口传参，可以传任意多个参数，参数名根据sql自动解析生成（前提是sql编写遵循此软件的要求规范）
 - 支持所有增、删、改、查sql
 - 部署简便，安装部署不需要连数据库，只有一个jar包启动即可
@@ -23,6 +26,7 @@
 ## 安装教程
 
 - 依赖java环境，需要安装jdk8+
+- 下载地址： https://gitee.com/freakchicken/db-api/releases
 - 下载 dbApi.jar 和数据库文件data.db， 放在同级目录下
 - java -jar dbApi.jar 一键启动
 - 浏览器访问 http://localhost:8520/
@@ -35,7 +39,7 @@
 ![](https://freakchicken.gitee.io/images/dbApi/add_api_20210125161115.jpg)
 - 填入路径，这就是将来http请求的路径
 - 选择数据源，就是接口执行sql逻辑的数据库地址
-- 填入sql ，就是api内部执行的逻辑，注意参数一定要以$符号开头
+- 填入sql ，就是api内部执行的逻辑，**注意参数一定要以$符号开头，且sql类不能有两个相同的参数名**
 - 点击解析参数，自动解析出sql中的参数，这个参数就是将来的http请求参数，
 http请求传来的参数值会被替换进sql。同时选择参数类型，默认string
 - 点击保存，返回api列表页面，可以看到新增一条记录
@@ -100,3 +104,29 @@ http://localhost:8520
 <div style="text-align: center"> 
 <img src="https://freakchicken.gitee.io/images/kafkaui/wechatpay.jpg" width = "30%" />
 </div>
+
+## sql编写规范
+
+1.  sql中传入的字符串和日期类型参数不需要单引号包裹
+比如以下sql就是错误的:
+```
+select * from user where name =  '$userName'
+```
+正确的方式是:
+```
+select * from user where name =  $userName
+```
+
+2.  不能有两个以上相同的参数名
+比如以下sql就是错误的:
+```
+select id,name from table1 where id = $id
+union
+select id,name from table2 where id = $id
+```
+正确的方式是:
+```
+select id,name from table1 where id = $id1
+union
+select id,name from table2 where id = $id2
+```
