@@ -13,7 +13,7 @@ if [ $1 = "start" ]; then
   export CONF_DIR=$HOME/conf
   export LIB_JARS=$HOME/lib/*
 
-  nohup java -classpath $CONF_DIR:$LIB_JARS com.jq.dbapi.DBApiApplication
+  nohup java -classpath $CONF_DIR:$LIB_JARS com.jq.dbapi.DBApiApplication > /dev/null 2>&1 &
   echo $! >$pid
 
 elif [ $1 = "stop" ]; then
