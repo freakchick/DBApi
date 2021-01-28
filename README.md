@@ -14,7 +14,7 @@
 - 支持接口传参，可以传任意多个参数，参数名根据sql自动解析生成（前提是sql编写遵循此软件的要求规范）
 - 接口地址支持任意多级，比如 http://ip:port/api/aa/bb/cc
 - 支持所有增、删、改、查sql
-- 部署简便，安装部署不需要连数据库，只有一个jar包启动即可
+- 部署简便，安装部署不需要连数据库，一键启动即可（自带sqlite数据库作为元数据库，同时支持用户自定义使用mysql作为元数据库）
 - 资源占用极少，单tomcat容器运行，新api的发布并没有创建新的web容器
 - 集群扩展方便，api非硬编码方式，而是逻辑上的api，多节点集群扩展极方便
 
@@ -27,10 +27,30 @@
 ## 安装教程
 
 - 依赖java环境，需要安装jdk8+
-- 下载地址： https://gitee.com/freakchicken/db-api/releases
-- 下载 dbApi.jar 和数据库文件data.db， 放在同级目录下
-- java -jar dbApi.jar 一键启动
-- 浏览器访问 http://localhost:8520/
+- 下载安装包解压，下载地址： https://gitee.com/freakchicken/db-api/releases
+- 启动/停止命令:
+```shell script
+bin/dbApi.sh start
+bin/dbApi.sh stop
+```
+
+- 浏览器访问 http://ip:8520/
+
+
+- 如果想修改端口启动,修改conf/application.properties文件中的端口配置:
+```
+server.port=8520
+```
+
+- 如果您想使用自己的mysql作为元数据库，请修改conf/application.properties文件中的以下配置
+```
+spring.datasource.driver-class-name=
+spring.datasource.url=
+spring.datasource.username=
+spring.datasource.password=
+```
+
+启动前在数据库执行初始化sql脚本，脚本在sql/目录下
 
 ## 使用说明
 

@@ -1,10 +1,25 @@
 #!/bin/sh
 
-BIN_DIR=`dirname $0`
-BIN_DIR=`cd "$BIN_DIR"; pwd`
-HOME=$BIN_DIR/..
+pid=server.pid
 
-export CONF_DIR=$HOME/conf
-export LIB_JARS=$HOME/lib/*
+if [ $1 = "start" ]; then
+  BIN_DIR=$(dirname $0)
+  BIN_DIR=$(
+    cd "$BIN_DIR"
+    pwd
+  )
+  HOME=$BIN_DIR/..
 
-java -classpath $CONF_DIR:$LIB_JARS com.jq.dbapi.DBApiApplication
+  export CONF_DIR=$HOME/conf
+  export LIB_JARS=$HOME/lib/*
+
+  nohup java -classpath $CONF_DIR:$LIB_JARS com.jq.dbapi.DBApiApplication
+  echo $! >$pid
+
+elif [ $1 = "stop" ]; then
+  TARGET_PID=$(cat $pid)
+  kill $TARGET_PID
+
+else
+  echo "parameter invalid"
+fi
