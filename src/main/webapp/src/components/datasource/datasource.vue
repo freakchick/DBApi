@@ -2,7 +2,7 @@
   <div>
     <el-button @click="dialogVisible = true">创建数据源</el-button>
 
-    <el-table :data="tableData">
+    <el-table :data="tableData"  border stripe max-height="700">
       <el-table-column prop="name" label="名称"></el-table-column>
       <el-table-column prop="type" label="数据库"></el-table-column>
       <el-table-column prop="note" label="描述"></el-table-column>

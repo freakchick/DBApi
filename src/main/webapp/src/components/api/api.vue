@@ -4,7 +4,7 @@
       <el-button>创建api</el-button>
     </router-link>
 
-    <el-table :data="tableData">
+    <el-table :data="tableData"  border stripe max-height="700">
       <el-table-column label="名称">
         <template slot-scope="scope">
           <i class="iconfont icon-on_line1 circle" v-if="scope.row.status == 1" title="已上线"></i>
@@ -77,7 +77,7 @@ export default {
         })
         this.tableData = list
       }).catch((error) => {
-        this.$message.error("添加失败")
+        this.$message.error("查询所有api失败")
       })
     },
     handleDelete(id) {

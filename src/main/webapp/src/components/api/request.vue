@@ -16,7 +16,7 @@
 
     <h4>返回结果：</h4>
 
-    <el-table :data="tableData" v-show="showTable" size="mini">
+    <el-table :data="tableData" v-show="showTable" size="mini" border stripe max-height="700" >
       <el-table-column :prop="item" :label="item" v-for="item in keys" :key="item"></el-table-column>
     </el-table>
     <el-input type="textarea" v-model="response" :autosize="{ minRows: 5, maxRows: 20 }" class="my" v-show="!showTable"></el-input>
