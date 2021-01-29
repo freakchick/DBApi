@@ -20,9 +20,7 @@
       </el-table-column>
       <el-table-column label="参数">
         <template slot-scope="scope">
-          <el-tag type="primary" v-for="item in scope.row.p" size="mini" effect="dark" :title="item.type" class="tag">
-            {{ item.name }}
-          </el-tag>
+          <data-tag v-for="item in scope.row.p" :name="item.name" :type="item.type" ></data-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作">
@@ -63,6 +61,8 @@
 </template>
 
 <script>
+import dataTag from "@/components/common/dataTag";
+
 export default {
   name: "api",
   data() {
@@ -71,6 +71,7 @@ export default {
       tableData: []
     }
   },
+  components: {dataTag},
   methods: {
     getAllApis() {
       this.axios.post("/apiConfig/getAll").then((response) => {
@@ -146,4 +147,6 @@ i {
 .tag {
   margin-right: 5px;
 }
+
+
 </style>
