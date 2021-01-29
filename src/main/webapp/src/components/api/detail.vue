@@ -41,7 +41,7 @@ export default {
   name: "detail",
   data() {
     return {
-      detail: null,
+      detail: {},
       datasources: [],
       address: null,
       params: []
