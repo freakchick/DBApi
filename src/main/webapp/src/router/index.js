@@ -7,6 +7,9 @@ import json from '../components/tool/json'
 import time from '../components/tool/time'
 
 import datasource from '../components/datasource/datasource'
+import datasourceEdit from '../components/datasource/edit'
+import datasourceAdd from '../components/datasource/add'
+import datasourceDetail from '../components/datasource/detail'
 import api from '../components/api/api'
 import apiAdd from '../components/api/add'
 import apiEdit from '../components/api/edit'
@@ -24,6 +27,9 @@ const routes = [
             {path: '/tool/time', name: 'time', component: time},
 
             {path: '/datasource', name: 'datasource', component: datasource},
+            {path: '/datasource/edit', component: datasourceEdit},
+            {path: '/datasource/detail', component: datasourceDetail},
+            {path: '/datasource/add', component: datasourceAdd},
             {path: '/api', name: 'api', component: api},
             {path: '/api/add', name: 'apiAdd', component: apiAdd},
             {path: '/api/edit', name: 'apiEdit', component: apiEdit},

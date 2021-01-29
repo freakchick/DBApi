@@ -34,7 +34,7 @@ public class DataSourceService {
         dataSourceMapper.insert(dataSource);
     }
 
-    @CacheEvict(value = "datasource", key = "#id")
+    @CacheEvict(value = "datasource", key = "#dataSource.id")
     @Transactional
     public void update(DataSource dataSource) {
         dataSourceMapper.updateById(dataSource);

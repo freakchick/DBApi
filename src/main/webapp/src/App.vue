@@ -51,4 +51,18 @@ img {
   margin: 0 auto;
 
 }
+
+i {
+  font-size: 14px;
+}
+
+h2 {
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+h4 {
+  margin: 10px 0;
+}
+
 </style>
