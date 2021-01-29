@@ -33,11 +33,11 @@
       </el-form-item>
       <el-form-item label="请求参数">
 
-        <el-table :data="detail.params" border stripe max-height="700" size="mini">
+        <el-table :data="detail.params" border stripe max-height="700" size="mini" style="width:500px">
           <el-table-column prop="name" label="名称"></el-table-column>
           <el-table-column prop="type" label="类型">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.type" placeholder="请选择">
+              <el-select v-model="scope.row.type" placeholder="请选择" size="mini">
                 <el-option label="string" value="string"></el-option>
                 <el-option label="double" value="double"></el-option>
                 <el-option label="bigint" value="bigint"></el-option>

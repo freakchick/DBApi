@@ -13,7 +13,11 @@
         </template>
       </el-table-column>
       <!--      <el-table-column prop="note" label="描述"></el-table-column>-->
-      <el-table-column prop="path" label="路径"></el-table-column>
+      <el-table-column label="路径">
+        <template slot-scope="scope">
+          <span>/api/{{ scope.row.path }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="参数">
         <template slot-scope="scope">
           <el-tag type="primary" v-for="item in scope.row.p" size="mini" effect="dark" :title="item.type" class="tag">

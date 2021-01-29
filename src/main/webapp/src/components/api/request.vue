@@ -6,9 +6,11 @@
     <div class="path">http://{{ address }}/api/{{ path }}</div>
 
     <h4>接口参数：</h4>
-    <el-form label-width="100px" style="width: 400px" size="small">
+    <el-form label-width="100px" style="width: 400px" size="medium">
       <el-form-item :label="item.name + '：'" v-for="item in params">
-        <el-input v-model="item.value"></el-input>
+        <el-input v-model="item.value">
+          <template slot="append">{{item.type}}</template>
+        </el-input>
       </el-form-item>
 
     </el-form>
