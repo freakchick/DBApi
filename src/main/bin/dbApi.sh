@@ -5,15 +5,17 @@ BIN_DIR=$(
   cd "$BIN_DIR"
   pwd
 )
+# 安装包部署的目录
 HOME=$BIN_DIR/..
 PID=$BIN_DIR/server.pid
 
 export CONF_DIR=$HOME/conf
 export LIB_JARS=$HOME/lib/*
+export LOG_DIR=$HOME/logs
 
 if [ $1 = "start" ]; then
 
-  nohup java -classpath $CONF_DIR:$LIB_JARS com.jq.dbapi.DBApiApplication >/dev/null 2>&1 &
+  nohup java -Dlogging.file=$LOG_DIR/dbApi.log -classpath $CONF_DIR:$LIB_JARS com.jq.dbapi.DBApiApplication >/dev/null 2>&1 &
   echo $! >$PID
 
 elif [ $1 = "stop" ]; then
