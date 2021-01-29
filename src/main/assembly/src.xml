@@ -1,7 +1,7 @@
 <assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
     <id>bin</id>
     <formats>
-        <format>tar.gz</format><!--打包的结果格式-->
+        <format>tar.gz</format>
     </formats>
     <includeBaseDirectory>true</includeBaseDirectory>
     <baseDirectory>${project.build.finalName}</baseDirectory>
@@ -22,15 +22,15 @@
                 <include>*.sh</include>
             </includes>
         </fileSet>
-        <fileSet>
-            <directory>${project.basedir}/src/main/bin</directory>
-            <outputDirectory>bin</outputDirectory>
-            <lineEnding>windows</lineEnding>
-            <fileMode>744</fileMode>
-            <includes>
-                <include>*.bat</include>
-            </includes>
-        </fileSet>
+<!--        <fileSet>-->
+<!--            <directory>${project.basedir}/src/main/bin</directory>-->
+<!--            <outputDirectory>bin</outputDirectory>-->
+<!--            <lineEnding>windows</lineEnding>-->
+<!--            <fileMode>744</fileMode>-->
+<!--            <includes>-->
+<!--                <include>*.bat</include>-->
+<!--            </includes>-->
+<!--        </fileSet>-->
         <fileSet>
             <directory>${project.basedir}/src/main/resources</directory>
             <outputDirectory>conf</outputDirectory>
