@@ -1,10 +1,10 @@
 <template>
   <div>
     <router-link to='/api/add'>
-      <el-button>创建api</el-button>
+      <el-button style="margin-bottom:5px;" type="primary" plain>创建api</el-button>
     </router-link>
 
-    <el-table :data="tableData"  border stripe max-height="700">
+    <el-table :data="tableData" border stripe max-height="700">
       <el-table-column label="名称">
         <template slot-scope="scope">
           <i class="iconfont icon-on_line1 circle" v-if="scope.row.status == 1" title="已上线"></i>
@@ -40,7 +40,7 @@
           </el-button>
 
           <el-button plain size="mini" v-if="scope.row.status == 1" type="primary" @click="httpTest(scope.row.id)" title="请求测试" circle>
-            <i class="iconfont icon-HTTPRequest" ></i>
+            <i class="iconfont icon-HTTPRequest"></i>
           </el-button>
 
         </template>
@@ -122,7 +122,7 @@ export default {
 </script>
 
 <style scoped>
-i{
+i {
   font-size: 14px;
 }
 

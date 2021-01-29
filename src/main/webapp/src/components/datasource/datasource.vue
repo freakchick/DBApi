@@ -5,8 +5,16 @@
       <el-button class="button" type="primary" plain>创建数据源</el-button>
     </router-link>
     <el-table :data="tableData" border stripe max-height="700">
-      <el-table-column prop="name" label="名称"></el-table-column>
-      <el-table-column prop="type" label="数据库"></el-table-column>
+      <el-table-column label="名称">
+        <template slot-scope="scope">
+          <i class="iconfont icon-my-SQL db" v-if="scope.row.type == 'mysql'"></i>
+          <i class="iconfont icon-postgre-sql db" v-if="scope.row.type == 'postgresql'"></i>
+          <i class="iconfont icon-hive db" v-if="scope.row.type == 'hive'"></i>
+          <i class="iconfont icon-SQLServer db" v-if="scope.row.type == 'sqlserver'"></i>
+          <span>{{scope.row.name}}</span>
+        </template>
+      </el-table-column>
+<!--      <el-table-column prop="type" label="数据库"></el-table-column>-->
       <el-table-column prop="note" label="描述"></el-table-column>
       <!--      <el-table-column prop="url" label="地址"></el-table-column>-->
       <el-table-column label="操作">
