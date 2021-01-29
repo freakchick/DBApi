@@ -35,8 +35,24 @@ public class ApiService {
         for (int i = 0; i < requestParams.size(); i++) {
             JSONObject jo = requestParams.getJSONObject(i);
             String name = jo.getString("name");
+            String type = jo.getString("type");
+
             String value = request.getParameter(name);
-            list.add(value);
+
+            switch (type) {
+                case "double":
+                    Double v = Double.valueOf(value);
+                    list.add(v);
+                    break;
+                case "bigint":
+                    Long longV = Long.valueOf(value);
+                    list.add(longV);
+                    break;
+                case "string":
+                case "date":
+                    list.add(value);
+                    break;
+            }
         }
         return list;
     }
