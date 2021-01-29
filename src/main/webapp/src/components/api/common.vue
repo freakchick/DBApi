@@ -29,7 +29,7 @@
       </el-form-item>
       <el-form-item label="sql">
         <el-input type="textarea" v-model="detail.sql" :autosize="{ minRows: 5, maxRows: 20 }" placeholder="请输入sql" class="my"></el-input>
-        <el-button @click="parseParams" style="margin :10px 0">解析参数</el-button>
+        <el-button type="primary" plain @click="parseParams" style="margin :10px 0">解析参数</el-button>
       </el-form-item>
       <el-form-item label="请求参数">
 
