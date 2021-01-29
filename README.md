@@ -13,7 +13,7 @@
 - 支持多种类型数据库，包括mysql、 sqlserver、 postgreSql、 hive、 maridb
 - 支持接口传参，可以传任意多个参数，参数名根据sql自动解析生成（前提是sql编写遵循此软件的要求规范）
 - 接口地址支持任意多级，比如 http://ip:port/api/aa/bb/cc
-- 支持所有增、删、改、查sql
+- 支持insert、update、delete、select sql语法
 - 部署简便，安装部署不需要连数据库，一键启动即可（自带sqlite数据库作为元数据库，同时支持用户自定义使用mysql作为元数据库）
 - 资源占用极少，单tomcat容器运行，新api的发布并没有创建新的web容器
 - 集群扩展方便，api非硬编码方式，而是逻辑上的api，多节点集群扩展极方便
@@ -23,6 +23,7 @@
 - 考虑到部署的简便性，最后打包是整合打到一个完整的jar包里
 - 考虑到部署的简便性，使用sqlite数据库
 - 新api的发布并没有创建新的tomcat容器，而是在单进程tomcat内创建逻辑上的api，不是物理上的硬编码的api，相比之下极大的节省了服务器资源。
+
 
 ## 安装教程
 
@@ -159,3 +160,14 @@ select id,name from table1 where id = $id1
 union
 select id,name from table2 where id = $id2
 ```
+
+## 开发计划
+- 前端ui优化-使用sql语法插件
+- 数组参数支持，sql in语法 参数支持
+- maven打包前端文件复制的bug修复
+- 支持动态sql语法(类似mybatis)
+- 接口权限控制
+- 集群版本开发，支持微服务注册consul/eureka/nacos
+- docker支持
+- spring-boot-stater-dbApi开发，支持springboot集成，代码配置接口
+- 安装包windows运行支持，bat编程
