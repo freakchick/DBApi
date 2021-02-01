@@ -134,41 +134,33 @@
 
     <build>
         <finalName>dbApi-${project.version}</finalName>
-<!--        <resources>-->
-<!--            <resource>-->
-<!--                <directory>src/main/resources</directory>-->
-<!--                <filtering>false</filtering>-->
-<!--                <includes>-->
-<!--                    <include>**/*.*</include>-->
-<!--                </includes>-->
-<!--            </resource>-->
-<!--            <resource>-->
-<!--                <directory>${basedir}</directory>-->
-<!--                <filtering>false</filtering>-->
-<!--                <includes>-->
-<!--                    <include>data.db</include>-->
-<!--                </includes>-->
-<!--                <targetPath>${project.build.directory}</targetPath>-->
 
-<!--            </resource>-->
-<!--        </resources>-->
         <plugins>
+            <!--  mvn clean 命令执行的时候删除static文件夹-->
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <failOnError>true</failOnError>
+                    <filesets>
+                        <fileset>
+                            <directory>${basedir}/src/main/resources/static/</directory>
+                            <includes>
+                                <include>**/*.*</include>
+                            </includes>
 
-
-
-<!--            <plugin>-->
-<!--                <groupId>org.springframework.boot</groupId>-->
-<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
-<!--            </plugin>-->
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
 
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <executions>
-
                     <execution>
                         <id>exec-cnpm-install</id>
-                        <phase>prepare-package</phase>
+                        <phase>validate</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
@@ -182,8 +174,8 @@
                     </execution>
 
                     <execution>
-                        <id>exec-cnpm-run-build</id>
-                        <phase>prepare-package</phase>
+                        <id>exec-npm-run-build</id>
+                        <phase>validate</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
@@ -202,31 +194,34 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <configuration>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                </configuration>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.0.0</version>
                 <executions>
                     <execution>
-                        <id>copy-spring-boot-webapp</id>
-                        <phase>prepare-package</phase>
+                        <id>move-dist-to-static</id>
+                        <phase>validate</phase>
                         <goals>
-                            <goal>copy-resources</goal>
+                            <goal>run</goal>
                         </goals>
                         <configuration>
-                            <encoding>utf-8</encoding>
-                            <outputDirectory>${basedir}/src/main/resources/static</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${basedir}/src/main/webapp/dist</directory>
-                                </resource>
-                            </resources>
+                            <!--删除static文件夹内容-->
+                            <target>
+                                <delete>
+                                    <fileset dir="${basedir}/src/main/resources/static/" includes="**/*.*"/>
+                                </delete>
+                            </target>
+                            <!-- 复制dist文件夹到static文件夹-->
+                            <target>
+                                <copy todir="${basedir}/src/main/resources/static">
+                                    <fileset dir="${basedir}/src/main/webapp/dist">
+                                        <include name="**/*.*"/>
+                                    </fileset>
+                                </copy>
+                            </target>
                         </configuration>
                     </execution>
-
                 </executions>
             </plugin>
-
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
