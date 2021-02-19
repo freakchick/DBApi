@@ -41,7 +41,7 @@ public class ApiConfigService {
             return ResponseDto.fail("该路径已被使用，请修改请求路径再保存");
         } else {
 
-            apiConfig.setRealSql(buildSql(apiConfig));
+//            apiConfig.setRealSql(buildSql(apiConfig));
             apiConfig.setStatus(0);
 
             String type = dataSourceMapper.selectById(apiConfig.getDatasourceId()).getType();
@@ -62,7 +62,7 @@ public class ApiConfigService {
         if (size > 0) {
             return ResponseDto.fail("该路径已被使用，请修改请求路径再保存");
         } else {
-            apiConfig.setRealSql(buildSql(apiConfig));
+//            apiConfig.setRealSql(buildSql(apiConfig));
             apiConfig.setStatus(0);
 
             String type = dataSourceMapper.selectById(apiConfig.getDatasourceId()).getType();
@@ -114,7 +114,7 @@ public class ApiConfigService {
         return apiConfigMapper.selectById(id).getPath();
     }
 
-    public String buildSql(ApiConfig config) {
+/*    public String buildSql(ApiConfig config) {
         String sql = config.getSql();
         JSONArray requestParams = JSON.parseArray(config.getParams());
         for (int i = 0; i < requestParams.size(); i++) {
@@ -124,5 +124,5 @@ public class ApiConfigService {
             sql = sql.replace(old, "?");
         }
         return sql;
-    }
+    }*/
 }

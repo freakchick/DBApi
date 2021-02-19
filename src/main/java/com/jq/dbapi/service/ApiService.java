@@ -4,8 +4,11 @@ import com.alibaba.druid.pool.DruidPooledConnection;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.annotation.SqlParser;
 import com.jq.dbapi.domain.ApiConfig;
 import com.jq.dbapi.domain.DataSource;
+import com.jq.dbapi.sql.DynamicSqlXmlBuilder;
+import com.jq.dbapi.sql.SqlExecutor;
 import com.jq.dbapi.util.PoolManager;
 import com.jq.dbapi.util.ResponseDto;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +19,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @program: dbApi
@@ -28,8 +33,8 @@ import java.util.List;
 @Slf4j
 public class ApiService {
 
-    public List<Object> getSqlParam(HttpServletRequest request, ApiConfig config) {
-        List<Object> list = new ArrayList<>();
+    public Map<String, Object> getSqlParam(HttpServletRequest request, ApiConfig config) {
+        Map<String, Object> map = new HashMap<>();
 
         JSONArray requestParams = JSON.parseArray(config.getParams());
         for (int i = 0; i < requestParams.size(); i++) {
@@ -42,32 +47,32 @@ public class ApiService {
             switch (type) {
                 case "double":
                     Double v = Double.valueOf(value);
-                    list.add(v);
+                    map.put(name, v);
                     break;
                 case "bigint":
                     Long longV = Long.valueOf(value);
-                    list.add(longV);
+                    map.put(name, longV);
                     break;
                 case "string":
                 case "date":
-                    list.add(value);
+                    map.put(name, value);
                     break;
             }
         }
-        return list;
+        return map;
     }
 
-    public ResponseDto executeSql(ApiConfig apiConfig, DataSource datasource, List<Object> sqlParam) {
-        String sql = apiConfig.getRealSql();
+    public ResponseDto executeSql(ApiConfig apiConfig, DataSource datasource, SqlExecutor sqlExecutor) {
+
         DruidPooledConnection connection = null;
         try {
 
             connection = PoolManager.getPooledConnection(datasource);
-            PreparedStatement statement = connection.prepareStatement(sql);
-
+            PreparedStatement statement = connection.prepareStatement(sqlExecutor.getSql());
+            List<Object> jdbcParamValues = sqlExecutor.getJdbcParamValues();
             //参数注入
-            for (int i = 1; i <= sqlParam.size(); i++) {
-                statement.setObject(i, sqlParam.get(i - 1));
+            for (int i = 1; i <= jdbcParamValues.size(); i++) {
+                statement.setObject(i, jdbcParamValues.get(i - 1));
             }
 
             if (apiConfig.getIsSelect() == 1) {

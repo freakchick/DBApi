@@ -6,6 +6,8 @@ import com.jq.dbapi.domain.DataSource;
 import com.jq.dbapi.service.ApiConfigService;
 import com.jq.dbapi.service.ApiService;
 import com.jq.dbapi.service.DataSourceService;
+import com.jq.dbapi.sql.DynamicSqlXmlBuilder;
+import com.jq.dbapi.sql.SqlExecutor;
 import com.jq.dbapi.util.ResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 日志拦截器
@@ -82,9 +85,13 @@ public class ApiInterceptor implements HandlerInterceptor {
                 return ResponseDto.fail("数据源不存在！！");
             }
 
-            List<Object> sqlParam = apiService.getSqlParam(request, config);
+            Map<String, Object> sqlParam = apiService.getSqlParam(request, config);
 
-            return apiService.executeSql(config, datasource, sqlParam);
+            String sql = config.getSql();
+            List<Object> tags = DynamicSqlXmlBuilder.parseXml(sql);
+            SqlExecutor sqlExecutor = DynamicSqlXmlBuilder.buildSql(tags, sqlParam);
+
+            return apiService.executeSql(config, datasource, sqlExecutor);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return ResponseDto.fail(e.getMessage());
