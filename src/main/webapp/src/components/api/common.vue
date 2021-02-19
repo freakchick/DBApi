@@ -40,14 +40,11 @@
       <el-form-item label="请求参数">
         <div v-for="(item,index) in detail.params" style="margin-bottom:5px">
           <el-autocomplete v-model="item.name" :fetch-suggestions="parseParams" style="width:200px;margin-right:5px" placeholder="请输入参数名"></el-autocomplete>
-          <!--          <el-select v-model="item.type" placeholder="请选择数据类型">-->
-          <!--            <el-option label="string" value="string"></el-option>-->
-          <!--            <el-option label="double" value="double"></el-option>-->
-          <!--            <el-option label="bigint" value="bigint"></el-option>-->
-          <!--            <el-option label="date" value="date"></el-option>-->
-          <!--          </el-select>-->
+          <el-select v-model="item.type" :options="options" placeholder="请选择数据类型">
+            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
 
-          <el-cascader  v-model="item.type" separator=" > " :options="options"></el-cascader>
+          <!--          <el-cascader  v-model="item.type" separator=" > " :options="options"></el-cascader>-->
 
           <el-button @click="deleteRow" circle type="danger" icon="el-icon-delete" size="mini"></el-button>
         </div>
@@ -80,13 +77,11 @@
           {label: 'bigint', value: 'bigint'},
           {label: 'decimal', value: 'decimal'},
           {label: 'date', value: 'date'},
-          {
-            label: '数组', children: [
-              {label: 'string', value: 'list<string>'},
-              {label: 'bigint', value: 'list<bigint>'},
-              {label: 'decimal', value: 'list<decimal>'},
-              {label: 'date', value: 'list<date>'}]
-          }
+
+          {label: 'string 数组', value: 'list<string>'},
+          {label: 'bigint 数组', value: 'list<bigint>'},
+          {label: 'decimal 数组', value: 'list<decimal>'},
+          {label: 'date 数组', value: 'list<date>'}
 
         ]
       }
