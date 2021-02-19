@@ -26,8 +26,7 @@ import java.util.Map;
 public class DynamicSqlXmlBuilder {
 
     public static void main(String[] args) throws Exception {
-        String file = FileUtils.readFileToString(new File("C:\\Users\\lty-017\\Desktop\\a.xml"), "utf-8");
-        List<Object> list = parseXml(file);
+        List<Object> list = parseXml("<root>select name,age from user where id > #{minId} and id &lt; #{maxId}</root>");
         Map<String, Object> map = new HashMap<>();
         map.put("minId", 100);
         map.put("maxId", 500);

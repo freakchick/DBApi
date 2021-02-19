@@ -12,6 +12,7 @@ import com.jq.dbapi.sql.SqlExecutor;
 import com.jq.dbapi.util.PoolManager;
 import com.jq.dbapi.util.ResponseDto;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,20 +44,24 @@ public class ApiService {
             String type = jo.getString("type");
 
             String value = request.getParameter(name);
+            if (StringUtils.isNotBlank(value)) {
 
-            switch (type) {
-                case "double":
-                    Double v = Double.valueOf(value);
-                    map.put(name, v);
-                    break;
-                case "bigint":
-                    Long longV = Long.valueOf(value);
-                    map.put(name, longV);
-                    break;
-                case "string":
-                case "date":
-                    map.put(name, value);
-                    break;
+                switch (type) {
+                    case "double":
+                        Double v = Double.valueOf(value);
+                        map.put(name, v);
+                        break;
+                    case "bigint":
+                        Long longV = Long.valueOf(value);
+                        map.put(name, longV);
+                        break;
+                    case "string":
+                    case "date":
+                        map.put(name, value);
+                        break;
+                }
+            } else {
+                map.put(name, value);
             }
         }
         return map;

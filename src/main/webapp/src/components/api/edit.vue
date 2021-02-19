@@ -25,6 +25,7 @@ export default {
         name: detail.name,
         note: detail.note,
         path: detail.path,
+        isSelect: detail.isSelect,
         datasourceId: detail.datasourceId,
         sql: detail.sql,
         params: JSON.stringify(detail.params)

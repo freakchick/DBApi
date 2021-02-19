@@ -5,7 +5,7 @@ import {
     // Pagination,
     Link,
     Dialog,
-    // Autocomplete,
+    Autocomplete,
     // Dropdown,
     // DropdownMenu,
     // DropdownItem,
@@ -60,7 +60,7 @@ import {
     // CarouselItem,
     Collapse,
     CollapseItem,
-    // Cascader,
+    Cascader,
     // ColorPicker,
     // Transfer,
     Container,
@@ -86,7 +86,7 @@ import {
 // Vue.use(Pagination);
 Vue.use(Link);
 Vue.use(Dialog);
-// Vue.use(Autocomplete);
+Vue.use(Autocomplete);
 // Vue.use(Dropdown);
 // Vue.use(DropdownMenu);
 // Vue.use(DropdownItem);
@@ -149,7 +149,7 @@ Vue.use(Tag);
 // Vue.use(CarouselItem);
 Vue.use(Collapse);
 Vue.use(CollapseItem);
-// Vue.use(Cascader);
+Vue.use(Cascader);
 // Vue.use(ColorPicker);
 // Vue.use(Transfer);
 Vue.use(Container);

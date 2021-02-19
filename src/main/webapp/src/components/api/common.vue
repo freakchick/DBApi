@@ -27,25 +27,31 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="sql类型">
+        <el-select v-model="detail.isSelect">
+          <el-option label="查询类" value=1></el-option>
+          <el-option label="非查询类" value=0></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="sql">
         <el-input type="textarea" v-model="detail.sql" :autosize="{ minRows: 5, maxRows: 20 }" placeholder="请输入sql" class="my"></el-input>
-        <el-button type="primary" plain @click="parseParams" style="margin :10px 0">解析参数</el-button>
+        <!--        <el-button type="primary" plain @click="parseParams" style="margin :10px 0">解析参数</el-button>-->
       </el-form-item>
       <el-form-item label="请求参数">
+        <div v-for="(item,index) in detail.params" style="margin-bottom:5px">
+          <el-autocomplete v-model="item.name" :fetch-suggestions="parseParams" style="width:200px;margin-right:5px" placeholder="请输入参数名"></el-autocomplete>
+          <!--          <el-select v-model="item.type" placeholder="请选择数据类型">-->
+          <!--            <el-option label="string" value="string"></el-option>-->
+          <!--            <el-option label="double" value="double"></el-option>-->
+          <!--            <el-option label="bigint" value="bigint"></el-option>-->
+          <!--            <el-option label="date" value="date"></el-option>-->
+          <!--          </el-select>-->
 
-        <el-table :data="detail.params" border stripe max-height="700" size="mini" style="width:500px">
-          <el-table-column prop="name" label="参数名称"></el-table-column>
-          <el-table-column prop="type" label="数据类型">
-            <template slot-scope="scope">
-              <el-select v-model="scope.row.type" placeholder="请选择数据类型" size="mini">
-                <el-option label="string" value="string"></el-option>
-                <el-option label="double" value="double"></el-option>
-                <el-option label="bigint" value="bigint"></el-option>
-                <el-option label="date" value="date"></el-option>
-              </el-select>
-            </template>
-          </el-table-column>
-        </el-table>
+          <el-cascader  v-model="item.type" separator=" > " :options="options"></el-cascader>
+
+          <el-button @click="deleteRow" circle type="danger" icon="el-icon-delete" size="mini"></el-button>
+        </div>
+        <el-button @click="addRow" icon="el-icon-plus" type="primary" circle size="mini"></el-button>
 
       </el-form-item>
 
@@ -55,85 +61,107 @@
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      datasources: [],
-      address: null,
-      detail: {
-        datasourceId: null,
-        name: null,
-        note: null,
-        path: null,
-        sql: 'select name,age from user where id > $minId and id < $maxId',
-        params: []
+  export default {
+    data() {
+      return {
+        datasources: [],
+        address: null,
+        detail: {
+          datasourceId: null,
+          name: null,
+          note: null,
+          path: null,
+          isSelect: "1",
+          sql: 'select name,age from user where id > #{minId} and id < #{maxId}',
+          params: []
+        },
+        options: [
+          {label: 'string', value: 'string'},
+          {label: 'bigint', value: 'bigint'},
+          {label: 'decimal', value: 'decimal'},
+          {label: 'date', value: 'date'},
+          {
+            label: '数组', children: [
+              {label: 'string', value: 'list<string>'},
+              {label: 'bigint', value: 'list<bigint>'},
+              {label: 'decimal', value: 'list<decimal>'},
+              {label: 'date', value: 'list<date>'}]
+          }
+
+        ]
       }
-    }
-  },
-  props: ["id"],
-  methods: {
-    getAllSource() {
-      this.axios.post("/datasource/getAll").then((response) => {
-        this.datasources = response.data
-      }).catch((error) => {
-        this.$message.error("查询所有数据源失败")
-      })
     },
-    parseParams() {
-      if (this.detail.datasourceId == null) {
-        this.$message.warning("请先选择数据源，解析sql参数需要获取数据库类型")
-        return
+    props: ["id"],
+    methods: {
+      addRow() {
+        this.detail.params.push({name: null, type: null})
+      },
+      deleteRow() {
+        // this.detail.params.
+      },
+      parseParams() {
+
+      },
+      getAllSource() {
+        this.axios.post("/datasource/getAll").then((response) => {
+          this.datasources = response.data
+        }).catch((error) => {
+          this.$message.error("查询所有数据源失败")
+        })
+      },
+      parseParams() {
+
+        // this.axios.post("/apiConfig/parseParam", {sql: this.detail.sql, datasourceId: this.detail.datasourceId}).then((response) => {
+        //   if (response.data.success) {
+        //     this.detail.params = response.data.data
+        //   } else {
+        //     this.$message.error(response.data.msg)
+        //   }
+        // }).catch((error) => {
+        //   this.$message.error("失败")
+        // })
+      },
+      getAddress() {
+        this.axios.post("/apiConfig/getIPPort").then((response) => {
+          this.address = response.data
+        }).catch((error) => {
+          this.$message.error("失败")
+        })
+      },
+      getDetail(id) {
+        this.id = id
+        this.axios.post("/apiConfig/detail/" + id).then((response) => {
+          this.detail.name = response.data.name
+          this.detail.note = response.data.note
+          this.detail.path = response.data.path
+          this.detail.sql = response.data.sql
+          this.detail.isSelect = response.data.isSelect.toString()
+          this.detail.datasourceId = response.data.datasourceId
+          this.detail.params = JSON.parse(response.data.params)
+        }).catch((error) => {
+          this.$message.error("失败")
+        })
       }
-      this.axios.post("/apiConfig/parseParam", {sql: this.detail.sql, datasourceId: this.detail.datasourceId}).then((response) => {
-        if (response.data.success) {
-          this.detail.params = response.data.data
-        } else {
-          this.$message.error(response.data.msg)
-        }
-      }).catch((error) => {
-        this.$message.error("失败")
-      })
     },
-    getAddress() {
-      this.axios.post("/apiConfig/getIPPort").then((response) => {
-        this.address = response.data
-      }).catch((error) => {
-        this.$message.error("失败")
-      })
-    },
-    getDetail(id) {
-      this.id = id
-      this.axios.post("/apiConfig/detail/" + id).then((response) => {
-        this.detail.name = response.data.name
-        this.detail.note = response.data.note
-        this.detail.path = response.data.path
-        this.detail.sql = response.data.sql
-        this.detail.datasourceId = response.data.datasourceId
-        this.detail.params = JSON.parse(response.data.params)
-      }).catch((error) => {
-        this.$message.error("失败")
-      })
+    created() {
+      this.getAllSource()
+      this.getAddress()
+      if (this.id != undefined)
+        this.getDetail(this.id)
     }
-  },
-  created() {
-    this.getAllSource()
-    this.getAddress()
-    if (this.id != undefined)
-      this.getDetail(this.id)
   }
-}
 </script>
 
 <style scoped>
-.my >>> .el-textarea__inner {
-  font-family: 'Consolas', Helvetica, Arial, sans-serif;
-  /*font-size: 18px;*/
-}
+  .my >>> .el-textarea__inner {
+    font-family: 'Consolas', Helvetica, Arial, sans-serif;
+    /*font-size: 18px;*/
+  }
 
-i {
-  color: #0698a5;
-  font-size: 18px;
-  font-weight: 700;
-  margin-right: 5px;
-}
+  i {
+    color: #0698a5;
+    font-size: 18px;
+    font-weight: 700;
+    margin-right: 5px;
+  }
 </style>

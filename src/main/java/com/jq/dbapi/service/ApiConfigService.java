@@ -45,8 +45,8 @@ public class ApiConfigService {
             apiConfig.setStatus(0);
 
             String type = dataSourceMapper.selectById(apiConfig.getDatasourceId()).getType();
-            int select = SqlParser.isSelect(apiConfig.getSql(), type);
-            apiConfig.setIsSelect(select);
+//            int select = SqlParser.isSelect(apiConfig.getSql(), type);
+//            apiConfig.setIsSelect(select);
 
             apiConfigMapper.insert(apiConfig);
             return ResponseDto.success("添加成功");
@@ -66,8 +66,8 @@ public class ApiConfigService {
             apiConfig.setStatus(0);
 
             String type = dataSourceMapper.selectById(apiConfig.getDatasourceId()).getType();
-            int select = SqlParser.isSelect(apiConfig.getSql(), type);
-            apiConfig.setIsSelect(select);
+//            int select = SqlParser.isSelect(apiConfig.getSql(), type);
+//            apiConfig.setIsSelect(select);
 
             apiConfigMapper.updateById(apiConfig);
             return ResponseDto.success("修改成功");

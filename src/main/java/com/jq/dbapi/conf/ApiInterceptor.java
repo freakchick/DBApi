@@ -88,6 +88,7 @@ public class ApiInterceptor implements HandlerInterceptor {
             Map<String, Object> sqlParam = apiService.getSqlParam(request, config);
 
             String sql = config.getSql();
+            sql = String.format("<root>%s</root>", sql);
             List<Object> tags = DynamicSqlXmlBuilder.parseXml(sql);
             SqlExecutor sqlExecutor = DynamicSqlXmlBuilder.buildSql(tags, sqlParam);
 
