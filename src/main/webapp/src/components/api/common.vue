@@ -58,105 +58,104 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        datasources: [],
-        address: null,
-        detail: {
-          datasourceId: null,
-          name: null,
-          note: null,
-          path: null,
-          isSelect: "1",
-          sql: 'select name,age from user where id > #{minId} and id < #{maxId}',
-          params: []
-        },
-        options: [
-          {label: 'string', value: 'string'},
-          {label: 'bigint', value: 'bigint'},
-          {label: 'decimal', value: 'decimal'},
-          {label: 'date', value: 'date'},
+export default {
+  data() {
+    return {
+      datasources: [],
+      address: null,
+      detail: {
+        datasourceId: null,
+        name: null,
+        note: null,
+        path: null,
+        isSelect: "1",
+        sql: 'select name,age from user where id > #{minId} and id < #{maxId}',
+        params: []
+      },
+      options: [
+        {label: 'string', value: 'string'},
+        {label: 'bigint', value: 'bigint'},
+        {label: 'decimal', value: 'decimal'},
+        {label: 'date', value: 'date'},
 
-          {label: 'string 数组', value: 'list<string>'},
-          {label: 'bigint 数组', value: 'list<bigint>'},
-          {label: 'decimal 数组', value: 'list<decimal>'},
-          {label: 'date 数组', value: 'list<date>'}
+        {label: 'string 数组', value: 'list<string>'},
+        {label: 'bigint 数组', value: 'list<bigint>'},
+        {label: 'decimal 数组', value: 'list<decimal>'},
+        {label: 'date 数组', value: 'list<date>'}
 
-        ]
-      }
-    },
-    props: ["id"],
-    methods: {
-      addRow() {
-        this.detail.params.push({name: null, type: null})
-      },
-      deleteRow() {
-        // this.detail.params.
-      },
-      parseParams() {
-
-      },
-      getAllSource() {
-        this.axios.post("/datasource/getAll").then((response) => {
-          this.datasources = response.data
-        }).catch((error) => {
-          this.$message.error("查询所有数据源失败")
-        })
-      },
-      parseParams() {
-
-        // this.axios.post("/apiConfig/parseParam", {sql: this.detail.sql, datasourceId: this.detail.datasourceId}).then((response) => {
-        //   if (response.data.success) {
-        //     this.detail.params = response.data.data
-        //   } else {
-        //     this.$message.error(response.data.msg)
-        //   }
-        // }).catch((error) => {
-        //   this.$message.error("失败")
-        // })
-      },
-      getAddress() {
-        this.axios.post("/apiConfig/getIPPort").then((response) => {
-          this.address = response.data
-        }).catch((error) => {
-          this.$message.error("失败")
-        })
-      },
-      getDetail(id) {
-        this.id = id
-        this.axios.post("/apiConfig/detail/" + id).then((response) => {
-          this.detail.name = response.data.name
-          this.detail.note = response.data.note
-          this.detail.path = response.data.path
-          this.detail.sql = response.data.sql
-          this.detail.isSelect = response.data.isSelect.toString()
-          this.detail.datasourceId = response.data.datasourceId
-          this.detail.params = JSON.parse(response.data.params)
-        }).catch((error) => {
-          this.$message.error("失败")
-        })
-      }
-    },
-    created() {
-      this.getAllSource()
-      this.getAddress()
-      if (this.id != undefined)
-        this.getDetail(this.id)
+      ]
     }
+  },
+  props: ["id"],
+  methods: {
+    addRow() {
+      this.detail.params.push({name: null, type: null})
+    },
+    deleteRow() {
+      // this.detail.params.
+    },
+    getAllSource() {
+      this.axios.post("/datasource/getAll").then((response) => {
+        this.datasources = response.data
+      }).catch((error) => {
+        this.$message.error("查询所有数据源失败")
+      })
+    },
+    parseParams(queryString, cb) {
+      this.axios.post("/apiConfig/parseParam", {sql: this.detail.sql}).then((response) => {
+        if (response.data.success) {
+          console.log(response.data.data[0])
+          cb(response.data.data)
+        } else {
+          this.$message.error(response.data.msg)
+          cb([])
+        }
+      }).catch((error) => {
+        // this.$message.error("失败")
+        cb([])
+      })
+    },
+    getAddress() {
+      this.axios.post("/apiConfig/getIPPort").then((response) => {
+        this.address = response.data
+      }).catch((error) => {
+        this.$message.error("失败")
+      })
+    },
+    getDetail(id) {
+      this.id = id
+      this.axios.post("/apiConfig/detail/" + id).then((response) => {
+        this.detail.name = response.data.name
+        this.detail.note = response.data.note
+        this.detail.path = response.data.path
+        this.detail.sql = response.data.sql
+        this.detail.isSelect = response.data.isSelect.toString()
+        this.detail.datasourceId = response.data.datasourceId
+        this.detail.params = JSON.parse(response.data.params)
+      }).catch((error) => {
+        this.$message.error("失败")
+      })
+    }
+  },
+  created() {
+    this.getAllSource()
+    this.getAddress()
+    if (this.id != undefined)
+      this.getDetail(this.id)
   }
+}
 </script>
 
 <style scoped>
-  .my >>> .el-textarea__inner {
-    font-family: 'Consolas', Helvetica, Arial, sans-serif;
-    /*font-size: 18px;*/
-  }
+.my >>> .el-textarea__inner {
+  font-family: 'Consolas', Helvetica, Arial, sans-serif;
+  /*font-size: 18px;*/
+}
 
-  i {
-    color: #0698a5;
-    font-size: 18px;
-    font-weight: 700;
-    margin-right: 5px;
-  }
+i {
+  color: #0698a5;
+  font-size: 18px;
+  font-weight: 700;
+  margin-right: 5px;
+}
 </style>

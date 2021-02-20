@@ -29,7 +29,13 @@ public class ResponseDto {
         dto.setSuccess(true);
         dto.setMsg(msg);
         return dto;
+    }
 
+    public static ResponseDto success(Object data) {
+        ResponseDto dto = new ResponseDto();
+        dto.setData(data);
+        dto.setSuccess(true);
+        return dto;
     }
 
     public static ResponseDto fail(String msg) {

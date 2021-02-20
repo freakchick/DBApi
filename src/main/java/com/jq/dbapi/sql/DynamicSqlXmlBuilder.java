@@ -2,13 +2,11 @@ package com.jq.dbapi.sql;
 
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 import org.apache.ibatis.ognl.Ognl;
 import org.apache.ibatis.ognl.OgnlContext;
 import org.apache.ibatis.ognl.OgnlException;
 import org.dom4j.*;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,7 +65,7 @@ public class DynamicSqlXmlBuilder {
             Object o = sqlElements.get(i);
 
             if (o instanceof String) {
-                String parse = VariableParser.parse((String) o, params, jdbcParams);
+                String parse = VariableParser.parseSql((String) o, params, jdbcParams);
                 sqlBuffer.append(parse).append(" ");
             }
             if (o instanceof Element) {
@@ -103,7 +101,7 @@ public class DynamicSqlXmlBuilder {
             if (value instanceof Boolean) {
                 Boolean b = (Boolean) value;
                 if (b) {
-                    String parse = VariableParser.parse(textTrim, params, jdbcParams);
+                    String parse = VariableParser.parseSql(textTrim, params, jdbcParams);
                     return parse;
                 } else {
                     return "";

@@ -5,10 +5,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.jq.dbapi.domain.ApiConfig;
 import com.jq.dbapi.service.ApiConfigService;
 import com.jq.dbapi.service.DataSourceService;
+import com.jq.dbapi.sql.VariableParser;
 import com.jq.dbapi.util.HttpUtil;
 import com.jq.dbapi.util.IPUtil;
 import com.jq.dbapi.util.ResponseDto;
-import com.jq.dbapi.util.SqlParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -43,21 +44,20 @@ public class ApiConfigController {
     }
 
     @RequestMapping("/parseParam")
-    public ResponseDto parseParam(String sql, Integer datasourceId) {
+    public ResponseDto parseParam(String sql) {
         try {
-            String dbType = dataSourceService.getDBType(datasourceId);
-            List<String> requestParam = SqlParser.getRequestParam(sql, dbType);
-            List<JSONObject> collect = requestParam.stream().map(t -> {
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("name", t);
-                jsonObject.put("type", "string");
-                return jsonObject;
+            Set<String> names = VariableParser.parseVariableNames(sql);
+
+            //转化成前端需要的格式
+            List<JSONObject> list = names.stream().map(t -> {
+                JSONObject object = new JSONObject();
+                object.put("value", t);
+                return object;
             }).collect(Collectors.toList());
-            return ResponseDto.apiSuccess(collect);
+            return ResponseDto.success(list);
         } catch (Exception e) {
             return ResponseDto.fail(e.getMessage());
         }
-
     }
 
     @RequestMapping("/getAll")
