@@ -69,7 +69,7 @@ export default {
         note: null,
         path: null,
         isSelect: "1",
-        sql: 'select name,age from user where id > #{minId} and id < #{maxId}',
+        sql: '',
         params: []
       },
       options: [

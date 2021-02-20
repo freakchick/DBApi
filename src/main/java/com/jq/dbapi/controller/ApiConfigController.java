@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.jq.dbapi.domain.ApiConfig;
 import com.jq.dbapi.service.ApiConfigService;
 import com.jq.dbapi.service.DataSourceService;
-import com.jq.dbapi.sql.VariableParser;
 import com.jq.dbapi.util.HttpUtil;
 import com.jq.dbapi.util.IPUtil;
 import com.jq.dbapi.util.ResponseDto;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -46,15 +46,14 @@ public class ApiConfigController {
     @RequestMapping("/parseParam")
     public ResponseDto parseParam(String sql) {
         try {
-            Set<String> names = VariableParser.parseVariableNames(sql);
 
-            //转化成前端需要的格式
-            List<JSONObject> list = names.stream().map(t -> {
-                JSONObject object = new JSONObject();
-                object.put("value", t);
-                return object;
-            }).collect(Collectors.toList());
-            return ResponseDto.success(list);
+//            //转化成前端需要的格式
+//            List<JSONObject> list = names.stream().map(t -> {
+//                JSONObject object = new JSONObject();
+//                object.put("value", t);
+//                return object;
+//            }).collect(Collectors.toList());
+            return ResponseDto.success(new ArrayList<JSONObject>());
         } catch (Exception e) {
             return ResponseDto.fail(e.getMessage());
         }

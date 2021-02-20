@@ -1,14 +1,10 @@
 package com.jq.dbapi.service;
 
-import com.alibaba.fastjson.JSON;
 import com.jq.dbapi.dao.ApiConfigMapper;
 import com.jq.dbapi.dao.DataSourceMapper;
 import com.jq.dbapi.domain.ApiConfig;
-import com.jq.dbapi.sql.DynamicSqlXmlBuilder;
-import com.jq.dbapi.sql.VariableParser;
 import com.jq.dbapi.util.ResponseDto;
 import lombok.extern.slf4j.Slf4j;
-import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -16,8 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @program: dbApi

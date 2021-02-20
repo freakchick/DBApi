@@ -130,15 +130,10 @@
         </dependency>
 
         <dependency>
-            <groupId>dom4j</groupId>
-            <artifactId>dom4j</artifactId>
-            <version>1.6.1</version>
+            <groupId>org.wzy</groupId>
+            <artifactId>sqltemplate</artifactId>
+            <version>0.1</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>ognl</groupId>-->
-<!--            <artifactId>ognl</artifactId>-->
-<!--            <version>2.7.3</version>-->
-<!--        </dependency>-->
 
     </dependencies>
 

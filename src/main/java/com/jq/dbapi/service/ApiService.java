@@ -4,16 +4,14 @@ import com.alibaba.druid.pool.DruidPooledConnection;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.annotation.SqlParser;
 import com.jq.dbapi.domain.ApiConfig;
 import com.jq.dbapi.domain.DataSource;
-import com.jq.dbapi.sql.DynamicSqlXmlBuilder;
-import com.jq.dbapi.sql.SqlExecutor;
 import com.jq.dbapi.util.PoolManager;
 import com.jq.dbapi.util.ResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.wzy.sqltemplate.SqlMeta;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.PreparedStatement;
@@ -67,20 +65,20 @@ public class ApiService {
         return map;
     }
 
-    public ResponseDto executeSql(ApiConfig apiConfig, DataSource datasource, SqlExecutor sqlExecutor) {
+    public ResponseDto executeSql(int isSelect, DataSource datasource, SqlMeta sqlMeta) {
 
         DruidPooledConnection connection = null;
         try {
 
             connection = PoolManager.getPooledConnection(datasource);
-            PreparedStatement statement = connection.prepareStatement(sqlExecutor.getSql());
-            List<Object> jdbcParamValues = sqlExecutor.getJdbcParamValues();
+            PreparedStatement statement = connection.prepareStatement(sqlMeta.getSql());
+            List<Object> jdbcParamValues = sqlMeta.getParameter();
             //参数注入
             for (int i = 1; i <= jdbcParamValues.size(); i++) {
                 statement.setObject(i, jdbcParamValues.get(i - 1));
             }
 
-            if (apiConfig.getIsSelect() == 1) {
+            if (isSelect == 1) {
                 ResultSet rs = statement.executeQuery();
 
                 int columnCount = rs.getMetaData().getColumnCount();

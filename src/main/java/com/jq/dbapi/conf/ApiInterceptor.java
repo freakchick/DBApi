@@ -6,14 +6,16 @@ import com.jq.dbapi.domain.DataSource;
 import com.jq.dbapi.service.ApiConfigService;
 import com.jq.dbapi.service.ApiService;
 import com.jq.dbapi.service.DataSourceService;
-import com.jq.dbapi.sql.DynamicSqlXmlBuilder;
-import com.jq.dbapi.sql.SqlExecutor;
 import com.jq.dbapi.util.ResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+import org.wzy.sqltemplate.Bindings;
+import org.wzy.sqltemplate.SqlMeta;
+import org.wzy.sqltemplate.SqlTemplate;
+import org.wzy.sqltemplate.SqlTemplateEngin;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -88,11 +90,13 @@ public class ApiInterceptor implements HandlerInterceptor {
             Map<String, Object> sqlParam = apiService.getSqlParam(request, config);
 
             String sql = config.getSql();
-            sql = String.format("<root>%s</root>", sql);
-            List<Object> tags = DynamicSqlXmlBuilder.parseXml(sql);
-            SqlExecutor sqlExecutor = DynamicSqlXmlBuilder.buildSql(tags, sqlParam);
+            SqlTemplateEngin sqlTemplateEngin = new SqlTemplateEngin();
+            SqlTemplate sqlTemplate = sqlTemplateEngin.getSqlTemplate(sql) ;
 
-            return apiService.executeSql(config, datasource, sqlExecutor);
+            SqlMeta sqlMeta = sqlTemplate.process(sqlParam);
+            log.info(sqlMeta.getSql());
+
+            return apiService.executeSql(config.getIsSelect(), datasource, sqlMeta);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return ResponseDto.fail(e.getMessage());
