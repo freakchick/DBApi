@@ -17,10 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @program: dbApi
@@ -41,25 +39,50 @@ public class ApiService {
             String name = jo.getString("name");
             String type = jo.getString("type");
 
-            String value = request.getParameter(name);
-            if (StringUtils.isNotBlank(value)) {
-
-                switch (type) {
-                    case "double":
-                        Double v = Double.valueOf(value);
-                        map.put(name, v);
-                        break;
-                    case "bigint":
-                        Long longV = Long.valueOf(value);
-                        map.put(name, longV);
-                        break;
-                    case "string":
-                    case "date":
-                        map.put(name, value);
-                        break;
+            //数组类型参数
+            if (type.startsWith("list")) {
+                String[] values = request.getParameterValues(name);
+                List<String> list = Arrays.asList(values);
+                if (values.length > 0) {
+                    switch (type) {
+                        case "list<double>":
+                            List<Double> collect = list.stream().map(value -> Double.valueOf(value)).collect(Collectors.toList());
+                            map.put(name, collect);
+                            break;
+                        case "list<bigint>":
+                            List<Long> longs = list.stream().map(value -> Long.valueOf(value)).collect(Collectors.toList());
+                            map.put(name, longs);
+                            break;
+                        case "list<string>":
+                        case "list<date>":
+                            map.put(name, list);
+                            break;
+                    }
+                } else {
+                    map.put(name, list);
                 }
             } else {
-                map.put(name, value);
+
+                String value = request.getParameter(name);
+                if (StringUtils.isNotBlank(value)) {
+
+                    switch (type) {
+                        case "double":
+                            Double v = Double.valueOf(value);
+                            map.put(name, v);
+                            break;
+                        case "bigint":
+                            Long longV = Long.valueOf(value);
+                            map.put(name, longV);
+                            break;
+                        case "string":
+                        case "date":
+                            map.put(name, value);
+                            break;
+                    }
+                } else {
+                    map.put(name, value);
+                }
             }
         }
         return map;
