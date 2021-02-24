@@ -29,7 +29,9 @@
             <template slot="title">
               <span class="">关于</span>
             </template>
-            <el-menu-item to="https://gitee.com/freakchicken/db-api">开源地址</el-menu-item>
+            <el-menu-item>
+              <el-link href="https://gitee.com/freakchicken/db-api" target="_blank" style="color:#fff">开源地址</el-link>
+            </el-menu-item>
 
           </el-submenu>
         </el-menu>

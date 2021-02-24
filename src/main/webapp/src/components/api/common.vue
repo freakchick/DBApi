@@ -34,6 +34,10 @@
         </el-select>
       </el-form-item>
       <el-form-item label="sql">
+        <div v-show="$route.path != '/api/detail'" class="tag">
+          <el-tag size="mini" @click="tag('foreach')" effect="plain">foreach</el-tag>
+          <el-tag size="mini" @click="tag('if')" effect="plain">if</el-tag>
+        </div>
         <el-input type="textarea" v-model="detail.sql" :autosize="{ minRows: 5, maxRows: 20 }" placeholder="请输入sql" class="my"></el-input>
         <!--        <el-button type="primary" plain @click="parseParams" style="margin :10px 0">解析参数</el-button>-->
       </el-form-item>
@@ -46,9 +50,9 @@
 
           <!--          <el-cascader  v-model="item.type" separator=" > " :options="options"></el-cascader>-->
 
-          <el-button @click="deleteRow" circle type="danger" icon="el-icon-delete" size="mini"></el-button>
+          <el-button @click="deleteRow(index)" circle type="danger" icon="el-icon-delete" size="mini" v-if="$route.path != '/api/detail'"></el-button>
         </div>
-        <el-button @click="addRow" icon="el-icon-plus" type="primary" circle size="mini"></el-button>
+        <el-button @click="addRow" icon="el-icon-plus" type="primary" circle size="mini" v-if="$route.path != '/api/detail'"></el-button>
 
       </el-form-item>
 
@@ -91,8 +95,8 @@ export default {
     addRow() {
       this.detail.params.push({name: null, type: null})
     },
-    deleteRow() {
-      // this.detail.params.
+    deleteRow(index) {
+      this.detail.params.splice(index, 1)
     },
     getAllSource() {
       this.axios.post("/datasource/getAll").then((response) => {
@@ -135,6 +139,14 @@ export default {
       }).catch((error) => {
         this.$message.error("失败")
       })
+    },
+    tag(item) {
+      if (item == 'foreach') {
+        this.detail.sql += "\n<foreach open='(' close=')' collection='' separator=',' item='item' index='index'>#{item}</foreach>"
+      }
+      if (item == 'if') {
+        this.detail.sql += "\n<if test='' ></if>"
+      }
     }
   },
   created() {
@@ -142,6 +154,7 @@ export default {
     this.getAddress()
     if (this.id != undefined)
       this.getDetail(this.id)
+    console.log(this.$route.path)
   }
 }
 </script>
@@ -157,5 +170,10 @@ i {
   font-size: 18px;
   font-weight: 700;
   margin-right: 5px;
+}
+.el-tag {
+  float: right;
+  margin-right: 5px;
+  margin-bottom: 2px;
 }
 </style>

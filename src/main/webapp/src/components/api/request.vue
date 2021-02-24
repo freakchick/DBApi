@@ -7,15 +7,15 @@
 
     <h4>接口参数：</h4>
     <el-form label-width="100px" style="width: 400px" size="medium">
-      <el-form-item :label="item.name + '：'" v-for="(item,index) in params">
+      <el-form-item :label="item.name + '：'" v-for="(item,index) in params" :key="index">
         <el-input v-model="item.value" v-if="!item.type.startsWith('list')">
           <template slot="append">{{ item.type }}</template>
         </el-input>
-        <div v-if="item.type.startsWith('list')">
-          <div v-for="tt in item.value">
-            <el-input  v-model="tt.v" style="width: 150px" >
+        <div v-show="item.type.startsWith('list')">
+          <div v-for="(childItem,childIndex) in item.values" :key="childIndex">
+            <el-input v-model="childItem.va" style="width: 150px">
             </el-input>
-            <el-button slot="append" icon="el-icon-delete" type="danger" circle size="mini" @click=""></el-button>
+            <el-button slot="append" icon="el-icon-delete" type="danger" circle size="mini" @click="deleteRow(index,childIndex)"></el-button>
           </div>
 
           <el-button icon="el-icon-plus" type="primary" circle size="mini" @click="addRow(index)"></el-button>
@@ -60,13 +60,14 @@ export default {
     getDetail(id) {
       this.axios.post("/apiConfig/detail/" + id).then((response) => {
         this.path = response.data.path
-        this.params = JSON.parse(response.data.params)
-        this.isSelect = response.data.isSelect
-
-        this.params.forEach(t => {
-          if (t.type.startsWith("list"))
-            t.value = ['aa','bb']
+        let params = JSON.parse(response.data.params)
+        params.forEach(t => {
+          if (t.type.startsWith("list")) {
+            t.values = []
+          }
         })
+        this.params = params
+        this.isSelect = response.data.isSelect
         console.log(this.params)
       }).catch((error) => {
         this.$message.error("失败")
@@ -82,8 +83,14 @@ export default {
     request() {
       let p = {}
       this.params.forEach(t => {
-        p[t.name] = t.value
+        //构造数组类型的请求参数
+        if (t.type.startsWith('list')) {
+          const values = t.values.map(item => item.va)
+          p[t.name] = values
+        } else
+          p[t.name] = t.value
       })
+      console.log(p)
       let url = `http://${this.address}/api/${this.path}`
       this.axios.post("/apiConfig/request",
           {url: url, "params": JSON.stringify(p)}
@@ -121,8 +128,10 @@ export default {
       this.showTable = false
     },
     addRow(index) {
-      console.log( this.params[index])
-      this.params[index].value.push('')
+      this.params[index].values.push({"va": null})
+    },
+    deleteRow(index, childIndex) {
+      this.params[index].values.splice(childIndex, 1)
     }
   },
   components: {},

@@ -78,20 +78,15 @@ public class ApiInterceptor implements HandlerInterceptor {
             if (config == null) {
                 return ResponseDto.fail("该接口不存在！！");
             }
-
             DataSource datasource = dataSourceService.detail(config.getDatasourceId());
             if (datasource == null) {
                 return ResponseDto.fail("数据源不存在！！");
             }
 
             Map<String, Object> sqlParam = apiService.getSqlParam(request, config);
-
             String sql = config.getSql();
-
             SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(sql, sqlParam);
-
             log.info(sqlMeta.getSql());
-
             return apiService.executeSql(config.getIsSelect(), datasource, sqlMeta.getSql(), sqlMeta.getJdbcParamValues());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
