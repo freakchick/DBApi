@@ -63,7 +63,7 @@ export default {
         let params = JSON.parse(response.data.params)
         params.forEach(t => {
           if (t.type.startsWith("list")) {
-            t.values = []
+            t.values = [{va: ''}]
           }
         })
         this.params = params
@@ -92,14 +92,11 @@ export default {
       })
       console.log(p)
       let url = `http://${this.address}/api/${this.path}`
-      this.axios.post("/apiConfig/request",
-          {url: url, "params": JSON.stringify(p)}
-      ).then((response) => {
+      this.axios.post(url, p).then((response) => {
         this.showTable = false
-        if (response.data.success) {
-          this.response = response.data.data
+        console.log(response.data)
+        this.response = JSON.stringify(response.data)
 
-        }
       }).catch((error) => {
         this.$message.error("失败")
       })

@@ -103,11 +103,6 @@ public class ApiConfigController {
         return ip + ":" + port;
     }
 
-    @RequestMapping("/request")
-    public JSONObject request(String url, String params) {
-        Map<String, String> map = JSON.parseObject(params, Map.class);
-        JSONObject post = HttpUtil.post(url, map);
-        return post;
-    }
+
 
 }

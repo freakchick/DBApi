@@ -46,6 +46,10 @@ public class ApiInterceptor implements HandlerInterceptor {
         log.info(servletPath);
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=utf-8");
+        // 跨域设置
+        response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE");
         PrintWriter out = null;
         try {
             ResponseDto responseDto = process(servletPath, request);

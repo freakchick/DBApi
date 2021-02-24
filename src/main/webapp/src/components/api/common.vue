@@ -142,10 +142,10 @@ export default {
     },
     tag(item) {
       if (item == 'foreach') {
-        this.detail.sql += "\n<foreach open='(' close=')' collection='' separator=',' item='item' index='index'>#{item}</foreach>"
+        this.detail.sql += "\n<foreach open=\"(\" close=\")\" collection=\"\" separator=\",\" item=\"item\" index=\"index\">#{item}</foreach>"
       }
       if (item == 'if') {
-        this.detail.sql += "\n<if test='' ></if>"
+        this.detail.sql += "\n<if test=\"\" ></if>"
       }
     }
   },
