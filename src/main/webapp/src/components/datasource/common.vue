@@ -94,4 +94,8 @@ export default {
   font-weight: 700;
   margin-right: 5px;
 }
+
+.my >>> .el-textarea__inner {
+  font-family: 'Consolas', Helvetica, Arial, sans-serif;
+}
 </style>

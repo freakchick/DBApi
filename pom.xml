@@ -130,9 +130,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.wzy</groupId>
-            <artifactId>sqltemplate</artifactId>
-            <version>0.1</version>
+            <groupId>com.jq</groupId>
+            <artifactId>orange</artifactId>
+            <version>1.0</version>
         </dependency>
 
     </dependencies>

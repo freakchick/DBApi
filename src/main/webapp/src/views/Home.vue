@@ -29,7 +29,7 @@
             <template slot="title">
               <span class="">关于</span>
             </template>
-            <el-menu-item index="/about/donate">捐赠</el-menu-item>
+            <el-menu-item to="https://gitee.com/freakchicken/db-api">开源地址</el-menu-item>
 
           </el-submenu>
         </el-menu>

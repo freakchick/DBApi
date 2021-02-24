@@ -11,7 +11,6 @@ import com.jq.dbapi.util.ResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import org.wzy.sqltemplate.SqlMeta;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.PreparedStatement;
@@ -88,14 +87,13 @@ public class ApiService {
         return map;
     }
 
-    public ResponseDto executeSql(int isSelect, DataSource datasource, SqlMeta sqlMeta) {
+    public ResponseDto executeSql(int isSelect, DataSource datasource, String sql, List<Object> jdbcParamValues) {
 
         DruidPooledConnection connection = null;
         try {
 
             connection = PoolManager.getPooledConnection(datasource);
-            PreparedStatement statement = connection.prepareStatement(sqlMeta.getSql());
-            List<Object> jdbcParamValues = sqlMeta.getParameter();
+            PreparedStatement statement = connection.prepareStatement(sql);
             //参数注入
             for (int i = 1; i <= jdbcParamValues.size(); i++) {
                 statement.setObject(i, jdbcParamValues.get(i - 1));

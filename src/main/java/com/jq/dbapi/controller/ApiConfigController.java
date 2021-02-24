@@ -46,7 +46,6 @@ public class ApiConfigController {
     @RequestMapping("/parseParam")
     public ResponseDto parseParam(String sql) {
         try {
-
 //            //转化成前端需要的格式
 //            List<JSONObject> list = names.stream().map(t -> {
 //                JSONObject object = new JSONObject();

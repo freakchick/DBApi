@@ -7,20 +7,17 @@ import com.jq.dbapi.service.ApiConfigService;
 import com.jq.dbapi.service.ApiService;
 import com.jq.dbapi.service.DataSourceService;
 import com.jq.dbapi.util.ResponseDto;
+import com.jq.dbapi.util.SqlEngineUtil;
+import com.jq.orange.SqlMeta;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import org.wzy.sqltemplate.Bindings;
-import org.wzy.sqltemplate.SqlMeta;
-import org.wzy.sqltemplate.SqlTemplate;
-import org.wzy.sqltemplate.SqlTemplateEngin;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -90,13 +87,12 @@ public class ApiInterceptor implements HandlerInterceptor {
             Map<String, Object> sqlParam = apiService.getSqlParam(request, config);
 
             String sql = config.getSql();
-            SqlTemplateEngin sqlTemplateEngin = new SqlTemplateEngin();
-            SqlTemplate sqlTemplate = sqlTemplateEngin.getSqlTemplate(sql) ;
 
-            SqlMeta sqlMeta = sqlTemplate.process(sqlParam);
+            SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(sql, sqlParam);
+
             log.info(sqlMeta.getSql());
 
-            return apiService.executeSql(config.getIsSelect(), datasource, sqlMeta);
+            return apiService.executeSql(config.getIsSelect(), datasource, sqlMeta.getSql(), sqlMeta.getJdbcParamValues());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return ResponseDto.fail(e.getMessage());
