@@ -18,6 +18,7 @@
 - 采用B/S架构，springboot + vue.js 前后端分离开发
 - 考虑到部署的简便性，最后打包是整合打到一个完整的jar包里
 - 考虑到部署的简便性，使用sqlite数据库
+- 使用了开源的动态sql引擎[orange](https://gitee.com/freakchicken/orange)
 
 ## 安装教程
 
@@ -55,9 +56,8 @@ spring.datasource.password=
 ![](https://freakchicken.gitee.io/images/dbApi/add_api_20210125161115.jpg)
 - 填入路径，这就是将来http请求的路径
 - 选择数据源，就是接口执行sql逻辑的数据库地址
-- 填入sql ，就是api内部执行的逻辑，**注意参数一定要以$符号开头，且sql类不能有两个相同的参数名**
-- 点击解析参数，自动解析出sql中的参数，这个参数就是将来的http请求参数，
-http请求传来的参数值会被替换进sql。同时选择参数类型，默认string
+- 填入sql ,类似mybatis的动态sql语法，不需要写最外层的select update 标签，参数名用 #{} ${} 表示，可以参考[这里](https://mybatis.org/mybatis-3/zh/dynamic-sql.html) 
+- 添加参数，参数名称就是sql中的参数名，sql中涉及到的每个参数都要填写
 - 点击保存，返回api列表页面，可以看到新增一条记录
 
 ![](https://freakchicken.gitee.io/images/dbApi/api_list_20210125161420.jpg)
@@ -123,6 +123,7 @@ http://localhost:8520
 如果您喜欢此项目，请给捐助作者一杯咖啡
 <div style="text-align: center"> 
 <img src="https://freakchicken.gitee.io/images/kafkaui/wechatpay.jpg" width = "30%" />
+<img src="https://freakchicken.gitee.io/images/kafkaui/alipay.jpg" width = "33%" />
 </div>
 
 
