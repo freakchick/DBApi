@@ -53,24 +53,24 @@ spring.datasource.password=
 ### 创建数据源
 ![](https://freakchicken.gitee.io/images/dbApi/add_source_20210125160727.jpg)
 ### 创建api
-![](https://freakchicken.gitee.io/images/dbApi/add_api_20210125161115.jpg)
+![](https://freakchicken.gitee.io/images/dbApi/20210225/create_api.jpg)
 - 填入路径，这就是将来http请求的路径
 - 选择数据源，就是接口执行sql逻辑的数据库地址
 - 填入sql ,类似mybatis的动态sql语法，不需要写最外层的select update 标签，参数名用 #{} ${} 表示，可以参考[这里](https://mybatis.org/mybatis-3/zh/dynamic-sql.html) 
 - 添加参数，参数名称就是sql中的参数名，sql中涉及到的每个参数都要填写
 - 点击保存，返回api列表页面，可以看到新增一条记录
 
-![](https://freakchicken.gitee.io/images/dbApi/api_list_20210125161420.jpg)
+![](https://freakchicken.gitee.io/images/dbApi/20210225/api_list.jpg)
 ### api上线
 - 点击api上线按钮，这个api就上线，可以访问了
 ![](https://freakchicken.gitee.io/images/dbApi/online_click_20210125161514.jpg)
 
 ### api详情
 - 点击查看详情按钮，这时候可以查看api的详情
-![](https://freakchicken.gitee.io/images/dbApi/api_detail_20210125161633.jpg)
+![](https://freakchicken.gitee.io/images/dbApi/20210225/api_detail.jpg)
 ### api访问测试
 - 点击请求测试按钮，我们可以发起api请求，查看返回结果，这个结果就是我们之前填入的sql执行的结果
-![](https://freakchicken.gitee.io/images/dbApi/request_20210125161613.jpg)
+![](https://freakchicken.gitee.io/images/dbApi/20210225/request.jpg)
 
 ## sql编写规范
 和mybatis动态sql语法一样，同样支持参数#{}、 ${}，可以参考[这里](https://mybatis.org/mybatis-3/zh/dynamic-sql.html) 
