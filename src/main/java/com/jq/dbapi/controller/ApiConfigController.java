@@ -1,13 +1,12 @@
 package com.jq.dbapi.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jq.dbapi.domain.ApiConfig;
 import com.jq.dbapi.service.ApiConfigService;
 import com.jq.dbapi.service.DataSourceService;
-import com.jq.dbapi.util.HttpUtil;
 import com.jq.dbapi.util.IPUtil;
 import com.jq.dbapi.util.ResponseDto;
+import com.jq.dbapi.util.SqlEngineUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,9 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -46,13 +43,14 @@ public class ApiConfigController {
     @RequestMapping("/parseParam")
     public ResponseDto parseParam(String sql) {
         try {
-//            //转化成前端需要的格式
-//            List<JSONObject> list = names.stream().map(t -> {
-//                JSONObject object = new JSONObject();
-//                object.put("value", t);
-//                return object;
-//            }).collect(Collectors.toList());
-            return ResponseDto.success(new ArrayList<JSONObject>());
+            Set<String> set = SqlEngineUtil.getEngine().parseParameter(sql);
+//            转化成前端需要的格式
+            List<JSONObject> list = set.stream().map(t -> {
+                JSONObject object = new JSONObject();
+                object.put("value", t);
+                return object;
+            }).collect(Collectors.toList());
+            return ResponseDto.success(list);
         } catch (Exception e) {
             return ResponseDto.fail(e.getMessage());
         }
@@ -102,7 +100,5 @@ public class ApiConfigController {
         String ip = IPUtil.getIpAddress();
         return ip + ":" + port;
     }
-
-
 
 }

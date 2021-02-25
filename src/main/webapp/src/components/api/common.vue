@@ -37,6 +37,8 @@
         <div v-show="$route.path != '/api/detail'" class="tag">
           <el-tag size="mini" @click="tag('foreach')" effect="plain">foreach</el-tag>
           <el-tag size="mini" @click="tag('if')" effect="plain">if</el-tag>
+          <el-tag size="mini" @click="tag('where')" effect="plain">where</el-tag>
+          <el-tag size="mini" @click="tag('trim')" effect="plain">trim</el-tag>
         </div>
         <el-input type="textarea" v-model="detail.sql" :autosize="{ minRows: 5, maxRows: 20 }" placeholder="请输入sql" class="my"></el-input>
         <!--        <el-button type="primary" plain @click="parseParams" style="margin :10px 0">解析参数</el-button>-->
@@ -144,8 +146,14 @@ export default {
       if (item == 'foreach') {
         this.detail.sql += "\n<foreach open=\"(\" close=\")\" collection=\"\" separator=\",\" item=\"item\" index=\"index\">#{item}</foreach>"
       }
-      if (item == 'if') {
+      else if (item == 'if') {
         this.detail.sql += "\n<if test=\"\" ></if>"
+      }
+      else if (item == 'where') {
+        this.detail.sql += "\n<where></where>"
+      }
+      else if (item == 'trim') {
+        this.detail.sql += "\n<trim prefix=\"\" suffix=\"\" suffixesToOverride=\"\" prefixesToOverride=\"\"></trim>"
       }
     }
   },

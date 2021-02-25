@@ -41,24 +41,28 @@ public class ApiService {
             //数组类型参数
             if (type.startsWith("list")) {
                 String[] values = request.getParameterValues(name);
-                List<String> list = Arrays.asList(values);
-                if (values.length > 0) {
-                    switch (type) {
-                        case "list<double>":
-                            List<Double> collect = list.stream().map(value -> Double.valueOf(value)).collect(Collectors.toList());
-                            map.put(name, collect);
-                            break;
-                        case "list<bigint>":
-                            List<Long> longs = list.stream().map(value -> Long.valueOf(value)).collect(Collectors.toList());
-                            map.put(name, longs);
-                            break;
-                        case "list<string>":
-                        case "list<date>":
-                            map.put(name, list);
-                            break;
+                if (values != null) {
+                    List<String> list = Arrays.asList(values);
+                    if (values.length > 0) {
+                        switch (type) {
+                            case "list<double>":
+                                List<Double> collect = list.stream().map(value -> Double.valueOf(value)).collect(Collectors.toList());
+                                map.put(name, collect);
+                                break;
+                            case "list<bigint>":
+                                List<Long> longs = list.stream().map(value -> Long.valueOf(value)).collect(Collectors.toList());
+                                map.put(name, longs);
+                                break;
+                            case "list<string>":
+                            case "list<date>":
+                                map.put(name, list);
+                                break;
+                        }
+                    } else {
+                        map.put(name, list);
                     }
                 } else {
-                    map.put(name, list);
+                    map.put(name, null);
                 }
             } else {
 
