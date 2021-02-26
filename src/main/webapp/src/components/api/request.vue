@@ -6,16 +6,19 @@
     <div class="path">http://{{ address }}/api/{{ path }}</div>
 
     <h4>接口参数：</h4>
-    <el-form label-width="100px" style="width: 400px" size="medium">
-      <el-form-item :label="item.name + '：'" v-for="(item,index) in params" :key="index">
+    <el-form label-width="150px" style="width: 600px" size="medium">
+      <el-form-item v-for="(item,index) in params" :key="index" style="margin-bottom: 5px">
+        <template slot="label">
+          <data-tag :name="item.name" :type="item.type" ></data-tag>
+        </template>
         <el-input v-model="item.value" v-if="!item.type.startsWith('list')">
-          <template slot="append">{{ item.type }}</template>
+<!--          <template slot="append">{{ item.type }}</template>-->
         </el-input>
         <div v-show="item.type.startsWith('list')">
           <div v-for="(childItem,childIndex) in item.values" :key="childIndex">
-            <el-input v-model="childItem.va" style="width: 150px">
+            <el-input v-model="childItem.va" style="width: 400px">
             </el-input>
-            <el-button slot="append" icon="el-icon-delete" type="danger" circle size="mini" @click="deleteRow(index,childIndex)"></el-button>
+            <el-button slot="append" icon="el-icon-delete" type="danger" circle size="mini" @click="deleteRow(index,childIndex)" style="margin-left: 4px;"></el-button>
           </div>
 
           <el-button icon="el-icon-plus" type="primary" circle size="mini" @click="addRow(index)"></el-button>
@@ -40,7 +43,7 @@
 </template>
 
 <script>
-
+import dataTag from "@/components/common/dataTag";
 export default {
   name: "request",
   data() {
@@ -131,7 +134,7 @@ export default {
       this.params[index].values.splice(childIndex, 1)
     }
   },
-  components: {},
+  components: {dataTag},
   created() {
     this.getDetail(this.$route.query.id)
     this.getAddress()

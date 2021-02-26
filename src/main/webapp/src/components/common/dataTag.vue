@@ -17,14 +17,14 @@ export default {
 
 <style scoped>
 .mytag {
-  margin-right: 4px;
+  margin: 0 4px 2px 0;
   display: inline-block;
-
+  /*overflow-wrap: normal;*/
 }
 
 .mytag span {
 
-  display: inline-block;
+  /*display: inline-block;*/
   font-size: 12px;
   line-height: 12px;
   color: cornsilk;

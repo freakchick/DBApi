@@ -52,7 +52,7 @@
 
           <!--          <el-cascader  v-model="item.type" separator=" > " :options="options"></el-cascader>-->
 
-          <el-button @click="deleteRow(index)" circle type="danger" icon="el-icon-delete" size="mini" v-if="$route.path != '/api/detail'"></el-button>
+          <el-button @click="deleteRow(index)" circle type="danger" icon="el-icon-delete" size="mini" v-if="$route.path != '/api/detail'" style="margin-left: 4px"></el-button>
         </div>
         <el-button @click="addRow" icon="el-icon-plus" type="primary" circle size="mini" v-if="$route.path != '/api/detail'"></el-button>
 
@@ -181,7 +181,7 @@ i {
 }
 .el-tag {
   float: right;
-  margin-right: 5px;
+  margin-left: 4px;
   margin-bottom: 2px;
 }
 </style>
