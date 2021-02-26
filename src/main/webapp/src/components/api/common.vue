@@ -81,12 +81,12 @@ export default {
       options: [
         {label: 'string', value: 'string'},
         {label: 'bigint', value: 'bigint'},
-        {label: 'decimal', value: 'decimal'},
+        {label: 'double', value: 'double'},
         {label: 'date', value: 'date'},
 
         {label: 'string 数组', value: 'list<string>'},
         {label: 'bigint 数组', value: 'list<bigint>'},
-        {label: 'decimal 数组', value: 'list<decimal>'},
+        {label: 'double 数组', value: 'list<double>'},
         {label: 'date 数组', value: 'list<date>'}
 
       ]
