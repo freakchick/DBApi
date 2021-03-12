@@ -20,6 +20,10 @@
 - 考虑到部署的简便性，使用sqlite数据库
 - 使用了开源的动态sql引擎[orange](https://gitee.com/freakchicken/orange)
 
+## springboot集成
+如果您想更加灵活的使用dbApi，在您自己的java springboot项目中使用代码配置接口，
+请使用[dbApi-spring-boot-starter项目](https://gitee.com/freakchicken/dbApi-spring-boot-starter)
+
 ## 安装教程
 
 - 依赖java环境，需要安装jdk8+
