@@ -38,12 +38,12 @@ bin/dbApi.sh stop
 
 
 - 如果想修改端口启动,修改conf/application.properties文件中的端口配置:
-```
+```properties
 server.port=8520
 ```
 
 - 如果您想使用自己的mysql作为元数据库，请修改conf/application.properties文件中的以下配置
-```
+```properties
 spring.datasource.driver-class-name=
 spring.datasource.url=
 spring.datasource.username=
@@ -87,7 +87,7 @@ spring.datasource.password=
 - 安装node.js
 - 安装cnpm (maven 会调用cnpm 系统命令)
 
-```
+```shell script
 npm install -g cnpm --registry=https://registry.npm.taobao.org
 ```
 
@@ -95,7 +95,7 @@ npm install -g cnpm --registry=https://registry.npm.taobao.org
 
 - maven打包会自动把前端安装依赖并编译打包，
 
-```
+```shell script
 mvn clean package
 ```
 
@@ -136,5 +136,4 @@ http://localhost:8520
 - 接口权限控制
 - 集群版本开发，支持微服务注册consul/eureka/nacos
 - docker支持
-- spring-boot-stater-dbApi开发，支持springboot集成，代码配置接口
 - 安装包windows运行支持，bat编程
