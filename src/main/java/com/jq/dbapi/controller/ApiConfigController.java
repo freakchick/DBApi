@@ -61,6 +61,11 @@ public class ApiConfigController {
         return apiConfigService.getAll();
     }
 
+    @RequestMapping("/search")
+    public List<ApiConfig> search(String keyword,String field) {
+        return apiConfigService.search(keyword,field);
+    }
+
     @RequestMapping("/detail/{id}")
     public ApiConfig detail(@PathVariable Integer id) {
         return apiConfigService.detail(id);

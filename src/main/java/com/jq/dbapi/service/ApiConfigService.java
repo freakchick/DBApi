@@ -72,6 +72,10 @@ public class ApiConfigService {
         return apiConfigMapper.selectList(null);
     }
 
+    public List<ApiConfig> search(String keyword,String field) {
+        return apiConfigMapper.selectByKeyword("%" + keyword + "%",field);
+    }
+
     @Cacheable(value = "api", key = "#path", unless = "#result == null")
     public ApiConfig getConfig(String path) {
         log.info("执行sql查询api参数");
@@ -96,6 +100,5 @@ public class ApiConfigService {
     public String getPath(Integer id) {
         return apiConfigMapper.selectById(id).getPath();
     }
-
 
 }

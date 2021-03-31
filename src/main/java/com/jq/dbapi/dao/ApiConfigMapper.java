@@ -5,11 +5,16 @@ import com.jq.dbapi.domain.ApiConfig;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 @Mapper
 public interface ApiConfigMapper extends BaseMapper<ApiConfig> {
 
     @Select("select * from api_config where path=#{path} and status = 1")
     ApiConfig selectByPathOnline(String path);
+
+    @Select("select * from api_config where ${field} like #{keyword} ")
+    List<ApiConfig> selectByKeyword(String keyword,String field);
 
     @Select("select count(1) from api_config where path=#{path}")
     Integer selectCountByPath(String path);
