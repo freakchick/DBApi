@@ -13,7 +13,10 @@ public interface ApiConfigMapper extends BaseMapper<ApiConfig> {
     @Select("select * from api_config where path=#{path} and status = 1")
     ApiConfig selectByPathOnline(String path);
 
-    @Select("select * from api_config where ${field} like #{keyword} ")
+    @Select("<script>select * from api_config " +
+            "<if test='field != null and field !=\"\"'> where ${field} like #{keyword} </if> " +
+            "<if test='field == null or field==\"\"'> where name like #{keyword} or note like #{keyword} or path like #{keyword}</if> " +
+            "</script>")
     List<ApiConfig> selectByKeyword(String keyword,String field);
 
     @Select("select count(1) from api_config where path=#{path}")
