@@ -16,16 +16,29 @@
       </el-form-item>
 
       <el-form-item label="数据源">
-        <el-select v-model="detail.datasourceId" placeholder="请选择">
-          <el-option v-for="item in datasources" :key="item.id" :label="item.name" :value="item.id">
-            <i class="iconfont icon-my-SQL" v-if="item.type == 'mysql'"></i>
-            <i class="iconfont icon-postgre-sql" v-if="item.type == 'postgresql'"></i>
-            <i class="iconfont icon-hive" v-if="item.type == 'hive'"></i>
-            <i class="iconfont icon-SQLServer" v-if="item.type == 'sqlserver'"></i>
-            <span>{{ item.name }}</span>
-            <!--            <span style="float: left">{{ item.name }}</span>-->
-          </el-option>
-        </el-select>
+        <div style="display:flex">
+          <el-select v-model="detail.datasourceId" placeholder="请选择" @change="getTables">
+            <el-option v-for="item in datasources" :key="item.id" :label="item.name" :value="item.id">
+              <i class="iconfont icon-my-SQL" v-if="item.type == 'mysql'"></i>
+              <i class="iconfont icon-postgre-sql" v-if="item.type == 'postgresql'"></i>
+              <i class="iconfont icon-hive" v-if="item.type == 'hive'"></i>
+              <i class="iconfont icon-SQLServer" v-if="item.type == 'sqlserver'"></i>
+              <span>{{ item.name }}</span>
+              <!--            <span style="float: left">{{ item.name }}</span>-->
+            </el-option>
+          </el-select>
+          <i class="el-icon-s-opportunity tip" @click="show=!show"></i>
+          <div>
+            <el-select placeholder="查看所有表" v-model="table" v-show="show" @change="getColumns">
+              <el-option :value="item" v-for="item in tables"><i class="iconfont icon-table"></i>{{ item }}</el-option>
+            </el-select>
+            <el-select placeholder="查看所有字段" v-model="column" v-show="show">
+              <el-option :value="item.fieldName" v-for="item in columns">
+                <i class="iconfont icon-ziyuan"></i>{{ item.fieldName }}
+              </el-option>
+            </el-select>
+          </div>
+        </div>
       </el-form-item>
       <el-form-item label="sql类型">
         <el-select v-model="detail.isSelect">
@@ -40,21 +53,25 @@
           <el-tag size="mini" @click="tag('where')" effect="plain">where</el-tag>
           <el-tag size="mini" @click="tag('trim')" effect="plain">trim</el-tag>
         </div>
-        <el-input type="textarea" v-model="detail.sql" :autosize="{ minRows: 5, maxRows: 20 }" placeholder="请输入sql" class="my"></el-input>
+        <el-input type="textarea" v-model="detail.sql" :autosize="{ minRows: 5, maxRows: 20 }" placeholder="请输入sql"
+                  class="my"></el-input>
         <!--        <el-button type="primary" plain @click="parseParams" style="margin :10px 0">解析参数</el-button>-->
       </el-form-item>
       <el-form-item label="请求参数">
         <div v-for="(item,index) in detail.params" style="margin-bottom:5px">
-          <el-autocomplete v-model="item.name" :fetch-suggestions="parseParams" style="width:200px;margin-right:5px" placeholder="请输入参数名"></el-autocomplete>
+          <el-autocomplete v-model="item.name" :fetch-suggestions="parseParams" style="width:200px;margin-right:5px"
+                           placeholder="请输入参数名"></el-autocomplete>
           <el-select v-model="item.type" :options="options" placeholder="请选择数据类型">
             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
 
           <!--          <el-cascader  v-model="item.type" separator=" > " :options="options"></el-cascader>-->
 
-          <el-button @click="deleteRow(index)" circle type="danger" icon="el-icon-delete" size="mini" v-if="$route.path != '/api/detail'" style="margin-left: 4px"></el-button>
+          <el-button @click="deleteRow(index)" circle type="danger" icon="el-icon-delete" size="mini"
+                     v-if="$route.path != '/api/detail'" style="margin-left: 4px"></el-button>
         </div>
-        <el-button @click="addRow" icon="el-icon-plus" type="primary" circle size="mini" v-if="$route.path != '/api/detail'"></el-button>
+        <el-button @click="addRow" icon="el-icon-plus" type="primary" circle size="mini"
+                   v-if="$route.path != '/api/detail'"></el-button>
 
       </el-form-item>
 
@@ -69,6 +86,7 @@ export default {
     return {
       datasources: [],
       address: null,
+      show: false,
       detail: {
         datasourceId: null,
         name: null,
@@ -89,7 +107,8 @@ export default {
         {label: 'double 数组', value: 'list<double>'},
         {label: 'date 数组', value: 'list<date>'}
 
-      ]
+      ],
+      table: null, tables: [], columns: [], column: null
     }
   },
   props: ["id"],
@@ -145,16 +164,31 @@ export default {
     tag(item) {
       if (item == 'foreach') {
         this.detail.sql += "\n<foreach open=\"(\" close=\")\" collection=\"\" separator=\",\" item=\"item\" index=\"index\">#{item}</foreach>"
-      }
-      else if (item == 'if') {
+      } else if (item == 'if') {
         this.detail.sql += "\n<if test=\"\" ></if>"
-      }
-      else if (item == 'where') {
+      } else if (item == 'where') {
         this.detail.sql += "\n<where></where>"
-      }
-      else if (item == 'trim') {
+      } else if (item == 'trim') {
         this.detail.sql += "\n<trim prefix=\"\" suffix=\"\" suffixesToOverride=\"\" prefixesToOverride=\"\"></trim>"
       }
+    },
+    getTables() {
+      this.axios.post("/table/getAllTables", {sourceId: this.detail.datasourceId}).then((response) => {
+        this.tables = response.data
+      }).catch((error) => {
+        this.$message.error("查询所有表失败")
+      })
+    },
+    getColumns() {
+      this.axios.post("/table/getAllColumns", {
+        sourceId: this.detail.datasourceId,
+        table: this.table
+      }).then((response) => {
+        console.log(response.data)
+        this.columns = response.data
+      }).catch((error) => {
+        this.$message.error("查询所有表失败")
+      })
     }
   },
   created() {
@@ -179,9 +213,25 @@ i {
   font-weight: 700;
   margin-right: 5px;
 }
+
 .el-tag {
   float: right;
   margin-left: 4px;
   margin-bottom: 2px;
 }
+
+.el-tag:hover {
+  font-weight: 700;
+  background-color: #ace2f8;
+}
+
+.tip {
+  font-weight: 300;
+  color: #8c939d
+}
+
+.tip:hover {
+  font-weight: 700;
+}
+
 </style>
