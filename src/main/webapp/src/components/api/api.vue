@@ -4,7 +4,7 @@
       <router-link to='/api/add'>
         <el-button style="margin-bottom:5px;" type="primary" plain>创建api</el-button>
       </router-link>
-      <el-input placeholder="输入关键字搜索api" v-model="keyword" style="width:400px;margin-left: 5px" clearable>
+      <el-input placeholder="输入关键字搜索api" v-model="keyword" style="width:400px;margin-left: 5px" clearable @keyup.enter.native="search">
         <el-select v-model="field" slot="prepend" placeholder="" style="width:80px;">
           <el-option label="名称" value="name"></el-option>
           <el-option label="描述" value="note"></el-option>
