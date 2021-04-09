@@ -9,6 +9,7 @@
             <i class="iconfont icon-postgre-sql db" v-if="item.label == 'postgresql'"></i>
             <i class="iconfont icon-hive db" v-if="item.label == 'hive'"></i>
             <i class="iconfont icon-SQLServer db" v-if="item.label == 'sqlserver'"></i>
+            <i class="iconfont icon-clickhouse2 db" v-if="item.label == 'clickhouse'"></i>
             <span>{{ item.label }}</span>
           </el-option>
         </el-select>
@@ -39,7 +40,7 @@ export default {
   name: "common",
   data() {
     return {
-      options: [{label: 'mysql'}, {label: 'postgresql'}, {label: 'hive'}, {label: 'sqlserver'}],
+      options: [{label: 'mysql'}, {label: 'postgresql'}, {label: 'hive'}, {label: 'sqlserver'}, {label: 'clickhouse'}],
       detail: {url: null, name: null, note: null, type: null, username: null, password: null}
     }
 
@@ -55,7 +56,11 @@ export default {
         this.detail.url = 'jdbc:hive2://localhost:10000/db'
       } else if (this.detail.type == 'sqlserver') {
         this.detail.url = 'jdbc:microsoft:sqlserver://localhost:1433;databaseName=db'
+      }else if (this.detail.type == 'clickhouse') {
+        this.detail.url = 'jdbc:clickhouse://localhost:8123/db'
       }
+
+
     },
     getDetail(id) {
       this.axios.post("/datasource/detail/" + id).then((response) => {

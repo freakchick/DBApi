@@ -22,16 +22,19 @@ public class JdbcUtil {
         String url = ds.getUrl();
         switch (ds.getType()) {
             case JdbcConstants.MYSQL:
-                Class.forName("com.mysql.jdbc.Driver");
+                Class.forName(JdbcConstants.MYSQL_DRIVER);
                 break;
             case JdbcConstants.POSTGRESQL:
-                Class.forName("org.postgresql.Driver");
+                Class.forName(JdbcConstants.POSTGRESQL_DRIVER);
                 break;
             case JdbcConstants.HIVE:
-                Class.forName("org.apache.hive.jdbc.HiveDriver");
+                Class.forName(JdbcConstants.HIVE_DRIVER);
                 break;
             case JdbcConstants.SQL_SERVER:
-                Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+                Class.forName(JdbcConstants.SQL_SERVER_DRIVER_SQLJDBC4);
+                break;
+            case JdbcConstants.CLICKHOUSE:
+                Class.forName(JdbcConstants.CLICKHOUSE_DRIVER);
                 break;
             default:
                 break;
