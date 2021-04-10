@@ -23,16 +23,18 @@
               <i class="iconfont icon-postgre-sql" v-if="item.type == 'postgresql'"></i>
               <i class="iconfont icon-hive" v-if="item.type == 'hive'"></i>
               <i class="iconfont icon-SQLServer" v-if="item.type == 'sqlserver'"></i>
+              <i class="iconfont icon-clickhouse2" v-if="item.type == 'clickhouse'"></i>
+              <i class="iconfont icon-Kylin" v-if="item.type == 'kylin'"></i>
               <span>{{ item.name }}</span>
               <!--            <span style="float: left">{{ item.name }}</span>-->
             </el-option>
           </el-select>
-          <i class="el-icon-s-opportunity tip" @click="show=!show"></i>
-          <div>
-            <el-select placeholder="查看所有表" v-model="table" v-show="show" @change="getColumns">
+          <i class="el-icon-s-opportunity tip" @click="show=!show" v-if="$route.path != '/api/detail'"></i>
+          <div v-show="show">
+            <el-select placeholder="查看所有表" v-model="table" @change="getColumns" clearable>
               <el-option :value="item" v-for="item in tables"><i class="iconfont icon-table"></i>{{ item }}</el-option>
             </el-select>
-            <el-select placeholder="查看所有字段" v-model="column" v-show="show">
+            <el-select placeholder="查看所有字段" v-model="column" style="margin-left: 10px" clearable>
               <el-option :value="item.fieldName" v-for="item in columns">
                 <i class="iconfont icon-ziyuan"></i>{{ item.fieldName }}
               </el-option>
@@ -227,7 +229,9 @@ i {
 
 .tip {
   font-weight: 300;
-  color: #8c939d
+  color: #8c939d;
+  line-height: 38px;
+  margin: 0 5px;
 }
 
 .tip:hover {

@@ -10,7 +10,7 @@
 ## 特点
 - 支持动态添加、修改api；支持api上线、下线管理
 - 支持多数据源连接，支持动态添加、修改、删除数据库地址
-- 支持多种类型数据库，包括mysql、 sqlserver、 postgreSql、 hive、 maridb
+- 支持多种类型数据库，包括mysql/sqlserver/postgreSql/hive/kylin/clickhouse
 - 支持动态sql，类似mybatis的动态sql
 - 部署简便，安装部署不需要使用外部数据库，一键启动即可（自带sqlite数据库作为元数据库，同时支持用户自定义使用mysql作为元数据库）
 

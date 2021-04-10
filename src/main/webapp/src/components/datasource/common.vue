@@ -10,6 +10,7 @@
             <i class="iconfont icon-hive db" v-if="item.label == 'hive'"></i>
             <i class="iconfont icon-SQLServer db" v-if="item.label == 'sqlserver'"></i>
             <i class="iconfont icon-clickhouse2 db" v-if="item.label == 'clickhouse'"></i>
+            <i class="iconfont icon-Kylin db" v-if="item.label == 'kylin'"></i>
             <span>{{ item.label }}</span>
           </el-option>
         </el-select>
@@ -40,7 +41,8 @@ export default {
   name: "common",
   data() {
     return {
-      options: [{label: 'mysql'}, {label: 'postgresql'}, {label: 'hive'}, {label: 'sqlserver'}, {label: 'clickhouse'}],
+      options: [{label: 'mysql'}, {label: 'postgresql'}, {label: 'hive'},
+        {label: 'sqlserver'}, {label: 'clickhouse'}, {label: 'kylin'}],
       detail: {url: null, name: null, note: null, type: null, username: null, password: null}
     }
 
@@ -58,6 +60,8 @@ export default {
         this.detail.url = 'jdbc:microsoft:sqlserver://localhost:1433;databaseName=db'
       }else if (this.detail.type == 'clickhouse') {
         this.detail.url = 'jdbc:clickhouse://localhost:8123/db'
+      }else if (this.detail.type == 'kylin') {
+        this.detail.url = 'jdbc:kylin://localhost:7070/db'
       }
 
 
@@ -95,8 +99,8 @@ export default {
 <style scoped>
 .db {
   color: #0698a5;
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 24px;
+  font-weight: 500;
   margin-right: 5px;
 }
 

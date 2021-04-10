@@ -36,6 +36,9 @@ public class JdbcUtil {
             case JdbcConstants.CLICKHOUSE:
                 Class.forName(JdbcConstants.CLICKHOUSE_DRIVER);
                 break;
+            case JdbcConstants.KYLIN:
+                Class.forName(JdbcConstants.KYLIN_DRIVER);
+                break;
             default:
                 break;
         }

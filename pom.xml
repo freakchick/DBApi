@@ -138,6 +138,12 @@
             <version>0.1.40</version>
         </dependency>
         <dependency>
+            <groupId>org.apache.kylin</groupId>
+            <artifactId>kylin-jdbc</artifactId>
+            <version>2.6.3</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.23.1</version>
