@@ -19,12 +19,7 @@
         <div style="display:flex">
           <el-select v-model="detail.datasourceId" placeholder="请选择" @change="getTables">
             <el-option v-for="item in datasources" :key="item.id" :label="item.name" :value="item.id">
-              <i class="iconfont icon-my-SQL" v-if="item.type == 'mysql'"></i>
-              <i class="iconfont icon-postgre-sql" v-if="item.type == 'postgresql'"></i>
-              <i class="iconfont icon-hive" v-if="item.type == 'hive'"></i>
-              <i class="iconfont icon-SQLServer" v-if="item.type == 'sqlserver'"></i>
-              <i class="iconfont icon-clickhouse2" v-if="item.type == 'clickhouse'"></i>
-              <i class="iconfont icon-Kylin" v-if="item.type == 'kylin'"></i>
+              <db-icon :type="item.type"></db-icon>
               <span>{{ item.name }}</span>
               <!--            <span style="float: left">{{ item.name }}</span>-->
             </el-option>
@@ -83,6 +78,8 @@
 </template>
 
 <script>
+import dbIcon from "@/components/common/dbIcon";
+
 export default {
   data() {
     return {
@@ -199,7 +196,8 @@ export default {
     if (this.id != undefined)
       this.getDetail(this.id)
     console.log(this.$route.path)
-  }
+  },
+  components: {dbIcon}
 }
 </script>
 

@@ -5,12 +5,7 @@
       <el-form-item label="数据库">
         <el-select v-model="detail.type" placeholder="请选择" @change="selectDB">
           <el-option v-for="item in options" :key="item.label" :label="item.label" :value="item.label">
-            <i class="iconfont icon-my-SQL db" v-if="item.label == 'mysql'"></i>
-            <i class="iconfont icon-postgre-sql db" v-if="item.label == 'postgresql'"></i>
-            <i class="iconfont icon-hive db" v-if="item.label == 'hive'"></i>
-            <i class="iconfont icon-SQLServer db" v-if="item.label == 'sqlserver'"></i>
-            <i class="iconfont icon-clickhouse2 db" v-if="item.label == 'clickhouse'"></i>
-            <i class="iconfont icon-Kylin db" v-if="item.label == 'kylin'"></i>
+            <db-icon :type="item.label"></db-icon>
             <span>{{ item.label }}</span>
           </el-option>
         </el-select>
@@ -37,6 +32,8 @@
 </template>
 
 <script>
+import dbIcon from "@/components/common/dbIcon";
+
 export default {
   name: "common",
   data() {
@@ -92,17 +89,12 @@ export default {
   created() {
     if (this.id != undefined)
       this.getDetail(this.id)
-  }
+  },
+  components: {dbIcon}
 }
 </script>
 
 <style scoped>
-.db {
-  color: #0698a5;
-  font-size: 24px;
-  font-weight: 500;
-  margin-right: 5px;
-}
 
 .my >>> .el-textarea__inner {
   font-family: 'Consolas', Helvetica, Arial, sans-serif;

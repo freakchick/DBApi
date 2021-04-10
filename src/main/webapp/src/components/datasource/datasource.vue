@@ -7,12 +7,13 @@
     <el-table :data="tableData" border stripe max-height="700">
       <el-table-column label="名称">
         <template slot-scope="scope">
-          <i class="iconfont icon-my-SQL db" v-if="scope.row.type == 'mysql'"></i>
-          <i class="iconfont icon-postgre-sql db" v-if="scope.row.type == 'postgresql'"></i>
-          <i class="iconfont icon-hive db" v-if="scope.row.type == 'hive'"></i>
-          <i class="iconfont icon-SQLServer db" v-if="scope.row.type == 'sqlserver'"></i>
-          <i class="iconfont icon-clickhouse2 db" v-if="scope.row.type == 'sqlserver'"></i>
-          <i class="iconfont icon-Kylin db" v-if="scope.row.type == 'kylin'"></i>
+          <db-icon :type="scope.row.type"></db-icon>
+<!--          <i class="iconfont icon-my-SQL db" v-if="scope.row.type == 'mysql'"></i>-->
+<!--          <i class="iconfont icon-postgre-sql db" v-if="scope.row.type == 'postgresql'"></i>-->
+<!--          <i class="iconfont icon-hive db" v-if="scope.row.type == 'hive'"></i>-->
+<!--          <i class="iconfont icon-SQLServer db" v-if="scope.row.type == 'sqlserver'"></i>-->
+<!--          <i class="iconfont icon-clickhouse2 db" v-if="scope.row.type == 'sqlserver'"></i>-->
+<!--          <i class="iconfont icon-Kylin db" v-if="scope.row.type == 'kylin'"></i>-->
           <span>{{scope.row.name}}</span>
         </template>
       </el-table-column>
@@ -40,6 +41,8 @@
 </template>
 
 <script>
+import dbIcon from '@/components/common/dbIcon'
+
 export default {
   name: "datasource",
   data() {
@@ -76,7 +79,8 @@ export default {
   },
   created() {
     this.getAllSource()
-  }
+  },
+  components: {dbIcon}
 }
 </script>
 
@@ -84,13 +88,6 @@ export default {
 .my >>> .el-textarea__inner {
   font-family: 'Consolas', Helvetica, Arial, sans-serif;
   /*font-size: 18px;*/
-}
-
-.db {
-  color: #0698a5;
-  font-size: 18px;
-  font-weight: 700;
-  margin-right: 5px;
 }
 
 .button {
