@@ -1,5 +1,19 @@
 #!/bin/sh
 
+bool=false
+
+while getopts d opt;
+do
+case $opt in
+  d) echo "running in daemon"
+    bool=true
+    shift
+    ;;
+  ?) echo "$opt is an invalid option"
+    ;;
+esac
+done
+
 BIN_DIR=$(dirname $0)
 BIN_DIR=$(
   cd "$BIN_DIR"
@@ -14,6 +28,13 @@ export LIB_JARS=$HOME/lib/*
 export LOG_DIR=$HOME/logs
 
 if [ $1 = "start" ]; then
+
+  if [ "$bool" = "false" ]; then
+    java -Dlogging.file=$LOG_DIR/dbApi.log -classpath $CONF_DIR:$LIB_JARS com.jq.dbapi.DBApiApplication
+  else
+    nohup java -Dlogging.file=$LOG_DIR/dbApi.log -classpath $CONF_DIR:$LIB_JARS com.jq.dbapi.DBApiApplication >/dev/null 2>&1 &
+    echo $! >$PID
+  fi
 
   nohup java -Dlogging.file=$LOG_DIR/dbApi.log -classpath $CONF_DIR:$LIB_JARS com.jq.dbapi.DBApiApplication >/dev/null 2>&1 &
   echo $! >$PID
