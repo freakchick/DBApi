@@ -22,15 +22,14 @@
                 <include>*.sh</include>
             </includes>
         </fileSet>
-<!--        <fileSet>-->
-<!--            <directory>${project.basedir}/src/main/bin</directory>-->
-<!--            <outputDirectory>bin</outputDirectory>-->
-<!--            <lineEnding>windows</lineEnding>-->
-<!--            <fileMode>744</fileMode>-->
-<!--            <includes>-->
-<!--                <include>*.bat</include>-->
-<!--            </includes>-->
-<!--        </fileSet>-->
+        <fileSet>
+            <directory>${project.basedir}/src/main/bin</directory>
+            <outputDirectory>bin</outputDirectory>
+            <lineEnding>windows</lineEnding>
+            <includes>
+                <include>*.bat</include>
+            </includes>
+        </fileSet>
         <fileSet>
             <directory>${project.basedir}/src/main/resources</directory>
             <outputDirectory>conf</outputDirectory>
