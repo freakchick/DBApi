@@ -27,17 +27,21 @@
 ## 安装教程
 
 - 依赖java环境，需要安装jdk8+
-- 下载安装包解压，下载地址： https://gitee.com/freakchicken/db-api/releases
-- 启动/停止命令:
-```shell script
-bin/dbApi.sh start
-bin/dbApi.sh stop
-```
+- 下载安装包，下载地址： https://gitee.com/freakchicken/db-api/releases
 
-- 浏览器访问 http://ip:8520/
+**有以下3种安装方式：**
 
+### 1.jar包安装
 
-- 如果想修改端口启动,修改conf/application.properties文件中的端口配置:
+- 如果您想要快速安装，请下载dbApi.jar包
+- 启动命令：java -jar dbApi.jar 一键启动
+
+- 启动后浏览器访问 http://ip:8520
+
+### 2.tar包安装
+
+- 如果您想自定义配置，请下载dbApi.tar.gz包
+- 解压tar包，修改conf/application.properties文件中的端口配置:
 ```properties
 server.port=8520
 ```
@@ -50,7 +54,36 @@ spring.datasource.username=
 spring.datasource.password=
 ```
 
-启动前在数据库执行初始化sql脚本，脚本在sql/目录下
+*如果您使用了mysql作为自己的元数据库，启动前请在数据库执行初始化sql脚本，脚本在sql/目录下*
+
+
+- linux操作命令
+
+```shell
+# 前台启动
+sh bin/dbApi.sh start
+# 后台启动
+sh bin/dbApi.sh -d start
+# 关闭后台启动的进程
+sh bin/dbApi.sh stop
+
+```
+
+- windows操作命令
+```shell
+# 前台启动
+bin/dbApi.bat
+```
+或者直接双击 bin/dbApi.bat 文件启动
+
+- 启动后浏览器访问 http://ip:8520
+
+### 3.docker安装
+
+```shell script
+  docker run -d -p 8520:8520 freakchicken/db-api
+```
+- 启动后浏览器访问 http://ip:8520
 
 ## 使用说明
 
