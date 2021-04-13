@@ -42,6 +42,9 @@ public class PoolManager {
                     druidDataSource.setUsername(ds.getUsername());
                     druidDataSource.setPassword(ds.getPassword());
                     druidDataSource.setDriverClassName(ds.getClassName());
+                    druidDataSource.setConnectionErrorRetryAttempts(3);       //失败后重连次数
+                    druidDataSource.setBreakAfterAcquireFailure(true);
+
                     map.put(ds.getId(), druidDataSource);
                     log.info("创建Druid连接池成功：{}", ds.getName());
                 }
