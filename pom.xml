@@ -150,6 +150,10 @@
                     <artifactId>slf4j-api</artifactId>
                     <groupId>org.slf4j</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>jetty-all</artifactId>
+                    <groupId>org.eclipse.jetty.aggregate</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
         <!--hive jdbc 访问只需要 hadoop-common hive-jdbc两个依赖-->
