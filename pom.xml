@@ -72,7 +72,7 @@
 
                         <configuration>
 
-                            <imageName>${docker.image.prefix}/${project.artifactId}</imageName>
+                            <imageName>${docker.image.prefix}/${project.name}</imageName>
                             <baseImage>openjdk:8</baseImage>
                             <workdir>${project.build.finalName}/bin</workdir>
                             <entryPoint>["sh", "dbApi.sh", "start"]</entryPoint>
