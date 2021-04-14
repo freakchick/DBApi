@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -97,13 +98,9 @@ public class ApiConfigController {
         return null;
     }
 
-    @Value("${server.port}")
-    String port;
-
     @RequestMapping("/getIPPort")
-    public String getIPPort() {
-        String ip = IPUtil.getIpAddress();
-        return ip + ":" + port;
+    public String getIPPort(HttpServletRequest request) {
+        return request.getServerName() + ":" + request.getServerPort();
     }
 
 }
