@@ -168,5 +168,3 @@ http://localhost:8520
 - 前端ui优化-使用sql语法插件
 - 接口权限控制
 - 集群版本开发，支持微服务注册consul/eureka/nacos
-- docker支持
-- 安装包windows运行支持，bat编程
