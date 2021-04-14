@@ -6,6 +6,7 @@
     <i class="iconfont icon-SQLServer db" v-if="type == 'sqlserver'"></i>
     <i class="iconfont icon-clickhouse2 db" v-if="type == 'clickhouse'"></i>
     <i class="iconfont icon-Kylin db" v-if="type == 'kylin'"></i>
+    <i class="iconfont icon-oracle db" v-if="type == 'oracle'"></i>
   </div>
 </template>
 

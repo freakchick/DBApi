@@ -39,6 +39,9 @@ public class JdbcUtil {
             case JdbcConstants.KYLIN:
                 Class.forName(JdbcConstants.KYLIN_DRIVER);
                 break;
+            case JdbcConstants.ORACLE:
+                Class.forName(JdbcConstants.ORACLE_DRIVER);
+                break;
             default:
                 break;
         }

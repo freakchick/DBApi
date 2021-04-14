@@ -39,7 +39,7 @@ export default {
   data() {
     return {
       options: [{label: 'mysql'}, {label: 'postgresql'}, {label: 'hive'},
-        {label: 'sqlserver'}, {label: 'clickhouse'}, {label: 'kylin'}],
+        {label: 'sqlserver'}, {label: 'clickhouse'}, {label: 'kylin'}, {label: 'oracle'}],
       detail: {url: null, name: null, note: null, type: null, username: null, password: null}
     }
 
@@ -55,10 +55,12 @@ export default {
         this.detail.url = 'jdbc:hive2://localhost:10000/db'
       } else if (this.detail.type == 'sqlserver') {
         this.detail.url = 'jdbc:microsoft:sqlserver://localhost:1433;databaseName=db'
-      }else if (this.detail.type == 'clickhouse') {
+      } else if (this.detail.type == 'clickhouse') {
         this.detail.url = 'jdbc:clickhouse://localhost:8123/db'
-      }else if (this.detail.type == 'kylin') {
+      } else if (this.detail.type == 'kylin') {
         this.detail.url = 'jdbc:kylin://localhost:7070/db'
+      } else if (this.detail.type == 'oracle') {
+        this.detail.url = 'jdbc:oracle:thin:@localhost:1521:db'
       }
 
 

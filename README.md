@@ -10,7 +10,7 @@
 ## 特点
 - 支持动态添加、修改api；支持api上线、下线管理
 - 支持多数据源连接，支持动态添加、修改、删除数据库地址
-- 支持多种类型数据库，包括mysql/sqlserver/postgreSql/hive/kylin/clickhouse
+- 支持多种类型数据库，包括mysql/sqlserver/postgreSql/hive/kylin/clickhouse/oracle
 - 支持动态sql，类似mybatis的动态sql
 - 部署简便，安装部署不需要使用外部数据库，一键启动即可（自带sqlite数据库作为元数据库，同时支持用户自定义使用mysql作为元数据库）
 
@@ -149,10 +149,18 @@ http://localhost:8521
 http://localhost:8520
 ```
 
+## 注意事项
+- 如果您使用了Oracle，请使用tar包安装方式，并将jdbc驱动包手动放入解压后的lib目录下
+
 ## 联系作者：
 ### wechat：
 <div style="text-align: center"> 
 <img src="https://freakchicken.gitee.io/images/kafkaui/wechat.jpg" width = "30%" />
+</div>
+
+### qq交流群：
+<div style="text-align: center"> 
+<img src="https://freakchicken.gitee.io/images/dbApi/qqgroup.jpg" width = "40%" />
 </div>
 
 
@@ -164,7 +172,7 @@ http://localhost:8520
 </div>
 
 
-## 开发计划
+## TODO
 - 前端ui优化-使用sql语法插件
 - 接口权限控制
 - 集群版本开发，支持微服务注册consul/eureka/nacos
