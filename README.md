@@ -150,7 +150,7 @@ http://localhost:8520
 ```
 
 ## 注意事项
-- 如果您使用了Oracle，请使用tar包安装方式，并将jdbc驱动包手动放入解压后的lib目录下
+- 如果您要使用Oracle，请使用tar包安装方式，并将oracle jdbc驱动包手动放入解压后的lib目录下
 
 ## 联系作者：
 ### wechat：
