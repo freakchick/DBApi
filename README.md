@@ -27,7 +27,7 @@
 ## 安装教程
 
 - 依赖java环境，需要安装jdk8+
-- 下载安装包，下载地址： https://gitee.com/freakchicken/db-api/releases
+- 下载地址： [天翼云盘](https://cloud.189.cn/t/Jza2MzeEZVNv) ，或者在发行版页面下载
 
 **有以下3种安装方式：**
 
