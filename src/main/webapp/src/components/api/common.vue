@@ -55,17 +55,17 @@
         <!--        <el-button type="primary" plain @click="parseParams" style="margin :10px 0">解析参数</el-button>-->
       </el-form-item>
       <el-form-item label="请求参数">
-        <div v-for="(item,index) in detail.params" style="margin-bottom:5px">
+        <div v-for="(item,index) in detail.params" style="margin-bottom:5px;display: flex">
           <el-autocomplete v-model="item.name" :fetch-suggestions="parseParams" style="width:200px;margin-right:5px"
-                           placeholder="请输入参数名"></el-autocomplete>
-          <el-select v-model="item.type" :options="options" placeholder="请选择数据类型">
+                           placeholder="*参数名"></el-autocomplete>
+          <el-select v-model="item.type" :options="options" placeholder="*数据类型" style="margin-right:5px">
             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
-
+          <el-input v-model="item.note" placeholder="参数说明" style="width:200px;margin-right:5px"></el-input>
           <!--          <el-cascader  v-model="item.type" separator=" > " :options="options"></el-cascader>-->
 
           <el-button @click="deleteRow(index)" circle type="danger" icon="el-icon-delete" size="mini"
-                     v-if="$route.path != '/api/detail'" style="margin-left: 4px"></el-button>
+                     v-if="$route.path != '/api/detail'" style="width: 40px;height:40px"></el-button>
         </div>
         <el-button @click="addRow" icon="el-icon-plus" type="primary" circle size="mini"
                    v-if="$route.path != '/api/detail'"></el-button>
