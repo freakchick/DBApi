@@ -52,7 +52,7 @@ public class ApiInterceptor implements HandlerInterceptor {
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE");
         PrintWriter out = null;
         try {
-            ResponseDto responseDto = process(servletPath, request);
+            ResponseDto responseDto = process(servletPath, request, response);
             out = response.getWriter();
             out.append(JSON.toJSONString(responseDto));
             return false;
@@ -76,14 +76,16 @@ public class ApiInterceptor implements HandlerInterceptor {
     @Autowired
     ApiService apiService;
 
-    public ResponseDto process(String path, HttpServletRequest request) {
+    public ResponseDto process(String path, HttpServletRequest request, HttpServletResponse response) {
         try {
             ApiConfig config = apiConfigService.getConfig(path);
             if (config == null) {
+                response.setStatus(404);
                 return ResponseDto.fail("该接口不存在！！");
             }
             DataSource datasource = dataSourceService.detail(config.getDatasourceId());
             if (datasource == null) {
+                response.setStatus(500);
                 return ResponseDto.fail("数据源不存在！！");
             }
 
@@ -91,7 +93,10 @@ public class ApiInterceptor implements HandlerInterceptor {
             String sql = config.getSql();
             SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(sql, sqlParam);
             log.info(sqlMeta.getSql());
-            return apiService.executeSql(config.getIsSelect(), datasource, sqlMeta.getSql(), sqlMeta.getJdbcParamValues());
+            ResponseDto responseDto = apiService.executeSql(config.getIsSelect(), datasource, sqlMeta.getSql(), sqlMeta.getJdbcParamValues());
+            if (!responseDto.isSuccess())
+                response.setStatus(500);
+            return responseDto;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return ResponseDto.fail(e.getMessage());
