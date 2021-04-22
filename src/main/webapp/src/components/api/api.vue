@@ -1,82 +1,95 @@
 <template>
   <div>
     <div>
-      <router-link to='/api/add'>
-        <el-button style="margin-bottom:5px;" type="primary" plain>创建api</el-button>
-      </router-link>
-      <el-input placeholder="输入关键字搜索api" v-model="keyword" style="width:400px;margin-left: 5px" clearable @keyup.enter.native="search">
-        <el-select v-model="field" slot="prepend" placeholder="" style="width:80px;">
-          <el-option label="名称" value="name"></el-option>
-          <el-option label="描述" value="note"></el-option>
-          <el-option label="路径" value="path"></el-option>
-        </el-select>
-        <el-button slot="append" type="primary" icon="el-icon-search" @click="search"></el-button>
-      </el-input>
+
+      <div style="width:100%">
+        <div>
+          <el-select v-model="group">
+            <el-option label="所有组" value=""></el-option>
+            <el-option :label="item.name" :value="item.id" v-for="item in groups" :key="item.id"></el-option>
+
+          </el-select>
+
+          <el-input placeholder="输入关键字" v-model="keyword" style="width:400px;margin-left: 5px" clearable
+                    @keyup.enter.native="search">
+            <el-select v-model="field" slot="prepend" placeholder="" style="width:80px;">
+              <el-option label="名称" value="name"></el-option>
+              <el-option label="描述" value="note"></el-option>
+              <el-option label="路径" value="path"></el-option>
+            </el-select>
+          </el-input>
+
+          <el-button type="primary" icon="el-icon-search" @click="search" plain>查询</el-button>
+
+        </div>
+
+
+        <el-table :data="tableData" border stripe max-height="700">
+          <el-table-column label="名称">
+            <template slot-scope="scope">
+              <i class="iconfont icon-on_line1 circle" v-if="scope.row.status == 1" title="已上线"></i>
+              <i class="iconfont icon-off_line circle red" v-else title="未上线"></i>
+              <span :title="scope.row.note">{{ scope.row.name }}</span>
+            </template>
+          </el-table-column>
+          <!--      <el-table-column prop="note" label="描述"></el-table-column>-->
+          <el-table-column label="路径">
+            <template slot-scope="scope">
+              <span>/api/{{ scope.row.path }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="参数">
+            <template slot-scope="scope">
+              <data-tag v-for="item in scope.row.p" :name="item.name" :type="item.type"></data-tag>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button plain size="mini" type="info" @click="detail(scope.row.id)" circle><i
+                  class="iconfont icon-detail"></i>
+              </el-button>
+              <el-button plain size="mini" type="warning" @click="handleEdit(scope.row.id)" circle>
+                <i class="el-icon-edit"></i>
+              </el-button>
+              <el-button plain size="mini" type="danger" @click="handleDelete(scope.row.id)" circle>
+                <i class="el-icon-delete"></i>
+              </el-button>
+              <el-button plain size="mini" v-if="scope.row.status == 0" type="warning" @click="online(scope.row.id)"
+                         title="上线" circle>
+                <i class="iconfont icon-on_line2"></i>
+              </el-button>
+
+              <el-button plain size="mini" v-if="scope.row.status == 1" type="info" @click="offline(scope.row.id)"
+                         title="下线" circle>
+                <i class="iconfont icon-off_line1"></i>
+              </el-button>
+
+              <el-button plain size="mini" v-if="scope.row.status == 1" type="primary" @click="httpTest(scope.row.id)"
+                         title="请求测试" circle>
+                <i class="iconfont icon-HTTPRequest"></i>
+              </el-button>
+
+            </template>
+          </el-table-column>
+        </el-table>
+
+        <router-link to='/api/add'>
+          <el-button style="margin-bottom:5px;" type="primary" plain>创建api</el-button>
+        </router-link>
+
+        <el-button @click="dialogVisible = true" type="primary" plain>api分组管理</el-button>
+        <el-button style="margin-bottom:5px;" type="primary" plain>导出api文档</el-button>
+        <el-dialog title="API分组" :visible.sync="dialogVisible" @close="getAllGroups">
+          <group></group>
+        </el-dialog>
+      </div>
     </div>
-
-
-    <el-table :data="tableData" border stripe max-height="700">
-      <el-table-column label="名称">
-        <template slot-scope="scope">
-          <i class="iconfont icon-on_line1 circle" v-if="scope.row.status == 1" title="已上线"></i>
-          <i class="iconfont icon-off_line circle red" v-else title="未上线"></i>
-          <span :title="scope.row.note">{{ scope.row.name }}</span>
-        </template>
-      </el-table-column>
-      <!--      <el-table-column prop="note" label="描述"></el-table-column>-->
-      <el-table-column label="路径">
-        <template slot-scope="scope">
-          <span>/api/{{ scope.row.path }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="参数">
-        <template slot-scope="scope">
-          <data-tag v-for="item in scope.row.p" :name="item.name" :type="item.type"></data-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作">
-        <template slot-scope="scope">
-          <el-button plain size="mini" type="info" @click="detail(scope.row.id)" circle><i
-              class="iconfont icon-detail"></i>
-          </el-button>
-          <el-button plain size="mini" type="warning" @click="handleEdit(scope.row.id)" circle>
-            <i class="el-icon-edit"></i>
-          </el-button>
-          <el-button plain size="mini" type="danger" @click="handleDelete(scope.row.id)" circle>
-            <i class="el-icon-delete"></i>
-          </el-button>
-          <el-button plain size="mini" v-if="scope.row.status == 0" type="warning" @click="online(scope.row.id)"
-                     title="上线" circle>
-            <i class="iconfont icon-on_line2"></i>
-          </el-button>
-
-          <el-button plain size="mini" v-if="scope.row.status == 1" type="info" @click="offline(scope.row.id)"
-                     title="下线" circle>
-            <i class="iconfont icon-off_line1"></i>
-          </el-button>
-
-          <el-button plain size="mini" v-if="scope.row.status == 1" type="primary" @click="httpTest(scope.row.id)"
-                     title="请求测试" circle>
-            <i class="iconfont icon-HTTPRequest"></i>
-          </el-button>
-
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <el-dialog title="请求测试api" :visible.sync="dialogVisible">
-
-
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-         <el-button type="primary" @click="dialogVisible = false;add()">确 定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
 <script>
 import dataTag from "@/components/common/dataTag";
+import group from "@/components/api/group";
 
 export default {
   name: "api",
@@ -85,10 +98,12 @@ export default {
       dialogVisible: false,
       keyword: null,
       field: null,
-      tableData: []
+      tableData: [],
+      groups: [],
+      group: ''
     }
   },
-  components: {dataTag},
+  components: {dataTag, group},
   methods: {
     getAllApis() {
       this.axios.post("/apiConfig/getAll").then((response) => {
@@ -103,7 +118,7 @@ export default {
       })
     },
     search() {
-      this.axios.post("/apiConfig/search", {keyword: this.keyword, field: this.field}).then((response) => {
+      this.axios.post("/apiConfig/search", {keyword: this.keyword, field: this.field,group:this.group}).then((response) => {
         const list = response.data
         list.forEach(t => {
           const obj = JSON.parse(t.params)
@@ -146,11 +161,18 @@ export default {
     },
     handleEdit(id) {
       this.$router.push({path: '/api/edit', query: {id: id}});
+    },
+    getAllGroups() {
+      this.axios.post("/group/getAll/").then((response) => {
+        this.groups = response.data
+      }).catch((error) => {
+      })
     }
   },
 
   created() {
     this.getAllApis()
+    this.getAllGroups()
   }
 }
 </script>

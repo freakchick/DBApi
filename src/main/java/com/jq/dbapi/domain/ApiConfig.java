@@ -45,4 +45,10 @@ public class ApiConfig {
 
     @TableField(value = "is_select")
     Integer isSelect;
+
+    @TableField
+    Integer previlege;
+
+    @TableField("`group`")
+    Integer group;
 }

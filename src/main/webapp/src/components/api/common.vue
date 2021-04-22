@@ -55,7 +55,7 @@
         <!--        <el-button type="primary" plain @click="parseParams" style="margin :10px 0">解析参数</el-button>-->
       </el-form-item>
       <el-form-item label="请求参数">
-        <div v-for="(item,index) in detail.params" style="margin-bottom:5px;display: flex">
+        <div v-for="(item,index) in detail.params" style="margin-bottom:5px;display: flex;align-items:center">
           <el-autocomplete v-model="item.name" :fetch-suggestions="parseParams" style="width:200px;margin-right:5px"
                            placeholder="*参数名"></el-autocomplete>
           <el-select v-model="item.type" :options="options" placeholder="*数据类型" style="margin-right:5px">
@@ -65,11 +65,24 @@
           <!--          <el-cascader  v-model="item.type" separator=" > " :options="options"></el-cascader>-->
 
           <el-button @click="deleteRow(index)" circle type="danger" icon="el-icon-delete" size="mini"
-                     v-if="$route.path != '/api/detail'" style="width: 40px;height:40px"></el-button>
+                     v-if="$route.path != '/api/detail'"></el-button>
         </div>
         <el-button @click="addRow" icon="el-icon-plus" type="primary" circle size="mini"
                    v-if="$route.path != '/api/detail'"></el-button>
 
+      </el-form-item>
+
+      <el-form-item label="API分组">
+        <el-select v-model="detail.group">
+          <el-option :label="item.name" :value="item.id" v-for="item in groups" :key="item.id"></el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="访问权限">
+        <el-radio-group v-model="detail.previlege">
+          <el-radio :label="0">私有接口</el-radio>
+          <el-radio :label="1">开放接口</el-radio>
+        </el-radio-group>
       </el-form-item>
 
 
@@ -86,6 +99,7 @@ export default {
       datasources: [],
       address: null,
       show: false,
+      groups:[],
       detail: {
         datasourceId: null,
         name: null,
@@ -93,7 +107,9 @@ export default {
         path: null,
         isSelect: "1",
         sql: '',
-        params: []
+        params: [],
+        group:null,
+        previlege:0
       },
       options: [
         {label: 'string', value: 'string'},
@@ -155,6 +171,8 @@ export default {
         this.detail.sql = response.data.sql
         this.detail.isSelect = response.data.isSelect.toString()
         this.detail.datasourceId = response.data.datasourceId
+        this.detail.previlege = response.data.previlege
+        this.detail.group = response.data.group
         this.detail.params = JSON.parse(response.data.params)
       }).catch((error) => {
         this.$message.error("失败")
@@ -188,6 +206,12 @@ export default {
       }).catch((error) => {
         this.$message.error("查询所有表失败")
       })
+    },
+    getAllGroups() {
+      this.axios.post("/group/getAll/").then((response) => {
+        this.groups = response.data
+      }).catch((error) => {
+      })
     }
   },
   created() {
@@ -195,6 +219,8 @@ export default {
     this.getAddress()
     if (this.id != undefined)
       this.getDetail(this.id)
+
+    this.getAllGroups()
     console.log(this.$route.path)
   },
   components: {dbIcon}

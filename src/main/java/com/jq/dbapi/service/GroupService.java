@@ -1,0 +1,39 @@
+package com.jq.dbapi.service;
+
+import com.jq.dbapi.dao.ApiConfigMapper;
+import com.jq.dbapi.dao.GroupMapper;
+import com.jq.dbapi.domain.Group;
+import com.jq.dbapi.util.ResponseDto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+public class GroupService {
+    @Autowired
+    GroupMapper groupMapper;
+    @Autowired
+    ApiConfigMapper apiConfigMapper;
+
+    public void insert(Group group) {
+        groupMapper.insert(group);
+    }
+
+    @Transactional
+    public ResponseDto deleteById(Integer id) {
+        int size = apiConfigMapper.selectCountByGroup(id);
+        if (size > 0){
+            return ResponseDto.fail("该分组下还有API，不可删除！");
+        }else{
+            groupMapper.deleteById(id);
+            return ResponseDto.success("删除成功");
+        }
+
+    }
+
+    public List<Group> selectList(Object o) {
+        return groupMapper.selectList(null);
+    }
+}

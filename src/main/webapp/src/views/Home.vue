@@ -1,7 +1,8 @@
 <template>
   <div class="home">
     <el-container>
-      <el-header>
+      <el-header style="background-color: #00a0e9">
+        <!--        <span>DBAPI</span>-->
 
         <el-menu
             default-active="1"
@@ -15,25 +16,21 @@
 
           <el-menu-item index="/datasource">
             <template slot="title">
-              <span class="">数据源</span>
+              <span class="menu">数据源</span>
             </template>
           </el-menu-item>
 
           <el-menu-item index="/api">
             <template slot="title">
-              <span class="">api</span>
+              <span class="menu">API</span>
             </template>
           </el-menu-item>
 
-          <el-submenu index="9">
+          <el-menu-item index="/token">
             <template slot="title">
-              <span class="">关于</span>
+              <span class="menu">权限</span>
             </template>
-            <el-menu-item>
-              <el-link href="https://gitee.com/freakchicken/db-api" target="_blank" style="color:#fff">开源地址</el-link>
-            </el-menu-item>
-
-          </el-submenu>
+          </el-menu-item>
         </el-menu>
 
       </el-header>
@@ -79,6 +76,10 @@ export default {
 .menu {
   font-size: 17px;
   font-weight: 700;
+}
+
+.home {
+  width: auto;
 }
 
 </style>

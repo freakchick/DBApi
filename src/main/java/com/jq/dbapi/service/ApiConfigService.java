@@ -72,8 +72,8 @@ public class ApiConfigService {
         return apiConfigMapper.selectList(null);
     }
 
-    public List<ApiConfig> search(String keyword,String field) {
-        return apiConfigMapper.selectByKeyword("%" + keyword + "%",field);
+    public List<ApiConfig> search(String keyword, String field, String group) {
+        return apiConfigMapper.selectByKeyword(keyword, field, group);
     }
 
     @Cacheable(value = "api", key = "#path", unless = "#result == null")
