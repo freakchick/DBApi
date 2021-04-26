@@ -3,6 +3,7 @@ package com.jq.dbapi.service;
 import com.jq.dbapi.dao.ApiAuthMapper;
 import com.jq.dbapi.dao.TokenMapper;
 import com.jq.dbapi.domain.ApiAuth;
+import com.jq.dbapi.domain.Token;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ public class TokenService {
 
     @Autowired
     ApiAuthMapper apiAuthMapper;
+
+    @Autowired
+    TokenMapper tokenMapper;
 
     @Transactional
     public void auth(Integer tokenId, String groupIds) {
@@ -37,5 +41,10 @@ public class TokenService {
 
         List<Integer> list = apiAuthMapper.selectByTokenId(tokenId);
         return list;
+    }
+
+    public Token getToken(String tokenStr) {
+        Token token = tokenMapper.selectByToken(tokenStr);
+        return token;
     }
 }

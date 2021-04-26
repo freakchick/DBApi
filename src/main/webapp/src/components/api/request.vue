@@ -5,20 +5,30 @@
     <h4>接口地址：</h4>
     <div class="path">http://{{ address }}/api/{{ path }}</div>
 
+    <h4>请求header：</h4>
+
+    <el-form label-width="150px" style="width: 600px" size="medium">
+      <el-form-item label="token:">
+        <el-input v-model="token"></el-input>
+      </el-form-item>
+    </el-form>
+
+
     <h4>接口参数：</h4>
     <el-form label-width="150px" style="width: 600px" size="medium">
       <el-form-item v-for="(item,index) in params" :key="index" style="margin-bottom: 5px">
         <template slot="label">
-          <data-tag :name="item.name" :type="item.type" ></data-tag>
+          <data-tag :name="item.name" :type="item.type"></data-tag>
         </template>
         <el-input v-model="item.value" v-if="!item.type.startsWith('list')">
-<!--          <template slot="append">{{ item.type }}</template>-->
+          <!--          <template slot="append">{{ item.type }}</template>-->
         </el-input>
         <div v-show="item.type.startsWith('list')">
           <div v-for="(childItem,childIndex) in item.values" :key="childIndex">
             <el-input v-model="childItem.va" style="width: 400px">
             </el-input>
-            <el-button slot="append" icon="el-icon-delete" type="danger" circle size="mini" @click="deleteRow(index,childIndex)" style="margin-left: 4px;"></el-button>
+            <el-button slot="append" icon="el-icon-delete" type="danger" circle size="mini"
+                       @click="deleteRow(index,childIndex)" style="margin-left: 4px;"></el-button>
           </div>
 
           <el-button icon="el-icon-plus" type="primary" circle size="mini" @click="addRow(index)"></el-button>
@@ -33,7 +43,8 @@
     <el-table :data="tableData" v-show="showTable" size="mini" border stripe max-height="700">
       <el-table-column :prop="item" :label="item" v-for="item in keys" :key="item"></el-table-column>
     </el-table>
-    <el-input type="textarea" v-model="response" :autosize="{ minRows: 5, maxRows: 20 }" class="my" v-show="!showTable"></el-input>
+    <el-input type="textarea" v-model="response" :autosize="{ minRows: 5, maxRows: 20 }" class="my"
+              v-show="!showTable"></el-input>
 
     <el-button size="small" @click="format" class="button">格式化json</el-button>
     <el-button size="small" @click="tableShow" class="button" v-if="isSelect == 1">表格展示</el-button>
@@ -44,6 +55,7 @@
 
 <script>
 import dataTag from "@/components/common/dataTag";
+
 export default {
   name: "request",
   data() {
@@ -56,7 +68,8 @@ export default {
       isSelect: null,
       keys: [],
       tableData: [],
-      showTable: false
+      showTable: false,
+      token: null
     }
   },
   methods: {
@@ -71,7 +84,6 @@ export default {
         })
         this.params = params
         this.isSelect = response.data.isSelect
-        console.log(this.params)
       }).catch((error) => {
         this.$message.error("失败")
       })
@@ -93,15 +105,15 @@ export default {
         } else
           p[t.name] = t.value
       })
-      console.log(p)
       let url = `http://${this.address}/api/${this.path}`
       this.axios.post(url, p).then((response) => {
+        console.log(response)
         this.showTable = false
-        console.log(response.data)
         this.response = JSON.stringify(response.data)
 
       }).catch((error) => {
-        this.$message.error("失败")
+        console.log(error)
+        this.$message.error("error")
       })
     },
     format() {
