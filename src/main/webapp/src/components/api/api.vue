@@ -2,10 +2,9 @@
   <div>
     <div>
 
-      <div style="width:100%">
-        <div>
+        <div class="gap">
           <el-select v-model="group">
-            <el-option label="所有组" value=""></el-option>
+            <el-option label="所有分组" value=""></el-option>
             <el-option :label="item.name" :value="item.id" v-for="item in groups" :key="item.id"></el-option>
 
           </el-select>
@@ -24,7 +23,7 @@
         </div>
 
 
-        <el-table :data="tableData" border stripe max-height="700">
+        <el-table :data="tableData" border stripe max-height="700" class="gap">
           <el-table-column label="名称">
             <template slot-scope="scope">
               <i class="iconfont icon-on_line1 circle" v-if="scope.row.status == 1" title="已上线"></i>
@@ -73,17 +72,16 @@
           </el-table-column>
         </el-table>
 
-        <router-link to='/api/add'>
-          <el-button style="margin-bottom:5px;" type="primary" plain>创建api</el-button>
+        <router-link to='/api/add' class="gap">
+          <el-button type="primary" plain>创建api</el-button>
         </router-link>
 
-        <el-button @click="dialogVisible = true" type="primary" plain>api分组管理</el-button>
-        <el-button style="margin-bottom:5px;" type="primary" plain>导出api文档</el-button>
+        <el-button @click="dialogVisible = true" type="primary" plain class="gap">api分组管理</el-button>
+        <el-button class="gap" type="primary" plain>导出api文档</el-button>
         <el-dialog title="API分组" :visible.sync="dialogVisible" @close="getAllGroups">
           <group></group>
         </el-dialog>
       </div>
-    </div>
   </div>
 </template>
 

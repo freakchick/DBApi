@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-@TableName(value = "group")
+@TableName(value = "api_auth")
 public class ApiAuth {
 
     @TableId(value = "id", type = IdType.AUTO)

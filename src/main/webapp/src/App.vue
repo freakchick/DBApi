@@ -65,4 +65,20 @@ h4 {
   margin: 10px 0;
 }
 
+.el-button--primary.is-active,
+.el-button--primary:active {
+  background: #20B2AA;
+  border-color: #20B2AA;
+  color: #fff;
+}
+
+.mycontent{
+  margin: 0 auto;
+  max-width: 1300px;
+}
+
+.gap{
+  margin: 0 5px 5px 0;
+}
+
 </style>

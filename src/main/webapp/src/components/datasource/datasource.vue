@@ -8,12 +8,6 @@
       <el-table-column label="名称">
         <template slot-scope="scope">
           <db-icon :type="scope.row.type"></db-icon>
-<!--          <i class="iconfont icon-my-SQL db" v-if="scope.row.type == 'mysql'"></i>-->
-<!--          <i class="iconfont icon-postgre-sql db" v-if="scope.row.type == 'postgresql'"></i>-->
-<!--          <i class="iconfont icon-hive db" v-if="scope.row.type == 'hive'"></i>-->
-<!--          <i class="iconfont icon-SQLServer db" v-if="scope.row.type == 'sqlserver'"></i>-->
-<!--          <i class="iconfont icon-clickhouse2 db" v-if="scope.row.type == 'sqlserver'"></i>-->
-<!--          <i class="iconfont icon-Kylin db" v-if="scope.row.type == 'kylin'"></i>-->
           <span>{{scope.row.name}}</span>
         </template>
       </el-table-column>

@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <el-container>
-      <el-header style="background-color: #00a0e9">
+      <el-header style="background-color: #06b176">
         <!--        <span>DBAPI</span>-->
 
         <el-menu
@@ -9,7 +9,7 @@
             class="el-menu-demo"
             mode="horizontal"
             @select="handleSelect"
-            background-color="#00a0e9"
+            background-color="#06B176"
             text-color="#fff"
             active-text-color="#01293b"
             router>
@@ -35,8 +35,7 @@
 
       </el-header>
       <el-main>
-
-        <router-view></router-view>
+          <router-view></router-view>
       </el-main>
       <!--      <el-footer>Footer</el-footer>-->
     </el-container>
@@ -74,7 +73,7 @@ export default {
 }
 
 .menu {
-  font-size: 17px;
+  font-size: 20px;
   font-weight: 700;
 }
 

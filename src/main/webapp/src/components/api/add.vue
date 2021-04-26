@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mycontent">
     <el-button icon="el-icon-d-arrow-left" type="info" plain @click="$router.go(-1)" size="small">返回</el-button>
     <h2>创建api</h2>
 
