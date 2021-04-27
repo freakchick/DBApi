@@ -5,7 +5,7 @@
 
     <common ref="apiAdd"></common>
 
-    <el-button @click="save">保存</el-button>
+    <el-button @click="save" type="primary" plain>保存</el-button>
 
   </div>
 </template>

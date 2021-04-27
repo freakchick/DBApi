@@ -39,7 +39,7 @@ export default {
 
 .right {
   padding: 4px 6px 4px 4px;
-  background-color: #409eff;
+  background-color: #2eb486;
   border-radius: 0 4px 4px 0;
 }
 </style>

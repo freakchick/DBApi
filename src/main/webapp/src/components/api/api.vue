@@ -2,14 +2,14 @@
   <div>
     <div>
 
-        <div class="gap">
-          <el-select v-model="group">
+        <div >
+          <el-select v-model="group" class="gap">
             <el-option label="所有分组" value=""></el-option>
             <el-option :label="item.name" :value="item.id" v-for="item in groups" :key="item.id"></el-option>
 
           </el-select>
 
-          <el-input placeholder="输入关键字" v-model="keyword" style="width:400px;margin-left: 5px" clearable
+          <el-input placeholder="输入关键字" v-model="keyword" style="width:400px;" clearable class="gap"
                     @keyup.enter.native="search">
             <el-select v-model="field" slot="prepend" placeholder="" style="width:80px;">
               <el-option label="名称" value="name"></el-option>

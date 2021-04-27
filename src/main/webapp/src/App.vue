@@ -78,7 +78,7 @@ h4 {
 }
 
 .gap{
-  margin: 0 5px 5px 0;
+  margin: 0 10px 10px 0;
 }
 
 </style>

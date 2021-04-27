@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
+import './theme/index.css'
 import './plugins/element.js'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import qs from 'qs'
-
 import VueCodeMirror from 'vue-codemirror';
 import 'codemirror/lib/codemirror.css'
 Vue.use(VueCodeMirror);

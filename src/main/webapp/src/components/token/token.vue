@@ -1,9 +1,10 @@
 <template>
   <div>
-    <router-link to="/token/add" class="gap">
+    <div class="gap">
+      <router-link to="/token/add">
       <el-button type="primary" plain>创建token</el-button>
-    </router-link>
-
+      </router-link>
+    </div>
     <el-table :data="tableData" border stripe max-height="700">
       <el-table-column prop="token" label="token">
         <template slot-scope="scope">
