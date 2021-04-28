@@ -110,52 +110,19 @@ export default {
       console.log(p)
       let url = `http://${this.address}/api/${this.path}`
 
-      this.axios({
-        method: 'post',
-        params: p,
-        url: url,
+      this.axios.post(url, p, {
         headers: {
-          "Content-type": "application/x-www-form-urlencoded"
-          // "Authorization": this.token == null ? '' : this.token
+          "Content-type": "application/x-www-form-urlencoded",
+          "Authorization": this.token == null ? '' : this.token
         }
-      }).then((res) => {
+      }).then((response) => {
         this.showTable = false
-        this.response = JSON.stringify(res.data)
-      }).catch(error => {
+        console.log(response.data)
+        this.response = JSON.stringify(response.data)
+
+      }).catch((error) => {
         this.$message.error(error.response.data.msg)
       })
-
-      /*   const xhr = new XMLHttpRequest();
-         xhr.open("POST", url, false);
-         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-         // xhr.setRequestHeader("Authorization", this.token == null ? '' : this.token);
-         xhr.onreadystatechange = () => {
-           var XMLHttpReq = xhr;
-           if (XMLHttpReq.readyState == 4) {
-             if (XMLHttpReq.status == 200) {
-               var data = XMLHttpReq.responseText
-               this.showTable = false
-               this.response = data
-             } else {
-               var data = XMLHttpReq.responseText
-               const obj = JSON.parse(data)
-               this.$message.error(obj.msg)
-             }
-           }
-         };
-
-         //构造数组类型的请求参数
-         var data = new FormData();
-         this.params.forEach(t => {
-           if (t.type.startsWith('list')) {
-             const values = t.values.map(item => item.va)
-             data.append(t.name,values)
-           } else {
-             data.append(t.name,t.value)
-           }
-         })
-
-         xhr.send(data)*/
 
     },
     format() {
