@@ -1,9 +1,11 @@
 <template>
   <div>
-    <router-link to="/datasource/add">
+    <div class="gap">
+    <router-link to="/datasource/add" >
 
-      <el-button class="button" type="primary" plain>创建数据源</el-button>
+      <el-button  type="primary" plain>创建数据源</el-button>
     </router-link>
+    </div>
     <el-table :data="tableData" border stripe max-height="700">
       <el-table-column label="名称">
         <template slot-scope="scope">
@@ -84,7 +86,4 @@ export default {
   /*font-size: 18px;*/
 }
 
-.button {
-  margin: 5px 5px 5px 0;
-}
 </style>

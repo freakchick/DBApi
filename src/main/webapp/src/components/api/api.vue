@@ -27,7 +27,9 @@
         <el-table-column label="名称">
           <template slot-scope="scope">
             <i class="iconfont icon-on_line1 circle" v-if="scope.row.status == 1" title="已上线"></i>
-            <i class="iconfont icon-off_line circle red" v-else title="未上线"></i>
+            <i class="iconfont icon-off_line circle offline" v-else title="未上线"></i>
+            <i class="el-icon-lock circle lock" v-if="scope.row.previlege == 0" title="私有接口"></i>
+            <i class="el-icon-unlock circle " v-else title="开放接口"></i>
             <span :title="scope.row.note">{{ scope.row.name }}</span>
           </template>
         </el-table-column>
@@ -241,8 +243,12 @@ i {
   color: #38be2e;
 }
 
-.red {
+.offline {
   color: #737373;
+}
+
+.lock {
+  color: #c10b0b;
 }
 
 .tag {

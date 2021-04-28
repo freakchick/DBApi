@@ -1,13 +1,13 @@
 <template>
-  <div>
+  <div class="mycontent">
     <el-button icon="el-icon-d-arrow-left" type="info" plain @click="$router.go(-1)" size="small">返回</el-button>
     <h2>接口请求测试</h2>
     <h4>接口地址：</h4>
     <div class="path">http://{{ address }}/api/{{ path }}</div>
 
-    <h4>请求header：</h4>
+    <h4 v-show="previlege == 0">请求header：</h4>
 
-    <el-form label-width="150px" style="width: 600px" size="medium">
+    <el-form label-width="150px" style="width: 600px" size="medium" v-show="previlege == 0">
       <el-form-item label="token:">
         <el-input v-model="token"></el-input>
       </el-form-item>
@@ -63,6 +63,7 @@ export default {
       api: {},
       params: [],
       path: null,
+      previlege: 0,
       address: null,
       response: null,
       isSelect: null,
@@ -76,6 +77,7 @@ export default {
     getDetail(id) {
       this.axios.post("/apiConfig/detail/" + id).then((response) => {
         this.path = response.data.path
+        this.previlege = response.data.previlege
         let params = JSON.parse(response.data.params)
         params.forEach(t => {
           if (t.type.startsWith("list")) {
@@ -105,16 +107,56 @@ export default {
         } else
           p[t.name] = t.value
       })
+      console.log(p)
       let url = `http://${this.address}/api/${this.path}`
-      this.axios.post(url, p).then((response) => {
-        console.log(response)
-        this.showTable = false
-        this.response = JSON.stringify(response.data)
 
-      }).catch((error) => {
-        console.log(error)
-        this.$message.error("error")
+      this.axios({
+        method: 'post',
+        params: p,
+        url: url,
+        headers: {
+          "Content-type": "application/x-www-form-urlencoded"
+          // "Authorization": this.token == null ? '' : this.token
+        }
+      }).then((res) => {
+        this.showTable = false
+        this.response = JSON.stringify(res.data)
+      }).catch(error => {
+        this.$message.error(error.response.data.msg)
       })
+
+      /*   const xhr = new XMLHttpRequest();
+         xhr.open("POST", url, false);
+         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+         // xhr.setRequestHeader("Authorization", this.token == null ? '' : this.token);
+         xhr.onreadystatechange = () => {
+           var XMLHttpReq = xhr;
+           if (XMLHttpReq.readyState == 4) {
+             if (XMLHttpReq.status == 200) {
+               var data = XMLHttpReq.responseText
+               this.showTable = false
+               this.response = data
+             } else {
+               var data = XMLHttpReq.responseText
+               const obj = JSON.parse(data)
+               this.$message.error(obj.msg)
+             }
+           }
+         };
+
+         //构造数组类型的请求参数
+         var data = new FormData();
+         this.params.forEach(t => {
+           if (t.type.startsWith('list')) {
+             const values = t.values.map(item => item.va)
+             data.append(t.name,values)
+           } else {
+             data.append(t.name,t.value)
+           }
+         })
+
+         xhr.send(data)*/
+
     },
     format() {
       const o = JSON.parse(this.response)

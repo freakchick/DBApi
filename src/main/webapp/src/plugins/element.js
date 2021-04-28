@@ -1,6 +1,5 @@
 import Vue from 'vue'
 // import { Button,ELCONTAINER } from 'element-ui'
-import '../theme/index.css'
 import {
     // Pagination,
     Link,
