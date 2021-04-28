@@ -6,7 +6,7 @@
 
       <el-form-item label="token">
         <el-input v-model="token">
-          <el-button slot="append" icon="el-icon-search" @click="generate">生成token</el-button>
+          <el-button slot="append" @click="generate">生成token</el-button>
         </el-input>
       </el-form-item>
       <el-form-item label="描述">

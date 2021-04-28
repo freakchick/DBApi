@@ -42,7 +42,7 @@ import {
     // Tabs,
     // TabPane,
     Tag,
-    // Tree,
+    Tree,
     // Alert,
     // Slider,
     // Icon,
@@ -126,7 +126,7 @@ Vue.use(Tooltip);
 
 Vue.use(Form);
 Vue.use(FormItem);
-// Vue.use(Tree);
+Vue.use(Tree);
 //
 // Vue.use(Tabs);
 // Vue.use(TabPane);

@@ -29,7 +29,7 @@ public class GroupController {
 
     @RequestMapping("/getAll")
     public List<Group> getAll() {
-        List<Group> list = groupService.selectList(null);
+        List<Group> list = groupService.getAll();
         return list;
     }
 }

@@ -1,14 +1,20 @@
 package com.jq.dbapi.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.jq.dbapi.domain.Api;
 import com.jq.dbapi.domain.ApiConfig;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
 @Mapper
 public interface ApiConfigMapper extends BaseMapper<ApiConfig> {
+
+
+
 
     @Select("select * from api_config where path=#{path} and status = 1")
     ApiConfig selectByPathOnline(String path);
@@ -36,4 +42,13 @@ public interface ApiConfigMapper extends BaseMapper<ApiConfig> {
 
     @Select("select count(1) from api_config where `group` = #{id}")
     int selectCountByGroup(Integer id);
+
+
+    @Results(id = "accResultMap",value = {
+            @Result(property = "id",column = "id"),
+            @Result(property = "name",column = "name"),
+            @Result(property = "group_name",column = "groupName")
+    })
+    @Select("select t1.id,t1.name,t2.name as group_name from api_config t1 join api_group t2 on t1.`group` = t2.id")
+    List<Api> getAllDetail();
 }

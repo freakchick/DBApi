@@ -1,7 +1,6 @@
 <template>
   <div>
-    <el-tag :key="tag" v-for="tag in groups" closable :disable-transitions="false" @close="handleClose(tag.id)"
-            style="width:fit-content;">
+    <el-tag :key="tag.id" v-for="tag in groups" closable :disable-transitions="false" @close="handleClose(tag.id)">
       {{ tag.name }}
     </el-tag>
     <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue"
@@ -82,7 +81,7 @@ export default {
 }
 
 .input-new-tag {
-  width: 90px;
+  width: 120px;
   /*margin: -5px 0 0 5px;*/
 
   /*vertical-align: bottom;*/

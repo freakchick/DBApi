@@ -33,7 +33,7 @@ public class GroupService {
 
     }
 
-    public List<Group> selectList(Object o) {
+    public List<Group> getAll() {
         return groupMapper.selectList(null);
     }
 }

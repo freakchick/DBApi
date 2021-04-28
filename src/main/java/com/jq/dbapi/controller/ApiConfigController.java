@@ -1,20 +1,26 @@
 package com.jq.dbapi.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jq.dbapi.domain.ApiConfig;
 import com.jq.dbapi.service.ApiConfigService;
 import com.jq.dbapi.service.DataSourceService;
-import com.jq.dbapi.util.IPUtil;
+import com.jq.dbapi.service.GroupService;
 import com.jq.dbapi.util.ResponseDto;
 import com.jq.dbapi.util.SqlEngineUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -35,6 +41,9 @@ public class ApiConfigController {
 
     @Autowired
     DataSourceService dataSourceService;
+
+    @Autowired
+    GroupService groupService;
 
     @RequestMapping("/add")
     public ResponseDto add(ApiConfig apiConfig) {
@@ -62,9 +71,15 @@ public class ApiConfigController {
         return apiConfigService.getAll();
     }
 
+    //给前端使用的数据结构
+    @RequestMapping("/getApiTree")
+    public JSONArray getApiTree() {
+        return apiConfigService.getAllDetail();
+    }
+
     @RequestMapping("/search")
-    public List<ApiConfig> search(String keyword,String field,String group) {
-        return apiConfigService.search(keyword,field,group);
+    public List<ApiConfig> search(String keyword, String field, String group) {
+        return apiConfigService.search(keyword, field, group);
     }
 
     @RequestMapping("/detail/{id}")
@@ -101,6 +116,30 @@ public class ApiConfigController {
     @RequestMapping("/getIPPort")
     public String getIPPort(HttpServletRequest request) {
         return request.getServerName() + ":" + request.getServerPort();
+    }
+
+    @RequestMapping("/apiDocs")
+    public void apiDocs(String ids, HttpServletResponse response) {
+        List<Integer> collect = Arrays.stream(ids.split(",")).map(t -> Integer.valueOf(t)).collect(Collectors.toList());
+
+        String docs = apiConfigService.apiDocs(collect);
+
+        response.setContentType("application/x-msdownload;charset=utf-8");
+        response.setHeader("Content-Disposition", "attachment; filename=接口文档.md");
+        OutputStream os = null; //输出流
+        try {
+            os = response.getOutputStream();
+            os.write(docs.getBytes("utf-8"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (os != null)
+                    os.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

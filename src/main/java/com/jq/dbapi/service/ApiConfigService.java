@@ -1,7 +1,11 @@
 package com.jq.dbapi.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.jq.dbapi.dao.ApiConfigMapper;
 import com.jq.dbapi.dao.DataSourceMapper;
+import com.jq.dbapi.domain.Api;
 import com.jq.dbapi.domain.ApiConfig;
 import com.jq.dbapi.util.ResponseDto;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +15,12 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @program: dbApi
@@ -72,6 +81,23 @@ public class ApiConfigService {
         return apiConfigMapper.selectList(null);
     }
 
+    public JSONArray getAllDetail() {
+        List<Api> list = apiConfigMapper.getAllDetail();
+
+        Map<String, List<Api>> map = list.stream().collect(Collectors.groupingBy(Api::getGroupName));
+
+        JSONArray array = new JSONArray();
+        map.keySet().forEach(t -> {
+            JSONObject jo = new JSONObject();
+            jo.put("name", t);
+            List<Api> apis = map.get(t);
+            jo.put("children", apis);
+            array.add(jo);
+        });
+        return array;
+
+    }
+
     public List<ApiConfig> search(String keyword, String field, String group) {
         return apiConfigMapper.selectByKeyword(keyword, field, group);
     }
@@ -99,6 +125,41 @@ public class ApiConfigService {
 
     public String getPath(Integer id) {
         return apiConfigMapper.selectById(id).getPath();
+    }
+
+    public String apiDocs(List<Integer> ids) {
+        StringBuffer temp = new StringBuffer("# 接口文档\n---\n");
+        List<ApiConfig> list = apiConfigMapper.selectBatchIds(ids);
+        list.stream().forEach(t -> {
+            temp.append("## ").append(t.getName()).append("\n- 接口地址： /api/").append(t.getPath())
+                    .append("\n- 接口备注：").append(t.getNote()).append("\n- 请求参数：");
+
+            String params = t.getParams();
+            JSONArray array = JSON.parseArray(params);
+
+            if (array.size() > 0) {
+                StringBuffer buffer = new StringBuffer();
+                buffer.append("\n\n| 参数名称 | 参数类型 | 参数说明 |\n");
+                buffer.append("| :----: | :----: | :----: |\n");
+
+                for (int i = 0; i < array.size(); i++) {
+                    JSONObject jsonObject = array.getJSONObject(i);
+                    String name = jsonObject.getString("name");
+                    String type = jsonObject.getString("type");
+                    String note = jsonObject.getString("note");
+                    buffer.append("|").append(name).append("|").append(type).append("|").append(note).append("|\n");
+                }
+
+                temp.append(buffer);
+            } else {
+                temp.append("无参数\n");
+            }
+            temp.append("\n---\n");
+        });
+
+        temp.append("\n导出日期："+ new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        return temp.toString();
+
     }
 
 }

@@ -57,11 +57,11 @@
       <el-form-item label="请求参数">
         <div v-for="(item,index) in detail.params" style="margin-bottom:5px;display: flex;align-items:center">
           <el-autocomplete v-model="item.name" :fetch-suggestions="parseParams" style="width:200px;margin-right:5px"
-                           placeholder="*参数名"></el-autocomplete>
+                           placeholder="*参数名称"></el-autocomplete>
           <el-select v-model="item.type" :options="options" placeholder="*数据类型" style="margin-right:5px">
             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
-          <el-input v-model="item.note" placeholder="参数说明" style="width:200px;margin-right:5px"></el-input>
+          <el-input v-model="item.note" placeholder="参数说明" style="width:400px;margin-right:5px"></el-input>
           <!--          <el-cascader  v-model="item.type" separator=" > " :options="options"></el-cascader>-->
 
           <el-button @click="deleteRow(index)" circle type="danger" icon="el-icon-delete" size="mini"
@@ -76,6 +76,9 @@
         <el-select v-model="detail.group">
           <el-option :label="item.name" :value="item.id" v-for="item in groups" :key="item.id"></el-option>
         </el-select>
+
+        <el-button  icon="el-icon-plus" type="primary" circle size="mini" title="创建新的分组"
+                   v-if="$route.path != '/api/detail'"></el-button>
       </el-form-item>
 
       <el-form-item label="访问权限">
