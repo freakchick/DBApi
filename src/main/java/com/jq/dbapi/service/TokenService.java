@@ -6,6 +6,8 @@ import com.jq.dbapi.domain.ApiAuth;
 import com.jq.dbapi.domain.Token;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,7 @@ public class TokenService {
     TokenMapper tokenMapper;
 
     @Transactional
+    @CacheEvict(value = "token_AuthGroups", key = "#tokenId")
     public void auth(Integer tokenId, String groupIds) {
         apiAuthMapper.deleteByTokenId(tokenId);
         if (StringUtils.isNoneBlank(groupIds)) {
@@ -37,14 +40,26 @@ public class TokenService {
 
     }
 
+    @Cacheable(value = "token_AuthGroups", key = "#tokenId", unless = "#result == null")
     public List<Integer> getAuthGroups(Integer tokenId) {
-
         List<Integer> list = apiAuthMapper.selectByTokenId(tokenId);
         return list;
     }
 
+    @Cacheable(value = "token", key = "#tokenStr", unless = "#result == null")
     public Token getToken(String tokenStr) {
         Token token = tokenMapper.selectByToken(tokenStr);
         return token;
+    }
+
+    @Transactional
+    public void insert(Token token) {
+        tokenMapper.insert(token);
+    }
+
+    @Transactional
+    @CacheEvict(value = "token_AuthGroups", key = "#id")
+    public void deleteById(Integer id) {
+        tokenMapper.deleteById(id);
     }
 }

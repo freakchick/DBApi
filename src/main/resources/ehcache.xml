@@ -9,6 +9,17 @@
     <cache name="datasource" eternal="false" maxElementsInMemory="10000"
            overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="3600"
            memoryStoreEvictionPolicy="LRU"/>
+
+    <!--token缓存1小时-->
+    <cache name="token" eternal="false" maxElementsInMemory="10000"
+           overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="3600"
+           memoryStoreEvictionPolicy="LRU"/>
+
+    <!--token_AuthGroups缓存1小时-->
+    <cache name="token_AuthGroups" eternal="false" maxElementsInMemory="10000"
+           overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="3600"
+           memoryStoreEvictionPolicy="LRU"/>
+
     <!--api参数空闲缓存5min-->
     <cache name="api" eternal="false" maxElementsInMemory="10000"
            overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="300"

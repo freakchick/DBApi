@@ -27,7 +27,8 @@ public class TokenController {
     @RequestMapping("/add")
     public void add(Token token) {
         token.setCreateTime(System.currentTimeMillis());
-        tokenMapper.insert(token);
+        tokenService.insert(token);
+
     }
 
     @RequestMapping("/getAll")
@@ -38,7 +39,8 @@ public class TokenController {
 
     @RequestMapping("/delete/{id}")
     public void delete(@PathVariable Integer id) {
-        tokenMapper.deleteById(id);
+        tokenService.deleteById(id);
+
     }
 
     @RequestMapping("/generate")
