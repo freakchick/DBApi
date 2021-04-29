@@ -58,8 +58,8 @@ public class TokenService {
     }
 
     @Transactional
-    @CacheEvict(value = "token_AuthGroups", key = "#id")
-    public void deleteById(Integer id) {
-        tokenMapper.deleteById(id);
+    @CacheEvict(value = "token_AuthGroups", key = "#tokenId")
+    public void deleteById(Integer tokenId) {
+        tokenMapper.deleteById(tokenId);
     }
 }
