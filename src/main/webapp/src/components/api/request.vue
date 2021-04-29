@@ -20,10 +20,10 @@
         <template slot="label">
           <data-tag :name="item.name" :type="item.type"></data-tag>
         </template>
-        <el-input v-model="item.value" v-if="!item.type.startsWith('list')">
+        <el-input v-model="item.value" v-if="!item.type.startsWith('Array')">
           <!--          <template slot="append">{{ item.type }}</template>-->
         </el-input>
-        <div v-show="item.type.startsWith('list')">
+        <div v-show="item.type.startsWith('Array')">
           <div v-for="(childItem,childIndex) in item.values" :key="childIndex">
             <el-input v-model="childItem.va" style="width: 400px">
             </el-input>
@@ -80,7 +80,7 @@ export default {
         this.previlege = response.data.previlege
         let params = JSON.parse(response.data.params)
         params.forEach(t => {
-          if (t.type.startsWith("list")) {
+          if (t.type.startsWith("Array")) {
             t.values = [{va: ''}]
           }
         })
@@ -101,7 +101,7 @@ export default {
       let p = {}
       this.params.forEach(t => {
         //构造数组类型的请求参数
-        if (t.type.startsWith('list')) {
+        if (t.type.startsWith('Array')) {
           const values = t.values.map(item => item.va)
           p[t.name] = values
         } else

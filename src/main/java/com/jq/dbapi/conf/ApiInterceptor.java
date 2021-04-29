@@ -14,7 +14,6 @@ import com.jq.orange.SqlMeta;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -46,7 +45,6 @@ public class ApiInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2) throws Exception {
-//        log.info(request.getMethod());
         String method = request.getMethod();
         String servletPath = request.getServletPath();
         servletPath = servletPath.substring(5);
@@ -123,7 +121,7 @@ public class ApiInterceptor implements HandlerInterceptor {
                         } else {
                             // log.info("token存在且有效");
                             List<Integer> authGroups = tokenService.getAuthGroups(token.getId());
-                            if (checkAuth(authGroups, config.getGroup())) {
+                            if (checkAuth(authGroups, config.getGroupId())) {
 
                             } else {
                                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);

@@ -24,10 +24,13 @@
               <!--            <span style="float: left">{{ item.name }}</span>-->
             </el-option>
           </el-select>
-          <i class="el-icon-s-opportunity tip" @click="show=!show" v-if="$route.path != '/api/detail'"></i>
+          <el-tooltip content="查看该数据源下的所有表结构" placement="top-start" effect="light">
+            <i class="el-icon-s-opportunity tip" @click="show=!show" v-if="$route.path != '/api/detail'"></i>
+          </el-tooltip>
           <div v-show="show">
             <el-select placeholder="查看所有表" v-model="table" @change="getColumns" clearable>
-              <el-option :value="item" v-for="item in tables"><i class="iconfont icon-table"></i>{{ item }}</el-option>
+              <el-option :value="item" v-for="item in tables"><i class="iconfont icon-table"></i>{{ item }}
+              </el-option>
             </el-select>
             <el-select placeholder="查看所有字段" v-model="column" style="margin-left: 10px" clearable>
               <el-option :value="item.fieldName" v-for="item in columns">
@@ -73,11 +76,11 @@
       </el-form-item>
 
       <el-form-item label="API分组">
-        <el-select v-model="detail.group">
+        <el-select v-model="detail.groupId">
           <el-option :label="item.name" :value="item.id" v-for="item in groups" :key="item.id"></el-option>
         </el-select>
 
-        <el-button  icon="el-icon-plus" type="primary" circle size="mini" title="创建新的分组"
+        <el-button icon="el-icon-plus" type="primary" circle size="mini" title="创建新的分组"
                    v-if="$route.path != '/api/detail'"></el-button>
       </el-form-item>
 
@@ -102,7 +105,7 @@ export default {
       datasources: [],
       address: null,
       show: false,
-      groups:[],
+      groups: [],
       detail: {
         datasourceId: null,
         name: null,
@@ -111,8 +114,8 @@ export default {
         isSelect: "1",
         sql: '',
         params: [],
-        group:null,
-        previlege:0
+        groupId: null,
+        previlege: 0
       },
       options: [
         {label: 'string', value: 'string'},
@@ -120,10 +123,10 @@ export default {
         {label: 'double', value: 'double'},
         {label: 'date', value: 'date'},
 
-        {label: 'string 数组', value: 'list<string>'},
-        {label: 'bigint 数组', value: 'list<bigint>'},
-        {label: 'double 数组', value: 'list<double>'},
-        {label: 'date 数组', value: 'list<date>'}
+        {label: 'string 数组', value: 'Array<string>'},
+        {label: 'bigint 数组', value: 'Array<bigint>'},
+        {label: 'double 数组', value: 'Array<double>'},
+        {label: 'date 数组', value: 'Array<date>'}
 
       ],
       table: null, tables: [], columns: [], column: null
@@ -175,7 +178,7 @@ export default {
         this.detail.isSelect = response.data.isSelect.toString()
         this.detail.datasourceId = response.data.datasourceId
         this.detail.previlege = response.data.previlege
-        this.detail.group = response.data.group
+        this.detail.groupId = response.data.groupId
         this.detail.params = JSON.parse(response.data.params)
       }).catch((error) => {
         this.$message.error("失败")

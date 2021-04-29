@@ -49,6 +49,6 @@ public class ApiConfig {
     @TableField
     Integer previlege;
 
-    @TableField("`group`")
-    Integer group;
+    @TableField("`group_id`")
+    Integer groupId;
 }

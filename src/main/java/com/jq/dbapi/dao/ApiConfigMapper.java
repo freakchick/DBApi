@@ -1,7 +1,7 @@
 package com.jq.dbapi.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.jq.dbapi.domain.Api;
+import com.jq.dbapi.domain.ApiDto;
 import com.jq.dbapi.domain.ApiConfig;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Result;
@@ -22,14 +22,14 @@ public interface ApiConfigMapper extends BaseMapper<ApiConfig> {
     @Select("<script>" +
             "select * from api_config\n" +
             "<where>\n" +
-            "<if test='group != null and group !=\"\"'> `group` = #{group} </if>\n" +
+            "<if test='groupId != null and groupId !=\"\"'> group_id = #{groupId} </if>\n" +
             "<if test='keyword != null and keyword !=\"\"'>\n" +
             "\t<if test='field != null and field !=\"\"'> and ${field} like '%'||#{keyword}||'%' </if>\n" +
             "\t<if test='field == null or field ==\"\"'> and (name like '%'||#{keyword}||'%' or note like '%'||#{keyword}||'%' or path like '%'||#{keyword}||'%' )</if>\n" +
             "</if>\n" +
             "</where>"+
             "</script>")
-    List<ApiConfig> selectByKeyword(String keyword,String field,String group);
+    List<ApiConfig> selectByKeyword(String keyword,String field,String groupId);
 
     @Select("select count(1) from api_config where path=#{path}")
     Integer selectCountByPath(String path);
@@ -40,7 +40,7 @@ public interface ApiConfigMapper extends BaseMapper<ApiConfig> {
     @Select("select count(1) from api_config where datasource_id = #{id}")
     int countByDatasoure(Integer id);
 
-    @Select("select count(1) from api_config where `group` = #{id}")
+    @Select("select count(1) from api_config where group_id = #{id}")
     int selectCountByGroup(Integer id);
 
 
@@ -49,6 +49,6 @@ public interface ApiConfigMapper extends BaseMapper<ApiConfig> {
             @Result(property = "name",column = "name"),
             @Result(property = "group_name",column = "groupName")
     })
-    @Select("select t1.id,t1.name,t2.name as group_name from api_config t1 join api_group t2 on t1.`group` = t2.id")
-    List<Api> getAllDetail();
+    @Select("select t1.id,t1.name,t2.name as group_name from api_config t1 join api_group t2 on t1.group_id = t2.id")
+    List<ApiDto> getAllDetail();
 }

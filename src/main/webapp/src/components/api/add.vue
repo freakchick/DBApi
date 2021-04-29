@@ -30,7 +30,7 @@ export default {
         isSelect: detail.isSelect,
         datasourceId: detail.datasourceId,
         sql: detail.sql,
-        group: detail.group,
+        groupId: detail.groupId,
         previlege: detail.previlege,
         params: JSON.stringify(detail.params)
       }).then((response) => {

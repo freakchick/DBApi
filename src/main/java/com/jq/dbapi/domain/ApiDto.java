@@ -3,7 +3,7 @@ package com.jq.dbapi.domain;
 import lombok.Data;
 
 @Data
-public class Api {
+public class ApiDto {
 
     Integer id;
     String name;

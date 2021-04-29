@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jq.dbapi.dao.ApiConfigMapper;
 import com.jq.dbapi.dao.DataSourceMapper;
-import com.jq.dbapi.domain.Api;
+import com.jq.dbapi.domain.ApiDto;
 import com.jq.dbapi.domain.ApiConfig;
 import com.jq.dbapi.util.ResponseDto;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -82,24 +81,24 @@ public class ApiConfigService {
     }
 
     public JSONArray getAllDetail() {
-        List<Api> list = apiConfigMapper.getAllDetail();
+        List<ApiDto> list = apiConfigMapper.getAllDetail();
 
-        Map<String, List<Api>> map = list.stream().collect(Collectors.groupingBy(Api::getGroupName));
+        Map<String, List<ApiDto>> map = list.stream().collect(Collectors.groupingBy(ApiDto::getGroupName));
 
         JSONArray array = new JSONArray();
         map.keySet().forEach(t -> {
             JSONObject jo = new JSONObject();
             jo.put("name", t);
-            List<Api> apis = map.get(t);
-            jo.put("children", apis);
+            List<ApiDto> apiDtos = map.get(t);
+            jo.put("children", apiDtos);
             array.add(jo);
         });
         return array;
 
     }
 
-    public List<ApiConfig> search(String keyword, String field, String group) {
-        return apiConfigMapper.selectByKeyword(keyword, field, group);
+    public List<ApiConfig> search(String keyword, String field, String groupId) {
+        return apiConfigMapper.selectByKeyword(keyword, field, groupId);
     }
 
     @Cacheable(value = "api", key = "#path", unless = "#result == null")
@@ -146,6 +145,9 @@ public class ApiConfigService {
                     JSONObject jsonObject = array.getJSONObject(i);
                     String name = jsonObject.getString("name");
                     String type = jsonObject.getString("type");
+                    if (type.startsWith("Array")) {
+                        type = type.substring(6, type.length() - 1) + "数组";
+                    }
                     String note = jsonObject.getString("note");
                     buffer.append("|").append(name).append("|").append(type).append("|").append(note).append("|\n");
                 }
@@ -157,7 +159,7 @@ public class ApiConfigService {
             temp.append("\n---\n");
         });
 
-        temp.append("\n导出日期："+ new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        temp.append("\n导出日期：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         return temp.toString();
 
     }

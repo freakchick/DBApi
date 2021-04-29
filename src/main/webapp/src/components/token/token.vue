@@ -2,7 +2,7 @@
   <div>
     <div class="gap">
       <router-link to="/token/add">
-      <el-button type="primary" plain>创建token</el-button>
+        <el-button type="primary" plain>创建token</el-button>
       </router-link>
     </div>
     <el-table :data="tableData" border stripe max-height="700">
@@ -19,9 +19,15 @@
         <template slot-scope="scope">
           <span v-if="scope.row.expire == null">永久</span>
           <span v-else>{{ scope.row.expire | dateFormat }}</span>
-
         </template>
       </el-table-column>
+
+      <el-table-column prop="createTime" label="创建时间">
+        <template slot-scope="scope">
+          <span>{{ scope.row.createTime | dateFormat }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column label="操作">
         <template slot-scope="scope">
 

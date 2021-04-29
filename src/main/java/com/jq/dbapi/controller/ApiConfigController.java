@@ -78,8 +78,8 @@ public class ApiConfigController {
     }
 
     @RequestMapping("/search")
-    public List<ApiConfig> search(String keyword, String field, String group) {
-        return apiConfigService.search(keyword, field, group);
+    public List<ApiConfig> search(String keyword, String field, String groupId) {
+        return apiConfigService.search(keyword, field, groupId);
     }
 
     @RequestMapping("/detail/{id}")

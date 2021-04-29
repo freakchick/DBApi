@@ -1,14 +1,11 @@
 <template>
   <div>
     <div>
-
       <div>
-        <el-select v-model="group" class="gap">
+        <el-select v-model="groupId" class="gap">
           <el-option label="所有分组" value=""></el-option>
           <el-option :label="item.name" :value="item.id" v-for="item in groups" :key="item.id"></el-option>
-
         </el-select>
-
         <el-input placeholder="输入关键字" v-model="keyword" style="width:400px;" clearable class="gap"
                   @keyup.enter.native="search">
           <el-select v-model="field" slot="prepend" placeholder="" style="width:80px;">
@@ -17,11 +14,8 @@
             <el-option label="路径" value="path"></el-option>
           </el-select>
         </el-input>
-
         <el-button type="primary" icon="el-icon-search" @click="search" plain>查询</el-button>
-
       </div>
-
 
       <el-table :data="tableData" border stripe max-height="700" class="gap">
         <el-table-column label="名称">
@@ -121,7 +115,7 @@ export default {
       field: null,
       tableData: [],
       groups: [],
-      group: '',
+      groupId: '',
       treeData: [],
       defaultProps: {
         children: 'children',
@@ -147,7 +141,7 @@ export default {
       this.axios.post("/apiConfig/search", {
         keyword: this.keyword,
         field: this.field,
-        group: this.group
+        groupId: this.groupId
       }).then((response) => {
         const list = response.data
         list.forEach(t => {
