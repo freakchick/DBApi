@@ -26,10 +26,22 @@
       <el-table :data="tableData" border stripe max-height="700" class="gap">
         <el-table-column label="名称">
           <template slot-scope="scope">
-            <i class="iconfont icon-on_line1 circle" v-if="scope.row.status == 1" title="已上线"></i>
-            <i class="iconfont icon-off_line circle offline" v-else title="未上线"></i>
-            <i class="el-icon-lock circle lock" v-if="scope.row.previlege == 0" title="私有接口"></i>
-            <i class="el-icon-unlock circle " v-else title="开放接口"></i>
+            <el-tooltip effect="light" content="已上线" placement="top-start" v-if="scope.row.status == 1">
+              <i class="iconfont icon-on_line1 circle"></i>
+            </el-tooltip>
+
+            <el-tooltip effect="light" content="未上线" placement="top-start" v-else>
+              <i class="iconfont icon-off_line circle offline"></i>
+            </el-tooltip>
+
+            <el-tooltip effect="light" content="私有接口" placement="top-start" v-if="scope.row.previlege == 0">
+              <i class="el-icon-lock circle lock"></i>
+            </el-tooltip>
+            <el-tooltip effect="light" content="开放接口" placement="top-start" v-else>
+              <i class="el-icon-unlock circle "></i>
+            </el-tooltip>
+
+
             <span :title="scope.row.note">{{ scope.row.name }}</span>
           </template>
         </el-table-column>
