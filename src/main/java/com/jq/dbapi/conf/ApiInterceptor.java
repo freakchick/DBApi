@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 日志拦截器
+ * api拦截器
  *
  * @author jiangqiang
  * @date 2019年3月19日下午4:30:56
@@ -54,7 +54,7 @@ public class ApiInterceptor implements HandlerInterceptor {
         // 跨域设置
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Credentials", "true");
-        response.setHeader("Access-Control-Allow-Headers", "Authorization");//这里很重要，要不然js header不能跨域携带  Authorization属性
+        response.setHeader("Access-Control-Allow-Headers", "Authorization,token");//这里很重要，要不然js header不能跨域携带  Authorization属性
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE");
 
         PrintWriter out = null;
@@ -105,7 +105,7 @@ public class ApiInterceptor implements HandlerInterceptor {
             }
             // 如果是私有接口，校验权限
             if (config.getPrevilege() == 0) {
-                String tokenStr = request.getHeader("Authorization");
+                String tokenStr = request.getHeader("token");
                 if (StringUtils.isBlank(tokenStr)) {
                     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                     return ResponseDto.fail("header中token缺失，私有接口禁止访问！！");

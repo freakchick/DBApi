@@ -113,7 +113,7 @@ export default {
       this.axios.post(url, p, {
         headers: {
           "Content-type": "application/x-www-form-urlencoded",
-          "Authorization": this.token == null ? '' : this.token
+          "token": this.token == null ? '' : this.token
         }
       }).then((response) => {
         this.showTable = false

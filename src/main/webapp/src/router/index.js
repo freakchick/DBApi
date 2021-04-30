@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import Login from '../views/Login.vue'
 
 import donate from '../components/about/donate'
 import json from '../components/tool/json'
@@ -21,6 +22,7 @@ import tokenAdd from '../components/token/add'
 Vue.use(VueRouter)
 
 const routes = [
+  {path: '/login', name: 'login', component: Login},
   {
     path: '/', name: 'Home', component: Home,
     children: [
@@ -37,8 +39,8 @@ const routes = [
       {path: '/api/edit', name: 'apiEdit', component: apiEdit},
       {path: '/api/detail', name: 'detail', component: detail},
       {path: '/api/request', name: 'request', component: request},
-      {path: '/token',  component: token},
-      {path: '/token/add',component: tokenAdd}
+      {path: '/token', component: token},
+      {path: '/token/add', component: tokenAdd}
     ]
   }
 ]

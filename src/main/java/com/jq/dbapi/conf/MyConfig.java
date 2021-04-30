@@ -15,6 +15,8 @@ public class MyConfig implements WebMvcConfigurer {
 
 	@Autowired
 	private ApiInterceptor apiInterceptor;
+	@Autowired
+	JwtAuthenticationInterceptor jwtAuthenticationInterceptor;
 
 	/**
 	 * 添加拦截器
@@ -22,6 +24,7 @@ public class MyConfig implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(apiInterceptor).addPathPatterns("/api/**");
+		registry.addInterceptor(jwtAuthenticationInterceptor).addPathPatterns("/**").excludePathPatterns("/api/**").excludePathPatterns("/user/**");
 	}
 
 
