@@ -16,4 +16,7 @@ public interface ApiAuthMapper extends BaseMapper<ApiAuth> {
 
     @Select("select group_id from api_auth where token_id = #{tokenId} ")
     List<Integer> selectByTokenId(Integer tokenId);
+
+    @Delete("delete from api_auth where group_id = #{groupId}")
+    void deleteByGroupId(Integer groupId);
 }

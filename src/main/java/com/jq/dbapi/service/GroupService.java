@@ -1,5 +1,6 @@
 package com.jq.dbapi.service;
 
+import com.jq.dbapi.dao.ApiAuthMapper;
 import com.jq.dbapi.dao.ApiConfigMapper;
 import com.jq.dbapi.dao.GroupMapper;
 import com.jq.dbapi.domain.Group;
@@ -16,6 +17,8 @@ public class GroupService {
     GroupMapper groupMapper;
     @Autowired
     ApiConfigMapper apiConfigMapper;
+    @Autowired
+    ApiAuthMapper apiAuthMapper;
 
     public void insert(Group group) {
         groupMapper.insert(group);
@@ -28,6 +31,7 @@ public class GroupService {
             return ResponseDto.fail("该分组下还有API，不可删除！");
         }else{
             groupMapper.deleteById(id);
+            apiAuthMapper.deleteByGroupId(id);
             return ResponseDto.success("删除成功");
         }
 

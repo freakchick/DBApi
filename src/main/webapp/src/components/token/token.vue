@@ -50,7 +50,6 @@
     <el-dialog title="授权该token访问以下分组的API" :visible.sync="dialogVisible" @open="getAllGroups">
       <el-checkbox-group v-model="checkList">
         <el-checkbox :label="item.id" v-for="item in groups">{{ item.name }}</el-checkbox>
-
       </el-checkbox-group>
 
       <span slot="footer" class="dialog-footer">
@@ -87,9 +86,11 @@ export default {
       })
     },
     auth() {
+      console.log(this.checkList)
       this.axios.post("/token/auth/", {tokenId: this.tokenId, groupIds: this.checkList.join(",")}).then((response) => {
-
+        this.$message.success("授权成功")
       }).catch((error) => {
+        this.$message.error("授权失败")
       })
     },
     handleDelete(id) {
