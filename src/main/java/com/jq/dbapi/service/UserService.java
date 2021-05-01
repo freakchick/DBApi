@@ -4,6 +4,7 @@ import com.jq.dbapi.dao.UserMapper;
 import com.jq.dbapi.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
@@ -18,5 +19,10 @@ public class UserService {
 
     public User getUserById(Integer id) {
         return userMapper.selectById(id);
+    }
+
+    @Transactional
+    public void resetPassword(String password) {
+        userMapper.updatePassword(password);
     }
 }

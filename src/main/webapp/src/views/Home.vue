@@ -16,21 +16,29 @@
 
           <el-menu-item index="/datasource">
             <template slot="title">
-              <span class="menu">数据源</span>
+              <span class="menu"><i class="iconfont icon-database"></i>数据源</span>
             </template>
           </el-menu-item>
 
           <el-menu-item index="/api">
             <template slot="title">
-              <span class="menu">API</span>
+              <span class="menu"><i class="iconfont icon-api"></i>API</span>
             </template>
           </el-menu-item>
 
           <el-menu-item index="/token">
             <template slot="title">
-              <span class="menu">权限</span>
+              <span class="menu"><i class="iconfont icon-quanxian"></i>权限</span>
             </template>
           </el-menu-item>
+
+          <el-submenu index="">
+            <template slot="title">
+              <span class="menu"><i class="iconfont icon-shezhi"></i>系统设置</span>
+            </template>
+            <el-menu-item index="/setting/password">修改密码</el-menu-item>
+          </el-submenu>
+
         </el-menu>
 
       </el-header>
@@ -66,10 +74,11 @@ export default {
 </script>
 
 <style scoped>
-.icon {
-  color: #ffffff;
-  font-size: 23px !important;
-  font-weight: normal;
+.iconfont {
+  color: #fff;
+  font-size: 20px !important;
+  font-weight: 700;
+  padding-right: 3px;
 }
 
 .menu {

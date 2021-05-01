@@ -1,5 +1,5 @@
 <template>
-  <div class="box">
+  <div class="box body-bg">
     <div class="content">
       <div class="item header">
         DBAPI
@@ -47,24 +47,20 @@ export default {
 </script>
 
 <style scoped>
-html {
-  background-color: #c7edcc;
-}
 
 .box {
   display: flex;
   display: -webkit-flex;
-  /*border: 1px solid #0000FF;*/
-  /*height: 200px;*/
-  /*width: 400px;*/
   align-items: center;
   justify-content: center;
-  margin-top: 200px;
+  /*margin-top: 200px;*/
 
 }
 
 .content {
   /*box-shadow: 10px 10px 5px #888888;*/
+  /*margin-top: -100px;*/
+  padding-bottom: 100px;
 }
 
 .item {
@@ -96,5 +92,15 @@ html {
   background-color: #07a863;
   font-size: 21px;
   cursor: pointer;
+}
+
+.body-bg {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  overflow-y: auto;
+  background-color: #c7edcc;
 }
 </style>

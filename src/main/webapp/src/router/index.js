@@ -18,6 +18,7 @@ import detail from '../components/api/detail'
 import request from '../components/api/request'
 import token from '../components/token/token'
 import tokenAdd from '../components/token/add'
+import user from '../components/setting/user'
 
 Vue.use(VueRouter)
 
@@ -40,7 +41,8 @@ const routes = [
       {path: '/api/detail', name: 'detail', component: detail},
       {path: '/api/request', name: 'request', component: request},
       {path: '/token', component: token},
-      {path: '/token/add', component: tokenAdd}
+      {path: '/token/add', component: tokenAdd},
+      {path: '/setting/password', component: user}
     ]
   }
 ]

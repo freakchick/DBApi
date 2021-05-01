@@ -28,5 +28,11 @@ public class UserController {
 
     }
 
+    @RequestMapping("/resetPassword")
+    public void resetPassword(String password) {
+
+        userService.resetPassword(password);
+
+    }
 
 }
