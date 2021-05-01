@@ -44,7 +44,8 @@ CREATE TABLE `api_group`
 (
     `id`   int(11) NOT NULL AUTO_INCREMENT,
     `name` varchar(255) DEFAULT NULL,
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 drop table if exists `token`;
@@ -65,6 +66,7 @@ CREATE TABLE `user`
     `id`       int(11) NOT NULL AUTO_INCREMENT,
     `username` varchar(255) DEFAULT NULL,
     `password` varchar(255) DEFAULT NULL,
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 insert into `user` (username,password) values ('admin','admin');
