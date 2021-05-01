@@ -5,6 +5,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 添加拦截
  * @author jiangqiang
@@ -24,7 +27,17 @@ public class MyConfig implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(apiInterceptor).addPathPatterns("/api/**");
-		registry.addInterceptor(jwtAuthenticationInterceptor).addPathPatterns("/**").excludePathPatterns("/api/**").excludePathPatterns("/user/login");
+
+		List<String > patterns = new ArrayList<>();
+		patterns.add("/user/login");
+		patterns.add("/api/**");
+		patterns.add("/js/**");
+		patterns.add("/css/**");
+		patterns.add("/fonts/**");
+		patterns.add("/index.html");
+
+		registry.addInterceptor(jwtAuthenticationInterceptor).addPathPatterns("/**")
+				.excludePathPatterns(patterns);
 	}
 
 

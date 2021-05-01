@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     login() {
-      this.axios.post("/user/login/", {username: this.username, password: this.password}).then((response) => {
+      this.axios.post("/user/login", {username: this.username, password: this.password}).then((response) => {
         console.log(response.data)
         if (response.data.success) {
           localStorage.setItem("token", response.data.msg)

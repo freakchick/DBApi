@@ -6,10 +6,12 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Calendar;
 import java.util.Date;
 
+@Slf4j
 public class JwtUtils {
 
 
@@ -38,7 +40,7 @@ public class JwtUtils {
             jwtVerifier.verify(token);
             return true;
         } catch (JWTVerificationException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
             return false;
         }
     }
