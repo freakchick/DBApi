@@ -113,12 +113,15 @@ export default {
       this.axios.post(url, p, {
         headers: {
           "Content-type": "application/x-www-form-urlencoded",
-          "token": this.token == null ? '' : this.token
+          "Authorization": this.token == null ? '' : this.token
         }
       }).then((response) => {
-        this.showTable = false
-        console.log(response.data)
-        this.response = JSON.stringify(response.data)
+        if (response.status == 200) {
+          this.showTable = false
+          this.response = JSON.stringify(response.data)
+        } else {
+          this.$message.error(response.response.data.msg)
+        }
 
       }).catch((error) => {
         this.$message.error(error.response.data.msg)

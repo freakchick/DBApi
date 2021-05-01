@@ -5,19 +5,14 @@ import './plugins/element.js'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import qs from 'qs'
-import VueCodeMirror from 'vue-codemirror';
-import 'codemirror/lib/codemirror.css'
 
-Vue.use(VueCodeMirror);
-
-import VueClipboard from 'vue-clipboard2'
 // import store from './store'
 
 Vue.config.productionTip = false
 
 //使用vue-axios，这样才可以全局使用this.axios调用
 Vue.use(VueAxios, axios);
-Vue.use(VueClipboard)
+
 
 // axios.defaults.baseURL = '/api'
 
@@ -28,13 +23,17 @@ axios.interceptors.request.use(config => {
   if (config.method === 'post' && config.headers['Content-Type'] === 'application/x-www-form-urlencoded') {
     config.data = qs.stringify(config.data, {indices: false});
   }
-  console.log("-------------------",config.url)
+  //拦截所有请求，添加登陆用户的token
   if (localStorage.getItem('token')) {
-    config.headers.Authorization = localStorage.getItem('token');
+    const x = config.headers.Authorization
+    if (x === null || x === undefined) {
+      config.headers.Authorization = localStorage.getItem('token');
+    }
   }
   return config
 })
 
+//后台用户登陆信息校验不成功就跳转到登录页面
 axios.interceptors.response.use(response => {
   if (response.status == '401') {
     console.log('已过期重新登陆');
@@ -51,6 +50,7 @@ axios.interceptors.response.use(response => {
   }
 })
 
+//前端页面路由跳转时校验用户登陆信息不成功就跳转到登录页
 // router.beforeEach((to, from, next) => {
 //     //非登录页拦截
 //     if (to.name != "Login") {
