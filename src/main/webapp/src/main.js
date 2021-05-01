@@ -43,10 +43,10 @@ axios.interceptors.response.use(response => {
   }
 }, error => {
   if (error.response.status == '401') {
-    console.log('已过期重新登陆');
+    console.log('--已过期重新登陆');
     router.push("/login");
   } else {
-    return error;
+    return Promise.reject(error)
   }
 })
 

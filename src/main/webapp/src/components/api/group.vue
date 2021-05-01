@@ -32,6 +32,8 @@ export default {
       this.axios.post("/group/create/", {name: this.inputValue}).then((response) => {
         this.getAllGroups()
       }).catch((error) => {
+        console.log(error.response)
+        this.$message.error(error.response.data.message)
       })
     },
     handleClose(id) {
