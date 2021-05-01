@@ -6,6 +6,9 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import qs from 'qs'
 
+
+import './theme/index.css'
+
 // import store from './store'
 
 Vue.config.productionTip = false
