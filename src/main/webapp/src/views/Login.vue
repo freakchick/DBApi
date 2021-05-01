@@ -1,19 +1,18 @@
 <template>
   <div class="box">
     <div class="content">
-      <el-form label-width="80px">
-        <el-form-item label="用户名">
-          <el-input v-model="username"></el-input>
-        </el-form-item>
-        <el-form-item label="密码">
-          <el-input v-model="password"></el-input>
-        </el-form-item>
-
-
-        <el-form-item>
-          <el-button type="primary" @click="login">登录</el-button>
-        </el-form-item>
-      </el-form>
+      <div class="item header">
+        DBAPI
+      </div>
+      <div class="item">
+        <el-input v-model="username" placeholder="用户名"></el-input>
+      </div>
+      <div class="item">
+        <el-input v-model="password" placeholder="密码" type="password"></el-input>
+      </div>
+      <div class="item">
+        <div class="buttton" @click="login">登&nbsp;录</div>
+      </div>
     </div>
   </div>
 </template>
@@ -48,6 +47,10 @@ export default {
 </script>
 
 <style scoped>
+html {
+  background-color: #c7edcc;
+}
+
 .box {
   display: flex;
   display: -webkit-flex;
@@ -61,6 +64,37 @@ export default {
 }
 
 .content {
-  box-shadow: 10px 10px 5px #888888;
+  /*box-shadow: 10px 10px 5px #888888;*/
+}
+
+.item {
+  width: 400px;
+  height: 70px;
+}
+
+.buttton {
+  width: 400px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  background-color: #06b176;
+  border-radius: 10px;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+
+.header {
+  text-align: center;
+  color: #06b176;
+  font-weight: 700;
+  font-size: 40px;
+}
+
+.buttton:hover {
+  background-color: #07a863;
+  font-size: 21px;
+  cursor: pointer;
 }
 </style>
