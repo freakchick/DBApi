@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-tag :key="tag.id" v-for="tag in groups" closable :disable-transitions="false" @close="handleClose(tag.id)">
+    <el-tag :key="tag.id" v-for="tag in groups" closable :disable-transitions="false" @close="handleClose(tag.id)" effect="dark">
       {{ tag.name }}
     </el-tag>
     <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue"
