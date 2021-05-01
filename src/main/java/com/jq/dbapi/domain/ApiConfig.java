@@ -31,7 +31,7 @@ public class ApiConfig {
     @TableField(value = "datasource_id")
     Integer datasourceId;
 
-    @TableField
+    @TableField("`sql`")
     String sql;
 
     @TableField(value = "real_sql")
@@ -49,6 +49,6 @@ public class ApiConfig {
     @TableField
     Integer previlege;
 
-    @TableField("`group_id`")
+    @TableField("group_id")
     Integer groupId;
 }
