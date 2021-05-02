@@ -3,7 +3,7 @@
 ## 介绍
 
 - 快速生成数据库的http接口服务，零代码开发，只需编写sql，就可以生成http api服务。是数据库的上层应用，方便数据库数据对外发布http服务
-
+- 体验地址： http://47.92.117.90:8520/
 ## 使用场景
 
 - BI报表、数据可视化大屏的后端接口快速开发；
@@ -163,6 +163,12 @@ npm install -g cnpm --registry=https://registry.npm.taobao.org
 ```shell script
 mvn clean package -P singleJar
 mvn clean package -P tar
+```
+
+### 构建镜像
+```shell script
+mvn docker:build -P tar
+mvn docker:push -P tar
 ```
 
 ### 启动
