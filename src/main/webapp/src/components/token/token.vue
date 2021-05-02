@@ -4,8 +4,11 @@
       <router-link to="/token/add">
         <el-button type="primary" plain>创建token</el-button>
       </router-link>
+
     </div>
-    <el-table :data="tableData" border stripe max-height="700">
+
+
+    <el-table :data="tableData" border stripe max-height="700" class="gap">
       <el-table-column prop="token" label="token">
         <template slot-scope="scope">
           <span>{{ scope.row.token }}</span>
@@ -57,6 +60,18 @@
         <el-button type="primary" @click="dialogVisible = false;auth()">保存</el-button>
       </span>
     </el-dialog>
+
+    <el-alert title="token使用说明" type="warning" show-icon>
+      <div>请求私有接口时，需要把token值放入header的Authorization字段中携带，才可以访问成功。（如果是开放接口，不需要设置header）</div>
+      <div>以python为例，访问api的代码示例如下：</div>
+      <div> <br/>
+        import requests  <br/>
+        headers = {"Authorization": "5ad0dcb4eb03d3b0b7e4b82ae0ba433f"} <br/>
+        re = requests.post("http://127.0.0.1:8520/api/userById", {"idList": [1, 2]}, headers=headers) <br/>
+        print(re.text) <br/>
+      </div>
+
+    </el-alert>
   </div>
 </template>
 

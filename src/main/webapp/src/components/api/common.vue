@@ -25,7 +25,7 @@
             </el-option>
           </el-select>
           <el-tooltip content="查看该数据源下的所有表结构" placement="top-start" effect="light">
-            <i class="el-icon-s-opportunity tip" @click="show=!show" v-if="$route.path != '/api/detail'"></i>
+            <i class="el-icon-info tip" @click="show=!show" v-if="$route.path != '/api/detail'"></i>
           </el-tooltip>
           <div v-show="show">
             <el-select placeholder="查看所有表" v-model="table" @change="getColumns" clearable>
@@ -80,8 +80,8 @@
           <el-option :label="item.name" :value="item.id" v-for="item in groups" :key="item.id"></el-option>
         </el-select>
 
-        <el-button icon="el-icon-plus" type="primary" circle size="mini" title="创建新的分组"
-                   v-if="$route.path != '/api/detail'"></el-button>
+<!--        <el-button icon="el-icon-plus" type="primary" circle size="mini" title="创建新的分组"-->
+<!--                   v-if="$route.path != '/api/detail'"></el-button>-->
       </el-form-item>
 
       <el-form-item label="访问权限">
@@ -89,6 +89,13 @@
           <el-radio :label="0">私有接口</el-radio>
           <el-radio :label="1">开放接口</el-radio>
         </el-radio-group>
+
+        <el-tooltip placement="top-start" effect="light">
+          <div slot="content">开放接口可以直接访问<br/>
+
+            私有接口在访问时必须在请求头中携带token，且该token值对此接口有访问权限，具体请到权限菜单查看</div>
+          <i class="el-icon-info tip"></i>
+        </el-tooltip>
       </el-form-item>
 
 
