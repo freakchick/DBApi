@@ -13,6 +13,7 @@
 ## 特点
 
 - 支持动态添加、修改api；支持api上线、下线管理
+- API支持访问权限控制，API支持分组管理
 - 支持多数据源连接，支持动态添加、修改、删除数据库地址
 - 支持多种类型数据库，包括mysql/sqlserver/postgreSql/hive/kylin/clickhouse/oracle
 - 支持动态sql，类似mybatis的动态sql
@@ -42,7 +43,7 @@
 - 如果您想要快速安装，请下载dbApi.jar包
 - 启动命令：java -jar dbApi.jar 一键启动
 
-- 启动后浏览器访问 http://ip:8520
+- 启动后浏览器访问 http://ip:8520 ，默认登录账户： admin/admin
 
 ### 2.tar包安装
 
@@ -85,7 +86,7 @@ bin/dbApi.bat
 
 或者直接双击 bin/dbApi.bat 文件启动
 
-- 启动后浏览器访问 http://ip:8520
+- 启动后浏览器访问 http://ip:8520 ，默认登录账户： admin/admin
 
 ### 3.docker安装
 
@@ -93,41 +94,50 @@ bin/dbApi.bat
 docker run -d -p 8520:8520 freakchicken/db-api
 ```
 
-- 启动后浏览器访问 http://ip:8520
+- 启动后浏览器访问 http://ip:8520 ，默认登录账户： admin/admin
 
 ## 使用说明
 
 ### 创建数据源
 
-![](https://freakchicken.gitee.io/images/dbApi/add_source_20210125160727.jpg)
+![](https://freakchicken.gitee.io/images/dbApi/20210502/datasource_create.png)
 
-### 创建api
+### 创建/修改api
 
-![](https://freakchicken.gitee.io/images/dbApi/20210225/create_api.jpg)
+![](https://freakchicken.gitee.io/images/dbApi/20210502/api_add.png)
+![](https://freakchicken.gitee.io/images/dbApi/20210502/api_edit.png)
 
 - 填入路径，这就是将来http请求的路径
 - 选择数据源，就是接口执行sql逻辑的数据库地址
 - 填入sql ,类似mybatis的动态sql语法，不需要写最外层的select update 标签，参数名用 #{} ${}
   表示，可以参考[这里](https://mybatis.org/mybatis-3/zh/dynamic-sql.html)
 - 添加参数，参数名称就是sql中的参数名，sql中涉及到的每个参数都要填写
+- API分组，选择api所属的分组，这个分组可以将来授权使用 
+- 访问权限，开放接口可以直接访问，私有接口需要申请tokrn才能访问  
 - 点击保存，返回api列表页面，可以看到新增一条记录
 
-![](https://freakchicken.gitee.io/images/dbApi/20210225/api_list.jpg)
+![](https://freakchicken.gitee.io/images/dbApi/20210502/api.png)
 
-### api上线
+### api分组管理
+- 可以添加、删除分组
+![](https://freakchicken.gitee.io/images/dbApi/20210502/group.png)
 
-- 点击api上线按钮，这个api就上线，可以访问了
-  ![](https://freakchicken.gitee.io/images/dbApi/online_click_20210125161514.jpg)
+### api请求测试
+- 在页面快速访问API，查看结果
+![](https://freakchicken.gitee.io/images/dbApi/20210502/request.png)
 
-### api详情
+### 创建token
+![](https://freakchicken.gitee.io/images/dbApi/20210502/token_add.png)
+![](https://freakchicken.gitee.io/images/dbApi/20210502/token.png)
 
-- 点击查看详情按钮，这时候可以查看api的详情
-  ![](https://freakchicken.gitee.io/images/dbApi/20210225/api_detail.jpg)
+### 授权token可以访问哪些api
+![](https://freakchicken.gitee.io/images/dbApi/20210502/token_auth.png)
 
-### api访问测试
+### 导出接口文档
+- 可以导出接口文档（markdown格式）
+![](https://freakchicken.gitee.io/images/dbApi/20210502/docs.png)
 
-- 点击请求测试按钮，我们可以发起api请求，查看返回结果，这个结果就是我们之前填入的sql执行的结果
-  ![](https://freakchicken.gitee.io/images/dbApi/20210225/request.jpg)
+
 
 ## sql编写规范
 
@@ -151,7 +161,8 @@ npm install -g cnpm --registry=https://registry.npm.taobao.org
 - maven打包会自动把前端安装依赖并编译打包，
 
 ```shell script
-mvn clean package
+mvn clean package -P singleJar
+mvn clean package -P tar
 ```
 
 ### 启动
@@ -204,6 +215,4 @@ http://localhost:8520
 
 ## TODO
 
-- 前端ui优化-使用sql语法插件
-- 接口权限控制
 - 集群版本开发，支持微服务注册consul/eureka/nacos
