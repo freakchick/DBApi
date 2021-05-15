@@ -199,8 +199,8 @@ http://localhost:8520
 
 ## 联系作者：
 
-### wechat：
-
+### 微信：
+- 提问请先star支持一下
 <div style="text-align: center"> 
 <img src="https://freakchicken.gitee.io/images/kafkaui/wechat.jpg" width = "30%" />
 </div>
@@ -216,7 +216,7 @@ http://localhost:8520
 如果您喜欢此项目，请给捐助作者一杯咖啡
 <div style="text-align: center"> 
 <img src="https://freakchicken.gitee.io/images/kafkaui/wechatpay.jpg" width = "30%" />
-<img src="https://freakchicken.gitee.io/images/kafkaui/alipay.jpg" width = "33%" />
+<img src="https://freakchicken.gitee.io/images/kafkaui/alipay.jpg" width = "29%" />
 </div>
 
 ## TODO
