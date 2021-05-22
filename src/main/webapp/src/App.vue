@@ -72,13 +72,10 @@ h4 {
   color: #fff;
 }
 
-.mycontent{
-  margin: 0 auto;
-  max-width: 1300px;
-}
-
 .gap{
   margin: 0 10px 10px 0;
 }
-
+body{
+  background-color: #eaeaea;
+}
 </style>
