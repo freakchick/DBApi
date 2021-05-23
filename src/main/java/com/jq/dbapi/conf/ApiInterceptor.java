@@ -8,6 +8,7 @@ import com.jq.dbapi.service.ApiConfigService;
 import com.jq.dbapi.service.ApiService;
 import com.jq.dbapi.service.DataSourceService;
 import com.jq.dbapi.service.TokenService;
+import com.jq.dbapi.util.IPUtil;
 import com.jq.dbapi.util.ResponseDto;
 import com.jq.dbapi.util.SqlEngineUtil;
 import com.jq.orange.SqlMeta;
@@ -45,6 +46,9 @@ public class ApiInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2) throws Exception {
+        String originIp = IPUtil.getOriginIp(request);
+        System.out.println(originIp);
+
         String method = request.getMethod();
         String servletPath = request.getServletPath();
         servletPath = servletPath.substring(5);

@@ -39,6 +39,7 @@
                 <span class="title"><i class="iconfont icon-shezhi"></i>系统设置</span>
               </template>
               <el-menu-item index="/setting/password">修改密码</el-menu-item>
+              <el-menu-item index="/setting/firewall">IP防火墙</el-menu-item>
             </el-submenu>
 
           </el-menu>

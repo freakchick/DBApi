@@ -19,6 +19,7 @@ import request from '../components/api/request'
 import token from '../components/token/token'
 import tokenAdd from '../components/token/add'
 import user from '../components/setting/user'
+import firewall from '../components/setting/firewall'
 
 Vue.use(VueRouter)
 
@@ -42,7 +43,8 @@ const routes = [
       {path: '/api/request', name: 'request', component: request},
       {path: '/token', component: token},
       {path: '/token/add', component: tokenAdd},
-      {path: '/setting/password', component: user}
+      {path: '/setting/password', component: user},
+      {path: '/setting/firewall', component: firewall}
     ]
   }
 ]
