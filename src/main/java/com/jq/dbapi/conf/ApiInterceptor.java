@@ -4,10 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.jq.dbapi.domain.ApiConfig;
 import com.jq.dbapi.domain.DataSource;
 import com.jq.dbapi.domain.Token;
-import com.jq.dbapi.service.ApiConfigService;
-import com.jq.dbapi.service.ApiService;
-import com.jq.dbapi.service.DataSourceService;
-import com.jq.dbapi.service.TokenService;
+import com.jq.dbapi.service.*;
 import com.jq.dbapi.util.IPUtil;
 import com.jq.dbapi.util.ResponseDto;
 import com.jq.dbapi.util.SqlEngineUtil;
@@ -63,16 +60,21 @@ public class ApiInterceptor implements HandlerInterceptor {
 
         PrintWriter out = null;
         try {
+
             //js跨域的预检请求，不经过处理逻辑
             if (method.equals("OPTIONS")) {
                 response.setStatus(HttpServletResponse.SC_OK);
                 return false;
             }
-
+            out = response.getWriter();
+            boolean checkIP = checkIP(originIp);
+            if (!checkIP) {
+                out.append(JSON.toJSONString(ResponseDto.fail("非法ip(" + originIp + ")，禁止访问")));
+                return false;
+            }
             ResponseDto responseDto = process(servletPath, request, response);
 
             log.info(JSON.toJSONString(responseDto));
-            out = response.getWriter();
             out.append(JSON.toJSONString(responseDto));
             return false;
 
@@ -89,15 +91,36 @@ public class ApiInterceptor implements HandlerInterceptor {
 
     @Autowired
     ApiConfigService apiConfigService;
-
     @Autowired
     DataSourceService dataSourceService;
-
     @Autowired
     ApiService apiService;
-
     @Autowired
     TokenService tokenService;
+    @Autowired
+    IPService ipService;
+
+    public boolean checkIP(String originIp) {
+        Map<String, String> map = ipService.detail();
+        String status = map.get("status");
+        if (status.equals("on")) {
+            String mode = map.get("mode");
+            if (mode.equals("black")) {
+                String blackIP = map.get("blackIP");
+                if (!ipService.check(mode, blackIP, originIp)) {
+                    log.error("ip黑名单拦截");
+                    return false;
+                }
+            } else if (mode.equals("white")) {
+                String whiteIP = map.get("whiteIP");
+                if (!ipService.check(mode, whiteIP, originIp)) {
+                    log.error("ip白名单检查不通过");
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
     public ResponseDto process(String path, HttpServletRequest request, HttpServletResponse response) {
         try {
