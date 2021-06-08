@@ -63,9 +63,9 @@ export default {
       this.axios.post("/firewall/save",
           {status: this.status, mode: this.mode, whiteIP: this.whiteIP, blackIP: this.blackIP}
       ).then((response) => {
-        this.$message.success("修改成功")
+        this.$message.success("提交成功")
       }).catch((error) => {
-        this.$message.error(error)
+        this.$message.error("提交失败")
       })
     }
   },

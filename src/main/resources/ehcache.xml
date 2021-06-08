@@ -25,5 +25,10 @@
            overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="300"
            memoryStoreEvictionPolicy="LRU"/>
 
+    <!--ipRules空闲缓存1hour-->
+    <cache name="ipRules" eternal="false" maxElementsInMemory="10"
+           overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="3600"
+           memoryStoreEvictionPolicy="LRU"/>
+
 
 </ehcache>
