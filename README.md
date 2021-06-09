@@ -22,9 +22,12 @@
 ## 软件架构
 
 - 采用B/S架构，springboot + vue.js 前后端分离开发
-- 考虑到部署的简便性，最后打包是整合打到一个完整的jar包里
 - 考虑到部署的简便性，使用sqlite数据库
 - 使用了开源的动态sql引擎[orange](https://gitee.com/freakchicken/orange)
+- 权限校验流程
+  ![](https://freakchicken.gitee.io/images/dbApi/20210502/lc.png)
+
+
 
 ## springboot集成
 
