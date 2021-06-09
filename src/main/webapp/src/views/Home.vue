@@ -104,6 +104,7 @@ export default {
     display: block;
     min-width: 150px;
     width: 200px;
+    text-shadow: 2px 2px 1px #a5d4b7;
 
     //width: auto;
   }
