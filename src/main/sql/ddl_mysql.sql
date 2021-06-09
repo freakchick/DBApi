@@ -69,4 +69,24 @@ CREATE TABLE `user`
     PRIMARY KEY (`id`),
     UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-insert into `user` (username,password) values ('admin','admin');
+insert into `user` (username, password)
+values ('admin', 'admin');
+
+CREATE TABLE `firewall`
+(
+    `status` varchar(255) DEFAULT NULL,
+    `mode`   varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+insert into `firewall` (status, mode)
+values ('off', 'black');
+
+
+CREATE TABLE `ip_rules`
+(
+    `type` varchar(255)   DEFAULT NULL,
+    `ip`   varchar(10240) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+insert into `ip_rules` (type)
+VALUES ('white');
+insert into `ip_rules` (type)
+VALUES ('black');
