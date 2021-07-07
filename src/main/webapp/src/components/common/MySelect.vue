@@ -12,6 +12,7 @@
         <div class="bottom">
           <slot></slot>
         </div>
+        <div v-if="options.length == 0" class="none">暂无数据</div>
       </div>
 
 
@@ -162,6 +163,10 @@ export default {
           //color: rgb(61, 192, 21);
           background-color: #f6f6f6;
         }
+      }
+      .none{
+        text-align: center;
+        color: #ccc;
       }
     }
 

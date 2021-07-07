@@ -12,32 +12,21 @@
 
 <script>
 import common from '@/components/api/common'
+
 export default {
   data() {
-    return {
-
-    }
+    return {}
   },
   components: {common},
   methods: {
 
     save() {
       const detail = this.$refs.apiAdd.detail
-      console.log(this.$refs.apiAdd)
-      console.log(this.$refs.apiAdd)
-      console.log(this.$refs.sqlCode.codemirror.getValue())
+      detail.datasourceId = this.$refs.apiAdd.$refs.sqlCode.datasourceId
+      detail.sql = this.$refs.apiAdd.$refs.sqlCode.codemirror.getValue()
+      detail.params = JSON.stringify(detail.params)
 
- /*     this.axios.post("/apiConfig/add", {
-        name: detail.name,
-        note: detail.note,
-        path: detail.path,
-        isSelect: detail.isSelect,
-        datasourceId: detail.datasourceId,
-        sql: detail.sql,
-        groupId: detail.groupId,
-        previlege: detail.previlege,
-        params: JSON.stringify(detail.params)
-      }).then((response) => {
+      this.axios.post("/apiConfig/add", detail).then((response) => {
         if (response.data.success) {
           this.$message.success(response.data.msg)
         } else {
@@ -46,7 +35,7 @@ export default {
 
       }).catch((error) => {
         this.$message.error("失败")
-      })*/
+      })
     }
   },
   created() {

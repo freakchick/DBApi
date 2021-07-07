@@ -128,15 +128,18 @@ export default {
         this.detail.name = response.data.name
         this.detail.note = response.data.note
         this.detail.path = response.data.path
-        this.detail.sql = response.data.sql
-        this.detail.isSelect = response.data.isSelect.toString()
-        this.detail.datasourceId = response.data.datasourceId
         this.detail.previlege = response.data.previlege
         this.detail.groupId = response.data.groupId
         this.detail.params = JSON.parse(response.data.params)
-      }).catch((error) => {
-        this.$message.error("失败")
+
+        console.log(this.$refs.sqlCode.datasourceId,response.data.datasourceId)
+        this.$refs.sqlCode.datasourceId = response.data.datasourceId
+        this.$refs.sqlCode.codemirror.setValue(response.data.sql)
       })
+
+       /*   .catch((error) => {
+        this.$message.error("")
+      })*/
     },
 
     getAllGroups() {

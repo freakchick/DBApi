@@ -153,9 +153,6 @@ export default {
       // console.log('the editor is focused!', cm)
     },
     onCmCodeChange(instance, changeObj) {
-      console.log(instance)
-      console.log(this.codemirror)
-
       //如果输入的是字母才提示，空格不提示
       if (/^[a-zA-Z]/.test(changeObj.text[0])) {
         this.codemirror.showHint({

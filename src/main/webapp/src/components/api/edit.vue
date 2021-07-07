@@ -20,18 +20,12 @@ export default {
   methods: {
     save() {
       const detail = this.$refs.apiEditCommon.detail
-      this.axios.post("/apiConfig/update", {
-        id: this.$route.query.id,
-        name: detail.name,
-        note: detail.note,
-        path: detail.path,
-        isSelect: detail.isSelect,
-        datasourceId: detail.datasourceId,
-        sql: detail.sql,
-        groupId: detail.groupId,
-        previlege: detail.previlege,
-        params: JSON.stringify(detail.params)
-      }).then((response) => {
+      detail.datasourceId = this.$refs.apiEditCommon.$refs.sqlCode.datasourceId
+      detail.sql = this.$refs.apiEditCommon.$refs.sqlCode.codemirror.getValue()
+      detail.params = JSON.stringify(detail.params)
+      detail.id = this.$route.query.id
+
+      this.axios.post("/apiConfig/update", detail).then((response) => {
         if (response.data.success) {
           this.$message.success(response.data.msg)
         } else {
