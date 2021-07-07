@@ -1,61 +1,19 @@
 <template>
   <div>
     <el-form label-width="100px">
-      <el-form-item label="api名称">
-        <el-input v-model="detail.name"></el-input>
-      </el-form-item>
-      <el-form-item label="描述">
-        <el-input v-model="detail.note"></el-input>
-      </el-form-item>
-      <el-form-item label="请求路径">
-        <el-input v-model="detail.path" class="my" placeholder="输入请求路径">
-          <template slot="prepend">
-            <span style="margin: 0 -14px">http://{{ address }}/api/</span>
-          </template>
-        </el-input>
+      <el-form-item label="API基本信息">
+        <my-input label="名称" :nullable="false" v-model="detail.name"></my-input>
+        <my-input label="描述" v-model="detail.note"></my-input>
+        <my-input label="请求路径" v-model="detail.path" :preffix="`http://${ address }/api/`" :nullable="false"></my-input>
+        <my-select v-model="detail.groupId" :options="groups" label="API分组" option_label="name"
+                   option_value="id" :nullable="false"></my-select>
       </el-form-item>
 
-      <el-form-item label="数据源">
-        <div style="display:flex">
-          <el-select v-model="detail.datasourceId" placeholder="请选择" @change="getTables">
-            <el-option v-for="item in datasources" :key="item.id" :label="item.name" :value="item.id">
-              <db-icon :type="item.type"></db-icon>
-              <span>{{ item.name }}</span>
-              <!--            <span style="float: left">{{ item.name }}</span>-->
-            </el-option>
-          </el-select>
-          <el-tooltip content="查看该数据源下的所有表结构" placement="top-start" effect="light">
-            <i class="el-icon-info tip" @click="show=!show" v-if="$route.path != '/api/detail'"></i>
-          </el-tooltip>
-          <div v-show="show">
-            <el-select placeholder="查看所有表" v-model="table" @change="getColumns" clearable>
-              <el-option :value="item" v-for="item in tables"><i class="iconfont icon-table"></i>{{ item }}
-              </el-option>
-            </el-select>
-            <el-select placeholder="查看所有字段" v-model="column" style="margin-left: 10px" clearable>
-              <el-option :value="item.fieldName" v-for="item in columns">
-                <i class="iconfont icon-ziyuan"></i>{{ item.fieldName }}
-              </el-option>
-            </el-select>
-          </div>
-        </div>
-      </el-form-item>
-      <el-form-item label="sql类型">
-        <el-select v-model="detail.isSelect">
-          <el-option label="查询类" value=1></el-option>
-          <el-option label="非查询类" value=0></el-option>
-        </el-select>
-      </el-form-item>
       <el-form-item label="sql">
-        <div v-show="$route.path != '/api/detail'" class="tag">
-          <el-tag size="mini" @click="tag('foreach')" effect="plain">foreach</el-tag>
-          <el-tag size="mini" @click="tag('if')" effect="plain">if</el-tag>
-          <el-tag size="mini" @click="tag('where')" effect="plain">where</el-tag>
-          <el-tag size="mini" @click="tag('trim')" effect="plain">trim</el-tag>
+        <div>
+          <sql-code ref="sqlCode"></sql-code>
         </div>
-        <el-input type="textarea" v-model="detail.sql" :autosize="{ minRows: 5, maxRows: 20 }" placeholder="请输入sql"
-                  class="my"></el-input>
-        <!--        <el-button type="primary" plain @click="parseParams" style="margin :10px 0">解析参数</el-button>-->
+
       </el-form-item>
       <el-form-item label="请求参数">
         <div v-for="(item,index) in detail.params" style="margin-bottom:5px;display: flex;align-items:center">
@@ -75,15 +33,6 @@
 
       </el-form-item>
 
-      <el-form-item label="API分组">
-        <el-select v-model="detail.groupId">
-          <el-option :label="item.name" :value="item.id" v-for="item in groups" :key="item.id"></el-option>
-        </el-select>
-
-<!--        <el-button icon="el-icon-plus" type="primary" circle size="mini" title="创建新的分组"-->
-<!--                   v-if="$route.path != '/api/detail'"></el-button>-->
-      </el-form-item>
-
       <el-form-item label="访问权限">
         <el-radio-group v-model="detail.previlege">
           <el-radio :label="0">私有接口</el-radio>
@@ -93,18 +42,21 @@
         <el-tooltip placement="top-start" effect="light">
           <div slot="content">开放接口可以直接访问<br/>
 
-            私有接口在访问时必须在请求头中携带token，且该token值对此接口有访问权限，具体请到权限菜单查看</div>
+            私有接口在访问时必须在请求头中携带token，且该token值对此接口有访问权限，具体请到权限菜单查看
+          </div>
           <i class="el-icon-info tip"></i>
         </el-tooltip>
       </el-form-item>
 
 
     </el-form>
+
   </div>
 </template>
 
 <script>
 import dbIcon from "@/components/common/dbIcon";
+import sqlCode from "@/components/api/common/SqlCode";
 
 export default {
   data() {
@@ -112,17 +64,15 @@ export default {
       datasources: [],
       address: null,
       show: false,
-      groups: [],
+      groups: [{label:'姓名',value:'name'}],
+      dialogVisible: false,
       detail: {
-        datasourceId: null,
         name: null,
         note: null,
         path: null,
-        isSelect: "1",
-        sql: '',
         params: [],
         groupId: null,
-        previlege: 0
+        previlege: 0 //访问权限
       },
       options: [
         {label: 'string', value: 'string'},
@@ -136,24 +86,21 @@ export default {
         {label: 'date 数组', value: 'Array<date>'}
 
       ],
-      table: null, tables: [], columns: [], column: null
+      table: null, tables: [], columns: [], column: null,
+      isFullScreen: false,
+      mode: 'mini'
     }
   },
   props: ["id"],
   methods: {
+
     addRow() {
       this.detail.params.push({name: null, type: null})
     },
     deleteRow(index) {
       this.detail.params.splice(index, 1)
     },
-    getAllSource() {
-      this.axios.post("/datasource/getAll").then((response) => {
-        this.datasources = response.data
-      }).catch((error) => {
-        this.$message.error("查询所有数据源失败")
-      })
-    },
+
     parseParams(queryString, cb) {
       this.axios.post("/apiConfig/parseParam", {sql: this.detail.sql}).then((response) => {
         if (response.data.success) {
@@ -191,35 +138,7 @@ export default {
         this.$message.error("失败")
       })
     },
-    tag(item) {
-      if (item == 'foreach') {
-        this.detail.sql += "\n<foreach open=\"(\" close=\")\" collection=\"\" separator=\",\" item=\"item\" index=\"index\">#{item}</foreach>"
-      } else if (item == 'if') {
-        this.detail.sql += "\n<if test=\"\" ></if>"
-      } else if (item == 'where') {
-        this.detail.sql += "\n<where></where>"
-      } else if (item == 'trim') {
-        this.detail.sql += "\n<trim prefix=\"\" suffix=\"\" suffixesToOverride=\"\" prefixesToOverride=\"\"></trim>"
-      }
-    },
-    getTables() {
-      this.axios.post("/table/getAllTables", {sourceId: this.detail.datasourceId}).then((response) => {
-        this.tables = response.data
-      }).catch((error) => {
-        this.$message.error("查询所有表失败")
-      })
-    },
-    getColumns() {
-      this.axios.post("/table/getAllColumns", {
-        sourceId: this.detail.datasourceId,
-        table: this.table
-      }).then((response) => {
-        console.log(response.data)
-        this.columns = response.data
-      }).catch((error) => {
-        this.$message.error("查询所有表失败")
-      })
-    },
+
     getAllGroups() {
       this.axios.post("/group/getAll/").then((response) => {
         this.groups = response.data
@@ -228,22 +147,27 @@ export default {
     }
   },
   created() {
-    this.getAllSource()
     this.getAddress()
     if (this.id != undefined)
       this.getDetail(this.id)
 
     this.getAllGroups()
-    console.log(this.$route.path)
   },
-  components: {dbIcon}
+  components: {dbIcon, sqlCode}
 }
 </script>
 
 <style scoped>
+
 .my >>> .el-textarea__inner {
   font-family: 'Consolas', Helvetica, Arial, sans-serif;
   /*font-size: 18px;*/
+}
+
+.mydialog >>> .el-dialog {
+  margin-top: 20px !important;
+  margin-bottom: 0px !important;
+
 }
 
 i {
@@ -253,26 +177,5 @@ i {
   margin-right: 5px;
 }
 
-.el-tag {
-  float: right;
-  margin-left: 4px;
-  margin-bottom: 2px;
-}
-
-.el-tag:hover {
-  font-weight: 700;
-  background-color: #ace2f8;
-}
-
-.tip {
-  font-weight: 300;
-  color: #8c939d;
-  line-height: 38px;
-  margin: 0 5px;
-}
-
-.tip:hover {
-  font-weight: 700;
-}
 
 </style>

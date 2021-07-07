@@ -135,7 +135,7 @@ public class JdbcUtil {
                 String columnName = rsd.getColumnName(i + 1);
                 if (columnName.contains("."))
                     columnName = columnName.split("\\.")[1];
-                jsonObject.put("fieldName", columnName);//表字段
+                jsonObject.put("label", columnName);//表字段
                 list.add(jsonObject);
             }
             return list;

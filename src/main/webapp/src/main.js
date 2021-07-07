@@ -9,12 +9,22 @@ import qs from 'qs'
 
 import './theme/index.css'
 
+import VueCodeMirror from 'vue-codemirror'
+import 'codemirror/lib/codemirror.css'
+Vue.use(VueCodeMirror)
+
 // import store from './store'
 
 Vue.config.productionTip = false
 
 //使用vue-axios，这样才可以全局使用this.axios调用
 Vue.use(VueAxios, axios);
+
+
+import MyInput from "@/components/common/MyInput";
+import MySelect from "@/components/common/MySelect";
+Vue.component('my-input', MyInput)
+Vue.component('my-select', MySelect)
 
 
 // axios.defaults.baseURL = '/api'

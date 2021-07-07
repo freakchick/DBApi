@@ -23,7 +23,11 @@ export default {
 
     save() {
       const detail = this.$refs.apiAdd.detail
-      this.axios.post("/apiConfig/add", {
+      console.log(this.$refs.apiAdd)
+      console.log(this.$refs.apiAdd)
+      console.log(this.$refs.sqlCode.codemirror.getValue())
+
+ /*     this.axios.post("/apiConfig/add", {
         name: detail.name,
         note: detail.note,
         path: detail.path,
@@ -42,7 +46,7 @@ export default {
 
       }).catch((error) => {
         this.$message.error("失败")
-      })
+      })*/
     }
   },
   created() {

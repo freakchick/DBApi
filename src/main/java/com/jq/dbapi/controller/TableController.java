@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @program: dbApi
@@ -29,11 +30,16 @@ public class TableController {
     DataSourceMapper dataSourceMapper;
 
     @RequestMapping("/getAllTables")
-    public List<String> getAllTables(Integer sourceId) throws SQLException {
+    public List<JSONObject> getAllTables(Integer sourceId) throws SQLException {
         DataSource dataSource = dataSourceMapper.selectById(sourceId);
         DruidPooledConnection connection = PoolManager.getPooledConnection(dataSource);
         List<String> tables = JdbcUtil.getAllTables(connection, dataSource.getType());
-        return tables;
+        List<JSONObject> list = tables.stream().map(t -> {
+            JSONObject jo = new JSONObject();
+            jo.put("label", t);
+            return jo;
+        }).collect(Collectors.toList());
+        return list;
     }
 
     @RequestMapping("/getAllColumns")
