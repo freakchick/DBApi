@@ -6,6 +6,7 @@ import com.jq.dbapi.domain.DataSource;
 import com.jq.dbapi.domain.Token;
 import com.jq.dbapi.service.*;
 import com.jq.dbapi.util.IPUtil;
+import com.jq.dbapi.util.JdbcUtil;
 import com.jq.dbapi.util.ResponseDto;
 import com.jq.dbapi.util.SqlEngineUtil;
 import com.jq.orange.SqlMeta;
@@ -171,7 +172,7 @@ public class ApiInterceptor implements HandlerInterceptor {
             String sql = config.getSql();
             SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(sql, sqlParam);
             log.info(sqlMeta.getSql());
-            ResponseDto responseDto = apiService.executeSql(config.getIsSelect(), datasource, sqlMeta.getSql(), sqlMeta.getJdbcParamValues());
+            ResponseDto responseDto = JdbcUtil.executeSql(datasource, sqlMeta.getSql(), sqlMeta.getJdbcParamValues());
             if (!responseDto.isSuccess())
                 response.setStatus(500);
             return responseDto;

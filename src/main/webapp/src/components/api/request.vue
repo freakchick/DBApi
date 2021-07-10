@@ -47,8 +47,8 @@
               v-show="!showTable"></el-input>
 
     <el-button size="small" @click="format" class="button">格式化json</el-button>
-    <el-button size="small" @click="tableShow" class="button" v-if="isSelect == 1">表格展示</el-button>
-    <el-button size="small" @click="tableHide" class="button" v-if="isSelect == 1">原始数据</el-button>
+    <el-button size="small" @click="tableShow" class="button">表格展示</el-button>
+    <el-button size="small" @click="tableHide" class="button">原始数据</el-button>
 
   </div>
 </template>

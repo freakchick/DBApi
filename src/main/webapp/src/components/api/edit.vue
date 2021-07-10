@@ -20,12 +20,26 @@ export default {
   methods: {
     save() {
       const detail = this.$refs.apiEditCommon.detail
-      detail.datasourceId = this.$refs.apiEditCommon.$refs.sqlCode.datasourceId
-      detail.sql = this.$refs.apiEditCommon.$refs.sqlCode.codemirror.getValue()
-      detail.params = JSON.stringify(detail.params)
-      detail.id = this.$route.query.id
+      let p = {
+        name: detail.name,
+        path: detail.path,
+        note: detail.note,
+        groupId: detail.groupId,
+        previlege: detail.previlege,
+        datasourceId: this.$refs.apiEditCommon.$refs.sqlCode.datasourceId,
+        sql: this.$refs.apiEditCommon.$refs.sqlCode.codemirror.getValue().trim(),
+        params: JSON.stringify(detail.params),
+        id: this.$route.query.id
+      }
 
-      this.axios.post("/apiConfig/update", detail).then((response) => {
+      // console.log(detail)
+      if (p.sql == null || p.datasourceId == null || p.name == null
+          || p.path == null || p.groupId == null) {
+        this.$message.error("必填项未填")
+        return
+      }
+
+      this.axios.post("/apiConfig/update", p).then((response) => {
         if (response.data.success) {
           this.$message.success(response.data.msg)
         } else {

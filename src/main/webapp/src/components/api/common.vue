@@ -98,6 +98,7 @@ export default {
       this.detail.params.push({name: null, type: null})
     },
     deleteRow(index) {
+      debugger
       this.detail.params.splice(index, 1)
     },
 

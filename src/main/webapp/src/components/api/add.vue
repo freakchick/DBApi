@@ -22,11 +22,26 @@ export default {
 
     save() {
       const detail = this.$refs.apiAdd.detail
-      detail.datasourceId = this.$refs.apiAdd.$refs.sqlCode.datasourceId
-      detail.sql = this.$refs.apiAdd.$refs.sqlCode.codemirror.getValue()
-      detail.params = JSON.stringify(detail.params)
+      // debugger
+      let p = {
+        name: detail.name,
+        path: detail.path,
+        note: detail.note,
+        groupId: detail.groupId,
+        previlege: detail.previlege,
+        datasourceId: this.$refs.apiAdd.$refs.sqlCode.datasourceId,
+        sql: this.$refs.apiAdd.$refs.sqlCode.codemirror.getValue().trim(),
+        params: JSON.stringify(detail.params)
+      }
 
-      this.axios.post("/apiConfig/add", detail).then((response) => {
+      // console.log(detail)
+      if (p.sql == null || p.datasourceId == null || p.name == null
+          || p.path == null || p.groupId == null) {
+        this.$message.error("必填项未填")
+        return
+      }
+
+      this.axios.post("/apiConfig/add", p).then((response) => {
         if (response.data.success) {
           this.$message.success(response.data.msg)
         } else {

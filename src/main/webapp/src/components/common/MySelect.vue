@@ -74,7 +74,7 @@ export default {
       return p;
     },
     optionClick(v) {
-      this.$emit("input", v[this.option_value]);
+      this.$emit("input", (v[this.option_value]).toString());
       this.showOptions = false;
       this.$emit("optionClick", v);
     },
