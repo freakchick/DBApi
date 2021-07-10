@@ -1,13 +1,19 @@
 package com.jq.dbapi.controller;
 
+import com.alibaba.druid.pool.DruidPooledConnection;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jq.dbapi.domain.ApiConfig;
+import com.jq.dbapi.domain.DataSource;
 import com.jq.dbapi.service.ApiConfigService;
 import com.jq.dbapi.service.DataSourceService;
 import com.jq.dbapi.service.GroupService;
+import com.jq.dbapi.util.JdbcUtil;
+import com.jq.dbapi.util.PoolManager;
 import com.jq.dbapi.util.ResponseDto;
 import com.jq.dbapi.util.SqlEngineUtil;
+import com.jq.orange.SqlMeta;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,8 +24,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -138,6 +146,16 @@ public class ApiConfigController {
                 e.printStackTrace();
             }
         }
+    }
+
+    @RequestMapping("/sql/execute")
+    public ResponseDto executeSql(Integer datasourceId,String sql,String params) {
+        DataSource dataSource = dataSourceService.detail(datasourceId);
+        Map<String,Object> map = JSON.parseObject(params, Map.class);
+        SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(sql, map);
+        ResponseDto responseDto = JdbcUtil.executeSql(dataSource, sqlMeta.getSql(), sqlMeta.getJdbcParamValues());
+        return responseDto;
+
     }
 
 }

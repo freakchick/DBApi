@@ -25,7 +25,7 @@
       <div class="top">
         <div class="tool">
           <div v-show="isFullScreen">
-            <div class="item"><i class="iconfont icon-play"></i><span>运行</span></div>
+            <div class="item" @click="run"><i class="iconfont icon-play"></i><span>运行</span></div>
             <div class="item"><i class="iconfont icon-play"></i><span>运行选中</span></div>
             <div class="item"><i class="iconfont icon-play-add"></i><span>新标签运行</span></div>
             <div class="item"><i class="iconfont icon-play-add"></i><span>新标签运行选中</span></div>
@@ -58,7 +58,17 @@
         </div>
       </div>
       <div class="result">
-        123
+        <div v-if="error != null" class="error">
+          <i class="el-icon-error"></i>
+          {{ error }}
+        </div>
+        <div v-if="updateMsg != null" class="updateMsg">
+          <i class="el-icon-success"></i>
+          {{ updateMsg }}
+        </div>
+        <el-table :data="resultList" border style="width: 100%" v-if="resultList.length > 0" size="mini">
+          <el-table-column :prop="item" :label="item" v-for="item in Object.keys(resultList[0])"></el-table-column>
+        </el-table>
       </div>
     </div>
 
@@ -86,6 +96,8 @@ require("codemirror/addon/hint/sql-hint");
 export default {
   data() {
     return {
+      resultList: [],
+      error: null, updateMsg: null,
       isFullScreen: false,
       mode: 'mini',
       params: null,
@@ -107,6 +119,36 @@ export default {
     codemirror, dbIcon
   },
   methods: {
+    run() {
+      if (this.datasourceId == null) {
+        this.$message.error("请先选择数据源")
+        return
+      }
+      const sql = this.codemirror.getValue()
+      if (sql == null || sql.trim() == '') {
+        this.$message.error("请先输入sql")
+        return
+      }
+      this.resultList = []
+      this.updateMsg = null
+      this.error = null
+
+      this.axios.post("/apiConfig/sql/execute",
+          {sql: sql, datasourceId: this.datasourceId, params: this.params}).then((response) => {
+        if (response.data.success) {
+          if (Array.isArray(response.data.data)) {
+            this.resultList = response.data.data
+          } else {
+            this.updateMsg = response.data.data
+          }
+
+        } else {
+          this.error = response.data.msg
+        }
+      }).catch((error) => {
+        // this.$message.error("查询所有数据源失败")
+      })
+    },
     fullWindow() {
       this.mode = "large"
       this.isFullScreen = true
@@ -283,12 +325,8 @@ export default {
           }
 
           &:hover {
-            //background-color: #ccc;
-            color: #fff;
+            background-color: #d77f00;
 
-            span {
-              color: #fff;
-            }
           }
         }
 
@@ -320,6 +358,12 @@ export default {
         .iconfont {
           font-size: 20px;
           margin: 0 5px;
+          padding: 0 5px;
+
+          &:hover {
+            background-color: #d77f00;
+            color: #fff;
+          }
         }
       }
     }
@@ -351,9 +395,16 @@ export default {
 
     .result {
       height: 300px;
-      background-color: #FFCC99;
+      background-color: #eee;
       display: none;
       border-top: 1px solid #82848a;
+      padding: 5px;
+      overflow: auto;
+
+      .error {
+        color: #f60303;
+
+      }
     }
   }
 }

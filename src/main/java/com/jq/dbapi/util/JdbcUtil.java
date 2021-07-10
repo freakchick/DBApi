@@ -1,5 +1,6 @@
 package com.jq.dbapi.util;
 
+import com.alibaba.druid.pool.DruidPooledConnection;
 import com.alibaba.druid.util.JdbcConstants;
 import com.alibaba.fastjson.JSONObject;
 import com.jq.dbapi.domain.DataSource;
@@ -154,4 +155,54 @@ public class JdbcUtil {
         }
     }
 
+    public static ResponseDto executeSql( DataSource datasource, String sql, List<Object> jdbcParamValues) {
+        DruidPooledConnection connection = null;
+        try {
+
+            connection = PoolManager.getPooledConnection(datasource);
+            PreparedStatement statement = connection.prepareStatement(sql);
+            //参数注入
+            for (int i = 1; i <= jdbcParamValues.size(); i++) {
+                statement.setObject(i, jdbcParamValues.get(i - 1));
+            }
+
+            boolean hasResultSet = statement.execute();
+            if (hasResultSet){
+                ResultSet rs = statement.getResultSet();
+                int columnCount = rs.getMetaData().getColumnCount();
+
+                List<String> columns = new ArrayList<>();
+                for (int i = 1; i <= columnCount; i++) {
+                    String columnName = rs.getMetaData().getColumnLabel(i);
+                    columns.add(columnName);
+                }
+                List<JSONObject> list = new ArrayList<>();
+                while (rs.next()) {
+                    JSONObject jo = new JSONObject();
+                    columns.stream().forEach(t -> {
+                        try {
+                            Object value = rs.getObject(t);
+                            jo.put(t, value);
+                        } catch (SQLException throwables) {
+                            throwables.printStackTrace();
+                        }
+                    });
+                    list.add(jo);
+                }
+                return ResponseDto.apiSuccess(list);
+            }else{
+                int updateCount = statement.getUpdateCount();
+                return ResponseDto.apiSuccess("sql修改数据行数： " + updateCount);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.fail(e.getMessage());
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+    }
 }
