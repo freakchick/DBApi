@@ -3,10 +3,10 @@
     <el-form label-width="100px">
       <el-form-item label="API基本信息">
         <my-input label="名称" :nullable="false" v-model="detail.name"></my-input>
-        <my-input label="描述" v-model="detail.note"></my-input>
         <my-input label="请求路径" v-model="detail.path" :preffix="`http://${ address }/api/`" :nullable="false"></my-input>
         <my-select v-model="detail.groupId" :options="groups" label="API分组" option_label="name"
                    option_value="id" :nullable="false"></my-select>
+        <my-input label="描述" v-model="detail.note" width="500px"></my-input>
       </el-form-item>
 
       <el-form-item label="sql">
@@ -64,7 +64,7 @@ export default {
       datasources: [],
       address: null,
       show: false,
-      groups: [{label:'姓名',value:'name'}],
+      groups: [{label: '姓名', value: 'name'}],
       dialogVisible: false,
       detail: {
         name: null,
@@ -132,14 +132,14 @@ export default {
         this.detail.groupId = response.data.groupId
         this.detail.params = JSON.parse(response.data.params)
 
-        console.log(this.$refs.sqlCode.datasourceId,response.data.datasourceId)
+        console.log(this.$refs.sqlCode.datasourceId, response.data.datasourceId)
         this.$refs.sqlCode.datasourceId = response.data.datasourceId
         this.$refs.sqlCode.codemirror.setValue(response.data.sql)
       })
 
-       /*   .catch((error) => {
-        this.$message.error("")
-      })*/
+      /*   .catch((error) => {
+       this.$message.error("")
+     })*/
     },
 
     getAllGroups() {

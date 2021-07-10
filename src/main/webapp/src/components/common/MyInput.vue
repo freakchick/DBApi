@@ -2,7 +2,7 @@
   <div class="form">
     <span class="label">{{ (nullable ? '' : '*') + label }}</span>
     <div class="preffix" v-if="preffix != ''">{{ preffix }}</div>
-    <input class="input" :value="value" @input="handleInput"/>
+    <input class="input" :value="value" @input="handleInput" :style="'width: ' + width"/>
   </div>
 </template>
 <script>
@@ -23,6 +23,10 @@ export default {
     preffix: {
       type: String,
       default: ''
+    },
+    width: {
+      type: String,
+      default: '200px'
     },
   },
   methods: {

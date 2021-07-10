@@ -25,10 +25,8 @@
       <div class="top">
         <div class="tool">
           <div v-show="isFullScreen">
-            <div class="item" @click="run"><i class="iconfont icon-play"></i><span>运行</span></div>
-            <div class="item"><i class="iconfont icon-play"></i><span>运行选中</span></div>
-            <div class="item"><i class="iconfont icon-play-add"></i><span>新标签运行</span></div>
-            <div class="item"><i class="iconfont icon-play-add"></i><span>新标签运行选中</span></div>
+            <div class="item" @click="run(false)"><i class="iconfont icon-play"></i><span>运行</span></div>
+            <div class="item" @click="run(true)"><i class="iconfont icon-play"></i><span>运行选中</span></div>
           </div>
         </div>
         <div class="quick">
@@ -119,12 +117,17 @@ export default {
     codemirror, dbIcon
   },
   methods: {
-    run() {
+    run(selected) {
       if (this.datasourceId == null) {
         this.$message.error("请先选择数据源")
         return
       }
-      const sql = this.codemirror.getValue()
+      let sql
+      if (selected) {
+        sql = this.codemirror.getSelection()
+      } else {
+        sql = this.codemirror.getValue()
+      }
       if (sql == null || sql.trim() == '') {
         this.$message.error("请先输入sql")
         return
