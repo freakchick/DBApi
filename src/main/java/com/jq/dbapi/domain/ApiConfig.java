@@ -51,4 +51,16 @@ public class ApiConfig {
 
     @TableField("group_id")
     Integer groupId;
+
+    @TableField(value = "cache_plugin")
+    String cachePlugin;
+
+    @TableField(value = "transform_plugin")
+    String transformPlugin;
+
+    @TableField(value = "cache_plugin_param")
+    String cachePluginParam;
+
+    @TableField(value = "transform_plugin_param")
+    String transformPluginParam;
 }

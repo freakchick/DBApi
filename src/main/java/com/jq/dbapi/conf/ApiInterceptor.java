@@ -1,9 +1,14 @@
 package com.jq.dbapi.conf;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.jq.dbapi.domain.ApiConfig;
 import com.jq.dbapi.domain.DataSource;
 import com.jq.dbapi.domain.Token;
+import com.jq.dbapi.plugin.DataCacher;
+import com.jq.dbapi.plugin.DataTransformer;
+import com.jq.dbapi.plugin.EncrypTransformer;
+import com.jq.dbapi.plugin.RedisDataChcher;
 import com.jq.dbapi.service.*;
 import com.jq.dbapi.util.IPUtil;
 import com.jq.dbapi.util.JdbcUtil;
@@ -169,12 +174,41 @@ public class ApiInterceptor implements HandlerInterceptor {
             }
 
             Map<String, Object> sqlParam = apiService.getSqlParam(request, config);
+
+            //从缓存获取数据
+            if (StringUtils.isNoneBlank(config.getCachePlugin())) {
+                DataCacher dataCacher = new RedisDataChcher();
+                Object o = dataCacher.get(config, sqlParam);
+                if (o != null) {
+                    return ResponseDto.apiSuccess(o);
+                }
+            }
+
             String sql = config.getSql();
             SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(sql, sqlParam);
             log.info(sqlMeta.getSql());
             ResponseDto responseDto = JdbcUtil.executeSql(datasource, sqlMeta.getSql(), sqlMeta.getJdbcParamValues());
-            if (!responseDto.isSuccess())
+
+            //数据转换
+            if (StringUtils.isNoneBlank(config.getTransformPlugin()) && responseDto.isSuccess()) {
+
+                List<JSONObject> data = (List<JSONObject>) (responseDto.getData());
+                DataTransformer dataTransformer = new EncrypTransformer();
+                Object transform = dataTransformer.transform(data);
+                responseDto.setData(transform);
+
+            }
+
+            //设置缓存
+            if (StringUtils.isNoneBlank(config.getCachePlugin()) && responseDto.isSuccess()) {
+                DataCacher dataCacher = new RedisDataChcher();
+                dataCacher.set(config, sqlParam, responseDto.getData());
+            }
+
+            if (!responseDto.isSuccess()) {
                 response.setStatus(500);
+
+            }
             return responseDto;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
