@@ -1,5 +1,5 @@
-.idea/
 target/
-*.iml
 logs/
-src/main/resources/static
+*.iml
+.idea/
+dist/
