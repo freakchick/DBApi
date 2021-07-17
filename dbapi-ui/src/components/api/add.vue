@@ -29,6 +29,8 @@ export default {
         note: detail.note,
         groupId: detail.groupId,
         previlege: detail.previlege,
+        cachePlugin: detail.cachePlugin,
+        transformPlugin: detail.transformPlugin,
         datasourceId: this.$refs.apiAdd.$refs.sqlCode.datasourceId,
         sql: this.$refs.apiAdd.$refs.sqlCode.codemirror.getValue().trim(),
         params: JSON.stringify(detail.params)

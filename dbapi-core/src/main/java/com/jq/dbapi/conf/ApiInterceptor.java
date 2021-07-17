@@ -6,13 +6,14 @@ import com.jq.dbapi.common.ResponseDto;
 import com.jq.dbapi.common.ApiConfig;
 import com.jq.dbapi.domain.DataSource;
 import com.jq.dbapi.domain.Token;
-import com.jq.dbapi.plugin.DataCacher;
-import com.jq.dbapi.plugin.DataTransformer;
+import com.jq.dbapi.plugin.CachePlugin;
+import com.jq.dbapi.plugin.TransformPlugin;
 import com.jq.dbapi.plugin.EncrypTransformer;
 import com.jq.dbapi.plugin.RedisDataChcher;
 import com.jq.dbapi.service.*;
 import com.jq.dbapi.util.IPUtil;
 import com.jq.dbapi.util.JdbcUtil;
+import com.jq.dbapi.util.PluginManager;
 import com.jq.dbapi.util.SqlEngineUtil;
 import com.jq.orange.SqlMeta;
 import lombok.extern.slf4j.Slf4j;
@@ -177,10 +178,10 @@ public class ApiInterceptor implements HandlerInterceptor {
 
             //从缓存获取数据
             if (StringUtils.isNoneBlank(config.getCachePlugin())) {
-                DataCacher dataCacher = new RedisDataChcher();
-                Object o = dataCacher.get(config, sqlParam);
+                CachePlugin cachePlugin = PluginManager.getCachePlugin(config.getCachePlugin());
+                Object o = cachePlugin.get(config, sqlParam);
                 if (o != null) {
-                    return ResponseDto.apiSuccess(o);
+                    return ResponseDto.apiSuccess(o); //如果缓存有数据直接返回
                 }
             }
 
@@ -191,18 +192,18 @@ public class ApiInterceptor implements HandlerInterceptor {
 
             //数据转换
             if (StringUtils.isNoneBlank(config.getTransformPlugin()) && responseDto.isSuccess()) {
-
                 List<JSONObject> data = (List<JSONObject>) (responseDto.getData());
-                DataTransformer dataTransformer = new EncrypTransformer();
-                Object transform = dataTransformer.transform(data);
+                TransformPlugin transformPlugin = PluginManager.getTransformPlugin(config.getTransformPlugin());
+                Object transform = transformPlugin.transform(data);
                 responseDto.setData(transform);
 
             }
 
             //设置缓存
             if (StringUtils.isNoneBlank(config.getCachePlugin()) && responseDto.isSuccess()) {
-                DataCacher dataCacher = new RedisDataChcher();
-                dataCacher.set(config, sqlParam, responseDto.getData());
+//                CachePlugin dataCacher = new RedisDataChcher();
+                CachePlugin cachePlugin = PluginManager.getCachePlugin(config.getCachePlugin());
+                cachePlugin.set(config, sqlParam, responseDto.getData());
             }
 
             if (!responseDto.isSuccess()) {

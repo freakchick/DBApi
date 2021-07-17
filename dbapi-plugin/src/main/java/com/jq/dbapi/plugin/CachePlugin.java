@@ -4,7 +4,7 @@ import com.jq.dbapi.common.ApiConfig;
 
 import java.util.Map;
 
-public interface DataCacher {
+public interface CachePlugin {
 
     void set(ApiConfig config, Map<String, Object> params, Object data);
 

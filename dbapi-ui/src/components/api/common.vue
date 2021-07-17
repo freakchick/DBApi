@@ -3,7 +3,8 @@
     <el-form label-width="100px">
       <el-form-item label="API基本信息">
         <my-input label="名称" :nullable="false" v-model="detail.name"></my-input>
-        <my-input label="请求路径" v-model="detail.path" :preffix="`http://${ address }/api/`" :nullable="false"></my-input>
+        <my-input label="请求路径" v-model="detail.path" :preffix="`http://${ address }/api/`" :nullable="false"
+                  width="400px"></my-input>
         <my-select v-model="detail.groupId" :options="groups" label="API分组" option_label="name"
                    option_value="id" :nullable="false"></my-select>
         <my-input label="描述" v-model="detail.note" width="500px"></my-input>
@@ -13,7 +14,6 @@
         <div>
           <sql-code ref="sqlCode"></sql-code>
         </div>
-
       </el-form-item>
       <el-form-item label="请求参数">
         <div v-for="(item,index) in detail.params" style="margin-bottom:5px;display: flex;align-items:center">
@@ -48,6 +48,25 @@
         </el-tooltip>
       </el-form-item>
 
+      <el-form-item label="数据转换">
+        <div style="width: 300px;display: inline-block">
+          <el-input v-model="transformPlugin" placeholder="填写数据转换插件java类名"></el-input>
+        </div>
+        <el-tooltip placement="top-start" effect="light">
+          <div slot="content">填写表示开启数据转换功能，不填写表示不转换。转换逻辑是自定义插件中编写的逻辑</div>
+          <i class="el-icon-info tip"></i>
+        </el-tooltip>
+      </el-form-item>
+      <el-form-item label="缓存">
+        <div style="width: 300px;display: inline-block">
+          <el-input v-model="cachePlugin" placeholder="填写缓存插件java类名"></el-input>
+        </div>
+        <el-tooltip placement="top-start" effect="light">
+          <div slot="content">填写表示对结果数据开启缓存，不填写表示不开启缓存</div>
+          <i class="el-icon-info tip"></i>
+        </el-tooltip>
+      </el-form-item>
+
 
     </el-form>
 
@@ -72,7 +91,9 @@ export default {
         path: null,
         params: [],
         groupId: null,
-        previlege: 0 //访问权限
+        previlege: 0,//访问权限
+        transformPlugin: null,
+        cachePlugin: null
       },
       options: [
         {label: 'string', value: 'string'},
@@ -179,6 +200,17 @@ i {
   font-size: 18px;
   font-weight: 700;
   margin-right: 5px;
+}
+
+.tip {
+  /*display: inline-block !important;*/
+  margin-left: 10px;
+  /*background-color: #fdf6ec;*/
+  /*padding: 15px;*/
+  color: #afafaf;
+  font-size: 20px;
+  font-weight: 100;
+
 }
 
 

@@ -101,7 +101,7 @@ export default {
 
   .label {
     display: inline-block;
-    background-color: #009933;
+    background-color: #06B176;
     height: 40px;
     padding: 0 10px;
     color: #fff;

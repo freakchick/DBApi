@@ -5,7 +5,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.List;
 
-public class EncrypTransformer implements DataTransformer {
+public class EncrypTransformer implements TransformPlugin {
     @Override
     public Object transform(List<JSONObject> data) {
 
