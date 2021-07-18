@@ -50,7 +50,7 @@
 
       <el-form-item label="数据转换">
         <div style="width: 300px;display: inline-block">
-          <el-input v-model="transformPlugin" placeholder="填写数据转换插件java类名"></el-input>
+          <el-input v-model="detail.transformPlugin" placeholder="填写数据转换插件java类名" clearable></el-input>
         </div>
         <el-tooltip placement="top-start" effect="light">
           <div slot="content">填写表示开启数据转换功能，不填写表示不转换。转换逻辑是自定义插件中编写的逻辑</div>
@@ -59,7 +59,7 @@
       </el-form-item>
       <el-form-item label="缓存">
         <div style="width: 300px;display: inline-block">
-          <el-input v-model="cachePlugin" placeholder="填写缓存插件java类名"></el-input>
+          <el-input v-model="detail.cachePlugin" placeholder="填写缓存插件java类名" clearable></el-input>
         </div>
         <el-tooltip placement="top-start" effect="light">
           <div slot="content">填写表示对结果数据开启缓存，不填写表示不开启缓存</div>
@@ -153,6 +153,9 @@ export default {
         this.detail.previlege = response.data.previlege
         this.detail.groupId = response.data.groupId
         this.detail.params = JSON.parse(response.data.params)
+        this.detail.cachePlugin = response.data.cachePlugin
+        this.detail.transformPlugin = response.data.transformPlugin
+
 
         console.log(this.$refs.sqlCode.datasourceId, response.data.datasourceId)
         this.$refs.sqlCode.datasourceId = response.data.datasourceId

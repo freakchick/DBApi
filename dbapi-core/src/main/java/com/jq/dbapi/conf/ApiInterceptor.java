@@ -178,10 +178,14 @@ public class ApiInterceptor implements HandlerInterceptor {
 
             //从缓存获取数据
             if (StringUtils.isNoneBlank(config.getCachePlugin())) {
-                CachePlugin cachePlugin = PluginManager.getCachePlugin(config.getCachePlugin());
-                Object o = cachePlugin.get(config, sqlParam);
-                if (o != null) {
-                    return ResponseDto.apiSuccess(o); //如果缓存有数据直接返回
+                try {
+                    CachePlugin cachePlugin = PluginManager.getCachePlugin(config.getCachePlugin());
+                    Object o = cachePlugin.get(config, sqlParam);
+                    if (o != null) {
+                        return ResponseDto.apiSuccess(o); //如果缓存有数据直接返回
+                    }
+                } catch (Exception e) {
+                    log.error("获取缓存错误");
                 }
             }
 
@@ -213,7 +217,8 @@ public class ApiInterceptor implements HandlerInterceptor {
             return responseDto;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            return ResponseDto.fail(e.getMessage());
+            ResponseDto fail = ResponseDto.fail(e.getMessage() == null ? e.toString() : e.getMessage());
+            return fail;
         }
     }
 

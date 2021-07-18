@@ -58,9 +58,9 @@ public class ApiConfig {
     @TableField(value = "transform_plugin")
     String transformPlugin;
 
-    @TableField(value = "cache_plugin_param")
-    String cachePluginParam;
+    @TableField(value = "cache_plugin_params")
+    String cachePluginParams;
 
-    @TableField(value = "transform_plugin_param")
-    String transformPluginParam;
+    @TableField(value = "transform_plugin_params")
+    String transformPluginParams;
 }
