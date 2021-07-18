@@ -49,7 +49,7 @@
       </el-form-item>
 
       <el-form-item label="数据转换">
-        <div style="width: 300px;display: inline-block">
+        <div style="width: 400px;display: inline-block">
           <el-input v-model="detail.transformPlugin" placeholder="填写数据转换插件java类名" clearable></el-input>
         </div>
         <el-tooltip placement="top-start" effect="light">
@@ -58,7 +58,7 @@
         </el-tooltip>
       </el-form-item>
       <el-form-item label="缓存">
-        <div style="width: 300px;display: inline-block">
+        <div style="width: 400px;display: inline-block">
           <el-input v-model="detail.cachePlugin" placeholder="填写缓存插件java类名" clearable></el-input>
         </div>
         <el-tooltip placement="top-start" effect="light">

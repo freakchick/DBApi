@@ -8,8 +8,6 @@ import com.jq.dbapi.domain.DataSource;
 import com.jq.dbapi.domain.Token;
 import com.jq.dbapi.plugin.CachePlugin;
 import com.jq.dbapi.plugin.TransformPlugin;
-import com.jq.dbapi.plugin.EncrypTransformer;
-import com.jq.dbapi.plugin.RedisDataChcher;
 import com.jq.dbapi.service.*;
 import com.jq.dbapi.util.IPUtil;
 import com.jq.dbapi.util.JdbcUtil;
