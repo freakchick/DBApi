@@ -63,7 +63,7 @@ public class ApiConfigController {
                 object.put("value", t);
                 return object;
             }).collect(Collectors.toList());
-            return ResponseDto.success(list);
+            return ResponseDto.successWithData(list);
         } catch (Exception e) {
             return ResponseDto.fail(e.getMessage());
         }
@@ -146,12 +146,23 @@ public class ApiConfigController {
     }
 
     @RequestMapping("/sql/execute")
-    public ResponseDto executeSql(Integer datasourceId,String sql,String params) {
+    public ResponseDto executeSql(Integer datasourceId, String sql, String params) {
         DataSource dataSource = dataSourceService.detail(datasourceId);
-        Map<String,Object> map = JSON.parseObject(params, Map.class);
+        Map<String, Object> map = JSON.parseObject(params, Map.class);
         SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(sql, map);
         ResponseDto responseDto = JdbcUtil.executeSql(dataSource, sqlMeta.getSql(), sqlMeta.getJdbcParamValues());
         return responseDto;
+
+    }
+
+    @RequestMapping("/parseDynamicSql")
+    public ResponseDto parseDynamicSql(String sql, Map<String, Object> params) {
+        try {
+            SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(sql, params);
+            return ResponseDto.successWithData(sqlMeta);
+        } catch (Exception e) {
+            return ResponseDto.fail(e.getMessage());
+        }
 
     }
 

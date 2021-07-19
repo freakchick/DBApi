@@ -183,7 +183,7 @@ public class ApiInterceptor implements HandlerInterceptor {
                         return ResponseDto.apiSuccess(o); //如果缓存有数据直接返回
                     }
                 } catch (Exception e) {
-                    log.error("获取缓存错误");
+                    log.error("获取缓存失败", e);
                 }
             }
 
@@ -203,14 +203,17 @@ public class ApiInterceptor implements HandlerInterceptor {
 
             //设置缓存
             if (StringUtils.isNoneBlank(config.getCachePlugin()) && responseDto.isSuccess()) {
-//                CachePlugin dataCacher = new RedisDataChcher();
-                CachePlugin cachePlugin = PluginManager.getCachePlugin(config.getCachePlugin());
-                cachePlugin.set(config, sqlParam, responseDto.getData());
+                //缓存设置失败不影响主逻辑
+                try {
+                    CachePlugin cachePlugin = PluginManager.getCachePlugin(config.getCachePlugin());
+                    cachePlugin.set(config, sqlParam, responseDto.getData());
+                } catch (Exception e) {
+                    log.error("缓存设置失败", e);
+                }
             }
 
             if (!responseDto.isSuccess()) {
                 response.setStatus(500);
-
             }
             return responseDto;
         } catch (Exception e) {

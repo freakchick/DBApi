@@ -45,7 +45,7 @@ public class ResponseDto {
 
     }
 
-    public static ResponseDto success(String msg) {
+    public static ResponseDto successWithMsg(String msg) {
         ResponseDto dto = new ResponseDto();
         dto.setData(null);
         dto.setSuccess(true);
@@ -53,7 +53,7 @@ public class ResponseDto {
         return dto;
     }
 
-    public static ResponseDto success(Object data) {
+    public static ResponseDto successWithData(Object data) {
         ResponseDto dto = new ResponseDto();
         dto.setData(data);
         dto.setSuccess(true);

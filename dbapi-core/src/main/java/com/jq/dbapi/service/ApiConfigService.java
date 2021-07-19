@@ -46,7 +46,7 @@ public class ApiConfigService {
         } else {
             apiConfig.setStatus(0);
             apiConfigMapper.insert(apiConfig);
-            return ResponseDto.success("添加成功");
+            return ResponseDto.successWithMsg("添加成功");
         }
 
     }
@@ -61,7 +61,7 @@ public class ApiConfigService {
         } else {
             apiConfig.setStatus(0);
             apiConfigMapper.updateById(apiConfig);
-            return ResponseDto.success("修改成功");
+            return ResponseDto.successWithMsg("修改成功");
         }
 
     }

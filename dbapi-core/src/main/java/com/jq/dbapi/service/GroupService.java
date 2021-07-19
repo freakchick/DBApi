@@ -32,7 +32,7 @@ public class GroupService {
         }else{
             groupMapper.deleteById(id);
             apiAuthMapper.deleteByGroupId(id);
-            return ResponseDto.success("删除成功");
+            return ResponseDto.successWithMsg("删除成功");
         }
 
     }
