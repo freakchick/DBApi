@@ -156,9 +156,10 @@ public class ApiConfigController {
     }
 
     @RequestMapping("/parseDynamicSql")
-    public ResponseDto parseDynamicSql(String sql, Map<String, Object> params) {
+    public ResponseDto parseDynamicSql(String sql, String params) {
         try {
-            SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(sql, params);
+            Map<String,Object> map = JSON.parseObject(params, Map.class);
+            SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(sql, map);
             return ResponseDto.successWithData(sqlMeta);
         } catch (Exception e) {
             return ResponseDto.fail(e.getMessage());

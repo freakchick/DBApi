@@ -27,6 +27,7 @@
           <div v-show="isFullScreen">
             <div class="item" @click="run(false)"><i class="iconfont icon-play"></i><span>运行</span></div>
             <div class="item" @click="run(true)"><i class="iconfont icon-play"></i><span>运行选中</span></div>
+            <div class="item" @click="parseSql"><i class="iconfont icon-play"></i><span>解析动态sql</span></div>
           </div>
         </div>
         <div class="quick">
@@ -117,6 +118,19 @@ export default {
     codemirror, dbIcon
   },
   methods: {
+    parseSql(){
+      this.axios.post("/apiConfig/parseDynamicSql",
+          {sql: this.codemirror.getValue(), params: (this.params)}).then((response) => {
+        if (response.data.success) {
+
+
+        } else {
+          this.error = response.data.msg
+        }
+      }).catch((error) => {
+        // this.$message.error("查询所有数据源失败")
+      })
+    },
     run(selected) {
       if (this.datasourceId == null) {
         this.$message.error("请先选择数据源")
