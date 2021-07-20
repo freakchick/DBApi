@@ -6,10 +6,13 @@
                    option_label="name" option_value="id" @optionClick="getTables"></my-select>
       </div>
       <div class="bottom">
-
+        <div class="menus" :style="`top:${y}px;left:${x}px`" v-show="showMenuFlag">
+          <div class="menu" @click="copy">复制</div>
+        </div>
         <div v-for="(item,index) in tables">
           <div @click="getColumns(item.label,index)">
-            <div class="table"><i class="iconfont icon-table"></i>{{ item.label }}</div>
+            <div class="table" @contextmenu.prevent="showMenu()"><i class="iconfont icon-table"></i>{{ item.label }}
+            </div>
 
             <div v-for="(it) in columns" v-if="current == index" class="column">
               <i class="iconfont icon-ziyuan"></i>
@@ -41,14 +44,8 @@
         </div>
       </div>
       <div class="code">
-        <codemirror ref="cmEditor"
-                    class="myMirror"
-                    :options="cmOptions"
-                    @ready="onCmReady"
-                    @focus="onCmFocus"
-
-                    @inputRead="onCmCodeChange"
-        >
+        <codemirror ref="cmEditor" class="myMirror" :options="cmOptions" @ready="onCmReady" @focus="onCmFocus"
+                    @inputRead="onCmCodeChange">
         </codemirror>
         <div class="params">
           <div style="display: inline-block">动态SQL参数设置：</div>
@@ -102,6 +99,9 @@ require("codemirror/addon/hint/sql-hint");
 export default {
   data() {
     return {
+      x: 0, //菜单坐标
+      y: 0,//菜单坐标
+      showMenuFlag: false,
       resultList: [],
       error: null, updateMsg: null,
       isFullScreen: false,
@@ -125,6 +125,15 @@ export default {
     codemirror, dbIcon
   },
   methods: {
+    copy(){
+      this.showMenuFlag = false
+    },
+    showMenu() {
+      event.preventDefault()
+      this.x = event.clientX
+      this.y = event.clientY + 10
+      this.showMenuFlag = true
+    },
     formatJson() {
       const o = JSON.parse(this.params)
       this.params = JSON.stringify(o, null, 4)
@@ -305,26 +314,53 @@ export default {
     overflow: hidden;
 
     .bottom {
-      //background-color: #ec4040;
       overflow: auto;
       padding-top: 5px;
-      //background-color: #f6cfcf;
+
+      .menus {
+        position: fixed;
+        z-index: 1000;
+        background-color: #fff;
+        width: 100px;
+        height: 40px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 0 3px #333;
+        line-height: 20px;
+        .menu{
+          cursor: pointer;
+          &:hover{
+            background-color: #dedede;
+          }
+        }
+
+      }
+
       .table {
-        //background-color: #ea9898;
         padding-left: 10px;
-      }
 
-      .table:hover {
-        background-color: #f87070;
-      }
+        i {
+          margin-right: 5px;
+          line-height: 20px;
+        }
 
-      .table:nth-child(2n) {
-        background-color: #f6cdcd;
+        &:hover {
+          background-color: #dedede;
+        }
       }
 
       .column {
-        //background-color: #84d559;
         padding-left: 40px;
+
+        i {
+          margin-right: 5px;
+          line-height: 20px;
+        }
+
+        &:hover {
+          background-color: #dedede;
+        }
       }
     }
   }
