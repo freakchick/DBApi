@@ -39,7 +39,7 @@
           <el-radio :label="1">开放接口</el-radio>
         </el-radio-group>
 
-        <el-tooltip placement="top-start" effect="light">
+        <el-tooltip placement="top-start" effect="dark">
           <div slot="content">开放接口可以直接访问<br/>
 
             私有接口在访问时必须在请求头中携带token，且该token值对此接口有访问权限，具体请到权限菜单查看
@@ -52,7 +52,7 @@
         <div style="width: 400px;display: inline-block">
           <el-input v-model="detail.transformPlugin" placeholder="填写数据转换插件java类名" clearable></el-input>
         </div>
-        <el-tooltip placement="top-start" effect="light">
+        <el-tooltip placement="top-start" effect="dark">
           <div slot="content">填写表示开启数据转换功能，不填写表示不转换。转换逻辑是自定义插件中编写的逻辑</div>
           <i class="el-icon-info tip"></i>
         </el-tooltip>
@@ -61,7 +61,7 @@
         <div style="width: 400px;display: inline-block">
           <el-input v-model="detail.cachePlugin" placeholder="填写缓存插件java类名" clearable></el-input>
         </div>
-        <el-tooltip placement="top-start" effect="light">
+        <el-tooltip placement="top-start" effect="dark">
           <div slot="content">填写表示对结果数据开启缓存，不填写表示不开启缓存</div>
           <i class="el-icon-info tip"></i>
         </el-tooltip>

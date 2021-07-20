@@ -25,9 +25,9 @@
       <div class="top">
         <div class="tool">
           <div v-show="isFullScreen">
-            <div class="item" @click="run(false)"><i class="iconfont icon-play"></i><span>运行</span></div>
-            <div class="item" @click="run(true)"><i class="iconfont icon-play"></i><span>运行选中</span></div>
-            <div class="item" @click="parseSql"><i class="iconfont icon-play"></i><span>解析动态sql</span></div>
+            <div class="item" @click="run(false)"><i class="iconfont icon-play"></i><span>运行SQL</span></div>
+            <div class="item" @click="run(true)"><i class="iconfont icon-play"></i><span>运行选中SQL</span></div>
+            <div class="item" @click="parseSql"><i class="iconfont icon-play"></i><span>解析动态SQL</span></div>
           </div>
         </div>
         <div class="quick">
@@ -51,9 +51,16 @@
         >
         </codemirror>
         <div class="params">
-          <div>动态SQL参数设置：</div>
-          <el-input type="textarea" rows="20" v-model="params"></el-input>
-          <div>json格式</div>
+          <div style="display: inline-block">动态SQL参数设置：</div>
+          <el-tooltip placement="top-start" effect="dark">
+            <div slot="content">
+              填写sql运行需要的参数值，拼接成json格式
+            </div>
+            <i class="el-icon-info tip" style="color:#ccc"></i>
+          </el-tooltip>
+
+          <el-input type="textarea" rows="24" v-model="params" @input="input($event)"></el-input>
+          <el-button @click="formatJson" size="mini">json格式化</el-button>
         </div>
       </div>
       <div class="result">
@@ -107,7 +114,7 @@ export default {
         styleActiveLine: true,
         lineNumbers: true,
         mode: 'text/x-mysql',
-        theme: 'solarized light',
+        theme: 'idea',
         lint: true,                     // 代码出错提醒
         matchBrackets: true
       }
@@ -118,7 +125,14 @@ export default {
     codemirror, dbIcon
   },
   methods: {
-    parseSql(){
+    formatJson() {
+      const o = JSON.parse(this.params)
+      this.params = JSON.stringify(o, null, 4)
+    },
+    input(event) {
+      console.log(event)
+    },
+    parseSql() {
       this.axios.post("/apiConfig/parseDynamicSql",
           {sql: this.codemirror.getValue(), params: (this.params)}).then((response) => {
         if (response.data.success) {
@@ -248,6 +262,8 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+
+
 .full {
   z-index: 10;
   position: fixed;
@@ -284,7 +300,7 @@ export default {
     width: 250px !important;
     border: 1px solid #999999;
     line-height: 20px;
-    background-color: #f1f1f1;
+    background-color: #fff;
     flex-shrink: 0;
     overflow: hidden;
 
@@ -318,7 +334,7 @@ export default {
     width: 100%;
     border: 1px solid #999999;
     border-left: 0px;
-    background-color: #d9d9d9;
+    background-color: #fff;
 
     .top {
       height: 26px;
@@ -326,6 +342,7 @@ export default {
       display: flex;
       justify-content: space-between;
       border-bottom: 1px solid #82848a;
+      background-color: #d2d2d2;
 
       .tool {
         .item {
@@ -397,22 +414,41 @@ export default {
       .myMirror {
         width: 100%;
 
+        /deep/ .CodeMirror-line {
+          font-family: 'Consolas', Helvetica, Arial, sans-serif !important;
+          font-size: 18px !important;
+          line-height: 20px;
+
+          .cm-comment {
+            font-family: 'Consolas', Helvetica, Arial, sans-serif !important;
+            font-size: 18px !important;
+            line-height: 20px;
+          }
+        }
       }
 
 
       .params {
         padding: 5px;
-        width: 400px;
+        width: 600px;
         border-left: 1px solid #82848a;
-        background-color: #FFFFCC;
+        //background-color: #ccc;
         display: none;
         overflow: auto;
+
+        /deep/ .el-textarea__inner {
+          font-family: 'Consolas', Helvetica, Arial, sans-serif !important;
+          font-size: 18px !important;
+          line-height: 20px;
+        }
       }
+
+
     }
 
     .result {
       height: 300px;
-      background-color: #eee;
+      //background-color: #eee;
       display: none;
       border-top: 1px solid #82848a;
       padding: 5px;
