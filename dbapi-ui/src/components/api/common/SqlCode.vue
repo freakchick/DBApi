@@ -6,7 +6,7 @@
                    option_label="name" option_value="id" @optionClick="getTables"></my-select>
       </div>
       <div class="bottom">
-        <div class="menus" :style="`top:${y}px;left:${x}px`" v-show="showMenuFlag">
+        <div class="menus" :style="`top:${y}px;left:${x}px`" v-show="showMenuFlag" @onblur="showMenuFlag=false">
           <div class="menu" @click="copy">复制</div>
         </div>
         <div v-for="(item,index) in tables">
@@ -48,7 +48,7 @@
                     @inputRead="onCmCodeChange">
         </codemirror>
         <div class="params">
-          <div style="display: inline-block">动态SQL参数设置：</div>
+          <div style="display: inline-block">参数设置：</div>
           <el-tooltip placement="top-start" effect="dark">
             <div slot="content">
               填写sql运行需要的参数值，拼接成json格式
@@ -69,9 +69,14 @@
           <i class="el-icon-success"></i>
           {{ updateMsg }}
         </div>
-        <el-table :data="resultList" border style="width: 100%" v-if="resultList.length > 0" size="mini">
-          <el-table-column :prop="item" :label="item" v-for="item in Object.keys(resultList[0])"></el-table-column>
-        </el-table>
+        <div v-if="sqlMeta != null" class="sqlMeta">
+          {{ sqlMeta }}
+        </div>
+        <div class="table">
+          <el-table :data="resultList" border stripe style="width: 100%" v-if="resultList.length > 0" size="mini">
+            <el-table-column :prop="item" :label="item" v-for="item in Object.keys(resultList[0])"></el-table-column>
+          </el-table>
+        </div>
       </div>
     </div>
 
@@ -117,7 +122,8 @@ export default {
         theme: 'idea',
         lint: true,                     // 代码出错提醒
         matchBrackets: true
-      }
+      },
+      sqlMeta: null
     }
   },
 
@@ -125,7 +131,7 @@ export default {
     codemirror, dbIcon
   },
   methods: {
-    copy(){
+    copy() {
       this.showMenuFlag = false
     },
     showMenu() {
@@ -142,10 +148,14 @@ export default {
       console.log(event)
     },
     parseSql() {
+      this.resultList = []
+      this.updateMsg = null
+      this.error = null
+      this.sqlMeta = null
       this.axios.post("/apiConfig/parseDynamicSql",
           {sql: this.codemirror.getValue(), params: (this.params)}).then((response) => {
         if (response.data.success) {
-
+          this.sqlMeta = response.data.data
 
         } else {
           this.error = response.data.msg
@@ -172,6 +182,7 @@ export default {
       this.resultList = []
       this.updateMsg = null
       this.error = null
+      this.sqlMeta = null
 
       this.axios.post("/apiConfig/sql/execute",
           {sql: sql, datasourceId: this.datasourceId, params: this.params}).then((response) => {
@@ -206,7 +217,6 @@ export default {
         table: table
       }).then((response) => {
         this.columns = (response.data);
-        // console.log(this.tables)
       }).catch((error) => {
         this.$message.error("查询子节点失败")
       })
@@ -328,9 +338,11 @@ export default {
         border-radius: 5px;
         box-shadow: 0 0 3px #333;
         line-height: 20px;
-        .menu{
+
+        .menu {
           cursor: pointer;
-          &:hover{
+
+          &:hover {
             background-color: #dedede;
           }
         }
@@ -488,7 +500,14 @@ export default {
       display: none;
       border-top: 1px solid #82848a;
       padding: 5px;
-      overflow: auto;
+      overflow-x: auto;
+      width: 100%;
+
+      .table {
+        margin: 5px;
+        overflow: auto;
+        width: 98%;
+      }
 
       .error {
         color: #f60303;

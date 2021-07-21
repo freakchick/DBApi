@@ -80,8 +80,13 @@ export default {
     },
     handleInput(e) {
       // this.$emit("input", e.target.value);
-    },
+    }
   },
+  watch: {
+   /* a(val, oldVal) {//普通的watch监听
+      console.log("a: " + val, oldVal);
+    }*/
+  }
 };
 </script>
 
@@ -115,6 +120,7 @@ export default {
     display: inline-block;
     position: relative;
     vertical-align: middle;
+
     .icon {
       position: absolute;
       right: 0px;
@@ -164,7 +170,8 @@ export default {
           background-color: #f6f6f6;
         }
       }
-      .none{
+
+      .none {
         text-align: center;
         color: #ccc;
       }
