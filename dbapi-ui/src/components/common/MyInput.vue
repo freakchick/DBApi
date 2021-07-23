@@ -9,7 +9,7 @@
 export default {
   props: {
     value: {
-      type: String,
+      type: String | Number,
       default: "",
     },
     label: {
@@ -82,7 +82,7 @@ export default {
     outline: 0px solid #afecab;
     border-radius: 0 5px 5px 0;
     font-family: Consolas, Arial, monospace !important;
-
+    font-size: 16px;
     &:focus {
       border: 1px solid #009933;
       border-left: 0px;

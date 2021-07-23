@@ -295,7 +295,25 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+::-webkit-scrollbar {
+  /*滚动条整体样式*/
+  width: 6px; /*高宽分别对应横竖滚动条的尺寸*/
+  height: 1px;
+}
 
+::-webkit-scrollbar-thumb {
+  /*滚动条里面小方块*/
+  border-radius: 6px;
+  //box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  background: #a0a0a0;
+}
+
+::-webkit-scrollbar-track {
+  /*滚动条里面轨道*/
+  //box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  //background: #ededed;
+}
 
 .full {
   z-index: 10;
@@ -371,8 +389,9 @@ export default {
       }
 
       .table {
-        padding-left: 10px;
+        padding-left: 5px;
         font-size: 16px;
+
         i {
           margin-right: 5px;
           line-height: 20px;
@@ -384,7 +403,7 @@ export default {
       }
 
       .column {
-        padding-left: 30px;
+        padding-left: 35px;
 
         .columnType {
           //background-color: #cdf2f6;
