@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +38,8 @@ public class TableController {
         List<JSONObject> list = tables.stream().map(t -> {
             JSONObject jo = new JSONObject();
             jo.put("label", t);
+            jo.put("columns", new ArrayList<Object>());
+            jo.put("showColumns", false);
             return jo;
         }).collect(Collectors.toList());
         return list;

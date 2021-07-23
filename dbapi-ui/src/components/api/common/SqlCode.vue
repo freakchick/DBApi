@@ -10,14 +10,19 @@
           <div class="menu" @click="copy">复制</div>
         </div>
         <div v-for="(item,index) in tables">
-          <div @click="getColumns(item.label,index)">
-            <div class="table" @contextmenu.prevent="showMenu()"><i class="iconfont icon-table"></i>{{ item.label }}
+          <div>
+            <div class="table" @click.prevent="getColumns(item.label,index)" @contextmenu.prevent="showMenu()">
+              <i class="iconfont icon-table"></i>{{ item.label }}
             </div>
+            <div v-show="item.showColumns">
+              <div v-for="(it) in item.columns" class="column">
+                <!--              <i class="iconfont icon-ziyuan"></i>-->
+                <span class="columnName">{{ it.label }}</span>
+                <span class="columnType">{{
+                    it.TypeName
+                  }}</span>
 
-            <div v-for="(it) in columns" v-if="current == index" class="column">
-              <i class="iconfont icon-ziyuan"></i>
-              <span>{{ it.label }}</span>
-
+              </div>
             </div>
           </div>
         </div>
@@ -70,12 +75,14 @@
           {{ updateMsg }}
         </div>
         <div v-if="sqlMeta != null" class="sqlMeta">
-          {{ sqlMeta }}
+          <div class="sql">{{ sqlMeta.sql }}</div>
+          <div class="sql">{{ sqlMeta.jdbcParamValues }}</div>
         </div>
         <div class="table">
           <el-table :data="resultList" border stripe style="width: 100%" v-if="resultList.length > 0" size="mini">
             <el-table-column :prop="item" :label="item" v-for="item in Object.keys(resultList[0])"></el-table-column>
           </el-table>
+          <div v-else>查询结果为空</div>
         </div>
       </div>
     </div>
@@ -113,7 +120,8 @@ export default {
       mode: 'mini',
       params: null,
       datasourceId: null, datasources: [],
-      tables: [], table: null, columns: [], current: null,
+      tables: [], table: null,
+      // columns: [], current: null,
       cmOptions: {
         value: '',
         styleActiveLine: true,
@@ -189,6 +197,7 @@ export default {
         if (response.data.success) {
           if (Array.isArray(response.data.data)) {
             this.resultList = response.data.data
+
           } else {
             this.updateMsg = response.data.data
           }
@@ -211,15 +220,20 @@ export default {
       this.codemirror.setSize('100%', '400px')
     },
     getColumns(table, index) {
-      this.current = index
-      this.axios.post("/table/getAllColumns", {
-        sourceId: this.datasourceId,
-        table: table
-      }).then((response) => {
-        this.columns = (response.data);
-      }).catch((error) => {
-        this.$message.error("查询子节点失败")
-      })
+      if (this.tables[index].columns.length == 0) {
+        this.axios.post("/table/getAllColumns", {
+          sourceId: this.datasourceId,
+          table: table
+        }).then((response) => {
+          this.tables[index].columns = response.data
+          this.tables[index].showColumns = true
+        }).catch((error) => {
+          // this.$message.error("查询子节点失败")
+        })
+      } else {
+        this.tables[index].showColumns = !(this.tables[index].showColumns)
+      }
+
     },
     getAllSource() {
       this.axios.post("/datasource/getAll").then((response) => {
@@ -293,6 +307,11 @@ export default {
 
   .left {
     width: 300px !important;
+    height: calc(100vh - 20px) !important;
+
+    .bottom {
+      height: calc(100vh - 30px) !important;
+    }
   }
 
   .right {
@@ -317,13 +336,15 @@ export default {
 
   .left {
     width: 250px !important;
+    height: 430px;
     border: 1px solid #999999;
     line-height: 20px;
     background-color: #fff;
     flex-shrink: 0;
-    overflow: hidden;
+    //overflow: auto;
 
     .bottom {
+      height: 400px;
       overflow: auto;
       padding-top: 5px;
 
@@ -351,7 +372,7 @@ export default {
 
       .table {
         padding-left: 10px;
-
+        font-size: 16px;
         i {
           margin-right: 5px;
           line-height: 20px;
@@ -363,7 +384,22 @@ export default {
       }
 
       .column {
-        padding-left: 40px;
+        padding-left: 30px;
+
+        .columnType {
+          //background-color: #cdf2f6;
+          margin-left: 5px;
+          padding: 0 3px;
+          color: #ccc;
+          font-size: 10px;
+        }
+
+        .columnName {
+          background-color: #eaeaea;
+          margin-left: 5px;
+          padding: 0 3px;
+          font-size: 16px;
+        }
 
         i {
           margin-right: 5px;
@@ -512,6 +548,16 @@ export default {
       .error {
         color: #f60303;
 
+      }
+
+      .sqlMeta {
+        .sql {
+          line-height: 20px;
+          background-color: #f3f3f3;
+          padding: 5px;
+          margin: 3px;
+          white-space: pre-wrap
+        }
       }
     }
   }
