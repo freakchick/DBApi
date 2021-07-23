@@ -65,7 +65,6 @@ export default {
   methods: {
     getLabel() {
       let p = null;
-      // console.log(this.options);
       this.options.forEach((elem, index) => {
         if (elem[this.option_value] == this.value) {
           p = elem[this.option_label];
@@ -83,9 +82,9 @@ export default {
     }
   },
   watch: {
-   /* a(val, oldVal) {//普通的watch监听
-      console.log("a: " + val, oldVal);
-    }*/
+    value(val, oldVal) {//普通的watch监听
+      this.$emit("onchange", val)
+    }
   }
 };
 </script>

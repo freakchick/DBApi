@@ -3,7 +3,7 @@
     <div class="left">
       <div>
         <my-select v-model="datasourceId" :options="datasources" :nullable="false" label="数据源" size="mini" width="176px"
-                   option_label="name" option_value="id" @optionClick="getTables"></my-select>
+                   option_label="name" option_value="id" @onchange="getTables"></my-select>
       </div>
       <div class="bottom">
         <div class="menus" :style="`top:${y}px;left:${x}px`" v-show="showMenuFlag" @onblur="showMenuFlag=false">
@@ -18,10 +18,7 @@
               <div v-for="(it) in item.columns" class="column">
                 <!--              <i class="iconfont icon-ziyuan"></i>-->
                 <span class="columnName">{{ it.label }}</span>
-                <span class="columnType">{{
-                    it.TypeName
-                  }}</span>
-
+                <span class="columnType">{{it.TypeName}}</span>
               </div>
             </div>
           </div>
@@ -242,8 +239,8 @@ export default {
         this.$message.error("查询所有数据源失败")
       })
     },
-    getTables() {
-      this.axios.post("/table/getAllTables", {sourceId: this.datasourceId}).then((response) => {
+    getTables(datasourceId) {
+      this.axios.post("/table/getAllTables", {sourceId: datasourceId}).then((response) => {
         this.tables = response.data
       }).catch((error) => {
         this.$message.error("查询所有表失败")
@@ -311,7 +308,7 @@ export default {
 ::-webkit-scrollbar-track {
   /*滚动条里面轨道*/
   //box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-  border-radius: 6px;
+  border-radius: 16px;
   //background: #ededed;
 }
 
