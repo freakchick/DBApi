@@ -79,9 +79,9 @@
                     <resources>
                         <resource>
                             <targetPath>/</targetPath>
-                            <directory>${project.build.directory}</directory>
+                            <directory>${project.parent.basedir}/dist</directory>
                             <!--tar包上传会自动解压-->
-                            <include>${project.build.finalName}-bin.tar.gz</include>
+                            <include>${project.build.finalName}.tar.gz</include>
                         </resource>
                     </resources>
                     <serverId>docker-hub</serverId>
