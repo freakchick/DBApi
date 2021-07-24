@@ -5,11 +5,12 @@ import com.jq.dbapi.plugin.TransformPlugin;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PluginManager {
 
-    private static Map<String, CachePlugin> cachePlugins = new HashMap<>();
-    private static Map<String, TransformPlugin> transformPlugins = new HashMap<>();
+    private static Map<String, CachePlugin> cachePlugins = new ConcurrentHashMap<>();
+    private static Map<String, TransformPlugin> transformPlugins = new ConcurrentHashMap<>();
 
     public static CachePlugin getCachePlugin(String className) {
         if (cachePlugins.containsKey(className)) {

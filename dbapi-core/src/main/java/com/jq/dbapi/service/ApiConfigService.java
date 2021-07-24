@@ -7,7 +7,10 @@ import com.jq.dbapi.dao.ApiConfigMapper;
 import com.jq.dbapi.dao.DataSourceMapper;
 import com.jq.dbapi.domain.ApiDto;
 import com.jq.dbapi.common.ApiConfig;
+import com.jq.dbapi.plugin.CachePlugin;
+import com.jq.dbapi.util.PluginManager;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -61,6 +64,15 @@ public class ApiConfigService {
         } else {
             apiConfig.setStatus(0);
             apiConfigMapper.updateById(apiConfig);
+            //清除所有缓存
+            if (StringUtils.isNoneBlank(apiConfig.getCachePlugin())) {
+                try {
+                    CachePlugin cachePlugin = PluginManager.getCachePlugin(apiConfig.getCachePlugin());
+                    cachePlugin.clean(apiConfig);
+                } catch (Exception e) {
+                    log.error("清除缓存失败", e);
+                }
+            }
             return ResponseDto.successWithMsg("修改成功");
         }
 
@@ -69,7 +81,17 @@ public class ApiConfigService {
     @CacheEvict(value = "api", key = "#path")
     @Transactional
     public void delete(Integer id, String path) {
+        ApiConfig apiConfig = apiConfigMapper.selectById(id);
         apiConfigMapper.deleteById(id);
+        //清除所有缓存
+        if (StringUtils.isNoneBlank(apiConfig.getCachePlugin())) {
+            try {
+                CachePlugin cachePlugin = PluginManager.getCachePlugin(apiConfig.getCachePlugin());
+                cachePlugin.clean(apiConfig);
+            } catch (Exception e) {
+                log.error("清除缓存失败", e);
+            }
+        }
     }
 
     public ApiConfig detail(Integer id) {
