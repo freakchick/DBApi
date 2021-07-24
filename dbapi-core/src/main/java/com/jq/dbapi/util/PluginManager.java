@@ -2,11 +2,13 @@ package com.jq.dbapi.util;
 
 import com.jq.dbapi.plugin.CachePlugin;
 import com.jq.dbapi.plugin.TransformPlugin;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Slf4j
 public class PluginManager {
 
     private static Map<String, CachePlugin> cachePlugins = new ConcurrentHashMap<>();
@@ -22,6 +24,7 @@ public class PluginManager {
                 cachePlugins.put(className, plugin);
                 return cachePlugins.get(className);
             } catch (Exception e) {
+                log.error("获取缓存插件失败", e);
                 return null;
             }
         }
@@ -37,6 +40,7 @@ public class PluginManager {
                 transformPlugins.put(className, plugin);
                 return transformPlugins.get(className);
             } catch (Exception e) {
+                log.error("获取转换插件失败", e);
                 return null;
             }
         }
