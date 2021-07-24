@@ -6,9 +6,9 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.util.List;
 
 /**
- * 字段加密插件
+ * md5字段加密插件
  */
-public class EncryptTransformer implements TransformPlugin {
+public class EncryptTransformerPlugin implements TransformPlugin {
     @Override
     public Object transform(List<JSONObject> data) {
         String[] columns = PluginConf.getKey("EncryptTransformer.columns").split(";");
