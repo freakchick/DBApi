@@ -76,10 +76,10 @@
           <div class="sql">{{ sqlMeta.jdbcParamValues }}</div>
         </div>
         <div class="table">
-          <el-table :data="resultList" border stripe style="width: 100%" v-if="resultList.length > 0" size="mini">
+          <el-table :data="resultList" border stripe style="width: 100%" v-if="resultList != null && resultList.length > 0" size="mini">
             <el-table-column :prop="item" :label="item" v-for="item in Object.keys(resultList[0])"></el-table-column>
           </el-table>
-          <div v-else>查询结果为空</div>
+          <div v-if="resultList != null && resultList.length == 0">查询结果为空</div>
         </div>
       </div>
     </div>
@@ -111,7 +111,7 @@ export default {
       x: 0, //菜单坐标
       y: 0,//菜单坐标
       showMenuFlag: false,
-      resultList: [],
+      resultList: null,
       error: null, updateMsg: null,
       isFullScreen: false,
       mode: 'mini',
@@ -153,7 +153,7 @@ export default {
       console.log(event)
     },
     parseSql() {
-      this.resultList = []
+      this.resultList = null
       this.updateMsg = null
       this.error = null
       this.sqlMeta = null
@@ -184,7 +184,7 @@ export default {
         this.$message.error("请先输入sql")
         return
       }
-      this.resultList = []
+      this.resultList = null
       this.updateMsg = null
       this.error = null
       this.sqlMeta = null
