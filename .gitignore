@@ -1,5 +1,5 @@
-target/
-logs/
-*.iml
+**/target/
+**/logs/
+**/*.iml
 .idea/
 dist/

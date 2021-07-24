@@ -147,18 +147,22 @@ public class ApiConfigController {
 
     @RequestMapping("/sql/execute")
     public ResponseDto executeSql(Integer datasourceId, String sql, String params) {
-        DataSource dataSource = dataSourceService.detail(datasourceId);
-        Map<String, Object> map = JSON.parseObject(params, Map.class);
-        SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(sql, map);
-        ResponseDto responseDto = JdbcUtil.executeSql(dataSource, sqlMeta.getSql(), sqlMeta.getJdbcParamValues());
-        return responseDto;
+        try {
+            DataSource dataSource = dataSourceService.detail(datasourceId);
+            Map<String, Object> map = JSON.parseObject(params, Map.class);
+            SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(sql, map);
+            ResponseDto responseDto = JdbcUtil.executeSql(dataSource, sqlMeta.getSql(), sqlMeta.getJdbcParamValues());
+            return responseDto;
+        } catch (Exception e) {
+            return ResponseDto.fail(e.getMessage());
+        }
 
     }
 
     @RequestMapping("/parseDynamicSql")
     public ResponseDto parseDynamicSql(String sql, String params) {
         try {
-            Map<String,Object> map = JSON.parseObject(params, Map.class);
+            Map<String, Object> map = JSON.parseObject(params, Map.class);
             SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(sql, map);
             return ResponseDto.successWithData(sqlMeta);
         } catch (Exception e) {

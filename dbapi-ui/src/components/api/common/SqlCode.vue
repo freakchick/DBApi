@@ -115,7 +115,7 @@ export default {
       error: null, updateMsg: null,
       isFullScreen: false,
       mode: 'mini',
-      params: null,
+      params: "{}",
       datasourceId: null, datasources: [],
       tables: [], table: null,
       // columns: [], current: null,
@@ -203,7 +203,7 @@ export default {
           this.error = response.data.msg
         }
       }).catch((error) => {
-        // this.$message.error("查询所有数据源失败")
+         this.$message.error(error)
       })
     },
     fullWindow() {
@@ -356,7 +356,6 @@ export default {
     line-height: 20px;
     background-color: #fff;
     flex-shrink: 0;
-    //overflow: auto;
 
     .bottom {
       height: 400px;
@@ -435,6 +434,8 @@ export default {
     border: 1px solid #999999;
     border-left: 0px;
     background-color: #fff;
+    //flex-shrink: 0;
+    //flex-grow: 3;
 
     .top {
       height: 26px;
@@ -504,16 +505,16 @@ export default {
 
     .code {
       display: flex;
-      width: 100%;
+      //width: 100%;
+
       height: 400px;
-      //background-color: #a8eee3;
       padding: 0px;
       overflow: auto;
-      overscroll-y: scroll !important;
+      //background-color: #f13838;
 
       .myMirror {
         width: 100%;
-
+        //max-width: 100%;
         /deep/ .CodeMirror-line {
           font-family: 'Consolas', Helvetica, Arial, sans-serif !important;
           font-size: 18px !important;
@@ -552,7 +553,7 @@ export default {
       display: none;
       border-top: 1px solid #82848a;
       padding: 5px;
-      overflow-x: auto;
+      overflow: auto;
       width: 100%;
 
       .table {
