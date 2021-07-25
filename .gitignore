@@ -2,4 +2,5 @@
 **/logs/
 **/*.iml
 .idea/
-dist/
+**/dist/
+dbapi-core/src/main/resources/static/
