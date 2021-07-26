@@ -18,10 +18,10 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.jq</groupId>
+            <groupId>com.jq.dbapi</groupId>
             <artifactId>dbapi-common</artifactId>
-            <version>2.3.0</version>
-            <scope>compile</scope>
+            <!--<version>${revision}</version>
+            <scope>compile</scope>-->
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
