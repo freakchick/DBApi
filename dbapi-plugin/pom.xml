@@ -20,8 +20,8 @@
         <dependency>
             <groupId>com.jq.dbapi</groupId>
             <artifactId>dbapi-common</artifactId>
-            <!--<version>${revision}</version>
-            <scope>compile</scope>-->
+            <version>${revision}</version>
+<!--            <scope>compile</scope>-->
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>

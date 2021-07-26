@@ -24,6 +24,7 @@
         <dependency>
             <groupId>com.jq.dbapi</groupId>
             <artifactId>dbapi-core</artifactId>
+            <version>${revision}</version>
         </dependency>
     </dependencies>
 

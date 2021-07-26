@@ -27,8 +27,7 @@
         <dependency>
             <groupId>com.jq.dbapi</groupId>
             <artifactId>dbapi-plugin</artifactId>
-           <!-- <version>2.3.0</version>
-            <scope>compile</scope>-->
+            <version>${revision}</version>
         </dependency>
 
         <dependency>
