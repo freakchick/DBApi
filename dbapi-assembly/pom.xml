@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>dbapi</artifactId>
-        <groupId>com.jq</groupId>
-        <version>2.3.0</version>
+        <groupId>com.jq.dbapi</groupId>
+        <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,6 +15,8 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <docker.image.prefix>freakchicken</docker.image.prefix>
+        <maven.install.skip>true</maven.install.skip>
+<!--        <maven.deploy.skip>true</maven.deploy.skip>-->
     </properties>
 
     <dependencies>

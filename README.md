@@ -208,6 +208,12 @@ http://localhost:8520
 <img src="https://freakchicken.gitee.io/images/kafkaui/wechat.jpg" width = "30%" />
 </div>
 
+### 微信交流群：
+
+<div style="text-align: center"> 
+<img src="https://freakchicken.gitee.io/images/dbApi/wechatGroup.png" width = "40%" />
+</div>
+
 ### qq交流群：
 
 <div style="text-align: center"> 
@@ -216,7 +222,7 @@ http://localhost:8520
 
 ### 捐赠：
 
-如果您喜欢此项目，请给捐助作者一杯咖啡
+如果此项目帮助到您，请捐赠作者一杯咖啡
 <div style="text-align: center"> 
 <img src="https://freakchicken.gitee.io/images/kafkaui/wechatpay.jpg" width = "30%" />
 <img src="https://freakchicken.gitee.io/images/kafkaui/alipay.jpg" width = "29%" />
@@ -225,3 +231,9 @@ http://localhost:8520
 ## TODO
 
 - 集群版本开发，支持微服务注册consul/eureka/nacos
+- api熔断支持
+- 请求路由参数支持
+- 流量监控支持，ip限流，分组限流
+- api配置导入导出支持
+- 功能性api支持（RPC调用）
+- 分库分表数据源支持（shardingSphere/mycat）

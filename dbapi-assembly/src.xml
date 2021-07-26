@@ -1,4 +1,6 @@
-<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
     <id>bin</id>
     <formats>
         <format>tar.gz</format>
@@ -9,7 +11,11 @@
         <dependencySet>
             <useProjectArtifact>true</useProjectArtifact>
             <outputDirectory>lib</outputDirectory>
-<!--            <unpack>false</unpack>-->
+            <excludes>
+                <!--  排除assembly自身打的jar包-->
+                <exclude>com.jq.dbapi:dbapi-assembly</exclude>
+            </excludes>
+            <!--            <unpack>false</unpack>-->
         </dependencySet>
     </dependencySets>
     <fileSets>
@@ -25,7 +31,7 @@
         <fileSet>
             <directory>${project.basedir}/bin</directory>
             <outputDirectory>bin</outputDirectory>
-<!--            <lineEnding>windows</lineEnding>-->
+            <!--            <lineEnding>windows</lineEnding>-->
             <includes>
                 <include>*.bat</include>
             </includes>
@@ -43,9 +49,9 @@
         <fileSet>
             <directory>${project.parent.basedir}/dbapi-core/src/main/resources</directory>
             <outputDirectory>conf</outputDirectory>
-<!--            不要设置文件编码格式之类的，否则sqlite数据库文件会损坏-->
-<!--            <lineEnding>unix</lineEnding>-->
-<!--            <fileMode>644</fileMode>-->
+            <!--            不要设置文件编码格式之类的，否则sqlite数据库文件会损坏-->
+            <!--            <lineEnding>unix</lineEnding>-->
+            <!--            <fileMode>644</fileMode>-->
             <includes>
                 <include>*.properties</include>
                 <include>*.xml</include>
@@ -68,7 +74,6 @@
                 <include>*.xml</include>
             </includes>
         </fileSet>
-
 
 
     </fileSets>
