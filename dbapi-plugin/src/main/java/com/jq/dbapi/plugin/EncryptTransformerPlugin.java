@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * md5字段加密插件
  */
-public class EncryptTransformerPlugin implements TransformPlugin {
+public class EncryptTransformerPlugin extends TransformPlugin {
     @Override
     public Object transform(List<JSONObject> data) {
         String[] columns = PluginConf.getKey("EncryptTransformer.columns").split(";");

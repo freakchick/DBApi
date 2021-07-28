@@ -7,11 +7,11 @@ import java.util.Map;
 /**
  * redis缓存插件
  */
-public class RedisCachePlugin implements CachePlugin {
+public class RedisCachePlugin extends CachePlugin {
 
     @Override
     public void set(ApiConfig config, Map<String, Object> params, Object data) {
-
+        logger.info("haha");
     }
 
     @Override
