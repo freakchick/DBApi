@@ -28,7 +28,7 @@ public class RedisCachePlugin extends CachePlugin {
         }
         pool = new JedisPool(jcon, PluginConf.getKey("RedisCachePlugin.ip"),
                 Integer.parseInt(PluginConf.getKey("RedisCachePlugin.port")), 100,
-                null,
+                password,
                 Integer.parseInt(PluginConf.getKey("RedisCachePlugin.db")));
 
         super.logger.info("init jedis pool success");
@@ -39,7 +39,6 @@ public class RedisCachePlugin extends CachePlugin {
         super.logger.debug("set data to cache");
         Jedis jedis = null;
         try {
-//            JedisPool pool = JedisUtil.getPool();
             jedis = pool.getResource();
             String key = "api-" + apiConfig.getId();
             String hashKey = "";
@@ -60,7 +59,6 @@ public class RedisCachePlugin extends CachePlugin {
     public void clean(ApiConfig apiConfig) {
         Jedis jedis = null;
         try {
-//            JedisPool pool = JedisUtil.getPool();
             jedis = pool.getResource();
             String key = "api-" + apiConfig.getId();
             jedis.del(key);
@@ -79,7 +77,6 @@ public class RedisCachePlugin extends CachePlugin {
         super.logger.debug("get data from cache");
         Jedis jedis = null;
         try {
-//            JedisPool pool = JedisUtil.getPool();
             jedis = pool.getResource();
             String key = "api-" + apiConfig.getId();
             String hashKey = "";
