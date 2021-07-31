@@ -11,6 +11,12 @@ public abstract class CachePlugin {
     public Logger logger = LoggerFactory.getLogger(CachePlugin.class);
 
     /**
+     * 插件初始化方法，实例化插件的时候执行，永远只会执行一次，
+     * 一般是用来创建连接池
+     */
+    public abstract void init();
+
+    /**
      * 缓存设置
      *
      * @param config api配置
@@ -20,7 +26,7 @@ public abstract class CachePlugin {
     public abstract void set(ApiConfig config, Map<String, Object> params, Object data);
 
     /**
-     * 清除所有缓存
+     * 清除所有缓存，API修改、删除、下线的时候会触发清除缓存
      *
      * @param config api配置
      */

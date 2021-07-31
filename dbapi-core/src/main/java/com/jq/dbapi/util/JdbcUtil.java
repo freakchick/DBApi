@@ -2,10 +2,12 @@ package com.jq.dbapi.util;
 
 import com.alibaba.druid.pool.DruidPooledConnection;
 import com.alibaba.druid.util.JdbcConstants;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jq.dbapi.common.ResponseDto;
 import com.jq.dbapi.domain.DataSource;
 import lombok.extern.slf4j.Slf4j;
+
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -158,6 +160,7 @@ public class JdbcUtil {
 
     public static ResponseDto executeSql(DataSource datasource, String sql, List<Object> jdbcParamValues) {
         log.debug(sql);
+        log.debug(JSON.toJSONString(jdbcParamValues));
         DruidPooledConnection connection = null;
         try {
 

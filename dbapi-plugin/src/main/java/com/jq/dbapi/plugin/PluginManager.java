@@ -18,6 +18,7 @@ public class PluginManager {
             try {
                 Class clazz = Class.forName(className);
                 CachePlugin plugin = (CachePlugin) clazz.newInstance();
+                plugin.init();
                 cachePlugins.put(className, plugin);
                 return cachePlugins.get(className);
             } catch (Exception e) {
