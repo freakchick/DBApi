@@ -1,6 +1,6 @@
 package com.jq.dbapi.util;
 
-import com.jq.orange.engine.DynamicSqlEngine;
+import com.github.freakchick.orange.engine.DynamicSqlEngine;
 
 /**
  * @program: dbApi

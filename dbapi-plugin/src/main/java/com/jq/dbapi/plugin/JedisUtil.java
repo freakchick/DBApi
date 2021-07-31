@@ -1,5 +1,6 @@
 package com.jq.dbapi.plugin;
 
+import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
@@ -17,5 +18,9 @@ public class JedisUtil {
                 PluginConf.getKey("RedisCachePlugin.password"),
                 Integer.parseInt(PluginConf.getKey("RedisCachePlugin.db")));
         return jedisPool;
+    }
+
+    public static void main(String[] args) {
+        Jedis resource = getPool().getResource();
     }
 }

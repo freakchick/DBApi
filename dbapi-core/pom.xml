@@ -194,7 +194,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.jq</groupId>
+            <groupId>com.github.freakchick</groupId>
             <artifactId>orange</artifactId>
             <version>1.0</version>
         </dependency>

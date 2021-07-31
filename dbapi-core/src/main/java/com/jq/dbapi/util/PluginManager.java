@@ -24,7 +24,7 @@ public class PluginManager {
                 cachePlugins.put(className, plugin);
                 return cachePlugins.get(className);
             } catch (Exception e) {
-                log.error("获取缓存插件失败", e);
+                log.error("获取缓存插件失败" + className, e);
                 return null;
             }
         }
@@ -40,7 +40,7 @@ public class PluginManager {
                 transformPlugins.put(className, plugin);
                 return transformPlugins.get(className);
             } catch (Exception e) {
-                log.error("获取转换插件失败", e);
+                log.error("获取转换插件失败" + className, e);
                 return null;
             }
         }

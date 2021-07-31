@@ -2,6 +2,7 @@ package com.jq.dbapi.conf;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.github.freakchick.orange.SqlMeta;
 import com.jq.dbapi.common.ResponseDto;
 import com.jq.dbapi.common.ApiConfig;
 import com.jq.dbapi.domain.DataSource;
@@ -13,7 +14,6 @@ import com.jq.dbapi.util.IPUtil;
 import com.jq.dbapi.util.JdbcUtil;
 import com.jq.dbapi.util.PluginManager;
 import com.jq.dbapi.util.SqlEngineUtil;
-import com.jq.orange.SqlMeta;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
