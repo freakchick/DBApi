@@ -34,7 +34,7 @@ public class IPService {
 
 //    @Cacheable(value = "ipRules")
     public Map<String, String> detail() {
-        log.info("sql 查询 ipRules");
+        log.debug("sql 查询 ipRules");
         List<Map<String, String>> ipRule = ipMapper.getIPRule();
         Map<String, String> status = ipMapper.getStatus();
         ipRule.stream().forEach(t -> {

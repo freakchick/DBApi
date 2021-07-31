@@ -12,7 +12,7 @@ import java.util.Map;
 public class RedisCachePlugin extends CachePlugin {
     @Override
     public void set(ApiConfig apiConfig, Map<String, Object> map, Object data) {
-        super.logger.info("设置缓存");
+        super.logger.debug("set data to cache");
         Jedis jedis = null;
         try {
             JedisPool pool = JedisUtil.getPool();
@@ -34,7 +34,6 @@ public class RedisCachePlugin extends CachePlugin {
 
     @Override
     public void clean(ApiConfig apiConfig) {
-        super.logger.info("清除缓存");
         Jedis jedis = null;
         try {
             JedisPool pool = JedisUtil.getPool();
@@ -53,7 +52,7 @@ public class RedisCachePlugin extends CachePlugin {
 
     @Override
     public Object get(ApiConfig apiConfig, Map<String, Object> map) {
-        super.logger.info("查询缓存");
+        super.logger.debug("get data from cache");
         Jedis jedis = null;
         try {
             JedisPool pool = JedisUtil.getPool();

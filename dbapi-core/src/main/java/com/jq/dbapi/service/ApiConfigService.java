@@ -3,12 +3,13 @@ package com.jq.dbapi.service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.jq.dbapi.common.ApiConfig;
+import com.jq.dbapi.common.ResponseDto;
 import com.jq.dbapi.dao.ApiConfigMapper;
 import com.jq.dbapi.dao.DataSourceMapper;
 import com.jq.dbapi.domain.ApiDto;
-import com.jq.dbapi.common.ApiConfig;
 import com.jq.dbapi.plugin.CachePlugin;
-import com.jq.dbapi.util.PluginManager;
+import com.jq.dbapi.plugin.PluginManager;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,6 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.jq.dbapi.common.ResponseDto;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -62,13 +62,15 @@ public class ApiConfigService {
         if (size > 0) {
             return ResponseDto.fail("该路径已被使用，请修改请求路径再保存");
         } else {
+            ApiConfig oldConfig = apiConfigMapper.selectById(apiConfig.getId());
             apiConfig.setStatus(0);
             apiConfigMapper.updateById(apiConfig);
             //清除所有缓存
             if (StringUtils.isNoneBlank(apiConfig.getCachePlugin())) {
                 try {
-                    CachePlugin cachePlugin = PluginManager.getCachePlugin(apiConfig.getCachePlugin());
-                    cachePlugin.clean(apiConfig);
+                    CachePlugin cachePlugin = PluginManager.getCachePlugin(oldConfig.getCachePlugin());
+                    cachePlugin.clean(oldConfig);
+                    log.debug("update api config, then clean cache");
                 } catch (Exception e) {
                     log.error("清除缓存失败", e);
                 }
@@ -88,6 +90,7 @@ public class ApiConfigService {
             try {
                 CachePlugin cachePlugin = PluginManager.getCachePlugin(apiConfig.getCachePlugin());
                 cachePlugin.clean(apiConfig);
+                log.debug("delete api then clean cache");
             } catch (Exception e) {
                 log.error("清除缓存失败", e);
             }
@@ -125,7 +128,6 @@ public class ApiConfigService {
 
     @Cacheable(value = "api", key = "#path", unless = "#result == null")
     public ApiConfig getConfig(String path) {
-        log.info("执行sql查询api参数");
         return apiConfigMapper.selectByPathOnline(path);
     }
 
@@ -142,6 +144,15 @@ public class ApiConfigService {
         ApiConfig apiConfig = apiConfigMapper.selectById(id);
         apiConfig.setStatus(0);
         apiConfigMapper.updateById(apiConfig);
+        if (StringUtils.isNoneBlank(apiConfig.getCachePlugin())) {
+            try {
+                CachePlugin cachePlugin = PluginManager.getCachePlugin(apiConfig.getCachePlugin());
+                cachePlugin.clean(apiConfig);
+                log.debug("offline api then clean cache");
+            } catch (Exception e) {
+                log.error("clean cache error", e);
+            }
+        }
     }
 
     public String getPath(Integer id) {

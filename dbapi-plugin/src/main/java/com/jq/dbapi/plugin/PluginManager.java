@@ -1,10 +1,7 @@
-package com.jq.dbapi.util;
+package com.jq.dbapi.plugin;
 
-import com.jq.dbapi.plugin.CachePlugin;
-import com.jq.dbapi.plugin.TransformPlugin;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 

@@ -157,7 +157,7 @@ public class JdbcUtil {
     }
 
     public static ResponseDto executeSql(DataSource datasource, String sql, List<Object> jdbcParamValues) {
-        log.info("执行sql查询");
+        log.debug(sql);
         DruidPooledConnection connection = null;
         try {
 

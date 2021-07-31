@@ -12,7 +12,7 @@ import com.jq.dbapi.plugin.TransformPlugin;
 import com.jq.dbapi.service.*;
 import com.jq.dbapi.util.IPUtil;
 import com.jq.dbapi.util.JdbcUtil;
-import com.jq.dbapi.util.PluginManager;
+import com.jq.dbapi.plugin.PluginManager;
 import com.jq.dbapi.util.SqlEngineUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -49,12 +49,12 @@ public class ApiInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2) throws Exception {
         String originIp = IPUtil.getOriginIp(request);
-        System.out.println(originIp);
+        log.debug(originIp);
 
         String method = request.getMethod();
         String servletPath = request.getServletPath();
         servletPath = servletPath.substring(5);
-        log.info(servletPath);
+        log.debug(servletPath);
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=utf-8");
         // 跨域设置
@@ -79,7 +79,7 @@ public class ApiInterceptor implements HandlerInterceptor {
             }
             ResponseDto responseDto = process(servletPath, request, response);
 
-            log.info(JSON.toJSONString(responseDto));
+            log.debug(JSON.toJSONString(responseDto));
             out.append(JSON.toJSONString(responseDto));
             return false;
 
@@ -189,7 +189,6 @@ public class ApiInterceptor implements HandlerInterceptor {
 
             String sql = config.getSql();
             SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(sql, sqlParam);
-            log.info(sqlMeta.getSql());
             ResponseDto responseDto = JdbcUtil.executeSql(datasource, sqlMeta.getSql(), sqlMeta.getJdbcParamValues());
 
             //数据转换
