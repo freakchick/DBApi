@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.jq.dbapi</groupId>
+    <groupId>com.gitee.freakchicken.dbapi</groupId>
     <artifactId>dbapi</artifactId>
     <version>2.3.0</version>
     <modules>
@@ -18,7 +18,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <revision>2.3.0</revision>
+<!--        <revision>2.3.0</revision>-->
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <docker.image.prefix>freakchicken</docker.image.prefix>
@@ -36,17 +36,17 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>com.jq.dbapi</groupId>
+                <groupId>com.gitee.freakchicken.dbapi</groupId>
                 <artifactId>dbapi-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.jq.dbapi</groupId>
+                <groupId>com.gitee.freakchicken.dbapi</groupId>
                 <artifactId>dbapi-plugin</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.jq.dbapi</groupId>
+                <groupId>com.gitee.freakchicken.dbapi</groupId>
                 <artifactId>dbapi-core</artifactId>
                 <version>${project.version}</version>
             </dependency>

@@ -13,7 +13,7 @@
             <outputDirectory>lib</outputDirectory>
             <excludes>
                 <!--  排除assembly自身打的jar包-->
-                <exclude>com.jq.dbapi:dbapi-assembly</exclude>
+                <exclude>com.gitee.freakchicken.dbapi:dbapi-assembly</exclude>
             </excludes>
             <!--            <unpack>false</unpack>-->
         </dependencySet>
