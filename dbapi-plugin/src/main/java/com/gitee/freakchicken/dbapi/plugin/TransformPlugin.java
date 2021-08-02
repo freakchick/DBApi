@@ -8,12 +8,12 @@ import java.util.List;
 
 public abstract class TransformPlugin {
 
-    Logger logger = LoggerFactory.getLogger(CachePlugin.class);
+    Logger logger = LoggerFactory.getLogger(TransformPlugin.class);
 
     /**
-     * sql查询结果数据转换
+     * 数据转换逻辑
      *
-     * @param data
+     * @param data sql查询结果
      * @return
      */
     public abstract Object transform(List<JSONObject> data);

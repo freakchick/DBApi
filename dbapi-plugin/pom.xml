@@ -14,13 +14,16 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.gitee.freakchicken.dbapi</groupId>
             <artifactId>dbapi-common</artifactId>
-<!--            <scope>compile</scope>-->
+            <!--            <scope>compile</scope>-->
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -63,5 +66,43 @@
             <version>1.2.3</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <!--生成doc jar包-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <!-- 不让像@Param 这种后面没写值的东西 报错。-->
+                        <configuration>
+                            <additionalJOption>-Xdoclint:none</additionalJOption>
+                        </configuration>
+
+                    </execution>
+
+                </executions>
+            </plugin>
+
+            <!--生成源码jar包-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
