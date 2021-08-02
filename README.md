@@ -94,11 +94,21 @@ docker run -d -p 8520:8520 freakchicken/db-api
 
 - 启动后浏览器访问 http://ip:8520 ，默认登录账户： admin/admin
 
+## 软件截图
+![](https://freakchicken.gitee.io/images/dbApi/20210502/datasource_create.png)
+![](https://freakchicken.gitee.io/images/dbApi/20210502/api_edit.png)
+![](https://freakchicken.gitee.io/images/dbApi/20210502/api.png)
+![](https://freakchicken.gitee.io/images/dbApi/20210502/group.png)
+![](https://freakchicken.gitee.io/images/dbApi/20210502/request.png)
 
-## springboot集成
+![](https://freakchicken.gitee.io/images/dbApi/20210502/token_add.png)
+![](https://freakchicken.gitee.io/images/dbApi/20210502/token.png)
+![](https://freakchicken.gitee.io/images/dbApi/20210502/token_auth.png)
+![](https://freakchicken.gitee.io/images/dbApi/20210502/docs.png)
 
-如果您想更加灵活的使用dbApi，在您自己的java springboot项目中使用代码配置接口，
-请使用[dbApi-spring-boot-starter开源框架](https://gitee.com/freakchicken/dbApi-spring-boot-starter)
+## 使用教程
+
+请阅读 [详细使用教程](./dbapi-assembly/docs/instruction.md)
 
 ## 插件开发
 请阅读 [插件开发指南](./dbapi-assembly/docs/plugin%20development.md)
@@ -146,6 +156,10 @@ http://localhost:8521
 ```
 http://localhost:8520
 ```
+## springboot集成
+
+如果您想更加灵活的使用dbApi，在您自己的java springboot项目中使用代码配置接口，
+请使用[dbApi-spring-boot-starter开源框架](https://gitee.com/freakchicken/dbApi-spring-boot-starter)
 
 ## 注意事项
 
