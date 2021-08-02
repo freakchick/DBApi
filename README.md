@@ -1,17 +1,16 @@
 # DBApi
 
-## 介绍
+## 1.介绍
 
 - 快速生成数据库的http接口服务，零代码开发，只需编写sql，就可以生成http api服务。是数据库的上层应用，方便数据库数据对外发布http服务
 - 体验地址： http://47.92.117.90:8520/  默认账户： admin/admin
-## 使用场景
+## 2.使用场景
 
 - BI报表、数据可视化大屏的后端接口快速开发；
 - 前端程序员快速开发后端接口进行接口联调；
 - 企业数据资产对外快速发布http服务及统一管理
 
-## 特点
-
+## 3.特点
 - 支持动态添加、修改api；支持api上线、下线管理
 - 支持API级别的访问权限控制，支持IP白名单、黑名单控制
 - 支持多数据源连接，支持动态添加、修改、删除数据源
@@ -29,7 +28,7 @@
 
   _（自带sqlite数据库作为元数据库，同时支持用户自定义使用mysql作为元数据库）_
 
-## 软件架构
+## 4.软件架构
 
 - 采用B/S架构，springboot + vue.js 前后端分离开发
 - 考虑到部署的简便性，使用sqlite数据库
@@ -37,17 +36,15 @@
 ### 权限校验流程
   ![](https://freakchicken.gitee.io/images/dbApi/20210502/lc.png)
 
-### API执行流程
 
-
-## 安装教程
+## 5.安装教程
 
 - 依赖java环境，需要安装jdk8+
 - 下载地址： [天翼云盘](https://cloud.189.cn/t/Jza2MzeEZVNv) ，或者在发行版页面下载
 
 **有以下2种安装方式：**
 
-### 1.tar包安装
+### 5.1 tar包安装
 
 - 下载dbApi.tar.gz包
 - 解压tar包，修改conf/application.properties文件中的配置:
@@ -86,7 +83,7 @@ bin/dbApi.bat
 
 - 启动后浏览器访问 http://ip:8520 ，默认登录账户： admin/admin
 
-### 2.docker安装
+### 5.2 docker安装
 
 ```shell script
 docker run -d -p 8520:8520 freakchicken/db-api
@@ -94,7 +91,7 @@ docker run -d -p 8520:8520 freakchicken/db-api
 
 - 启动后浏览器访问 http://ip:8520 ，默认登录账户： admin/admin
 
-## 软件截图
+## 6.软件截图
 ![](https://freakchicken.gitee.io/images/dbApi/20210502/datasource_create.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20210502/api_edit.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20210502/api.png)
@@ -106,21 +103,21 @@ docker run -d -p 8520:8520 freakchicken/db-api
 ![](https://freakchicken.gitee.io/images/dbApi/20210502/token_auth.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20210502/docs.png)
 
-## 使用教程
+## 7.使用教程
 
 请阅读 [详细使用教程](./dbapi-assembly/docs/instruction.md)
 
-## 插件开发
+## 8.插件开发
 请阅读 [插件开发指南](./dbapi-assembly/docs/plugin%20development.md)
 
-## 开发指南
+## 9.开发指南
 
-### 环境依赖
+### 9.1环境依赖
 
 - 安装jdk8+
 - 安装node.js
 
-### 编译打包
+### 9.2编译打包
 
 - maven打包会自动把前端安装依赖并编译打包，
 
@@ -129,43 +126,43 @@ mvn clean package
 mvn clean package
 ```
 
-### 构建镜像
+### 9.3构建镜像
 ```shell script
 mvn docker:build
 mvn docker:push
 ```
 
-### 启动
+### 9.4启动
 
-#### 前端启动：
+#### 9.4.1前端启动：
 
 - dbapi-ui 目录下 **npm run serve**
 
-#### 后端启动
+#### 9.4.2后端启动
 
 - dbapi-core目录下启动主类com.gitee.freakchicken.dbapi.DBApiApplication
 
-### 前端访问地址：
+### 9.5前端访问地址：
 
 ```
 http://localhost:8521
 ```
 
-### 后端接口访问地址：
+### 9.6后端接口访问地址：
 
 ```
 http://localhost:8520
 ```
-## springboot集成
+## 10.springboot集成
 
 如果您想更加灵活的使用dbApi，在您自己的java springboot项目中使用代码配置接口，
 请使用[dbApi-spring-boot-starter开源框架](https://gitee.com/freakchicken/dbApi-spring-boot-starter)
 
-## 注意事项
+## 11.注意事项
 
 - 如果您要使用Oracle，请将oracle jdbc驱动包手动放入解压后的lib目录下
 
-## 联系作者：
+## 12.联系作者：
 
 ### 微信：
 - 提问请先star支持一下
@@ -193,7 +190,7 @@ http://localhost:8520
 <img src="https://freakchicken.gitee.io/images/kafkaui/alipay.jpg" width = "29%" />
 </div>
 
-## TODO
+## 13.TODO
 
 - 集群版本开发，支持微服务注册consul/eureka/nacos
 - api熔断支持
