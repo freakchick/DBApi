@@ -85,8 +85,9 @@ docker run -d -p 8520:8520 freakchicken/db-api
 
 ## 6.软件截图
 ![](https://freakchicken.gitee.io/images/dbApi/20210502/datasource_create.png)
-![](https://freakchicken.gitee.io/images/dbApi/20210502/api_edit.png)
-![](https://freakchicken.gitee.io/images/dbApi/20210502/api.png)
+![](https://freakchicken.gitee.io/images/dbApi/20210803/api_edit.png)
+![](https://freakchicken.gitee.io/images/dbApi/20210803/sql_run.png)
+![](https://freakchicken.gitee.io/images/dbApi/20210803/api_list.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20210502/group.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20210502/request.png)
 
@@ -94,6 +95,7 @@ docker run -d -p 8520:8520 freakchicken/db-api
 ![](https://freakchicken.gitee.io/images/dbApi/20210502/token.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20210502/token_auth.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20210502/docs.png)
+![](https://freakchicken.gitee.io/images/dbApi/20210803/ip.png)
 
 ## 7.使用教程
 
