@@ -44,6 +44,13 @@
             </includes>
         </fileSet>
         <fileSet>
+            <directory>${project.basedir}/../</directory>
+            <outputDirectory>docs</outputDirectory>
+            <includes>
+                <include>*.md</include>
+            </includes>
+        </fileSet>
+        <fileSet>
             <directory>${project.basedir}/sql</directory>
             <outputDirectory>sql</outputDirectory>
             <lineEnding>unix</lineEnding>

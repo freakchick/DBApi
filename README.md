@@ -18,16 +18,8 @@
 - 支持动态sql，类似mybatis的动态sql
 - 支持sql编辑调试，包括动态sql的调试
 - 支持API结果缓存，支持缓存开启/关闭
-
-  _（缓存逻辑由用户使用java编写缓存插件实现，可以灵活的缓存到redis/mongodb/elasticsearch等等）_
 - 支持自定义代码逻辑的数据转换，比如数据脱敏
-  
-  _（用户用java编写转换插件）_
-
 - 部署简便，安装部署不需要使用外部数据库，一键启动即可
-
-  _（自带sqlite数据库作为元数据库，同时支持用户自定义使用mysql作为元数据库）_
-
 ## 4.软件架构
 
 - 采用B/S架构，springboot + vue.js 前后端分离开发
@@ -134,22 +126,18 @@ mvn docker:push
 
 ### 9.4启动
 
-#### 9.4.1前端启动：
+- 前端启动：
+dbapi-ui 目录下 **npm run serve**
 
-- dbapi-ui 目录下 **npm run serve**
+- 后端启动:
+dbapi-core目录下启动主类com.gitee.freakchicken.dbapi.DBApiApplication
 
-#### 9.4.2后端启动
-
-- dbapi-core目录下启动主类com.gitee.freakchicken.dbapi.DBApiApplication
-
-### 9.5前端访问地址：
-
+- 前端访问地址：
 ```
 http://localhost:8521
 ```
 
-### 9.6后端接口访问地址：
-
+- 后端接口访问地址：
 ```
 http://localhost:8520
 ```
