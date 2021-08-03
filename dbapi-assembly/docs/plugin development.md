@@ -130,6 +130,7 @@ super.logger.debug("set data to cache");
 ### 插件使用
 - 用户开发完插件后，请打包，将最后生成的jar包和插件依赖的jar包拷贝进DBApi的lib目录下，
 再重启DBApi服务，就可以使用插件了
+- 如果插件中使用了外部配置，还需要在conf/plugin.properties添加相应配置
 
 ### 插件开发完整案例
 [案例demo](https://gitee.com/freakchicken/dbapi-plugin)
