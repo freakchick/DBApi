@@ -110,14 +110,13 @@ docker run -d -p 8520:8520 freakchicken/db-api
 
 - 安装jdk8+
 - 安装node.js
-- 拉取[orange](https://gitee.com/freakchicken/orange)代码本地maven install安装。（作者试了多次发布orange到maven中央仓库一直没有成功，有懂的同学指导作者一下）
+- 拉取[orange](https://gitee.com/freakchicken/orange) 代码到本地并maven install安装。（作者试了多次发布orange到maven中央仓库一直没有成功，有懂的同学指导作者一下）
 
 ### 9.2编译打包
 
 - maven打包会自动把前端安装依赖并编译打包，
 
 ```shell script
-mvn clean package
 mvn clean package
 ```
 
