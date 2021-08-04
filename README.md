@@ -110,6 +110,10 @@ docker run -d -p 8520:8520 freakchicken/db-api
 
 - 安装jdk8+
 - 安装node.js
+- (可选)npm设置国内源
+```shell
+npm config set registry https://registry.npm.taobao.org
+```
 - 拉取[orange](https://gitee.com/freakchicken/orange) 代码到本地并maven install安装。（作者试了多次发布orange到maven中央仓库一直没有成功，有懂的同学指导作者一下）
 
 ### 9.2编译打包
@@ -121,6 +125,7 @@ mvn clean package
 ```
 
 ### 9.3构建镜像
+- 在dbapi-assembly目录下
 ```shell script
 mvn docker:build
 mvn docker:push

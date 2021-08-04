@@ -83,39 +83,7 @@
                     </filesets>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>1.2.2</version>
 
-                <configuration>
-
-                    <imageName>${docker.image.prefix}/db-api</imageName>
-                    <baseImage>openjdk:8</baseImage>
-                    <workdir>DBApi-${project.version}/bin</workdir>
-                    <entryPoint>["sh", "dbApi.sh", "start"]</entryPoint>
-                    <exposes>
-                        <expose>8520</expose>
-                    </exposes>
-                    <imageTags>
-                        <imageTag>${project.version}</imageTag>
-                    </imageTags>
-                    <forceTags>true</forceTags>
-                    <resources>
-                        <resource>
-                            <targetPath>/</targetPath>
-                            <directory>${project.basedir}/dist</directory>
-                            <!--tar包上传会自动解压-->
-                            <include>DBApi-2.3.0-bin.tar.gz</include>
-                        </resource>
-                    </resources>
-                    <serverId>docker-hub</serverId>
-                    <registryUrl>https://index.docker.io/v1/</registryUrl>
-
-                </configuration>
-
-
-            </plugin>
         </plugins>
     </build>
 
