@@ -92,7 +92,7 @@
 
                     <imageName>${docker.image.prefix}/db-api</imageName>
                     <baseImage>openjdk:8</baseImage>
-                    <workdir>${project.build.finalName}/bin</workdir>
+                    <workdir>DBApi-${project.version}/bin</workdir>
                     <entryPoint>["sh", "dbApi.sh", "start"]</entryPoint>
                     <exposes>
                         <expose>8520</expose>
