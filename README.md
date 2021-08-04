@@ -110,6 +110,7 @@ docker run -d -p 8520:8520 freakchicken/db-api
 
 - 安装jdk8+
 - 安装node.js
+- 拉取[orange](https://gitee.com/freakchicken/orange)代码本地maven install安装。（作者试了多次发布orange到maven中央仓库一直没有成功，有懂的同学指导作者一下）
 
 ### 9.2编译打包
 
