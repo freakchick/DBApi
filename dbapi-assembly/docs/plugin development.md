@@ -133,4 +133,4 @@ super.logger.debug("set data to cache");
 - 如果插件中使用了外部配置，还需要在conf/plugin.properties添加相应配置
 
 ### 插件开发完整案例
-[案例demo](https://gitee.com/freakchicken/dbapi-plugin)
+[案例demo](https://gitee.com/freakchicken/dbapi-plugin-demo)

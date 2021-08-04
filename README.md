@@ -102,8 +102,8 @@ docker run -d -p 8520:8520 freakchicken/db-api
 请阅读 [详细使用教程](./dbapi-assembly/docs/instruction.md)
 
 ## 8.插件开发
-请阅读 [插件开发指南](./dbapi-assembly/docs/plugin%20development.md)
-
+- 请阅读 [插件开发指南](./dbapi-assembly/docs/plugin%20development.md)
+- 作者已经开发了字段加密插件和redis缓存插件，请阅读[案例demo](https://gitee.com/freakchicken/dbapi-plugin-demo)
 ## 9.开发指南
 
 ### 9.1环境依赖
