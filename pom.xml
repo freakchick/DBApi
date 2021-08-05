@@ -84,6 +84,15 @@
                 </configuration>
             </plugin>
 
+<!--  更新子模块版本号： mvn -N versions:update-child-modules-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <generateBackupPoms>false</generateBackupPoms>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
