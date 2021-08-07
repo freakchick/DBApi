@@ -48,38 +48,39 @@ axios.interceptors.request.use(config => {
 
 //后台用户登陆信息校验不成功就跳转到登录页面
 axios.interceptors.response.use(response => {
-  if (response.status == '401') {
-    console.log('已过期重新登陆');
-    router.push("/login");
-  } else {
-    return response;
-  }
+
+  return response
 }, error => {
+  debugger
   if (error.response.status == '401') {
-    console.log('--已过期重新登陆');
-    router.push("/login");
+
+    //不是api请求测试的请求，就跳转登录页
+    if (!error.response.config.url.startsWith("http://")) {
+      router.push("/login");
+    } else {
+      return Promise.reject(error)
+    }
   } else {
     return Promise.reject(error)
   }
 })
 
 //前端页面路由跳转时校验用户登陆信息不成功就跳转到登录页
-// router.beforeEach((to, from, next) => {
-//     //非登录页拦截
-//     if (to.name != "Login") {
-//
-//       var user = store.state.user;
-//       //没有登陆就拦截
-//       if (user == null) {
-//         next({path: '/', query: {redirect: to.path}}); //跳转到登录页，并且携带重定向页面参数
-//       } else {
-//         next()
-//       }
-//     } else {
-//       next();//登录页不拦截
-//     }
-//   }
-// );
+router.beforeEach((to, from, next) => {
+    //非登录页拦截
+    if (to.path != "/login") {
+      var token = localStorage.getItem("token");
+      //没有登陆就拦截
+      if (token == null) {
+        next({path: '/login'}); //跳转到登录页
+      } else {
+        next()
+      }
+    } else {
+      next();//登录页不拦截
+    }
+  }
+);
 
 //过滤器
 Vue.filter('dateFormat', function (originVal) {

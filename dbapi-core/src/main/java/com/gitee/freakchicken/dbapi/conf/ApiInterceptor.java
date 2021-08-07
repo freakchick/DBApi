@@ -138,18 +138,18 @@ public class ApiInterceptor implements HandlerInterceptor {
             // 如果是私有接口，校验权限
             if (config.getPrevilege() == 0) {
                 String tokenStr = request.getHeader("Authorization");
-                log.info(tokenStr);
+                log.debug(tokenStr);
                 if (StringUtils.isBlank(tokenStr)) {
-                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     return ResponseDto.fail("header中token缺失，私有接口禁止访问！！");
                 } else {
                     Token token = tokenService.getToken(tokenStr);
                     if (token == null) {
-                        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                         return ResponseDto.fail("token无效，私有接口禁止访问！！");
                     } else {
                         if (token.getExpire() != null && token.getExpire() < System.currentTimeMillis()) {
-                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                             return ResponseDto.fail("token过期，私有接口禁止访问！！");
                         } else {
                             // log.info("token存在且有效");
@@ -157,7 +157,7 @@ public class ApiInterceptor implements HandlerInterceptor {
                             if (checkAuth(authGroups, config.getGroupId())) {
 
                             } else {
-                                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                                 return ResponseDto.fail("该token无权访问此接口");
                             }
                         }

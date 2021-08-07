@@ -30,10 +30,8 @@ export default {
   methods: {
     login() {
       this.axios.post("/user/login", {username: this.username, password: this.password}).then((response) => {
-        console.log(response.data)
         if (response.data.success) {
           localStorage.setItem("token", response.data.msg)
-
           this.$router.push("/api")
         } else {
           this.$message.error(response.data.msg)
@@ -41,6 +39,15 @@ export default {
       }).catch((error) => {
         this.$message.error(error)
       })
+    }
+  },
+  created() {
+    //bind login evvent to enter key
+    document.onkeydown = (e) => {
+      const key = window.event.keyCode;
+      if (key == 13 || key == 100) {
+        this.login()
+      }
     }
   }
 }

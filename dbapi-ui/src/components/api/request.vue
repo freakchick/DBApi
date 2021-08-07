@@ -107,7 +107,6 @@ export default {
         } else
           p[t.name] = t.value
       })
-      console.log(p)
       let url = `http://${this.address}/api/${this.path}`
 
       this.axios.post(url, p, {
@@ -183,9 +182,10 @@ h4 {
 }
 
 .path {
-  font-size: 18px;
-  border: 1px solid;
-  padding: 5px;
+  font-size: 16px;
+  border: 1px #ccc solid;
+  padding: 10px 10px;
+
 
 }
 

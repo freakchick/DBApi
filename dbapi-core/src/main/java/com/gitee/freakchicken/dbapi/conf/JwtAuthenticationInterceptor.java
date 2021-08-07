@@ -23,7 +23,7 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object object) throws Exception {
-        log.info(request.getServletPath());
+        log.debug(request.getServletPath());
         // 跨域的预检请求直接放行
         if (request.getMethod().equals(HttpMethod.OPTIONS)) {
             return true;
