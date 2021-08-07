@@ -65,23 +65,6 @@ axios.interceptors.response.use(response => {
   }
 })
 
-//前端页面路由跳转时校验用户登陆信息不成功就跳转到登录页
-router.beforeEach((to, from, next) => {
-    //非登录页拦截
-    if (to.path != "/login") {
-      var token = localStorage.getItem("token");
-      //没有登陆就拦截
-      if (token == null) {
-        next({path: '/login'}); //跳转到登录页
-      } else {
-        next()
-      }
-    } else {
-      next();//登录页不拦截
-    }
-  }
-);
-
 //过滤器
 Vue.filter('dateFormat', function (originVal) {
   const dt = new Date(originVal)
