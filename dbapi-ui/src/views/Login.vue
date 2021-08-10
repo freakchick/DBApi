@@ -42,13 +42,17 @@ export default {
     }
   },
   created() {
-    //bind login evvent to enter key
+    //bind login event to enter key
     document.onkeydown = (e) => {
       const key = window.event.keyCode;
       if (key == 13 || key == 100) {
         this.login()
       }
     }
+  },
+  destroyed() {
+    //unbind login event to enter key when go to other pages
+    document.onkeydown = null
   }
 }
 </script>
