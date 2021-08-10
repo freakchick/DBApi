@@ -113,13 +113,13 @@ public class ApiInterceptor implements HandlerInterceptor {
             if (mode.equals("black")) {
                 String blackIP = map.get("blackIP");
                 if (!ipService.check(mode, blackIP, originIp)) {
-                    log.error("ip黑名单拦截");
+                    log.warn("ip黑名单拦截");
                     return false;
                 }
             } else if (mode.equals("white")) {
                 String whiteIP = map.get("whiteIP");
                 if (!ipService.check(mode, whiteIP, originIp)) {
-                    log.error("ip白名单检查不通过");
+                    log.warn("ip白名单检查不通过");
                     return false;
                 }
             }
