@@ -197,4 +197,8 @@ public class ApiConfigService {
 
     }
 
+    public List<ApiConfig>  selectBatch(List<Integer> ids) {
+        List<ApiConfig> list = apiConfigMapper.selectBatchIds(ids);
+        return list;
+    }
 }

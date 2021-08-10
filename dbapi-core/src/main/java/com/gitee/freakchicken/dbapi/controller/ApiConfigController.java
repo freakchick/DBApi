@@ -124,15 +124,36 @@ public class ApiConfigController {
     @RequestMapping("/apiDocs")
     public void apiDocs(String ids, HttpServletResponse response) {
         List<Integer> collect = Arrays.stream(ids.split(",")).map(t -> Integer.valueOf(t)).collect(Collectors.toList());
-
         String docs = apiConfigService.apiDocs(collect);
-
         response.setContentType("application/x-msdownload;charset=utf-8");
         response.setHeader("Content-Disposition", "attachment; filename=接口文档.md");
         OutputStream os = null; //输出流
         try {
             os = response.getOutputStream();
             os.write(docs.getBytes("utf-8"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (os != null)
+                    os.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @RequestMapping("/downloadConfig")
+    public void downloadConfig( String ids,HttpServletResponse response) {
+        List<Integer> collect = Arrays.stream(ids.split(",")).map(t -> Integer.valueOf(t)).collect(Collectors.toList());
+        List<ApiConfig> apiConfigs = apiConfigService.selectBatch(collect);
+        String s = JSON.toJSONString(apiConfigs);
+        response.setContentType("application/x-msdownload;charset=utf-8");
+        response.setHeader("Content-Disposition", "attachment; filename=api配置.json");
+        OutputStream os = null;
+        try {
+            os = response.getOutputStream();
+            os.write(s.getBytes("utf-8"));
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

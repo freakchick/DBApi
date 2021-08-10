@@ -86,6 +86,8 @@
 
       <el-button @click="dialogVisible = true" type="primary" plain class="gap">api分组管理</el-button>
       <el-button class="gap" type="primary" plain @click="dialogVisible2=true">导出api文档</el-button>
+      <el-button class="gap" type="primary" plain @click="dialogVisible3=true">导出api配置</el-button>
+
       <el-dialog title="API分组" :visible.sync="dialogVisible" @close="getAllGroups">
         <group></group>
       </el-dialog>
@@ -93,9 +95,17 @@
       <el-dialog title="导出api文档" :visible.sync="dialogVisible2" @open="getApiTree">
         <el-tree :data="treeData" show-checkbox node-key="id" :props="defaultProps" ref="tree"></el-tree>
         <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible2 = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible2 = false;exportDocs()">导出</el-button>
-      </span>
+          <el-button @click="dialogVisible2 = false">取 消</el-button>
+          <el-button type="primary" @click="dialogVisible2 = false;exportDocs()">导出</el-button>
+        </span>
+      </el-dialog>
+
+      <el-dialog title="导出api配置" :visible.sync="dialogVisible3" @open="getApiTree">
+        <el-tree :data="treeData" show-checkbox node-key="id" :props="defaultProps" ref="tree2"></el-tree>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible3 = false">取 消</el-button>
+          <el-button type="primary" @click="dialogVisible3 = false;exportConfig()">导出</el-button>
+        </span>
       </el-dialog>
     </div>
   </div>
@@ -111,6 +121,7 @@ export default {
     return {
       dialogVisible: false,
       dialogVisible2: false,
+      dialogVisible3: false,
       keyword: null,
       field: null,
       tableData: [],
@@ -225,7 +236,35 @@ export default {
         this.$message.error("导出接口文档错误")
         console.error(error)
       })
-    }
+    },
+    exportConfig(){
+      let a = this.$refs.tree2.getCheckedKeys().filter((t) => {
+        return t != undefined
+      })
+      const ids = a.join(",")
+      if (ids == '') {
+        return
+      }
+      this.axios({
+        method: 'post',
+        params: {ids: ids},
+        url: '/apiConfig/downloadConfig',
+        responseType: 'blob' //这个很重要
+      }).then((res) => {
+        console.log(res)
+        const link = document.createElement('a')
+        let blob = new Blob([res.data], {type: 'application/x-msdownload'});
+        link.style.display = 'none'
+        link.href = URL.createObjectURL(blob);
+        link.setAttribute('download', 'api_config.json')
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      }).catch(error => {
+        this.$message.error("导出错误")
+        console.error(error)
+      })
+    },
   },
 
   created() {
