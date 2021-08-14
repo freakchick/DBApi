@@ -18,8 +18,8 @@ public interface ApiConfigMapper extends BaseMapper<ApiConfig> {
             "<where>\n" +
             "<if test='groupId != null and groupId !=\"\"'> group_id = #{groupId} </if>\n" +
             "<if test='keyword != null and keyword !=\"\"'>\n" +
-            "\t<if test='field != null and field !=\"\"'> and ${field} like '%'||#{keyword}||'%' </if>\n" +
-            "\t<if test='field == null or field ==\"\"'> and (name like '%'||#{keyword}||'%' or note like '%'||#{keyword}||'%' or path like '%'||#{keyword}||'%' )</if>\n" +
+            "\t<if test='field != null and field !=\"\"'> and ${field} like #{keyword} </if>\n" +
+            "\t<if test='field == null or field ==\"\"'> and (name like #{keyword} or note like #{keyword} or path like #{keyword} )</if>\n" +
             "</if>\n" +
             "</where>" +
             "</script>")

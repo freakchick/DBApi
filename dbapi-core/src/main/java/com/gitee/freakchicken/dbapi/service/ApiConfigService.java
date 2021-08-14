@@ -125,6 +125,9 @@ public class ApiConfigService {
     }
 
     public List<ApiConfig> search(String keyword, String field, String groupId) {
+        if (StringUtils.isNoneBlank(keyword)) {
+            keyword = "%" + keyword + "%";
+        }
         return apiConfigMapper.selectByKeyword(keyword, field, groupId);
     }
 
