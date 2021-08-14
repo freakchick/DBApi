@@ -86,12 +86,12 @@ public class ApiConfigController {
     }
 
     @RequestMapping("/detail/{id}")
-    public ApiConfig detail(@PathVariable Integer id) {
+    public ApiConfig detail(@PathVariable String id) {
         return apiConfigService.detail(id);
     }
 
     @RequestMapping("/delete/{id}")
-    public ApiConfig delete(@PathVariable Integer id) {
+    public ApiConfig delete(@PathVariable String id) {
         String path = apiConfigService.getPath(id);
         apiConfigService.delete(id, path);
         return null;
@@ -103,14 +103,14 @@ public class ApiConfigController {
     }
 
     @RequestMapping("/online/{id}")
-    public ApiConfig online(@PathVariable Integer id) {
+    public ApiConfig online(@PathVariable String id) {
         String path = apiConfigService.getPath(id);
         apiConfigService.online(id, path);
         return null;
     }
 
     @RequestMapping("/offline/{id}")
-    public ApiConfig offline(@PathVariable Integer id) {
+    public ApiConfig offline(@PathVariable String id) {
         String path = apiConfigService.getPath(id);
         apiConfigService.offline(id, path);
         return null;
@@ -123,7 +123,7 @@ public class ApiConfigController {
 
     @RequestMapping("/apiDocs")
     public void apiDocs(String ids, HttpServletResponse response) {
-        List<Integer> collect = Arrays.stream(ids.split(",")).map(t -> Integer.valueOf(t)).collect(Collectors.toList());
+        List<String> collect = Arrays.asList(ids.split(","));
         String docs = apiConfigService.apiDocs(collect);
         response.setContentType("application/x-msdownload;charset=utf-8");
         response.setHeader("Content-Disposition", "attachment; filename=接口文档.md");
@@ -145,7 +145,7 @@ public class ApiConfigController {
 
     @RequestMapping("/downloadConfig")
     public void downloadConfig( String ids,HttpServletResponse response) {
-        List<Integer> collect = Arrays.stream(ids.split(",")).map(t -> Integer.valueOf(t)).collect(Collectors.toList());
+        List<String> collect = Arrays.asList(ids.split(","));
         List<ApiConfig> apiConfigs = apiConfigService.selectBatch(collect);
         String s = JSON.toJSONString(apiConfigs);
         response.setContentType("application/x-msdownload;charset=utf-8");
@@ -167,7 +167,7 @@ public class ApiConfigController {
     }
 
     @RequestMapping("/sql/execute")
-    public ResponseDto executeSql(Integer datasourceId, String sql, String params) {
+    public ResponseDto executeSql(String datasourceId, String sql, String params) {
         try {
             DataSource dataSource = dataSourceService.detail(datasourceId);
             Map<String, Object> map = JSON.parseObject(params, Map.class);

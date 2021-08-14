@@ -16,8 +16,8 @@ import lombok.Data;
 @TableName(value = "datasource")
 public class DataSource {
 
-    @TableId(value = "id",type = IdType.AUTO)
-    Integer id;
+    @TableId(value = "id")
+    String id;
 
     @TableField
     String name;

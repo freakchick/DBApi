@@ -5,6 +5,7 @@ import com.gitee.freakchicken.dbapi.dao.DataSourceMapper;
 import com.gitee.freakchicken.dbapi.domain.DataSource;
 import com.gitee.freakchicken.dbapi.util.PoolManager;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
+import com.gitee.freakchicken.dbapi.util.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -31,6 +32,7 @@ public class DataSourceService {
 
     @Transactional
     public void add(DataSource dataSource) {
+        dataSource.setId(UUIDUtil.id());
         dataSourceMapper.insert(dataSource);
     }
 
@@ -42,7 +44,7 @@ public class DataSourceService {
 
     @CacheEvict(value = "datasource", key = "#id")
     @Transactional
-    public ResponseDto delete(Integer id) {
+    public ResponseDto delete(String id) {
         int i = apiConfigMapper.countByDatasoure(id);
         if (i == 0) {
             dataSourceMapper.deleteById(id);
@@ -54,7 +56,7 @@ public class DataSourceService {
     }
 
     @Cacheable(value = "datasource", key = "#id", unless = "#result == null")
-    public DataSource detail(Integer id) {
+    public DataSource detail(String id) {
         DataSource dataSource = dataSourceMapper.selectById(id);
         return dataSource;
     }

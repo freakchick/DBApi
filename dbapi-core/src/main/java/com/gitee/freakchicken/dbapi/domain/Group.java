@@ -10,8 +10,8 @@ import lombok.Data;
 @TableName(value = "api_group")
 public class Group {
 
-    @TableId(value = "id", type = IdType.AUTO)
-    Integer id;
+    @TableId(value = "id")
+    String id;
 
     @TableField
     String name;

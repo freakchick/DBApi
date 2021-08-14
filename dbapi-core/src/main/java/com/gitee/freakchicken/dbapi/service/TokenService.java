@@ -32,7 +32,7 @@ public class TokenService {
             Arrays.stream(split).forEach(t -> {
                 ApiAuth auth = new ApiAuth();
                 auth.setTokenId(tokenId);
-                auth.setGroupId(Integer.valueOf(t));
+                auth.setGroupId(t);
                 apiAuthMapper.insert(auth);
             });
         }
@@ -40,8 +40,8 @@ public class TokenService {
     }
 
     @Cacheable(value = "token_AuthGroups", key = "#tokenId", unless = "#result == null")
-    public List<Integer> getAuthGroups(Integer tokenId) {
-        List<Integer> list = apiAuthMapper.selectByTokenId(tokenId);
+    public List<String> getAuthGroups(Integer tokenId) {
+        List<String> list = apiAuthMapper.selectByTokenId(tokenId);
         return list;
     }
 

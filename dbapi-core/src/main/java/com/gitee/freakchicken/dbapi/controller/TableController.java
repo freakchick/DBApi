@@ -31,7 +31,7 @@ public class TableController {
     DataSourceMapper dataSourceMapper;
 
     @RequestMapping("/getAllTables")
-    public List<JSONObject> getAllTables(Integer sourceId) throws SQLException {
+    public List<JSONObject> getAllTables(String sourceId) throws SQLException {
         DataSource dataSource = dataSourceMapper.selectById(sourceId);
         DruidPooledConnection connection = PoolManager.getPooledConnection(dataSource);
         List<String> tables = JdbcUtil.getAllTables(connection, dataSource.getType());
@@ -46,7 +46,7 @@ public class TableController {
     }
 
     @RequestMapping("/getAllColumns")
-    public List<JSONObject> getAllTables(Integer sourceId, String table) throws SQLException {
+    public List<JSONObject> getAllTables(String sourceId, String table) throws SQLException {
         DataSource dataSource = dataSourceMapper.selectById(sourceId);
         DruidPooledConnection connection = PoolManager.getPooledConnection(dataSource);
         List<JSONObject> columns = JdbcUtil.getRDBMSColumnProperties(connection, dataSource.getType(), table);

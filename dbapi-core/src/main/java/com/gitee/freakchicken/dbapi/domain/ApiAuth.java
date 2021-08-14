@@ -17,5 +17,5 @@ public class ApiAuth {
     Integer tokenId;
 
     @TableField("group_id")
-    Integer groupId;
+    String groupId;
 }

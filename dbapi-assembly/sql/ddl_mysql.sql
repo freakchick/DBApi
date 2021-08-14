@@ -1,18 +1,31 @@
-drop table if exists api_config;
+DROP TABLE IF EXISTS `api_auth`;
+
+CREATE TABLE `api_auth`
+(
+    `id`       int(11) NOT NULL AUTO_INCREMENT,
+    `token_id` int(11)     DEFAULT NULL,
+    `group_id` varchar(11) DEFAULT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+
+DROP TABLE IF EXISTS `api_config`;
+
 CREATE TABLE `api_config`
 (
-    `id`                      int(11) NOT NULL AUTO_INCREMENT,
+    `id`                      varchar(255) NOT NULL,
     `path`                    varchar(255) DEFAULT NULL,
     `name`                    varchar(255) DEFAULT NULL,
     `note`                    varchar(255) DEFAULT NULL,
     `sql`                     text,
     `params`                  text,
     `status`                  int(11)      DEFAULT NULL,
-    `datasource_id`           int(11)      DEFAULT NULL,
+    `datasource_id`           varchar(255) DEFAULT NULL,
     `real_sql`                text,
     `is_select`               int(11)      DEFAULT NULL,
     `previlege`               int(11)      DEFAULT NULL,
-    `group_id`                int(11)      DEFAULT NULL,
+    `group_id`                varchar(255) DEFAULT NULL,
     `cache_plugin`            varchar(255) DEFAULT NULL,
     `cache_plugin_params`     varchar(255) DEFAULT NULL,
     `transform_plugin`        varchar(255) DEFAULT NULL,
@@ -23,10 +36,23 @@ CREATE TABLE `api_config`
   DEFAULT CHARSET = utf8;
 
 
-drop table if exists `datasource`;
+DROP TABLE IF EXISTS `api_group`;
+
+CREATE TABLE `api_group`
+(
+    `id`   varchar(255) NOT NULL,
+    `name` varchar(255) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `name` (`name`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+
+DROP TABLE IF EXISTS `datasource`;
+
 CREATE TABLE `datasource`
 (
-    `id`       int(11) NOT NULL AUTO_INCREMENT,
+    `id`       varchar(255) NOT NULL,
     `name`     varchar(255) DEFAULT NULL,
     `note`     varchar(255) DEFAULT NULL,
     `type`     varchar(255) DEFAULT NULL,
@@ -37,27 +63,29 @@ CREATE TABLE `datasource`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-drop table if exists `api_auth`;
-CREATE TABLE `api_auth`
+
+DROP TABLE IF EXISTS `firewall`;
+
+CREATE TABLE `firewall`
 (
-    `id`       int(11) NOT NULL AUTO_INCREMENT,
-    `token_id` int(11) DEFAULT NULL,
-    `group_id` int(11) DEFAULT NULL,
-    PRIMARY KEY (`id`)
+    `status` varchar(255) DEFAULT NULL,
+    `mode`   varchar(255) DEFAULT NULL
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-drop table if exists `api_group`;
-CREATE TABLE `api_group`
+
+DROP TABLE IF EXISTS `ip_rules`;
+
+CREATE TABLE `ip_rules`
 (
-    `id`   int(11) NOT NULL AUTO_INCREMENT,
-    `name` varchar(255) DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `name` (`name`)
+    `type` varchar(255)   DEFAULT NULL,
+    `ip`   varchar(10240) DEFAULT NULL
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-drop table if exists `token`;
+
+DROP TABLE IF EXISTS `token`;
+
 CREATE TABLE `token`
 (
     `id`          int(11) NOT NULL AUTO_INCREMENT,
@@ -70,7 +98,8 @@ CREATE TABLE `token`
   DEFAULT CHARSET = utf8;
 
 
-drop table if exists `user`;
+DROP TABLE IF EXISTS `user`;
+
 CREATE TABLE `user`
 (
     `id`       int(11) NOT NULL AUTO_INCREMENT,
@@ -79,28 +108,5 @@ CREATE TABLE `user`
     PRIMARY KEY (`id`),
     UNIQUE KEY `username` (`username`)
 ) ENGINE = InnoDB
+  AUTO_INCREMENT = 2
   DEFAULT CHARSET = utf8;
-insert into `user` (username, password)
-values ('admin', 'admin');
-
-drop table if exists `firewall`;
-CREATE TABLE `firewall`
-(
-    `status` varchar(255) DEFAULT NULL,
-    `mode`   varchar(255) DEFAULT NULL
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
-insert into `firewall` (status, mode)
-values ('off', 'black');
-
-drop table if exists `ip_rules`;
-CREATE TABLE `ip_rules`
-(
-    `type` varchar(255)   DEFAULT NULL,
-    `ip`   varchar(10240) DEFAULT NULL
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
-insert into `ip_rules` (type)
-VALUES ('white');
-insert into `ip_rules` (type)
-VALUES ('black');

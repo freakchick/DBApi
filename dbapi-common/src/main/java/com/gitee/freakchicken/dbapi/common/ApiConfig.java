@@ -16,8 +16,8 @@ import lombok.Data;
 @TableName(value = "api_config")
 public class ApiConfig {
 
-    @TableId(value = "id", type = IdType.AUTO)
-    Integer id;
+    @TableId(value = "id")
+    String id;
 
     @TableField
     String name;
@@ -29,7 +29,7 @@ public class ApiConfig {
     String path;
 
     @TableField(value = "datasource_id")
-    Integer datasourceId;
+    String datasourceId;
 
     @TableField("`sql`")
     String sql;
@@ -43,14 +43,14 @@ public class ApiConfig {
     @TableField
     Integer status;
 
-    @TableField(value = "is_select")
-    Integer isSelect;
+//    @TableField(value = "is_select")
+//    Integer isSelect;
 
     @TableField
     Integer previlege;
 
     @TableField("group_id")
-    Integer groupId;
+    String groupId;
 
     @TableField(value = "cache_plugin")
     String cachePlugin;

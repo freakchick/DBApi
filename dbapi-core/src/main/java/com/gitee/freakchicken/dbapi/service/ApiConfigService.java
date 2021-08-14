@@ -10,6 +10,7 @@ import com.gitee.freakchicken.dbapi.dao.DataSourceMapper;
 import com.gitee.freakchicken.dbapi.domain.ApiDto;
 import com.gitee.freakchicken.dbapi.plugin.CachePlugin;
 import com.gitee.freakchicken.dbapi.plugin.PluginManager;
+import com.gitee.freakchicken.dbapi.util.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,7 @@ public class ApiConfigService {
             return ResponseDto.fail("该路径已被使用，请修改请求路径再保存");
         } else {
             apiConfig.setStatus(0);
+            apiConfig.setId(UUIDUtil.id());
             apiConfigMapper.insert(apiConfig);
             return ResponseDto.successWithMsg("添加成功");
         }
@@ -72,7 +74,7 @@ public class ApiConfigService {
                     cachePlugin.clean(oldConfig);
                     log.debug("update api config, then clean cache");
                 } catch (Exception e) {
-                    log.error("清除缓存失败", e);
+                    log.error("clean cache failed when update api", e);
                 }
             }
             return ResponseDto.successWithMsg("修改成功");
@@ -82,7 +84,7 @@ public class ApiConfigService {
 
     @CacheEvict(value = "api", key = "#path")
     @Transactional
-    public void delete(Integer id, String path) {
+    public void delete(String id, String path) {
         ApiConfig apiConfig = apiConfigMapper.selectById(id);
         apiConfigMapper.deleteById(id);
         //清除所有缓存
@@ -92,12 +94,12 @@ public class ApiConfigService {
                 cachePlugin.clean(apiConfig);
                 log.debug("delete api then clean cache");
             } catch (Exception e) {
-                log.error("清除缓存失败", e);
+                log.error("clean cache failed when delete api", e);
             }
         }
     }
 
-    public ApiConfig detail(Integer id) {
+    public ApiConfig detail(String id) {
         return apiConfigMapper.selectById(id);
     }
 
@@ -132,14 +134,14 @@ public class ApiConfigService {
     }
 
     @CacheEvict(value = "api", key = "#path")
-    public void online(int id, String path) {
+    public void online(String id, String path) {
         ApiConfig apiConfig = apiConfigMapper.selectById(id);
         apiConfig.setStatus(1);
         apiConfigMapper.updateById(apiConfig);
     }
 
     @CacheEvict(value = "api", key = "#path")
-    public void offline(int id, String path) {
+    public void offline(String id, String path) {
 
         ApiConfig apiConfig = apiConfigMapper.selectById(id);
         apiConfig.setStatus(0);
@@ -155,11 +157,11 @@ public class ApiConfigService {
         }
     }
 
-    public String getPath(Integer id) {
+    public String getPath(String id) {
         return apiConfigMapper.selectById(id).getPath();
     }
 
-    public String apiDocs(List<Integer> ids) {
+    public String apiDocs(List<String> ids) {
         StringBuffer temp = new StringBuffer("# 接口文档\n---\n");
         List<ApiConfig> list = apiConfigMapper.selectBatchIds(ids);
         list.stream().forEach(t -> {
@@ -197,7 +199,7 @@ public class ApiConfigService {
 
     }
 
-    public List<ApiConfig>  selectBatch(List<Integer> ids) {
+    public List<ApiConfig>  selectBatch(List<String> ids) {
         List<ApiConfig> list = apiConfigMapper.selectBatchIds(ids);
         return list;
     }

@@ -22,7 +22,7 @@ public class GroupController {
     }
 
     @RequestMapping("/delete/{id}")
-    public ResponseDto delete(@PathVariable Integer id) {
+    public ResponseDto delete(@PathVariable String id) {
         return groupService.deleteById(id);
     }
 

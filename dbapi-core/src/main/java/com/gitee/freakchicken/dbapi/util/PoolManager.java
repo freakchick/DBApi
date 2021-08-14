@@ -25,7 +25,7 @@ public class PoolManager {
     private static Lock deleteLock = new ReentrantLock();
 
     //所有数据源的连接池存在map里
-    static Map<Integer, DruidDataSource> map = new HashMap<>();
+    static Map<String, DruidDataSource> map = new HashMap<>();
 
     public static DruidDataSource getJdbcConnectionPool(DataSource ds) {
         if (map.containsKey(ds.getId())) {
@@ -57,7 +57,7 @@ public class PoolManager {
     }
 
     //删除数据库连接池
-    public static void removeJdbcConnectionPool(Integer id) {
+    public static void removeJdbcConnectionPool(String id) {
         deleteLock.lock();
         try {
             DruidDataSource druidDataSource = map.get(id);

@@ -38,12 +38,12 @@ public class DataSourceController {
     }
 
     @RequestMapping("/detail/{id}")
-    public DataSource detail(@PathVariable Integer id) {
+    public DataSource detail(@PathVariable String id) {
         return dataSourceService.detail(id);
     }
 
     @RequestMapping("/delete/{id}")
-    public ResponseDto delete(@PathVariable Integer id) {
+    public ResponseDto delete(@PathVariable String id) {
         return dataSourceService.delete(id);
     }
 

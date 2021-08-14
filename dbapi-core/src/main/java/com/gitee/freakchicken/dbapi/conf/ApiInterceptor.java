@@ -153,7 +153,7 @@ public class ApiInterceptor implements HandlerInterceptor {
                             return ResponseDto.fail("token过期，私有接口禁止访问！！");
                         } else {
                             // log.info("token存在且有效");
-                            List<Integer> authGroups = tokenService.getAuthGroups(token.getId());
+                            List<String> authGroups = tokenService.getAuthGroups(token.getId());
                             if (checkAuth(authGroups, config.getGroupId())) {
 
                             } else {
@@ -222,9 +222,9 @@ public class ApiInterceptor implements HandlerInterceptor {
         }
     }
 
-    public boolean checkAuth(List<Integer> authGroups, Integer group) {
-        for (Integer authGroup : authGroups) {
-            if (authGroup == group) {
+    public boolean checkAuth(List<String> authGroups, String group) {
+        for (String authGroup : authGroups) {
+            if (authGroup.equals(group)) {
                 return true;
             }
         }

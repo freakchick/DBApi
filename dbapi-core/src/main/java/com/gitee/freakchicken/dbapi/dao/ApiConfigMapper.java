@@ -29,13 +29,13 @@ public interface ApiConfigMapper extends BaseMapper<ApiConfig> {
     Integer selectCountByPath(String path);
 
     @Select("select count(1) from api_config where path=#{path} and id != #{id}")
-    Integer selectCountByPathWhenUpdate(@Param("path") String path, @Param("id") Integer id);
+    Integer selectCountByPathWhenUpdate(@Param("path") String path, @Param("id") String id);
 
     @Select("select count(1) from api_config where datasource_id = #{id}")
-    int countByDatasoure(Integer id);
+    int countByDatasoure(String id);
 
     @Select("select count(1) from api_config where group_id = #{id}")
-    int selectCountByGroup(Integer id);
+    int selectCountByGroup(String id);
 
     @Results(id = "accResultMap", value = {
             @Result(property = "id", column = "id"),

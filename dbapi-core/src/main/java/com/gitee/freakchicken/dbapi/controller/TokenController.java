@@ -54,8 +54,8 @@ public class TokenController {
     }
 
     @RequestMapping("/getAuthGroups/{tokenId}")
-    public List<Integer> getAuthGroups(@PathVariable("tokenId") Integer tokenId) {
-        List<Integer> list = tokenService.getAuthGroups(tokenId);
+    public List<String> getAuthGroups(@PathVariable("tokenId") Integer tokenId) {
+        List<String> list = tokenService.getAuthGroups(tokenId);
         return list;
     }
 }
