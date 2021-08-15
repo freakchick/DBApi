@@ -1,21 +1,34 @@
 <template>
   <div>
-    <div class="gap">
-    <router-link to="/datasource/add" >
-
-      <el-button  type="primary" plain>创建数据源</el-button>
-    </router-link>
+    <div>
+      <ul>
+        <li>
+          <router-link to="/datasource/add">
+            <el-button type="primary" plain icon="el-icon-plus">创建数据源</el-button>
+          </router-link>
+        </li>
+        <li>
+          <el-button type="warning" plain @click="show=true" icon="el-icon-download">导出数据源</el-button>
+        </li>
+        <li>
+          <el-upload action="/datasource/import" accept=".json" :on-success="importSuccess" :headers="headers"
+                     :on-error="importFail" :file-list="fileList">
+            <el-button type="warning" plain icon="el-icon-upload2">导入数据源</el-button>
+          </el-upload>
+        </li>
+      </ul>
     </div>
+
     <el-table :data="tableData" border stripe max-height="700">
+      <el-table-column prop="id" label="id"></el-table-column>
       <el-table-column label="名称">
         <template slot-scope="scope">
           <db-icon :type="scope.row.type"></db-icon>
-          <span>{{scope.row.name}}</span>
+          <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-<!--      <el-table-column prop="type" label="数据库"></el-table-column>-->
       <el-table-column prop="note" label="描述"></el-table-column>
-      <!--      <el-table-column prop="url" label="地址"></el-table-column>-->
+      <el-table-column prop="updateTime" label="修改时间"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
 
@@ -32,7 +45,17 @@
       </el-table-column>
     </el-table>
 
-
+    <el-dialog title="导出数据源配置" :visible.sync="show">
+      <ul>
+        <li v-for="item in tableData">
+          <el-checkbox v-model="item.checked">{{item.name}}</el-checkbox>
+        </li>
+      </ul>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="show = false">取 消</el-button>
+        <el-button type="primary" @click="show = false;exportConfig()">导出</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -43,10 +66,45 @@ export default {
   name: "datasource",
   data() {
     return {
-      tableData: []
+      tableData: [],
+      show: false,
+      headers: {
+        Authorization: localStorage.getItem('token')
+      },
+      fileList: []
     }
   },
   methods: {
+    exportConfig(){
+      const ids = this.tableData.filter(t=>t.checked).map(t=>t.id)
+      console.log(ids)
+      this.axios({
+        method: 'post',
+        params: {ids: ids.join(",")},
+        url: '/datasource/export',
+        responseType: 'blob' //这个很重要
+      }).then((res) => {
+        const link = document.createElement('a')
+        let blob = new Blob([res.data], {type: 'application/x-msdownload'});
+        link.style.display = 'none'
+        link.href = URL.createObjectURL(blob);
+        link.setAttribute('download', 'datasource.json')
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      }).catch(error => {
+        this.$message.error("导出错误")
+        console.error(error)
+      })
+    },
+    importSuccess(response, file, fileList) {
+      this.fileList = []
+      this.$message.success("import success")
+      this.getAllSource()
+    },
+    importFail(error, file, fileList) {
+      this.$message.error("import failed!  "+ error.message)
+    },
     detail(id) {
       this.$router.push({path: '/datasource/detail', query: {id: id}});
     },
@@ -80,10 +138,16 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .my >>> .el-textarea__inner {
   font-family: 'Consolas', Helvetica, Arial, sans-serif;
   /*font-size: 18px;*/
 }
-
+ul {
+  margin-bottom: 10px;
+  li {
+    display: inline-block;
+    margin-right: 10px;
+  }
+}
 </style>

@@ -40,7 +40,8 @@
       </div>
 
       <el-table :data="tableData" border stripe max-height="700" class="gap" width="100%">
-        <el-table-column label="id" width="330px">
+        <el-table-column label="id" prop="id" width="300px"></el-table-column>
+        <el-table-column label="名称" >
           <template slot-scope="scope">
             <el-tooltip effect="light" content="已上线" placement="top-start" v-if="scope.row.status == 1">
               <i class="iconfont icon-on_line1 circle"></i>
@@ -56,10 +57,9 @@
             <el-tooltip effect="light" content="开放接口" placement="top-start" v-else>
               <i class="el-icon-unlock circle "></i>
             </el-tooltip>
-            <span :title="scope.row.note">{{ scope.row.id }}</span>
+            <span :title="scope.row.note">{{ scope.row.name }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="名称" prop="name"></el-table-column>
         <el-table-column label="路径">
           <template slot-scope="scope">
             <span>/api/{{ scope.row.path }}</span>
@@ -160,7 +160,7 @@ export default {
       this.getAllApis()
     },
     importFail(error, file, fileList) {
-      this.$message.error("import failed")
+      this.$message.error("import failed!  "+ error.message)
     },
     getAllApis() {
       this.axios.post("/apiConfig/getAll").then((response) => {

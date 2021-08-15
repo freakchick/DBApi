@@ -1,16 +1,26 @@
 package com.gitee.freakchicken.dbapi.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.domain.DataSource;
 import com.gitee.freakchicken.dbapi.service.DataSourceService;
 import com.gitee.freakchicken.dbapi.util.JdbcUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -71,5 +81,38 @@ public class DataSourceController {
                 }
             }
         }
+    }
+
+    @RequestMapping("/export")
+    public void export(String ids, HttpServletResponse response) {
+        List<String> collect = Arrays.asList(ids.split(","));
+        List<DataSource> list = dataSourceService.selectBatch(collect);
+        String s = JSON.toJSONString(list);
+        response.setContentType("application/x-msdownload;charset=utf-8");
+        response.setHeader("Content-Disposition", "attachment; filename=datasource.json");
+        OutputStream os = null;
+        try {
+            os = response.getOutputStream();
+            os.write(s.getBytes("utf-8"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (os != null)
+                    os.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    @RequestMapping(value = "/import", produces = "application/json;charset=UTF-8")
+    public void uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
+
+        String s = IOUtils.toString(file.getInputStream(), "utf-8");
+        List<DataSource> list = JSON.parseArray(s, DataSource.class);
+        dataSourceService.insertBatch(list);
+
     }
 }

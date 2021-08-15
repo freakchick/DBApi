@@ -13,12 +13,16 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @program: dbApi
  * @description:
- * @author: jiangqiang
+ * @author:
  * @create: 2021-01-20 10:43
  **/
 @Service
@@ -33,12 +37,15 @@ public class DataSourceService {
     @Transactional
     public void add(DataSource dataSource) {
         dataSource.setId(UUIDUtil.id());
+        dataSource.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        dataSource.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         dataSourceMapper.insert(dataSource);
     }
 
     @CacheEvict(value = "datasource", key = "#dataSource.id")
     @Transactional
     public void update(DataSource dataSource) {
+        dataSource.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         dataSourceMapper.updateById(dataSource);
     }
 
@@ -63,10 +70,23 @@ public class DataSourceService {
 
     public List<DataSource> getAll() {
         List<DataSource> list = dataSourceMapper.selectList(null);
-        return list;
+        List<DataSource> collect = list.stream().sorted(Comparator.comparing(DataSource::getUpdateTime).reversed()).collect(Collectors.toList());
+        return collect;
     }
 
     public String getDBType(Integer id) {
         return dataSourceMapper.selectById(id).getType();
+    }
+
+    public List<DataSource> selectBatch(List<String> ids) {
+        List<DataSource> dataSources = dataSourceMapper.selectBatchIds(ids);
+        return dataSources;
+    }
+
+    @Transactional
+    public void insertBatch(List<DataSource> list) {
+        list.forEach(t -> {
+            dataSourceMapper.insert(t);
+        });
     }
 }

@@ -40,4 +40,10 @@ public class DataSource {
     @TableField(exist = false)
     String className;
 
+    @TableField(value = "create_time")
+    String createTime;
+
+    @TableField(value = "update_time")
+    String updateTime;
+
 }
