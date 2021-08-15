@@ -51,7 +51,6 @@ axios.interceptors.response.use(response => {
 
   return response
 }, error => {
-  debugger
   if (error.response.status == '401') {
 
     //不是api请求测试的请求，就跳转登录页

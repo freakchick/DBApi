@@ -122,8 +122,8 @@ export default {
 
 .main {
   background-color: #fff;
-  max-width: 1500px;
-  margin: 0 auto;
+  //max-width: 1500px;
+  //margin: 0 auto;
   border-radius: 5px;
   box-shadow: 1px 1px 5px #72767b;
   padding: 20px;

@@ -63,4 +63,10 @@ public class ApiConfig {
 
     @TableField(value = "transform_plugin_params")
     String transformPluginParams;
+
+    @TableField(value = "create_time")
+    String createTime;
+
+    @TableField(value = "update_time")
+    String updateTime;
 }

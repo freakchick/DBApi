@@ -1,6 +1,28 @@
 <template>
   <div>
     <div>
+      <ul>
+        <li>
+          <router-link to='/api/add'>
+            <el-button type="primary" plain icon="el-icon-plus">创建API</el-button>
+          </router-link>
+        </li>
+        <li>
+          <el-button @click="dialogVisible = true" type="primary" plain>API分组管理</el-button>
+        </li>
+        <li>
+          <el-button type="warning" plain @click="dialogVisible2=true" icon="el-icon-download">导出API文档</el-button>
+        </li>
+        <li>
+          <el-button type="warning" plain @click="dialogVisible3=true" icon="el-icon-download">导出API配置</el-button>
+        </li>
+        <li>
+          <el-upload action="/apiConfig/import" accept=".json" :on-success="importSuccess" :headers="headers"
+                     :on-error="importFail" :file-list="fileList">
+            <el-button type="warning" plain icon="el-icon-upload2">导入API配置</el-button>
+          </el-upload>
+        </li>
+      </ul>
       <div>
         <el-select v-model="groupId" class="gap">
           <el-option label="所有分组" value=""></el-option>
@@ -17,8 +39,8 @@
         <el-button type="primary" icon="el-icon-search" @click="search" plain>查询</el-button>
       </div>
 
-      <el-table :data="tableData" border stripe max-height="700" class="gap">
-        <el-table-column label="名称">
+      <el-table :data="tableData" border stripe max-height="700" class="gap" width="100%">
+        <el-table-column label="id" width="330px">
           <template slot-scope="scope">
             <el-tooltip effect="light" content="已上线" placement="top-start" v-if="scope.row.status == 1">
               <i class="iconfont icon-on_line1 circle"></i>
@@ -34,12 +56,10 @@
             <el-tooltip effect="light" content="开放接口" placement="top-start" v-else>
               <i class="el-icon-unlock circle "></i>
             </el-tooltip>
-
-
-            <span :title="scope.row.note">{{ scope.row.name }}</span>
+            <span :title="scope.row.note">{{ scope.row.id }}</span>
           </template>
         </el-table-column>
-        <!--      <el-table-column prop="note" label="描述"></el-table-column>-->
+        <el-table-column label="名称" prop="name"></el-table-column>
         <el-table-column label="路径">
           <template slot-scope="scope">
             <span>/api/{{ scope.row.path }}</span>
@@ -50,7 +70,8 @@
             <data-tag v-for="item in scope.row.p" :name="item.name" :type="item.type"></data-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column prop="updateTime" label="修改时间" width="200px"></el-table-column>
+        <el-table-column label="操作" width="200px">
           <template slot-scope="scope">
             <el-button plain size="mini" type="info" @click="detail(scope.row.id)" circle><i
                 class="iconfont icon-detail"></i>
@@ -80,19 +101,12 @@
         </el-table-column>
       </el-table>
 
-      <router-link to='/api/add' class="gap">
-        <el-button type="primary" plain>创建api</el-button>
-      </router-link>
-
-      <el-button @click="dialogVisible = true" type="primary" plain class="gap">api分组管理</el-button>
-      <el-button class="gap" type="primary" plain @click="dialogVisible2=true">导出api文档</el-button>
-      <el-button class="gap" type="primary" plain @click="dialogVisible3=true">导出api配置</el-button>
 
       <el-dialog title="API分组" :visible.sync="dialogVisible" @close="getAllGroups">
         <group></group>
       </el-dialog>
 
-      <el-dialog title="导出api文档" :visible.sync="dialogVisible2" @open="getApiTree">
+      <el-dialog title="导出API文档" :visible.sync="dialogVisible2" @open="getApiTree">
         <el-tree :data="treeData" show-checkbox node-key="id" :props="defaultProps" ref="tree"></el-tree>
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible2 = false">取 消</el-button>
@@ -100,7 +114,7 @@
         </span>
       </el-dialog>
 
-      <el-dialog title="导出api配置" :visible.sync="dialogVisible3" @open="getApiTree">
+      <el-dialog title="导出API配置" :visible.sync="dialogVisible3" @open="getApiTree">
         <el-tree :data="treeData" show-checkbox node-key="id" :props="defaultProps" ref="tree2"></el-tree>
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible3 = false">取 消</el-button>
@@ -131,11 +145,23 @@ export default {
       defaultProps: {
         children: 'children',
         label: 'name'
-      }
+      },
+      headers: {
+        Authorization: localStorage.getItem('token')
+      },
+      fileList:[]
     }
   },
   components: {dataTag, group},
   methods: {
+    importSuccess(response, file, fileList) {
+      this.fileList = []
+      this.$message.success("导入api成功")
+      this.getAllApis()
+    },
+    importFail(error, file, fileList) {
+      this.$message.error("import failed")
+    },
     getAllApis() {
       this.axios.post("/apiConfig/getAll").then((response) => {
         const list = response.data
@@ -237,7 +263,7 @@ export default {
         console.error(error)
       })
     },
-    exportConfig(){
+    exportConfig() {
       let a = this.$refs.tree2.getCheckedKeys().filter((t) => {
         return t != undefined
       })
@@ -274,7 +300,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 i {
   font-size: 14px;
 }
@@ -300,5 +326,13 @@ i {
   margin-right: 5px;
 }
 
+ul {
+  margin-bottom: 10px;
 
+  li {
+    display: inline-block;
+    margin-right: 10px;
+  }
+
+}
 </style>

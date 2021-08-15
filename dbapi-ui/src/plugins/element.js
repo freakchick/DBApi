@@ -47,7 +47,7 @@ import {
     // Icon,
     // Row,
     // Col,
-    // Upload,
+    Upload,
     // Progress,
     // Spinner,
     // Badge,
@@ -136,7 +136,7 @@ Vue.use(Alert);
 // Vue.use(Icon);
 // Vue.use(Row);
 // Vue.use(Col);
-// Vue.use(Upload);
+Vue.use(Upload);
 // Vue.use(Progress);
 // Vue.use(Spinner);
 // Vue.use(Badge);

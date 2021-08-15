@@ -6,7 +6,7 @@
 
     <groupId>com.gitee.freakchicken.dbapi</groupId>
     <artifactId>dbapi</artifactId>
-    <version>2.3.0</version>
+    <version>2.3.1</version>
     <modules>
         <module>dbapi-ui</module>
         <module>dbapi-common</module>

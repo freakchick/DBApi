@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +51,10 @@ public class ApiConfigService {
         } else {
             apiConfig.setStatus(0);
             apiConfig.setId(UUIDUtil.id());
+
+            String now = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date());
+            apiConfig.setCreateTime(now);
+            apiConfig.setUpdateTime(now);
             apiConfigMapper.insert(apiConfig);
             return ResponseDto.successWithMsg("添加成功");
         }
@@ -66,6 +71,7 @@ public class ApiConfigService {
         } else {
             ApiConfig oldConfig = apiConfigMapper.selectById(apiConfig.getId());
             apiConfig.setStatus(0);
+            apiConfig.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()));
             apiConfigMapper.updateById(apiConfig);
             //清除所有缓存
             if (StringUtils.isNoneBlank(apiConfig.getCachePlugin())) {
@@ -104,7 +110,9 @@ public class ApiConfigService {
     }
 
     public List<ApiConfig> getAll() {
-        return apiConfigMapper.selectList(null);
+        List<ApiConfig> list = apiConfigMapper.selectList(null);
+        List<ApiConfig> collect = list.stream().sorted(Comparator.comparing(ApiConfig::getUpdateTime).reversed()).collect(Collectors.toList());
+        return collect;
     }
 
     public JSONArray getAllDetail() {
@@ -202,8 +210,17 @@ public class ApiConfigService {
 
     }
 
-    public List<ApiConfig>  selectBatch(List<String> ids) {
+    public List<ApiConfig> selectBatch(List<String> ids) {
         List<ApiConfig> list = apiConfigMapper.selectBatchIds(ids);
         return list;
+    }
+
+    @Transactional
+    public void insertBatch(List<ApiConfig> configs) {
+        configs.stream().forEach(t -> {
+            t.setCreateTime(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()));
+            t.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()));
+            apiConfigMapper.insert(t);
+        });
     }
 }

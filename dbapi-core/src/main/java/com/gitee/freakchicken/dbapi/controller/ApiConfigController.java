@@ -13,14 +13,18 @@ import com.github.freakchick.orange.SqlMeta;
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
@@ -144,7 +148,7 @@ public class ApiConfigController {
     }
 
     @RequestMapping("/downloadConfig")
-    public void downloadConfig( String ids,HttpServletResponse response) {
+    public void downloadConfig(String ids, HttpServletResponse response) {
         List<String> collect = Arrays.asList(ids.split(","));
         List<ApiConfig> apiConfigs = apiConfigService.selectBatch(collect);
         String s = JSON.toJSONString(apiConfigs);
@@ -164,6 +168,16 @@ public class ApiConfigController {
                 e.printStackTrace();
             }
         }
+    }
+
+    @RequestMapping(value = "/import", produces = "application/json;charset=UTF-8")
+    public void uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
+
+        String s = IOUtils.toString(file.getInputStream(), "utf-8");
+        List<ApiConfig> configs = JSON.parseArray(s, ApiConfig.class);
+        configs.stream().forEach(t -> t.setStatus(0));
+        apiConfigService.insertBatch(configs);
+
     }
 
     @RequestMapping("/sql/execute")
