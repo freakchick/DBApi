@@ -20,7 +20,7 @@
     </div>
 
     <el-table :data="tableData" border stripe max-height="700">
-      <el-table-column prop="id" label="id"></el-table-column>
+      <el-table-column prop="id" label="id" width="270px"></el-table-column>
       <el-table-column label="名称">
         <template slot-scope="scope">
           <db-icon :type="scope.row.type"></db-icon>
@@ -28,8 +28,8 @@
         </template>
       </el-table-column>
       <el-table-column prop="note" label="描述"></el-table-column>
-      <el-table-column prop="updateTime" label="修改时间"></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column prop="updateTime" label="修改时间" width="170px"></el-table-column>
+      <el-table-column label="操作" width="220px">
         <template slot-scope="scope">
 
           <el-button plain size="mini" type="info" @click="detail(scope.row.id)" circle>

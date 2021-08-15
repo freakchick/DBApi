@@ -40,7 +40,7 @@
       </div>
 
       <el-table :data="tableData" border stripe max-height="700" class="gap" width="100%">
-        <el-table-column label="id" prop="id" width="300px"></el-table-column>
+        <el-table-column label="id" prop="id" width="270px"></el-table-column>
         <el-table-column label="名称" >
           <template slot-scope="scope">
             <el-tooltip effect="light" content="已上线" placement="top-start" v-if="scope.row.status == 1">
@@ -70,8 +70,8 @@
             <data-tag v-for="item in scope.row.p" :name="item.name" :type="item.type"></data-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="updateTime" label="修改时间" width="200px"></el-table-column>
-        <el-table-column label="操作" width="250px">
+        <el-table-column prop="updateTime" label="修改时间" width="170px"></el-table-column>
+        <el-table-column label="操作" width="220px">
           <template slot-scope="scope">
             <el-button plain size="mini" type="info" @click="detail(scope.row.id)" circle><i
                 class="iconfont icon-detail"></i>
