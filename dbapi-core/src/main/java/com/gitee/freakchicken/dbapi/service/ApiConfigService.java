@@ -52,7 +52,7 @@ public class ApiConfigService {
             apiConfig.setStatus(0);
             apiConfig.setId(UUIDUtil.id());
 
-            String now = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date());
+            String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
             apiConfig.setCreateTime(now);
             apiConfig.setUpdateTime(now);
             apiConfigMapper.insert(apiConfig);
@@ -71,7 +71,7 @@ public class ApiConfigService {
         } else {
             ApiConfig oldConfig = apiConfigMapper.selectById(apiConfig.getId());
             apiConfig.setStatus(0);
-            apiConfig.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()));
+            apiConfig.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             apiConfigMapper.updateById(apiConfig);
             //清除所有缓存
             if (StringUtils.isNoneBlank(apiConfig.getCachePlugin())) {
@@ -218,8 +218,8 @@ public class ApiConfigService {
     @Transactional
     public void insertBatch(List<ApiConfig> configs) {
         configs.stream().forEach(t -> {
-            t.setCreateTime(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()));
-            t.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()));
+            t.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+            t.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             apiConfigMapper.insert(t);
         });
     }
