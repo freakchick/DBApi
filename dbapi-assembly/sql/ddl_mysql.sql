@@ -3,8 +3,8 @@ DROP TABLE IF EXISTS `api_auth`;
 CREATE TABLE `api_auth`
 (
     `id`       int(11) NOT NULL AUTO_INCREMENT,
-    `token_id` int(11)     DEFAULT NULL,
-    `group_id` varchar(11) DEFAULT NULL,
+    `token_id` int(11)      DEFAULT NULL,
+    `group_id` varchar(255) DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -30,6 +30,8 @@ CREATE TABLE `api_config`
     `cache_plugin_params`     varchar(255) DEFAULT NULL,
     `transform_plugin`        varchar(255) DEFAULT NULL,
     `transform_plugin_params` varchar(255) DEFAULT NULL,
+    `create_time`             varchar(20)  DEFAULT NULL,
+    `update_time`             varchar(20)  DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `path` (`path`)
 ) ENGINE = InnoDB
@@ -52,13 +54,15 @@ DROP TABLE IF EXISTS `datasource`;
 
 CREATE TABLE `datasource`
 (
-    `id`       varchar(255) NOT NULL,
-    `name`     varchar(255) DEFAULT NULL,
-    `note`     varchar(255) DEFAULT NULL,
-    `type`     varchar(255) DEFAULT NULL,
-    `url`      varchar(255) DEFAULT NULL,
-    `username` varchar(255) DEFAULT NULL,
-    `password` varchar(255) DEFAULT NULL,
+    `id`          varchar(255) NOT NULL,
+    `name`        varchar(255) DEFAULT NULL,
+    `note`        varchar(255) DEFAULT NULL,
+    `type`        varchar(255) DEFAULT NULL,
+    `url`         varchar(255) DEFAULT NULL,
+    `username`    varchar(255) DEFAULT NULL,
+    `password`    varchar(255) DEFAULT NULL,
+    `create_time` varchar(20)  DEFAULT NULL,
+    `update_time` varchar(20)  DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -95,6 +99,7 @@ CREATE TABLE `token`
     `create_time` bigint(20)   DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
+  AUTO_INCREMENT = 2
   DEFAULT CHARSET = utf8;
 
 
@@ -110,3 +115,13 @@ CREATE TABLE `user`
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 2
   DEFAULT CHARSET = utf8;
+
+insert into `firewall`(`status`, `mode`)
+values ('off', 'black');
+
+insert into `ip_rules`(`type`, `ip`)
+values ('white', NULL),
+       ('black', NULL);
+
+insert into `user`(`id`, `username`, `password`)
+values (1, 'admin', 'admin');
