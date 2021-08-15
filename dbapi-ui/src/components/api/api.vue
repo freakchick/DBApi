@@ -71,7 +71,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="updateTime" label="修改时间" width="200px"></el-table-column>
-        <el-table-column label="操作" width="200px">
+        <el-table-column label="操作" width="250px">
           <template slot-scope="scope">
             <el-button plain size="mini" type="info" @click="detail(scope.row.id)" circle><i
                 class="iconfont icon-detail"></i>
