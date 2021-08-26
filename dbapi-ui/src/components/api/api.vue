@@ -23,12 +23,13 @@
           </el-upload>
         </li>
       </ul>
-      <div>
-        <el-select v-model="groupId" class="gap">
+      <div class="search">
+        <my-select  v-model="groupId"  label="API分组" :options="groups" option_label="name" option_value="id"> </my-select>
+<!--        <el-select v-model="groupId" class="gap">
           <el-option label="所有分组" value=""></el-option>
           <el-option :label="item.name" :value="item.id" v-for="item in groups" :key="item.id"></el-option>
-        </el-select>
-        <el-input placeholder="输入关键字" v-model="keyword" style="width:400px;" clearable class="gap"
+        </el-select>-->
+        <el-input placeholder="输入关键字" v-model="keyword" style="width:400px;" clearable
                   @keyup.enter.native="search">
           <el-select v-model="field" slot="prepend" placeholder="" style="width:80px;">
             <el-option label="名称" value="name"></el-option>
@@ -39,7 +40,7 @@
         <el-button type="primary" icon="el-icon-search" @click="search" plain>查询</el-button>
       </div>
 
-      <el-table :data="tableData" border stripe max-height="700" class="gap" width="100%">
+      <el-table :data="tableData" border stripe max-height="700" width="100%">
         <el-table-column label="id" prop="id" width="270px"></el-table-column>
         <el-table-column label="名称" >
           <template slot-scope="scope">
@@ -334,5 +335,10 @@ ul {
     margin-right: 10px;
   }
 
+}
+
+.search{
+  //padding: 10px ;
+  //border: 1px solid #ccc;
 }
 </style>

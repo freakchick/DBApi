@@ -95,7 +95,7 @@ export default {
 .form {
   display: inline-block;
   line-height: 40px;
-  vertical-align: middle;
+  vertical-align: top;
   margin-right: 10px;
   margin-bottom: 5px;
   position: relative;
@@ -110,7 +110,6 @@ export default {
     padding: 0 10px;
     color: #fff;
     border: 1px solid #a7a7a7;
-    vertical-align: middle;
     border-radius: 5px 0 0 5px;
   }
 
@@ -118,7 +117,7 @@ export default {
     width: 200px;
     display: inline-block;
     position: relative;
-    vertical-align: middle;
+    vertical-align: top;
 
     .icon {
       position: absolute;
@@ -133,7 +132,7 @@ export default {
       padding: 0 10px;
       width: 100%;
       height: 40px;
-      vertical-align: middle;
+      //vertical-align: top;
       border: 1px solid #a7a7a7;
       border-left: 0px;
       outline: 0px solid #afecab;

@@ -42,7 +42,7 @@ export default {
   display: inline-block;
   height: 40px;
   line-height: 40px;
-  vertical-align: middle;
+  vertical-align: top;
   margin-right: 10px;
   margin-bottom: 5px;
   font-family: Consolas, Arial, monospace !important;
@@ -58,7 +58,7 @@ export default {
     color: #fff;
     border: 0px solid #a7a7a7;
     border-radius: 5px 0 0 5px;
-    vertical-align: middle;
+    //vertical-align: middle;
   }
 
   .preffix {
@@ -66,7 +66,7 @@ export default {
     height: 40px;
     background-color: #f5f7fa;
     border: 1px solid #ccc;
-    vertical-align: middle;
+    vertical-align: top;
     padding: 0 3px;
     border-right-width: 0px;
 
@@ -76,7 +76,7 @@ export default {
     display: inline-block;
     height: 40px;
     padding: 0 10px;
-    vertical-align: middle;
+    vertical-align: top;
     border: 1px solid #ccc;
     border-left: 0px;
     outline: 0px solid #afecab;
