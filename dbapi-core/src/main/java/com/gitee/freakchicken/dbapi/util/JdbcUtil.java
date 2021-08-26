@@ -108,6 +108,7 @@ public class JdbcUtil {
 
     /**
      * 查询表所有字段
+     *
      * @param conn
      * @param type
      * @param table
@@ -134,7 +135,7 @@ public class JdbcUtil {
 
                 String columnTypeName = rsd.getColumnTypeName(i + 1);
                 jsonObject.put("fieldTypeName", columnTypeName);//数据库字段类型名
-                jsonObject.put("TypeName",  columnTypeName);
+                jsonObject.put("TypeName", columnTypeName);
                 jsonObject.put("fieldJavaTypeName", rsd.getColumnClassName(i + 1));//映射到java的类型名
                 String columnName = rsd.getColumnName(i + 1);
                 if (columnName.contains("."))
@@ -172,7 +173,7 @@ public class JdbcUtil {
             }
 
             boolean hasResultSet = statement.execute();
-            if (hasResultSet){
+            if (hasResultSet) {
                 ResultSet rs = statement.getResultSet();
                 int columnCount = rs.getMetaData().getColumnCount();
 
@@ -195,7 +196,7 @@ public class JdbcUtil {
                     list.add(jo);
                 }
                 return ResponseDto.apiSuccess(list);
-            }else{
+            } else {
                 int updateCount = statement.getUpdateCount();
                 return ResponseDto.apiSuccess("sql修改数据行数： " + updateCount);
             }
@@ -204,7 +205,8 @@ public class JdbcUtil {
             return ResponseDto.fail(e.getMessage());
         } finally {
             try {
-                connection.close();
+                if (connection != null)
+                    connection.close();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
