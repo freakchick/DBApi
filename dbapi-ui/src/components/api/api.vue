@@ -132,7 +132,7 @@
         </span>
       </el-dialog>
 
-      <el-dialog title="导出API分组配置" :visible.sync="dialogVisible4" @open="">
+      <el-dialog title="导出API分组配置" :visible.sync="dialogVisible4" @open="getAllGroups">
         <el-checkbox-group v-model="checkList">
           <el-checkbox v-for="item in groups" :label="item.id">{{item.name}}
             <span style="color: #ccc">{{item.id}}</span>
