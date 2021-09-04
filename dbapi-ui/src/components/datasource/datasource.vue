@@ -4,16 +4,16 @@
       <ul>
         <li>
           <router-link to="/datasource/add">
-            <el-button type="primary" plain icon="el-icon-plus">创建数据源</el-button>
+            <el-button type="primary" icon="el-icon-plus">创建数据源</el-button>
           </router-link>
         </li>
         <li>
-          <el-button type="warning" plain @click="show=true" icon="el-icon-download">导出数据源</el-button>
+          <el-button type="warning" @click="show=true" icon="el-icon-download" round>导出数据源</el-button>
         </li>
         <li>
           <el-upload action="/datasource/import" accept=".json" :on-success="importSuccess" :headers="headers"
                      :on-error="importFail" :file-list="fileList">
-            <el-button type="warning" plain icon="el-icon-upload2">导入数据源</el-button>
+            <el-button type="warning" icon="el-icon-upload2" round>导入数据源</el-button>
           </el-upload>
         </li>
       </ul>

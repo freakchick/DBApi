@@ -4,31 +4,31 @@
       <ul>
         <li>
           <router-link to='/api/add'>
-            <el-button type="primary" plain icon="el-icon-plus">创建API</el-button>
+            <el-button type="primary" icon="el-icon-plus">创建API</el-button>
           </router-link>
         </li>
         <li>
-          <el-button @click="dialogVisible = true" type="primary" plain>API分组管理</el-button>
+          <el-button @click="dialogVisible = true" type="primary" >API分组管理</el-button>
         </li>
         <li>
-          <el-button type="warning" plain @click="dialogVisible2=true" icon="el-icon-download">导出API文档</el-button>
+          <el-button type="warning" plain @click="dialogVisible2=true" icon="el-icon-download" round>导出API文档</el-button>
         </li>
         <li>
-          <el-button type="warning" plain @click="dialogVisible3=true" icon="el-icon-download">导出API配置</el-button>
+          <el-button type="warning"  @click="dialogVisible3=true" icon="el-icon-download" round>导出API配置</el-button>
         </li>
         <li>
           <el-upload action="/apiConfig/import" accept=".json" :on-success="importSuccess" :headers="headers"
                      :on-error="importFail" :file-list="fileList">
-            <el-button type="warning" plain icon="el-icon-upload2">导入API配置</el-button>
+            <el-button type="warning"  icon="el-icon-upload2" round>导入API配置</el-button>
           </el-upload>
         </li>
         <li>
-          <el-button type="warning" @click="dialogVisible4=true" icon="el-icon-download">导出API分组配置</el-button>
+          <el-button type="warning" @click="dialogVisible4=true" icon="el-icon-download" round>导出API分组配置</el-button>
         </li>
         <li>
           <el-upload action="/apiConfig/importGroup" accept=".json" :on-success="importGroupSuccess" :headers="headers"
                      :on-error="importFail" :file-list="groupFile">
-            <el-button type="warning" icon="el-icon-upload2">导入API分组配置</el-button>
+            <el-button type="warning" icon="el-icon-upload2" round>导入API分组配置</el-button>
           </el-upload>
         </li>
       </ul>
