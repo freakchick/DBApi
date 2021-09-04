@@ -20,6 +20,7 @@
 - 支持API结果缓存，支持缓存开启/关闭
 - 支持自定义代码逻辑的数据转换，比如数据脱敏
 - 部署简便，安装部署不需要使用外部数据库，一键启动即可
+- 支持API配置导入导出，方便测试环境到生产环境的快速部署
 ## 4.软件架构
 
 - 采用B/S架构，springboot + vue.js 前后端分离开发
@@ -84,6 +85,7 @@ docker run -d -p 8520:8520 freakchicken/db-api
 - 启动后浏览器访问 http://ip:8520 ，默认登录账户： admin/admin
 
 ## 6.软件截图
+![](https://freakchicken.gitee.io/images/dbApi/20210904/api.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20210502/datasource_create.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20210803/api_edit.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20210803/sql_run.png)
@@ -179,7 +181,7 @@ http://localhost:8520
 
 ### 捐赠：
 
-如果此项目帮助到您，请捐赠作者一杯咖啡
+开源不易，用爱发电，如果此项目帮助到您，请作者喝一杯咖啡
 <div style="text-align: center"> 
 <img src="https://freakchicken.gitee.io/images/kafkaui/wechatpay.jpg" width = "30%" />
 <img src="https://freakchicken.gitee.io/images/kafkaui/alipay.jpg" width = "29%" />
@@ -191,6 +193,6 @@ http://localhost:8520
 - api熔断支持
 - 请求路由参数支持
 - 流量监控支持，ip限流，分组限流
-- api配置导入导出支持
+- ~~api配置导入导出支持~~
 - 功能性api支持（RPC调用）
 - 分库分表数据源支持（shardingSphere/mycat）
