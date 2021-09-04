@@ -42,4 +42,15 @@ public class GroupService {
     public List<Group> getAll() {
         return groupMapper.selectList(null);
     }
+
+    public List<Group> selectBatch(List<String> ids) {
+        return groupMapper.selectBatchIds(ids);
+    }
+
+    @Transactional
+    public void insertBatch(List<Group> configs) {
+        configs.stream().forEach(t->{
+            groupMapper.insert(t);
+        });
+    }
 }

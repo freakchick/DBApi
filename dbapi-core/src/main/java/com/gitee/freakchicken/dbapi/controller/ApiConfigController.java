@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.gitee.freakchicken.dbapi.domain.DataSource;
+import com.gitee.freakchicken.dbapi.domain.Group;
 import com.gitee.freakchicken.dbapi.service.ApiConfigService;
 import com.gitee.freakchicken.dbapi.service.DataSourceService;
 import com.gitee.freakchicken.dbapi.service.GroupService;
@@ -170,6 +171,29 @@ public class ApiConfigController {
         }
     }
 
+    @RequestMapping("/downloadGroupConfig")
+    public void downloadGroupConfig(String ids, HttpServletResponse response) {
+        List<String> collect = Arrays.asList(ids.split(","));
+        List<Group> list = groupService.selectBatch(collect);
+        String s = JSON.toJSONString(list);
+        response.setContentType("application/x-msdownload;charset=utf-8");
+//        response.setHeader("Content-Disposition", "attachment; filename=api配置.json");
+        OutputStream os = null;
+        try {
+            os = response.getOutputStream();
+            os.write(s.getBytes("utf-8"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (os != null)
+                    os.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @RequestMapping(value = "/import", produces = "application/json;charset=UTF-8")
     public void uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
 
@@ -177,6 +201,15 @@ public class ApiConfigController {
         List<ApiConfig> configs = JSON.parseArray(s, ApiConfig.class);
         configs.stream().forEach(t -> t.setStatus(0));
         apiConfigService.insertBatch(configs);
+
+    }
+
+    @RequestMapping(value = "/importGroup", produces = "application/json;charset=UTF-8")
+    public void importGroup(@RequestParam("file") MultipartFile file) throws IOException {
+
+        String s = IOUtils.toString(file.getInputStream(), "utf-8");
+        List<Group> configs = JSON.parseArray(s, Group.class);
+        groupService.insertBatch(configs);
 
     }
 

@@ -86,6 +86,7 @@ public class DataSourceService {
     @Transactional
     public void insertBatch(List<DataSource> list) {
         list.forEach(t -> {
+            t.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             dataSourceMapper.insert(t);
         });
     }

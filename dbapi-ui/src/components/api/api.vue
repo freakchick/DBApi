@@ -22,6 +22,15 @@
             <el-button type="warning" plain icon="el-icon-upload2">导入API配置</el-button>
           </el-upload>
         </li>
+        <li>
+          <el-button type="warning" @click="dialogVisible4=true" icon="el-icon-download">导出API分组配置</el-button>
+        </li>
+        <li>
+          <el-upload action="/apiConfig/importGroup" accept=".json" :on-success="importGroupSuccess" :headers="headers"
+                     :on-error="importFail" :file-list="groupFile">
+            <el-button type="warning" icon="el-icon-upload2">导入API分组配置</el-button>
+          </el-upload>
+        </li>
       </ul>
       <div class="search">
         <my-select  v-model="groupId"  label="API分组" :options="groups" option_label="name" option_value="id"> </my-select>
@@ -122,6 +131,20 @@
           <el-button type="primary" @click="dialogVisible3 = false;exportConfig()">导出</el-button>
         </span>
       </el-dialog>
+
+      <el-dialog title="导出API分组配置" :visible.sync="dialogVisible4" @open="">
+        <el-checkbox-group v-model="checkList">
+          <el-checkbox v-for="item in groups" :label="item.id">{{item.name}}
+            <span style="color: #ccc">{{item.id}}</span>
+          </el-checkbox>
+
+        </el-checkbox-group>
+
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible4 = false">取 消</el-button>
+          <el-button type="primary" @click="dialogVisible4 = false;exportGroupConfig()">导出</el-button>
+        </span>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -137,6 +160,7 @@ export default {
       dialogVisible: false,
       dialogVisible2: false,
       dialogVisible3: false,
+      dialogVisible4: false,
       keyword: null,
       field: null,
       tableData: [],
@@ -150,7 +174,9 @@ export default {
       headers: {
         Authorization: localStorage.getItem('token')
       },
-      fileList:[]
+      fileList:[],
+      groupFile:[],
+      checkList:[]
     }
   },
   components: {dataTag, group},
@@ -159,6 +185,11 @@ export default {
       this.fileList = []
       this.$message.success("导入api成功")
       this.getAllApis()
+    },
+    importGroupSuccess(response, file, fileList){
+      this.groupFile = []
+      this.$message.success("导入api分组成功")
+      this.getAllGroups()
     },
     importFail(error, file, fileList) {
       this.$message.error("import failed!  "+ error.message)
@@ -292,6 +323,29 @@ export default {
         console.error(error)
       })
     },
+    exportGroupConfig(){
+      console.log(this.checkList)
+      const ids = this.checkList.join(",")
+      this.axios({
+        method: 'post',
+        params: {ids: ids},
+        url: '/apiConfig/downloadGroupConfig',
+        responseType: 'blob' //这个很重要
+      }).then((res) => {
+        console.log(res)
+        const link = document.createElement('a')
+        let blob = new Blob([res.data], {type: 'application/x-msdownload'});
+        link.style.display = 'none'
+        link.href = URL.createObjectURL(blob);
+        link.setAttribute('download', 'api_group_config.json')
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      }).catch(error => {
+        this.$message.error("导出错误")
+        console.error(error)
+      })
+    }
   },
 
   created() {
