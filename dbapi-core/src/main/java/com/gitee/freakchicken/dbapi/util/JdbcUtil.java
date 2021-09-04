@@ -78,6 +78,9 @@ public class JdbcUtil {
                 case "SQLSERVER":
                     sql = "select * from sys.tables";
                     break;
+                case "ORACLE":
+                    sql = "select table_name from user_tables where TABLESPACE_NAME is not null";
+                    break;
                 default:
                     sql = "show tables";
 
