@@ -162,7 +162,7 @@ http://localhost:8520
 ## 12.联系作者：
 
 ### 微信：
-- 提问请先star支持一下
+- 提问请先star支持一下，提问前请先把文档读一遍，文档里写过的问题不会回答
 <div style="text-align: center"> 
 <img src="https://freakchicken.gitee.io/images/kafkaui/wechat.jpg" width = "30%" />
 </div>
