@@ -10,6 +10,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>dbapi-plugin</artifactId>
+    <name>${project.artifactId}</name>
+    <description>build http api from sql without other code</description>
+    <url>https://gitee.com/freakchicken/db-api</url>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
