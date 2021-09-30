@@ -26,7 +26,7 @@
 - 采用B/S架构，springboot + vue.js 前后端分离开发
 - 考虑到部署的简便性，使用sqlite数据库
 - 使用了开源的动态sql引擎[orange](https://gitee.com/freakchicken/orange)
-### 权限校验流程
+- 权限校验流程
   ![](https://freakchicken.gitee.io/images/dbApi/20210502/lc.png)
 
 
@@ -39,7 +39,7 @@
 
 ### 5.1 tar包安装
 
-- 下载dbApi.tar.gz包
+- 下载DBApi-[version]-bin.tar.gz包
 - 解压tar包，修改conf/application.properties文件中的配置:
 
 - 如果您想使用自己的mysql作为元数据库，请修改conf/application.properties文件中的以下配置
@@ -116,8 +116,6 @@ docker run -d -p 8520:8520 freakchicken/db-api
 ```shell
 npm config set registry https://registry.npm.taobao.org
 ```
-- 拉取[orange](https://gitee.com/freakchicken/orange) 代码到本地并maven install安装。（作者试了多次发布orange到maven中央仓库一直没有成功，有懂的同学指导作者一下）
-
 ### 9.2编译打包
 
 - maven打包会自动把前端安装依赖并编译打包，
@@ -152,7 +150,7 @@ http://localhost:8520
 ```
 ## 10.springboot集成
 
-如果您想更加灵活的使用dbApi，在您自己的java springboot项目中使用代码配置接口，
+如果您想更加灵活的使用DBApi，在您自己的java springboot项目中使用代码配置接口，
 请使用[dbApi-spring-boot-starter开源框架](https://gitee.com/freakchicken/dbApi-spring-boot-starter)
 
 ## 11.注意事项

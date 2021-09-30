@@ -26,7 +26,7 @@
         <dependency>
             <groupId>com.gitee.freakchicken.dbapi</groupId>
             <artifactId>dbapi-common</artifactId>
-            <!--            <scope>compile</scope>-->
+            <!--<scope>compile</scope>-->
         </dependency>
 
 

@@ -15,16 +15,13 @@ DBApi的插件分两类，一类是数据转换插件，一类是缓存插件
 ## 插件的开发流程
 
 ### 准备工作
-- 插件使用java语言编写，准备java开发环境和node.js环境
-- 拉取[orange](https://gitee.com/freakchicken/orange) 代码本地安装，安装命令mvn install
-- 拉取[dbApi](https://gitee.com/freakchicken/db-api) 代码本地安装，安装命令mvn install，
-  如果代码跑不起来，参考DBApi的开发指南
+- 插件使用java语言编写，准备java(8+)开发环境和node.js环境
 - 新建maven项目，pom里引入dbapi-plugin
 ```xml
 <dependency>
     <groupId>com.gitee.freakchicken.dbapi</groupId>
     <artifactId>dbapi-plugin</artifactId>
-    <version>2.3.0</version>
+    <version>2.3.1</version>
     <scope>provided</scope>
 </dependency>
 ```
