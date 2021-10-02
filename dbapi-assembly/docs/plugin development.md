@@ -15,7 +15,7 @@ DBApi的插件分两类，一类是数据转换插件，一类是缓存插件
 ## 插件的开发流程
 
 ### 准备工作
-- 插件使用java语言编写，准备java(8+)开发环境和node.js环境
+- 插件使用java语言编写，准备java(8+)开发环境
 - 新建maven项目，pom里引入dbapi-plugin
 ```xml
 <dependency>
