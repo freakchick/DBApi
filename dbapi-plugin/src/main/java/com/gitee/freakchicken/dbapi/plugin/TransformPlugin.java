@@ -1,6 +1,7 @@
 package com.gitee.freakchicken.dbapi.plugin;
 
 import com.alibaba.fastjson.JSONObject;
+import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,9 +13,9 @@ public abstract class TransformPlugin {
 
     /**
      * 数据转换逻辑
-     *
      * @param data sql查询结果
+     * @param config api配置
      * @return
      */
-    public abstract Object transform(List<JSONObject> data);
+    public abstract Object transform(List<JSONObject> data, ApiConfig config);
 }

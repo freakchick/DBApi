@@ -195,7 +195,7 @@ public class ApiInterceptor implements HandlerInterceptor {
             if (StringUtils.isNoneBlank(config.getTransformPlugin()) && responseDto.isSuccess()) {
                 List<JSONObject> data = (List<JSONObject>) (responseDto.getData());
                 TransformPlugin transformPlugin = PluginManager.getTransformPlugin(config.getTransformPlugin());
-                Object transform = transformPlugin.transform(data);
+                Object transform = transformPlugin.transform(data, config);
                 responseDto.setData(transform);
 
             }

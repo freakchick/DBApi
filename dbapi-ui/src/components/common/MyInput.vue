@@ -2,7 +2,7 @@
   <div class="form">
     <span class="label">{{ (nullable ? '' : '*') + label }}</span>
     <div class="preffix" v-if="preffix != ''">{{ preffix }}</div>
-    <input class="input" :value="value" @input="handleInput" :style="'width: ' + width"/>
+    <input class="input" :value="value" @input="handleInput" :style="'width: ' + width" :placeholder="placeholder"/>
   </div>
 </template>
 <script>
@@ -28,6 +28,10 @@ export default {
       type: String,
       default: '200px'
     },
+    placeholder: {
+      type: String,
+      default: ''
+    },
   },
   methods: {
     handleInput(e) {
@@ -38,6 +42,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+input::-webkit-input-placeholder {
+  /* WebKit browsers */
+  color: #ccc;
+}
+input:-moz-placeholder {
+  /* Mozilla Firefox 4 to 18 */
+  color: #ccc;
+}
+input::-moz-placeholder {
+  /* Mozilla Firefox 19+ */
+  color: #ccc;
+}
+input:-ms-input-placeholder {
+  /* Internet Explorer 10+ */
+  color: #ccc;
+}
+
 .form {
   display: inline-block;
   height: 40px;

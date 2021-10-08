@@ -28,6 +28,8 @@ export default {
         previlege: detail.previlege,
         cachePlugin: detail.cachePlugin,
         transformPlugin: detail.transformPlugin,
+        cachePluginParams: detail.cachePluginParams,
+        transformPluginParams: detail.transformPluginParams,
         datasourceId: this.$refs.apiEditCommon.$refs.sqlCode.datasourceId,
         sql: this.$refs.apiEditCommon.$refs.sqlCode.codemirror.getValue().trim(),
         params: JSON.stringify(detail.params),

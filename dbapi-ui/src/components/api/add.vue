@@ -30,7 +30,9 @@ export default {
         groupId: detail.groupId,
         previlege: detail.previlege,
         cachePlugin: detail.cachePlugin,
+        cachePluginParams: detail.cachePluginParams,
         transformPlugin: detail.transformPlugin,
+        transformPluginParams: detail.transformPluginParams,
         datasourceId: this.$refs.apiAdd.$refs.sqlCode.datasourceId,
         sql: this.$refs.apiAdd.$refs.sqlCode.codemirror.getValue().trim(),
         params: JSON.stringify(detail.params)

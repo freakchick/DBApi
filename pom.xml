@@ -6,18 +6,18 @@
 
     <groupId>com.gitee.freakchicken.dbapi</groupId>
     <artifactId>dbapi</artifactId>
-    <version>2.3.1</version>
+    <version>2.3.2</version>
     <name>DBApi</name>
     <description>build http api from sql without other code</description>
     <url>https://gitee.com/freakchicken/db-api</url>
 
-    <modules>
-        <module>dbapi-ui</module>
-        <module>dbapi-common</module>
-        <module>dbapi-plugin</module>
-        <module>dbapi-core</module>
-        <module>dbapi-assembly</module>
-    </modules>
+    <!--   <modules>
+           <module>dbapi-ui</module>
+           <module>dbapi-common</module>
+           <module>dbapi-plugin</module>
+           <module>dbapi-core</module>
+           <module>dbapi-assembly</module>
+       </modules>-->
 
     <packaging>pom</packaging>
 
@@ -29,6 +29,98 @@
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
         <docker.image.prefix>freakchicken</docker.image.prefix>
     </properties>
+
+    <profiles>
+        <!--开发模式，只编译后端，不打tar包-->
+        <profile>
+            <id>dev</id>
+            <modules>
+                <module>dbapi-common</module>
+                <module>dbapi-plugin</module>
+                <module>dbapi-core</module>
+            </modules>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <!--release模式，编译所有模块，打tar包-->
+        <profile>
+            <id>release</id>
+            <modules>
+                <module>dbapi-ui</module>
+                <module>dbapi-common</module>
+                <module>dbapi-plugin</module>
+                <module>dbapi-core</module>
+                <module>dbapi-assembly</module>
+            </modules>
+        </profile>
+        <!--部署模式，只编译两个模块，并发布到中央仓库-->
+        <profile>
+            <id>deploy</id>
+            <modules>
+                <module>dbapi-common</module>
+                <module>dbapi-plugin</module>
+            </modules>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>2.2.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.2.0</version>
+                        <configuration>
+                            <show>package</show>
+                            <tags>
+                                <tag>
+                                    <name>date</name>
+                                </tag>
+                            </tags>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <configuration>
+                                    <doclint>none</doclint>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.0</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+
+        </profile>
+
+    </profiles>
 
     <dependencyManagement>
         <dependencies>
@@ -98,60 +190,7 @@
                 </configuration>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.2.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.2.0</version>
-                <configuration>
-                    <show>package</show>
-                    <tags>
-                        <tag>
-                            <name>date</name>
-                        </tag>
-                    </tags>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                        <configuration>
-                            <doclint>none</doclint>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
 
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.0</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 
