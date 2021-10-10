@@ -121,7 +121,7 @@ npm config set registry https://registry.npm.taobao.org
 - maven打包会自动把前端安装依赖并编译打包，
 
 ```shell script
-mvn clean package
+mvn clean package -P release
 ```
 
 ### 9.3构建镜像
