@@ -158,6 +158,8 @@ export default {
         this.detail.params = JSON.parse(response.data.params)
         this.detail.cachePlugin = response.data.cachePlugin
         this.detail.transformPlugin = response.data.transformPlugin
+        this.detail.transformPluginParams = response.data.transformPluginParams
+        this.detail.cachePluginParams = response.data.cachePluginParams
 
 
         console.log(this.$refs.sqlCode.datasourceId, response.data.datasourceId)
