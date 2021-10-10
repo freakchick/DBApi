@@ -59,6 +59,16 @@
     </dependencies>
 
     <build>
+        <resources>
+            <!--plugin.properties配置文件不打进jar包里，tar包会打进去的。发布到maven中央仓库的时候不希望此jar包携带此properties文件-->
+            <resource>
+                <directory>src/main/resources/</directory>
+                <filtering>true</filtering>
+                <excludes>
+                    <exclude>plugin.properties</exclude>
+                </excludes>
+            </resource>
+        </resources>
         <plugins>
             <!--生成doc jar包-->
             <plugin>
