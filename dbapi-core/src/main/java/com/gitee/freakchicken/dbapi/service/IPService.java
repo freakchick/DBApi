@@ -33,7 +33,7 @@ public class IPService {
 
     public Map<String, String> detail() {
         if (Cache.status == null) {
-            log.info("sql 查询 ipRules");
+//            log.info("sql 查询 ipRules");
             List<Map<String, String>> ipRule = ipMapper.getIPRule();
             Map<String, String> status = ipMapper.getStatus();
             ipRule.stream().forEach(t -> {
@@ -47,10 +47,10 @@ public class IPService {
             });
             // set cache
             Cache.status = status;
-            log.info("set cache");
+//            log.info("set cache");
             return status;
         } else {
-            log.info("get from cache");
+//            log.info("get from cache");
             return Cache.status;
         }
     }
