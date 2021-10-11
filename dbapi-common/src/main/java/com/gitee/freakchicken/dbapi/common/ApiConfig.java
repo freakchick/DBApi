@@ -34,6 +34,7 @@ public class ApiConfig {
     @TableField("`sql`")
     String sql;
 
+    @Deprecated
     @TableField(value = "real_sql")
     String realSql;
 
