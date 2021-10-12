@@ -26,7 +26,9 @@ export default {
         "url": data.url,
         "username": data.username,
         "password": data.password,
-        "type": data.type
+        "type": data.type,
+        "driver": data.driver,
+        "tableSql": data.tableSql
       }).then((response) => {
         this.$message.success("添加成功")
       }).catch((error) => {

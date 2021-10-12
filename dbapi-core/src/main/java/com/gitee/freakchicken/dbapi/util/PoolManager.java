@@ -40,7 +40,7 @@ public class PoolManager {
                     druidDataSource.setUrl(ds.getUrl());
                     druidDataSource.setUsername(ds.getUsername());
                     druidDataSource.setPassword(ds.getPassword());
-                    druidDataSource.setDriverClassName(ds.getClassName());
+                    druidDataSource.setDriverClassName(ds.getDriver());
                     druidDataSource.setConnectionErrorRetryAttempts(3);       //失败后重连次数
                     druidDataSource.setBreakAfterAcquireFailure(true);
 

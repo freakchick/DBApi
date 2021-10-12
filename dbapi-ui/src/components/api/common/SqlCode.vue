@@ -243,7 +243,7 @@ export default {
       this.axios.post("/table/getAllTables", {sourceId: datasourceId}).then((response) => {
         this.tables = response.data
       }).catch((error) => {
-        this.$message.error("查询所有表失败")
+        this.$message.error("查询所有表名称失败；但不影响使用！")
       })
     },
 

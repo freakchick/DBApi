@@ -37,8 +37,11 @@ public class DataSource {
     @TableField
     String type;
 
-    @TableField(exist = false)
-    String className;
+    @TableField
+    String driver;
+
+    @TableField(value = "table_sql")
+    String tableSql;
 
     @TableField(value = "create_time")
     String createTime;

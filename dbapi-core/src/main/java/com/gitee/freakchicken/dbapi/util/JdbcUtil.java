@@ -23,34 +23,8 @@ public class JdbcUtil {
     }
 
     public static Connection getConnection(DataSource ds) throws SQLException, ClassNotFoundException {
-        String url = ds.getUrl();
-        switch (ds.getType()) {
-            case JdbcConstants.MYSQL:
-                Class.forName(JdbcConstants.MYSQL_DRIVER);
-                break;
-            case JdbcConstants.POSTGRESQL:
-                Class.forName(JdbcConstants.POSTGRESQL_DRIVER);
-                break;
-            case JdbcConstants.HIVE:
-                Class.forName(JdbcConstants.HIVE_DRIVER);
-                break;
-            case JdbcConstants.SQL_SERVER:
-                Class.forName(JdbcConstants.SQL_SERVER_DRIVER_SQLJDBC4);
-                break;
-            case JdbcConstants.CLICKHOUSE:
-                Class.forName(JdbcConstants.CLICKHOUSE_DRIVER);
-                break;
-            case JdbcConstants.KYLIN:
-                Class.forName(JdbcConstants.KYLIN_DRIVER);
-                break;
-            case JdbcConstants.ORACLE:
-                Class.forName(JdbcConstants.ORACLE_DRIVER);
-                break;
-            default:
-                break;
-        }
-
-        Connection connection = DriverManager.getConnection(url, ds.getUsername(), ds.getPassword());
+        Class.forName(ds.getDriver());
+        Connection connection = DriverManager.getConnection(ds.getUrl(), ds.getUsername(), ds.getPassword());
         log.info("获取连接成功");
         return connection;
     }
@@ -58,34 +32,13 @@ public class JdbcUtil {
     /**
      * 查询库中所有表
      * @param conn
-     * @param type
+     * @param sql
      * @return
      */
-    public static List<String> getAllTables(Connection conn, String type) {
+    public static List<String> getAllTables(Connection conn, String sql) {
         List<String> list = new ArrayList<>();
         PreparedStatement pst = null;
         try {
-            String sql;
-            switch (type) {
-                case "MYSQL":
-                case "HIVE":
-                    sql = "show tables";
-                    break;
-                case "POSTGRESQL":
-                    sql = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' ORDER BY table_name";
-                    break;
-                // TODO
-                case "SQLSERVER":
-                    sql = "select * from sys.tables";
-                    break;
-                case "ORACLE":
-                    sql = "select table_name from user_tables where TABLESPACE_NAME is not null";
-                    break;
-                default:
-                    sql = "show tables";
-
-            }
-
             pst = conn.prepareStatement(sql);
             ResultSet resultSet = pst.executeQuery();
 

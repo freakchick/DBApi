@@ -1,7 +1,7 @@
 <template>
   <div>
 
-    <el-form label-width="100px">
+    <el-form label-width="140px">
       <el-form-item label="数据库">
         <el-select v-model="detail.type" placeholder="请选择" @change="selectDB">
           <el-option v-for="item in options" :key="item.label" :label="item.label" :value="item.label">
@@ -16,7 +16,10 @@
       <el-form-item label="描述">
         <el-input v-model="detail.note"></el-input>
       </el-form-item>
-      <el-form-item label="url">
+      <el-form-item label="jdbc驱动">
+        <el-input v-model="detail.driver"></el-input>
+      </el-form-item>
+      <el-form-item label="jdbc url">
         <el-input v-model="detail.url" type="textarea" class="my"></el-input>
       </el-form-item>
       <el-form-item label="用户名">
@@ -24,6 +27,12 @@
       </el-form-item>
       <el-form-item label="密码">
         <el-input v-model="detail.password"></el-input>
+      </el-form-item>
+      <el-form-item label="查询所有表名称sql">
+        <el-input v-model="detail.tableSql"></el-input>
+        <el-alert type="warning" show-icon>
+          创建或编辑API的时候，选择数据源，会执行此sql来获取该数据源下的所有表名称
+        </el-alert>
       </el-form-item>
     </el-form>
 
@@ -39,31 +48,61 @@ export default {
   data() {
     return {
       options: [{label: 'mysql'}, {label: 'postgresql'}, {label: 'hive'},
-        {label: 'sqlserver'}, {label: 'clickhouse'}, {label: 'kylin'}, {label: 'oracle'}],
-      detail: {url: null, name: null, note: null, type: null, username: null, password: null}
+        {label: 'sqlserver'}, {label: 'clickhouse'}, {label: 'kylin'}, {label: 'oracle'}, {label: '其他'}],
+      detail: {
+        url: null,
+        name: null,
+        note: null,
+        type: null,
+        username: null,
+        password: null,
+        driver: null,
+        tableSql: null
+      },
+      ds: {
+        mysql: {
+          url: 'jdbc:mysql://localhost:3306/db?useSSL=false&characterEncoding=UTF-8&serverTimezone=GMT%2B8',
+          driver: 'com.mysql.cj.jdbc.Driver',
+          sql: 'show tables'
+        },
+        postgresql: {
+          url: 'jdbc:postgresql://localhost:5432/db',
+          driver: 'org.postgresql.Driver',
+          sql: 'SELECT table_name FROM information_schema.tables WHERE table_schema = \'public\' ORDER BY table_name'
+        },
+        hive: {
+          url: 'jdbc:hive2://localhost:10000/db',
+          driver: 'org.apache.hive.jdbc.HiveDriver',
+          sql: 'show tables'
+        },
+        sqlserver: {
+          url: 'jdbc:microsoft:sqlserver://localhost:1433;databaseName=db',
+          driver: 'com.microsoft.sqlserver.jdbc.SQLServerDriver',
+          sql: 'select * from sys.tables'
+        },
+        clickhouse: {
+          url: 'jdbc:clickhouse://localhost:8123/db',
+          driver: 'ru.yandex.clickhouse.ClickHouseDriver'
+        },
+        kylin: {
+          url: 'jdbc:kylin://localhost:7070/db',
+          driver: 'org.apache.kylin.jdbc.Driver'
+        },
+        oracle: {
+          url: 'jdbc:oracle:thin:@localhost:1521:db',
+          driver: 'oracle.jdbc.OracleDriver',
+          sql: 'select table_name from user_tables where TABLESPACE_NAME is not null'
+        }
+      }
     }
 
   },
   props: ["id"],
   methods: {
     selectDB() {
-      if (this.detail.type == 'mysql') {
-        this.detail.url = 'jdbc:mysql://localhost:3306/db?useSSL=false&characterEncoding=UTF-8&serverTimezone=GMT%2B8'
-      } else if (this.detail.type == 'postgresql') {
-        this.detail.url = 'jdbc:postgresql://localhost:5432/db'
-      } else if (this.detail.type == 'hive') {
-        this.detail.url = 'jdbc:hive2://localhost:10000/db'
-      } else if (this.detail.type == 'sqlserver') {
-        this.detail.url = 'jdbc:microsoft:sqlserver://localhost:1433;databaseName=db'
-      } else if (this.detail.type == 'clickhouse') {
-        this.detail.url = 'jdbc:clickhouse://localhost:8123/db'
-      } else if (this.detail.type == 'kylin') {
-        this.detail.url = 'jdbc:kylin://localhost:7070/db'
-      } else if (this.detail.type == 'oracle') {
-        this.detail.url = 'jdbc:oracle:thin:@localhost:1521:db'
-      }
-
-
+      this.detail.url = (this.ds[this.detail.type]).url
+      this.detail.driver = (this.ds[this.detail.type]).driver
+      this.detail.tableSql = (this.ds[this.detail.type]).sql
     },
     getDetail(id) {
       this.axios.post("/datasource/detail/" + id).then((response) => {
@@ -77,7 +116,7 @@ export default {
         "url": this.detail.url,
         "username": this.detail.username,
         "password": this.detail.password,
-        "type": this.detail.type
+        "driver": this.detail.driver
       }).then((response) => {
         if (response.data.success)
           this.$message.success("成功")

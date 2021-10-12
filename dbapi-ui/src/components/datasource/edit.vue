@@ -28,7 +28,9 @@ export default {
         "username": data.username,
         "password": data.password,
         "type": data.type,
-        "id": data.id
+        "id": data.id,
+        "driver": data.driver,
+        "tableSql": data.tableSql
       }).then((response) => {
         this.$message.success("修改成功")
       }).catch((error) => {
