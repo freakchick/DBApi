@@ -70,7 +70,7 @@ public class DataSourceController {
             connection = JdbcUtil.getConnection(dataSource);
             return ResponseDto.apiSuccess(null);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage(), e);
             return ResponseDto.fail(e.getMessage());
         } finally {
             if (connection != null) {

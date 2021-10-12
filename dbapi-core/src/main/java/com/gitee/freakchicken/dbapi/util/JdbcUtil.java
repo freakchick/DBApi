@@ -8,7 +8,6 @@ import com.gitee.freakchicken.dbapi.common.ResponseDto;
 import com.gitee.freakchicken.dbapi.domain.DataSource;
 import lombok.extern.slf4j.Slf4j;
 
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,15 +21,20 @@ public class JdbcUtil {
         return resultSet;
     }
 
-    public static Connection getConnection(DataSource ds) throws SQLException, ClassNotFoundException {
-        Class.forName(ds.getDriver());
-        Connection connection = DriverManager.getConnection(ds.getUrl(), ds.getUsername(), ds.getPassword());
-        log.info("获取连接成功");
-        return connection;
+    public static Connection getConnection(DataSource ds) throws SQLException {
+        try {
+            Class.forName(ds.getDriver());
+            Connection connection = DriverManager.getConnection(ds.getUrl(), ds.getUsername(), ds.getPassword());
+            log.info("获取连接成功");
+            return connection;
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("请确认是否缺少相应驱动包，请将驱动包复制到lib目录下。"+ e.getMessage());
+        }
     }
 
     /**
      * 查询库中所有表
+     *
      * @param conn
      * @param sql
      * @return
