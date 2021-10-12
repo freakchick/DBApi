@@ -17,10 +17,10 @@
 - 支持多种类型数据库，包括mysql/sqlserver/postgreSql/hive/kylin/clickhouse/oracle
 - 支持动态sql，类似mybatis的动态sql
 - 支持sql编辑调试，包括动态sql的调试
-- 支持API结果缓存，支持缓存开启/关闭
+- 支持API结果缓存，支持缓存开启/关闭（通过缓存插件实现）
 - 支持自定义代码逻辑的数据转换，比如数据脱敏
 - 部署简便，安装部署不需要使用外部数据库，一键启动即可
-- 支持API配置导入导出，方便测试环境到生产环境的快速部署
+- 支持API配置导入导出，方便测试环境到生产环境的API迁移
 ## 4.软件架构
 
 - 采用B/S架构，springboot + vue.js 前后端分离开发
@@ -106,7 +106,8 @@ docker run -d -p 8520:8520 freakchicken/db-api
 ## 8.插件开发
 - 请阅读 [插件开发指南](./dbapi-assembly/docs/plugin%20development.md)
 - 作者已经开发了字段加密插件和redis缓存插件，请阅读[案例demo](https://gitee.com/freakchicken/dbapi-plugin-demo)
-## 9.开发指南
+
+## 9.二次开发
 
 ### 9.1环境依赖
 
@@ -155,7 +156,7 @@ http://localhost:8520
 
 ## 11.注意事项
 
-- 如果您要使用Oracle，请将oracle jdbc驱动包手动放入解压后的lib目录下
+- 如果您要使用Oracle或者其他类型的数据源，请将相应的jdbc驱动包手动放入DBApi部署后的lib目录下
 
 ## 12.联系作者：
 
