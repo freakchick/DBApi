@@ -10,13 +10,26 @@
 |API分组|API使用分组管理，创建API前要先创建好分组，然后把API归属到某个分组下||
 |描述|API功能的详细描述||
 |数据源|API中的sql执行的数据库地址，也是必须先创建好数据源，然后创建API的时候需要选择某个数据源||
-|sql|API中的执行sql，支持类似mybatis的动态sql语法|不需要写最外层select/update标签，参数名用 #{} ${}表示，可以参考[这里](https://mybatis.org/mybatis-3/zh/dynamic-sql.html)|
+|sql|API中的执行sql，支持类似mybatis的动态sql语法|不需要写最外层select/update标签，参数名用 #{}、${}表示，可以参考[这里](https://mybatis.org/mybatis-3/zh/dynamic-sql.html)|
 |访问权限|开放接口可以直接访问，私有接口需要申请token才能访问|请在权限菜单中申请token|
-|数据转换插件|||
-|缓存插件|||
-
+|数据转换插件|对数据进行转换的插件的java类名，如果没有值表示此API结果不需要转换||
+|数据转换插件参数|数据转换插件需要的参数||
+|缓存插件|缓存插件的java类名，如果没有值表示此API结果不需要缓存||
+|缓存插件参数|缓存插件需要的参数||
 ![](https://freakchicken.gitee.io/images/dbApi/20211011/api_add.png)
 
+## 插件的作用
+- DBApi的插件分两类，一类是数据转换插件，一类是缓存插件
+- [插件开发指南](./plugin%20development.md)
+
+### 1. 数据转换插件
+- 主要是对查询类API，sql查询结果进行转换。典型应用场景是数据脱敏。
+- 比如针对sql查询结果中的用户手机号、银行卡号进行加密脱敏。
+
+### 2. 缓存插件
+- 主要是对查询类API，sql查询结果进行缓存，这样避免频繁的查询数据库，对数据库造成压力。
+- 缓存逻辑由用户自己编写，用户可以缓存到redis/mangodb/elasticsearch等等。
+- 当从缓存中查询不到数据时，才去数据库查询，同时将结果缓存下来。
 
 ## 基本操作
 
