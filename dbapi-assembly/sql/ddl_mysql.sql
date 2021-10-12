@@ -61,6 +61,8 @@ CREATE TABLE `datasource`
     `url`         varchar(255) DEFAULT NULL,
     `username`    varchar(255) DEFAULT NULL,
     `password`    varchar(255) DEFAULT NULL,
+    `driver`      varchar(100) DEFAULT NULL,
+    `table_sql`   varchar(255) DEFAULT NULL,
     `create_time` varchar(20)  DEFAULT NULL,
     `update_time` varchar(20)  DEFAULT NULL,
     PRIMARY KEY (`id`)
@@ -99,7 +101,7 @@ CREATE TABLE `token`
     `create_time` bigint(20)   DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 2
+  AUTO_INCREMENT = 1
   DEFAULT CHARSET = utf8;
 
 
@@ -113,7 +115,7 @@ CREATE TABLE `user`
     PRIMARY KEY (`id`),
     UNIQUE KEY `username` (`username`)
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 2
+  AUTO_INCREMENT = 1
   DEFAULT CHARSET = utf8;
 
 insert into `firewall`(`status`, `mode`)
