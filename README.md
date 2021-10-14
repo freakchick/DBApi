@@ -14,7 +14,7 @@
 - 支持动态添加、修改api；支持api上线、下线管理
 - 支持API级别的访问权限控制，支持IP白名单、黑名单控制
 - 支持多数据源连接，支持动态添加、修改、删除数据源
-- 支持多种类型数据库，包括mysql/sqlserver/postgreSql/hive/kylin/clickhouse/oracle
+- 支持所有类型数据库（JDBC连接方式），包括mysql/sqlserver/postgreSql/hive/kylin/clickhouse/oracle等等
 - 支持动态sql，类似mybatis的动态sql
 - 支持sql编辑调试，包括动态sql的调试
 - 支持API结果缓存，支持缓存开启/关闭（通过缓存插件实现）
