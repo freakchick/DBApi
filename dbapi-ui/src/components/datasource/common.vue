@@ -4,8 +4,8 @@
     <el-form label-width="140px">
       <el-form-item label="数据库">
         <el-select v-model="detail.type" placeholder="请选择" @change="selectDB">
-          <el-option v-for="item in options" :key="item.label" :label="item.label" :value="item.label">
-            <db-icon :type="item.label"></db-icon>
+          <el-option v-for="item in options" :key="item.label" :label="item.label" :value="item.value">
+            <db-icon :type="item.value"></db-icon>
             <span>{{ item.label }}</span>
           </el-option>
         </el-select>
@@ -47,8 +47,9 @@ export default {
   name: "common",
   data() {
     return {
-      options: [{label: 'mysql'}, {label: 'postgresql'}, {label: 'hive'},
-        {label: 'sqlserver'}, {label: 'clickhouse'}, {label: 'kylin'}, {label: 'oracle'}, {label: '其他'}],
+      options: [{label: 'mysql', value: 'mysql'}, {label: 'postgresql',value: 'postgresql'}, {label: 'hive',value: 'hive'},
+        {label: 'sqlserver',value: 'sqlserver'}, {label: 'clickhouse',value: 'clickhouse'}, {label: 'kylin',value: 'kylin'},
+         {label: 'oracle',value: 'oracle'}, {label: '其他',value:'others'}],
       detail: {
         url: null,
         name: null,
