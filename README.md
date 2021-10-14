@@ -99,9 +99,9 @@ docker run -d -p 8520:8520 freakchicken/db-api
 ![](https://freakchicken.gitee.io/images/dbApi/20210502/docs.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20210803/ip.png)
 
-## 7.使用教程
+## 7.使用说明
 
-请阅读 [详细使用教程](./dbapi-assembly/docs/instruction.md)
+请阅读 [详细使用说明](./dbapi-assembly/docs/instruction.md)
 
 ## 8.插件开发
 - 请阅读 [插件开发指南](./dbapi-assembly/docs/plugin%20development.md)
