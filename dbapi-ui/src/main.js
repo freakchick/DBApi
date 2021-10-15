@@ -8,6 +8,7 @@ import qs from 'qs'
 
 
 import './theme/index.css'
+import './icon/iconfont.css'
 
 import VueCodeMirror from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'

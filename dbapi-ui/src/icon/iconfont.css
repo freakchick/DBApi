@@ -1,0 +1,167 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 2343121 */
+  src: url('iconfont.woff2?t=1634305429065') format('woff2'),
+       url('iconfont.woff?t=1634305429065') format('woff'),
+       url('iconfont.ttf?t=1634305429065') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-OTHER:before {
+  content: "\ea31";
+}
+
+.icon-mini2:before {
+  content: "\e67d";
+}
+
+.icon-mini:before {
+  content: "\e722";
+}
+
+.icon-full:before {
+  content: "\e633";
+}
+
+.icon-zuidahua:before {
+  content: "\e60e";
+}
+
+.icon-play:before {
+  content: "\e9a6";
+}
+
+.icon-play-add:before {
+  content: "\e605";
+}
+
+.icon-Playclip:before {
+  content: "\e6d3";
+}
+
+.icon-database:before {
+  content: "\e60f";
+}
+
+.icon-quanxian:before {
+  content: "\e606";
+}
+
+.icon-api:before {
+  content: "\e675";
+}
+
+.icon-shezhi:before {
+  content: "\e60d";
+}
+
+.icon-oracle:before {
+  content: "\e604";
+}
+
+.icon-postgresql:before {
+  content: "\e603";
+}
+
+.icon-my-SQL:before {
+  content: "\e62e";
+}
+
+.icon-table:before {
+  content: "\e72d";
+}
+
+.icon-clickhouse2:before {
+  content: "\e638";
+}
+
+.icon-presto:before {
+  content: "\e6d1";
+}
+
+.icon-Kylin:before {
+  content: "\e6aa";
+}
+
+.icon-ziyuan:before {
+  content: "\e73f";
+}
+
+.icon-save:before {
+  content: "\e602";
+}
+
+.icon-detail:before {
+  content: "\e621";
+}
+
+.icon-on_line2:before {
+  content: "\e741";
+}
+
+.icon-off_line1:before {
+  content: "\e8fd";
+}
+
+.icon-DB2:before {
+  content: "\e6b2";
+}
+
+.icon-clickhouse:before {
+  content: "\e7b7";
+}
+
+.icon-hive:before {
+  content: "\e6f2";
+}
+
+.icon-SQLServer:before {
+  content: "\e600";
+}
+
+.icon-oracle-copy-png:before {
+  content: "\e601";
+}
+
+.icon-MariaDB-chanpinicon:before {
+  content: "\e9c6";
+}
+
+.icon-off_line:before {
+  content: "\e6a5";
+}
+
+.icon-on_line1:before {
+  content: "\e6a6";
+}
+
+.icon-HTTPRequest:before {
+  content: "\e774";
+}
+
+.icon-http:before {
+  content: "\e651";
+}
+
+.icon-on_line:before {
+  content: "\e65e";
+}
+
+.icon-On-line:before {
+  content: "\e746";
+}
+
+.icon-Http:before {
+  content: "\e66f";
+}
+
+.icon-Off-line:before {
+  content: "\e7c2";
+}
+

@@ -1,0 +1,275 @@
+{
+  "id": "2343121",
+  "name": "dbapi",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "23366751",
+      "name": "OTHER",
+      "font_class": "OTHER",
+      "unicode": "ea31",
+      "unicode_decimal": 59953
+    },
+    {
+      "icon_id": "15157468",
+      "name": "最小化",
+      "font_class": "mini2",
+      "unicode": "e67d",
+      "unicode_decimal": 59005
+    },
+    {
+      "icon_id": "16307545",
+      "name": "最小化",
+      "font_class": "mini",
+      "unicode": "e722",
+      "unicode_decimal": 59170
+    },
+    {
+      "icon_id": "18834064",
+      "name": "full",
+      "font_class": "full",
+      "unicode": "e633",
+      "unicode_decimal": 58931
+    },
+    {
+      "icon_id": "21893372",
+      "name": "最大化",
+      "font_class": "zuidahua",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "13833497",
+      "name": "play",
+      "font_class": "play",
+      "unicode": "e9a6",
+      "unicode_decimal": 59814
+    },
+    {
+      "icon_id": "18416543",
+      "name": "play-add",
+      "font_class": "play-add",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "19107142",
+      "name": "Play clip",
+      "font_class": "Playclip",
+      "unicode": "e6d3",
+      "unicode_decimal": 59091
+    },
+    {
+      "icon_id": "6881701",
+      "name": "Database setup-数据库设置",
+      "font_class": "database",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "12084413",
+      "name": "权限",
+      "font_class": "quanxian",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "18723289",
+      "name": "api",
+      "font_class": "api",
+      "unicode": "e675",
+      "unicode_decimal": 58997
+    },
+    {
+      "icon_id": "20692801",
+      "name": "设 置",
+      "font_class": "shezhi",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "11155553",
+      "name": "oracle",
+      "font_class": "oracle",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "8069318",
+      "name": "postgresql",
+      "font_class": "postgresql",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "19466375",
+      "name": "my-SQL",
+      "font_class": "my-SQL",
+      "unicode": "e62e",
+      "unicode_decimal": 58926
+    },
+    {
+      "icon_id": "5417164",
+      "name": "table",
+      "font_class": "table",
+      "unicode": "e72d",
+      "unicode_decimal": 59181
+    },
+    {
+      "icon_id": "20288781",
+      "name": "clickhouse",
+      "font_class": "clickhouse2",
+      "unicode": "e638",
+      "unicode_decimal": 58936
+    },
+    {
+      "icon_id": "15322070",
+      "name": "presto",
+      "font_class": "presto",
+      "unicode": "e6d1",
+      "unicode_decimal": 59089
+    },
+    {
+      "icon_id": "16049790",
+      "name": "Kylin",
+      "font_class": "Kylin",
+      "unicode": "e6aa",
+      "unicode_decimal": 59050
+    },
+    {
+      "icon_id": "5681596",
+      "name": "field",
+      "font_class": "ziyuan",
+      "unicode": "e73f",
+      "unicode_decimal": 59199
+    },
+    {
+      "icon_id": "12631353",
+      "name": "save",
+      "font_class": "save",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "4976981",
+      "name": "detail",
+      "font_class": "detail",
+      "unicode": "e621",
+      "unicode_decimal": 58913
+    },
+    {
+      "icon_id": "11020796",
+      "name": "on_line",
+      "font_class": "on_line2",
+      "unicode": "e741",
+      "unicode_decimal": 59201
+    },
+    {
+      "icon_id": "17340809",
+      "name": "off_line",
+      "font_class": "off_line1",
+      "unicode": "e8fd",
+      "unicode_decimal": 59645
+    },
+    {
+      "icon_id": "1622300",
+      "name": "DB2",
+      "font_class": "DB2",
+      "unicode": "e6b2",
+      "unicode_decimal": 59058
+    },
+    {
+      "icon_id": "19452574",
+      "name": "clickhouse",
+      "font_class": "clickhouse",
+      "unicode": "e7b7",
+      "unicode_decimal": 59319
+    },
+    {
+      "icon_id": "8691929",
+      "name": "hive",
+      "font_class": "hive",
+      "unicode": "e6f2",
+      "unicode_decimal": 59122
+    },
+    {
+      "icon_id": "13892339",
+      "name": "SQLServer",
+      "font_class": "SQLServer",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "16969905",
+      "name": "oracle",
+      "font_class": "oracle-copy-png",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "17714364",
+      "name": "MariaDB",
+      "font_class": "MariaDB-chanpinicon",
+      "unicode": "e9c6",
+      "unicode_decimal": 59846
+    },
+    {
+      "icon_id": "7824506",
+      "name": "off_line",
+      "font_class": "off_line",
+      "unicode": "e6a5",
+      "unicode_decimal": 59045
+    },
+    {
+      "icon_id": "7824507",
+      "name": "on_line",
+      "font_class": "on_line1",
+      "unicode": "e6a6",
+      "unicode_decimal": 59046
+    },
+    {
+      "icon_id": "19306533",
+      "name": "HTTP Request",
+      "font_class": "HTTPRequest",
+      "unicode": "e774",
+      "unicode_decimal": 59252
+    },
+    {
+      "icon_id": "17613436",
+      "name": "http",
+      "font_class": "http",
+      "unicode": "e651",
+      "unicode_decimal": 58961
+    },
+    {
+      "icon_id": "7366072",
+      "name": "on_line",
+      "font_class": "on_line",
+      "unicode": "e65e",
+      "unicode_decimal": 58974
+    },
+    {
+      "icon_id": "9649760",
+      "name": "On-line",
+      "font_class": "On-line",
+      "unicode": "e746",
+      "unicode_decimal": 59206
+    },
+    {
+      "icon_id": "17262447",
+      "name": "Http",
+      "font_class": "Http",
+      "unicode": "e66f",
+      "unicode_decimal": 58991
+    },
+    {
+      "icon_id": "19271797",
+      "name": "Off-line",
+      "font_class": "Off-line",
+      "unicode": "e7c2",
+      "unicode_decimal": 59330
+    }
+  ]
+}
