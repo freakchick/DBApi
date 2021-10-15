@@ -145,7 +145,11 @@ String ip = PluginConf.getKey("RedisCachePlugin.ip")
 - 代码获取插件局部参数值，从ApiConfig类中获取：
 ```java
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
+
+// 获取缓存插件参数
 String params = ApiConfig.getCachePluginParams();
+// 获取转换插件参数
+String params2 = ApiConfig.getTransformPluginParams();
 ```
 
 ### 2.6 插件使用
