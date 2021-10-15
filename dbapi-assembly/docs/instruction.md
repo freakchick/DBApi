@@ -92,7 +92,17 @@
 - 可以导出接口文档（markdown格式）
   ![](https://freakchicken.gitee.io/images/dbApi/20210502/docs.png)
 
+## Token使用说明
 
+- 请求私有接口时，需要把token值放入header的Authorization字段中携带，才可以访问成功。（如果是开放接口，不需要设置header）
+- 以python为例，访问api的代码示例如下：
+
+```python
+import requests
+headers = {"Authorization": "5ad0dcb4eb03d3b0b7e4b82ae0ba433f"}
+re = requests.post("http://127.0.0.1:8520/api/userById", {"idList": [1, 2]}, headers=headers)
+print(re.text)
+```
 
 ## sql编写规范
 

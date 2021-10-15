@@ -89,9 +89,7 @@
             <el-button plain size="mini" type="warning" @click="handleEdit(scope.row.id)" circle>
               <i class="el-icon-edit"></i>
             </el-button>
-            <el-button plain size="mini" type="danger" @click="handleDelete(scope.row.id)" circle>
-              <i class="el-icon-delete"></i>
-            </el-button>
+
             <el-button plain size="mini" v-if="scope.row.status == 0" type="warning" @click="online(scope.row.id)"
                        title="上线" circle>
               <i class="iconfont icon-on_line2"></i>
@@ -106,7 +104,9 @@
                        title="请求测试" circle>
               <i class="iconfont icon-HTTPRequest"></i>
             </el-button>
-
+            <el-button plain size="mini" type="danger" @click="handleDelete(scope.row.id)" circle>
+              <i class="el-icon-delete"></i>
+            </el-button>
           </template>
         </el-table-column>
       </el-table>

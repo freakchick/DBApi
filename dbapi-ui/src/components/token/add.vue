@@ -39,6 +39,7 @@ export default {
 
       this.axios.post("/token/add/", {token: this.token, note: this.note, expire: this.expire}).then((response) => {
         this.$message.success("创建token成功")
+        this.$router.push("/token")
       }).catch((error) => {
       })
     },

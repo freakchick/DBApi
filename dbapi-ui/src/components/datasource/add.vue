@@ -31,6 +31,7 @@ export default {
         "tableSql": data.tableSql
       }).then((response) => {
         this.$message.success("添加成功")
+        this.$router.push("/datasource")
       }).catch((error) => {
         this.$message.error("添加失败")
       })

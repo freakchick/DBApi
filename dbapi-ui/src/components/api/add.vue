@@ -39,7 +39,8 @@ export default {
       }
 
       // console.log(detail)
-      if (p.sql == null || p.datasourceId == null || p.name == null
+      debugger
+      if (p.sql == "" || p.datasourceId == null || p.name == null
           || p.path == null || p.groupId == null) {
         this.$message.error("必填项未填")
         return
@@ -48,6 +49,8 @@ export default {
       this.axios.post("/apiConfig/add", p).then((response) => {
         if (response.data.success) {
           this.$message.success(response.data.msg)
+          debugger
+          this.$router.push("/api")
         } else {
           this.$message.error(response.data.msg)
         }
