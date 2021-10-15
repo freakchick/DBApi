@@ -9,6 +9,7 @@
 - BI报表、数据可视化大屏的后端接口快速开发；
 - 前端程序员快速开发后端接口进行接口联调；
 - 企业数据资产对外快速发布http服务及统一管理
+- 企业数据接口的统一管理中心
 
 ## 3.特点
 - 支持动态添加、修改api；支持api上线、下线管理
@@ -42,16 +43,15 @@
 - 下载DBApi-[version]-bin.tar.gz包
 - 解压tar包，修改conf/application.properties文件中的配置:
 
-- 如果您想使用自己的mysql作为元数据库，请修改conf/application.properties文件中的以下配置
+- （可选）如果您想使用自己的mysql作为元数据库，请修改conf/application.properties文件中的以下配置
 
 ```properties
+# 如果您使用了mysql作为自己的元数据库，启动前请在数据库执行初始化sql脚本，脚本在sql/目录下
 spring.datasource.driver-class-name=
 spring.datasource.url=
 spring.datasource.username=
 spring.datasource.password=
 ```
-
-*如果您使用了mysql作为自己的元数据库，启动前请在数据库执行初始化sql脚本，脚本在sql/目录下*
 
 - linux操作命令
 
@@ -62,7 +62,6 @@ sh bin/dbApi.sh start
 sh bin/dbApi.sh -d start
 # 关闭后台启动的进程
 sh bin/dbApi.sh stop
-
 ```
 
 - windows操作命令
@@ -156,7 +155,7 @@ http://localhost:8520
 
 ## 11.注意事项
 
-- 如果您要使用Oracle或者其他类型的数据源，请将相应的jdbc驱动包手动放入DBApi部署后的lib目录下
+- **如果您要使用Oracle或者其他类型的数据源，请将相应的jdbc驱动包手动放入DBApi部署后的lib目录下**
 
 ## 12.联系作者：
 

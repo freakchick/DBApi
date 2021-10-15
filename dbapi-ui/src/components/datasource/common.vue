@@ -9,6 +9,9 @@
             <span>{{ item.label }}</span>
           </el-option>
         </el-select>
+        <el-alert type="warning" show-icon v-show="detail.type == 'others'" style="margin-top: 10px;">
+          如果是其他类型数据库，DBAPI中可能缺少相应的JDBC驱动jar包，请手动将驱动包放入lib目录下
+        </el-alert>
       </el-form-item>
       <el-form-item label="名称">
         <el-input v-model="detail.name"></el-input>
@@ -28,9 +31,9 @@
       <el-form-item label="密码">
         <el-input v-model="detail.password"></el-input>
       </el-form-item>
-      <el-form-item label="查询所有表名称sql">
+      <el-form-item label="查询所有表名称SQL">
         <el-input v-model="detail.tableSql"></el-input>
-        <el-alert type="warning" show-icon>
+        <el-alert type="warning" show-icon style="margin-top: 10px;">
           创建或编辑API的时候，选择数据源，会执行此sql来获取该数据源下的所有表名称
         </el-alert>
       </el-form-item>
