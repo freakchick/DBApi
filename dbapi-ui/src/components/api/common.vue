@@ -53,7 +53,7 @@
           <div slot="content">填写“插件类名”表示开启数据转换功能，不填写表示不转换。转换逻辑是自定义插件中编写的逻辑</div>
           <i class="el-icon-info tip"></i>
         </el-tooltip>
-        <my-input label="插件类名" v-model="detail.transformPlugin" placeholder="填写数据转换插件java类名" width="300px"></my-input>
+        <my-input label="插件类名" v-model="detail.transformPlugin" placeholder="填写数据转换插件java类名" width="400px"></my-input>
         <my-input label="插件参数" v-model="detail.transformPluginParams" width="300px"></my-input>
       </el-form-item>
       <el-form-item label="缓存">
@@ -61,12 +61,14 @@
           <div slot="content">填写“插件类名”表示对结果数据开启缓存，不填写表示不开启缓存</div>
           <i class="el-icon-info tip"></i>
         </el-tooltip>
-        <my-input label="插件类名" v-model="detail.cachePlugin" placeholder="填写缓存插件java类名" width="300px"></my-input>
+        <my-input label="插件类名" v-model="detail.cachePlugin" placeholder="填写缓存插件java类名" width="400px"></my-input>
         <my-input label="插件参数" v-model="detail.cachePluginParams" width="300px"></my-input>
-        <a class="el-icon-question" target="_blank"
-           href="https://gitee.com/freakchicken/db-api/blob/master/dbapi-assembly/docs/instruction.md#%E6%8F%92%E4%BB%B6">什么是插件</a>
-        <a class="el-icon-question" target="_blank"
-           href="https://gitee.com/freakchicken/db-api/blob/master/dbapi-assembly/docs/plugin%20development.md#252-%E5%B1%80%E9%83%A8%E5%8F%82%E6%95%B0">什么是插件参数</a>
+        <div>
+          <a class="el-icon-question" target="_blank"
+             href="https://gitee.com/freakchicken/db-api/blob/master/dbapi-assembly/docs/instruction.md#%E6%8F%92%E4%BB%B6">什么是插件</a>
+          <a class="el-icon-question" target="_blank"
+             href="https://gitee.com/freakchicken/db-api/blob/master/dbapi-assembly/docs/plugin%20development.md#252-%E5%B1%80%E9%83%A8%E5%8F%82%E6%95%B0">什么是插件参数</a>
+        </div>
       </el-form-item>
 
 

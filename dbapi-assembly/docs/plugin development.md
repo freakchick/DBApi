@@ -153,6 +153,7 @@ String params = ApiConfig.getCachePluginParams();
 // 获取转换插件参数
 String params2 = ApiConfig.getTransformPluginParams();
 ```
+![](https://freakchicken.gitee.io/images/dbApi/20211016/plugin_param.png)
 
 ### 2.6 插件使用
 - 用户开发完插件后，请打包，将最后生成的jar包和插件依赖的jar包拷贝进DBApi的lib目录下，
