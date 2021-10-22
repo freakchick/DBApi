@@ -22,6 +22,8 @@
 - 支持自定义代码逻辑的数据转换，比如数据脱敏
 - 部署简便，安装部署不需要使用外部数据库，一键启动即可
 - 支持API配置导入导出，方便测试环境到生产环境的API迁移
+- [查看视频教程](https://www.bilibili.com/video/BV1zL411G7Qh)
+
 ## 4.软件架构
 
 - 采用B/S架构，springboot + vue.js 前后端分离开发
@@ -101,6 +103,7 @@ docker run -d -p 8520:8520 freakchicken/db-api
 ## 7.使用说明
 
 请阅读 [详细使用说明](./dbapi-assembly/docs/instruction.md)
+
 
 ## 8.插件开发
 - 请阅读 [插件开发指南](./dbapi-assembly/docs/plugin%20development.md)
