@@ -16,7 +16,7 @@
 
 ### 2.1 准备工作
 - 插件使用java语言编写，准备java(8+)开发环境
-- 新建maven项目，pom里引入dbapi-plugin
+- 新建maven项目，pom里引入`dbapi-plugin`
 ```xml
 <dependency>
     <groupId>com.gitee.freakchicken.dbapi</groupId>
@@ -27,7 +27,7 @@
 ```
 
 ### 2.2 缓存插件开发
-- 新建java类实现com.gitee.freakchicken.dbapi.plugin.CachePlugin
+- 新建java类实现`com.gitee.freakchicken.dbapi.plugin.CachePlugin`
 ```java
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.plugin.CachePlugin;
@@ -82,14 +82,14 @@ public class Cdemo extends CachePlugin {
 
 ```
 
-- init方法是插件初始化方法，只会执行一次，一般用来初始化连接池，比如初始化redis连接池
-- get方法是获取缓存中的数据的方法，第一个参数是api配置，第二个参数是请求的参数
-- set方法是设置缓存的方法，当执行sql查询结果后，会调用set方法。第一个参数是api配置，
+- `init`方法是插件初始化方法，只会执行一次，一般用来初始化连接池，比如初始化redis连接池
+- `get`方法是获取缓存中的数据的方法，第一个参数是api配置，第二个参数是请求的参数
+- `set`方法是设置缓存的方法，当执行sql查询结果后，会调用set方法。第一个参数是api配置，
   第二个参数是请求的参数，第三个参数是sql查询结果，如果api配置了数据转换插件的话，就是转换后的结果
-- clean是清空缓存的方法，当API的修改、下线、删除的时候，会执行这个clean方法
+- `clean`是清空缓存的方法，当API的修改、下线、删除的时候，会执行这个`clean`方法
 
 ### 2.3 数据转换插件开发
-- 新建java类，实现com.gitee.freakchicken.dbapi.plugin.TransformPlugin
+- 新建java类，实现`com.gitee.freakchicken.dbapi.plugin.TransformPlugin`
 
 ```java
 import com.alibaba.fastjson.JSONObject;
@@ -112,10 +112,10 @@ public class Tdemo extends TransformPlugin {
     }
 }
 ```
-- 数据转换逻辑写在transform方法里，第一个参数就是sql查询结果，第二个参数是API的配置
+- 数据转换逻辑写在`transform`方法里，第一个参数就是sql查询结果，第二个参数是API的配置
 
 ### 2.4 插件日志打印
-- 如果想在插件内打印日志，推荐直接调用父类的logger
+- 如果想在插件内打印日志，推荐直接调用父类的`logger`
 ```java
 super.logger.debug("set data to cache");
 ```
@@ -123,9 +123,9 @@ super.logger.debug("set data to cache");
 ### 2.5 插件参数
 #### 2.5.1 全局参数
 - ***设计插件全局参数的目的，是为了方便一个插件在不同的环境中使用***
-- 插件全局参数是每个插件自身的参数，与API无关，比如缓存插件需要连接的redis的ip、端口信息。配置在文件conf/plugin.properties中。
+- 插件全局参数是每个插件自身的参数，与API无关，比如缓存插件需要连接的redis的ip、端口信息。配置在文件`conf/plugin.properties`中。
 - 全局参数主要是为了方便不同环境的切换，比如测试环境和生产环境需要连接不同的redis地址，那么把redis地址信息配在配置文件就很方便。
-- 如果用户想添加插件的全局配置，可以直接在plugin.properties文件中添加配置，比如：
+- 如果用户想添加插件的全局配置，可以直接在`plugin.properties`文件中添加配置，比如：
 ```properties
 RedisCachePlugin.ip=127.0.0.1
 RedisCachePlugin.port=6379
@@ -144,7 +144,7 @@ String ip = PluginConf.getKey("RedisCachePlugin.ip")
 - 比如针对redis缓存插件，不同的API需要设置不同的缓存时间， 那么每个API调用同一个缓存插件的时候，就可以传递不同的时间参数进去。
 又比如针对字段加密插件，每个API需要加密的字段都不一样，那么每个API调用同一个字段加密插件的时候，就可以传递不同的字段名参数进去。
 这样可以让一个插件灵活的被多个API复用。
-- 代码获取插件局部参数值，从ApiConfig类中获取：
+- 代码获取插件局部参数值，从`ApiConfig`类中获取：
 ```java
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
 
@@ -156,9 +156,9 @@ String params2 = ApiConfig.getTransformPluginParams();
 ![](https://freakchicken.gitee.io/images/dbApi/20211016/plugin_param.png)
 
 ### 2.6 插件使用
-- 用户开发完插件后，请打包，将最后生成的jar包和插件依赖的jar包拷贝进DBApi的lib目录下，
+- 用户开发完插件后，请打包，将最后生成的jar包和插件依赖的jar包拷贝进DBApi的`lib`目录下，
 再重启DBApi服务，就可以使用插件了
-- 如果插件中使用了全局参数，还需要在conf/plugin.properties文件添加相应配置
+- 如果插件中使用了全局参数，还需要在`conf/plugin.properties`文件添加相应配置
 
 ## 3.插件开发完整案例
 [案例demo](https://gitee.com/freakchicken/dbapi-plugin-demo)

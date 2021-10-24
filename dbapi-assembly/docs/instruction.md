@@ -4,8 +4,8 @@
 
 ## 数据源
 - 理论上支持所有支持JDBC协议的数据库
-- 创建数据源的时候如果选择其他类型，需要用户手动填写JDBC驱动class类和查询所有表的sql，**同时将相应的JDBC驱动jar包放入DBApi的lib目录下并重启生效**
-- DBApi已经自带mysql/sqlserver/postgreSql/hive/kylin/clickhouse/的驱动包，**如果版本不匹配请手动替换lib目录下的相应驱动jar包**
+- 创建数据源的时候如果选择其他类型，需要用户手动填写JDBC驱动class类和查询所有表的sql，**同时将相应的JDBC驱动jar包放入DBApi的`lib`目录下并重启生效**
+- DBApi已经自带mysql/sqlserver/postgreSql/hive/kylin/clickhouse/的驱动包，**如果版本不匹配请手动替换`lib`目录下的相应驱动jar包**
 - 查询所有表sql的作用：创建、编辑API的时候，点击选择数据源，会自动展示该数据源下的所有表名称，方便辅助用户编写业务逻辑sql。
 由于不同数据库查询所有表名称的方式都不一样，所以需要用户手动去填写这个sql
 
@@ -18,7 +18,7 @@
 |API分组|API使用分组管理，创建API前要先创建好分组，然后把API归属到某个分组下||
 |描述|API功能的详细描述||
 |数据源|API中的sql执行的数据库地址，也是必须先创建好数据源，然后创建API的时候需要选择某个数据源|理论上支持所有类型的数据库（jdbc连接）|
-|sql|API中的执行sql，支持类似mybatis的动态sql语法|不需要写最外层select/update标签，参数名用 #{}、${}表示，可以参考[这里](https://mybatis.org/mybatis-3/zh/dynamic-sql.html)|
+|sql|API中的执行sql，支持类似mybatis的动态sql语法|不需要写最外层select/update标签，参数名用`#{}`、`${}`表示，可以参考[mybatis文档](https://mybatis.org/mybatis-3/zh/dynamic-sql.html)|
 |访问权限|开放接口可以直接访问，私有接口需要申请token才能访问|请在权限菜单中申请token|
 |数据转换插件|对数据进行转换的插件的java类名（class全路径），如果没有值表示此API结果不需要转换|使用转换插件可以按照自定义代码逻辑对数据进行转换，比如字段加密脱敏|
 |数据转换插件参数|数据转换插件需要的参数|比如针对字段加密插件，每个API需要加密的字段都不一样，那么每个API调用同一个字段加密插件的时候，就可以传递不同的字段名参数进去。|
@@ -29,7 +29,7 @@
 
 ## 插件
 - DBApi的插件分两类，一类是数据转换插件，一类是缓存插件
-- 插件需要用户自己编写java代码开发。开发完成后打成jar包，并放入DBApi的lib目录下即可以使用
+- 插件需要用户自己编写java代码开发。开发完成后打成jar包，并放入DBApi的`lib`目录下即可以使用
 - [插件开发指南](./plugin%20development.md)
 
 ### 1. 数据转换插件
@@ -94,7 +94,7 @@
 
 ## Token使用说明
 
-- 请求私有接口时，需要把token值放入header的Authorization字段中携带，才可以访问成功。（如果是开放接口，不需要设置header）
+- 请求私有接口时，需要把token值放入header的`Authorization`字段中携带，才可以访问成功。（如果是开放接口，不需要设置header）
 - 以python为例，访问api的代码示例如下：
 
 ```python
@@ -106,6 +106,6 @@ print(re.text)
 
 ## sql编写规范
 
-- 和mybatis动态sql语法一样，同样支持参数#{}、 ${}，可以参考[这里](https://mybatis.org/mybatis-3/zh/dynamic-sql.html)
-，不需要写最外层的select update 标签，直接写sql内容
-- 注意和mybatis一样，sql里的小于号不要写成<，要写成 <![CDATA[&lt;]]>
+- 和mybatis动态sql语法一样，同样支持参数`#{}`、 `${}`，可以参考[mybatis文档](https://mybatis.org/mybatis-3/zh/dynamic-sql.html)
+，不需要写最外层的`<select>` `<update>` 标签，直接写sql内容
+- 注意和mybatis一样，sql里的小于号不要写成`<`，要写成 `&lt;`
