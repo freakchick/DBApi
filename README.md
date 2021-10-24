@@ -3,7 +3,7 @@
 ## 1.介绍
 
 - 快速生成数据库的http接口服务，零代码开发，只需编写sql，就可以生成http api服务。是数据库的上层应用，方便数据库数据对外发布http服务
-- 体验地址： http://101.34.234.234:8520/  默认账户： admin/admin
+- 体验地址： `http://47.92.117.90:8520/`  默认账户： admin/admin
 ## 2.使用场景
 
 - BI报表、数据可视化大屏的后端接口快速开发；
@@ -42,10 +42,10 @@
 
 ### 5.1 tar包安装
 
-- 下载DBApi-[version]-bin.tar.gz包
-- 解压tar包，修改conf/application.properties文件中的配置:
+- 下载`DBApi-[version]-bin.tar.gz`包
+- 解压tar包，修改`conf/application.properties`文件中的配置:
 
-- （可选）如果您想使用自己的mysql作为元数据库，请修改conf/application.properties文件中的以下配置
+- （可选）如果您想使用自己的mysql作为元数据库，请修改`conf/application.properties`文件中的以下配置
 
 ```properties
 # 如果您使用了mysql作为自己的元数据库，启动前请在数据库执行初始化sql脚本，脚本在sql/目录下
@@ -73,9 +73,9 @@ sh bin/dbApi.sh stop
 bin/dbApi.bat
 ```
 
-或者直接双击 bin/dbApi.bat 文件启动
+或者直接双击 `bin/dbApi.bat` 文件启动
 
-- 启动后浏览器访问 http://ip:8520 ，默认登录账户： admin/admin
+- 启动后浏览器访问 `http://ip:8520` ，默认登录账户： admin/admin
 
 ### 5.2 docker安装
 
@@ -83,7 +83,7 @@ bin/dbApi.bat
 docker run -d -p 8520:8520 freakchicken/db-api
 ```
 
-- 启动后浏览器访问 http://ip:8520 ，默认登录账户： admin/admin
+- 启动后浏览器访问 `http://ip:8520` ，默认登录账户： admin/admin
 
 ## 6.软件截图
 ![](https://freakchicken.gitee.io/images/dbApi/20210904/api.png)
@@ -128,7 +128,7 @@ mvn clean package -P release
 ```
 
 ### 9.3构建镜像
-- 在dbapi-assembly目录下
+- 在`dbapi-assembly`目录下
 ```shell script
 mvn docker:build
 mvn docker:push
@@ -136,11 +136,11 @@ mvn docker:push
 
 ### 9.4启动
 
-- 前端启动：
-dbapi-ui 目录下 **npm run serve**
+- 前端启动
+`dbapi-ui` 目录下 `npm run serve`
 
 - 后端启动:
-dbapi-core目录下启动主类com.gitee.freakchicken.dbapi.DBApiApplication
+`dbapi-core`目录下启动主类`com.gitee.freakchicken.dbapi.DBApiApplication`
 
 - 前端访问地址：
 ```
@@ -158,7 +158,7 @@ http://localhost:8520
 
 ## 11.注意事项
 
-- **如果您要使用Oracle或者其他类型的数据源，请将相应的jdbc驱动包手动放入DBApi部署后的lib目录下**
+- **如果您要使用Oracle或者其他类型的数据源，请将相应的jdbc驱动包手动放入DBApi部署后的`lib`目录下**
 
 ## 12.联系作者：
 
