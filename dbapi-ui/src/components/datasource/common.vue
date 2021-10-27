@@ -94,7 +94,7 @@ export default {
         oracle: {
           url: 'jdbc:oracle:thin:@localhost:1521:db',
           driver: 'oracle.jdbc.OracleDriver',
-          sql: 'select table_name from user_tables where TABLESPACE_NAME is not null'
+          sql: "SELECT OWNER || '.' || TABLE_NAME FROM ALL_TABLES"
         }
       }
     }
