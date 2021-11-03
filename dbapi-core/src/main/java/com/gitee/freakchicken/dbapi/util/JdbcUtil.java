@@ -25,10 +25,10 @@ public class JdbcUtil {
         try {
             Class.forName(ds.getDriver());
             Connection connection = DriverManager.getConnection(ds.getUrl(), ds.getUsername(), ds.getPassword());
-            log.info("获取连接成功");
+            log.info("successfully connected");
             return connection;
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("请确认是否缺少相应驱动包，请将驱动包复制到lib目录下。"+ e.getMessage());
+            throw new RuntimeException("Please check whether the jdbc driver jar is missing, if missed copy the jdbc jar file to lib dir. "+ e.getMessage());
         }
     }
 
@@ -158,7 +158,7 @@ public class JdbcUtil {
                 return ResponseDto.apiSuccess(list);
             } else {
                 int updateCount = statement.getUpdateCount();
-                return ResponseDto.apiSuccess("sql修改数据行数： " + updateCount);
+                return ResponseDto.apiSuccess(updateCount + " rows affected");
             }
         } catch (Exception e) {
             e.printStackTrace();

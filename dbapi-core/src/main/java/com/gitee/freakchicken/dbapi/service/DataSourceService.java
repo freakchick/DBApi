@@ -56,9 +56,9 @@ public class DataSourceService {
         if (i == 0) {
             dataSourceMapper.deleteById(id);
             PoolManager.removeJdbcConnectionPool(id);
-            return ResponseDto.successWithMsg("删除成功");
+            return ResponseDto.successWithMsg("delete success");
         } else {
-            return ResponseDto.fail("该数据源已经被使用，不可删除");
+            return ResponseDto.fail("datasource has been used, can not delete");
         }
     }
 

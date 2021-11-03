@@ -74,7 +74,7 @@ public class ApiInterceptor implements HandlerInterceptor {
             out = response.getWriter();
             boolean checkIP = checkIP(originIp);
             if (!checkIP) {
-                out.append(JSON.toJSONString(ResponseDto.fail("非法ip(" + originIp + ")，禁止访问")));
+                out.append(JSON.toJSONString(ResponseDto.fail("Illegal ip (" + originIp + "), access forbidden")));
                 return false;
             }
             ResponseDto responseDto = process(servletPath, request, response);
@@ -133,7 +133,7 @@ public class ApiInterceptor implements HandlerInterceptor {
             ApiConfig config = apiConfigService.getConfig(path);
             if (config == null) {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                return ResponseDto.fail("该接口不存在！！");
+                return ResponseDto.fail("Api not exists");
             }
             // 如果是私有接口，校验权限
             if (config.getPrevilege() == 0) {
@@ -141,16 +141,16 @@ public class ApiInterceptor implements HandlerInterceptor {
                 log.debug(tokenStr);
                 if (StringUtils.isBlank(tokenStr)) {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    return ResponseDto.fail("header中token缺失，私有接口禁止访问！！");
+                    return ResponseDto.fail("No token! Private api can not be accessed!");
                 } else {
                     Token token = tokenService.getToken(tokenStr);
                     if (token == null) {
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                        return ResponseDto.fail("token无效，私有接口禁止访问！！");
+                        return ResponseDto.fail("Invalid token! Private api can not be accessed!");
                     } else {
                         if (token.getExpire() != null && token.getExpire() < System.currentTimeMillis()) {
                             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                            return ResponseDto.fail("token过期，私有接口禁止访问！！");
+                            return ResponseDto.fail("Token expired! Private api can not be accessed!");
                         } else {
                             // log.info("token存在且有效");
                             List<String> authGroups = tokenService.getAuthGroups(token.getId());
@@ -158,7 +158,7 @@ public class ApiInterceptor implements HandlerInterceptor {
 
                             } else {
                                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                                return ResponseDto.fail("该token无权访问此接口");
+                                return ResponseDto.fail("Token unauthorized to access this api");
                             }
                         }
                     }
@@ -169,7 +169,7 @@ public class ApiInterceptor implements HandlerInterceptor {
             DataSource datasource = dataSourceService.detail(config.getDatasourceId());
             if (datasource == null) {
                 response.setStatus(500);
-                return ResponseDto.fail("数据源不存在！！");
+                return ResponseDto.fail("Datasource not exists!");
             }
 
             Map<String, Object> sqlParam = apiService.getSqlParam(request, config);
@@ -183,7 +183,7 @@ public class ApiInterceptor implements HandlerInterceptor {
                         return ResponseDto.apiSuccess(o); //如果缓存有数据直接返回
                     }
                 } catch (Exception e) {
-                    log.error("获取缓存失败", e);
+                    log.error("Get from cache failed!", e);
                 }
             }
 
@@ -207,7 +207,7 @@ public class ApiInterceptor implements HandlerInterceptor {
                     CachePlugin cachePlugin = PluginManager.getCachePlugin(config.getCachePlugin());
                     cachePlugin.set(config, sqlParam, responseDto.getData());
                 } catch (Exception e) {
-                    log.error("缓存设置失败", e);
+                    log.error("Set to cache failed!", e);
                 }
             }
 

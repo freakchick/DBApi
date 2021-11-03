@@ -30,11 +30,11 @@ public class GroupService {
     public ResponseDto deleteById(String id) {
         int size = apiConfigMapper.selectCountByGroup(id);
         if (size > 0){
-            return ResponseDto.fail("该分组下还有API，不可删除！");
+            return ResponseDto.fail("group is not empty, can not delete");
         }else{
             groupMapper.deleteById(id);
             apiAuthMapper.deleteByGroupId(id);
-            return ResponseDto.successWithMsg("删除成功");
+            return ResponseDto.successWithMsg("delete success");
         }
 
     }

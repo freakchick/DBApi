@@ -47,7 +47,7 @@ public class ApiConfigService {
 
         int size = apiConfigMapper.selectCountByPath(apiConfig.getPath());
         if (size > 0) {
-            return ResponseDto.fail("该路径已被使用，请修改请求路径再保存");
+            return ResponseDto.fail("path has been used, please update path and save again");
         } else {
             apiConfig.setStatus(0);
             apiConfig.setId(UUIDUtil.id());
@@ -56,7 +56,7 @@ public class ApiConfigService {
             apiConfig.setCreateTime(now);
             apiConfig.setUpdateTime(now);
             apiConfigMapper.insert(apiConfig);
-            return ResponseDto.successWithMsg("添加成功");
+            return ResponseDto.successWithMsg("create success");
         }
 
     }
@@ -67,7 +67,7 @@ public class ApiConfigService {
 
         int size = apiConfigMapper.selectCountByPathWhenUpdate(apiConfig.getPath(), apiConfig.getId());
         if (size > 0) {
-            return ResponseDto.fail("该路径已被使用，请修改请求路径再保存");
+            return ResponseDto.fail("path has been used, please update path and save again");
         } else {
             ApiConfig oldConfig = apiConfigMapper.selectById(apiConfig.getId());
             apiConfig.setStatus(0);
@@ -83,7 +83,7 @@ public class ApiConfigService {
                     log.error("clean cache failed when update api", e);
                 }
             }
-            return ResponseDto.successWithMsg("修改成功");
+            return ResponseDto.successWithMsg("update success");
         }
 
     }

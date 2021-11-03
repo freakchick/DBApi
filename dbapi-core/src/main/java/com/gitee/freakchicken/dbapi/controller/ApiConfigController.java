@@ -131,7 +131,7 @@ public class ApiConfigController {
         List<String> collect = Arrays.asList(ids.split(","));
         String docs = apiConfigService.apiDocs(collect);
         response.setContentType("application/x-msdownload;charset=utf-8");
-        response.setHeader("Content-Disposition", "attachment; filename=接口文档.md");
+        response.setHeader("Content-Disposition", "attachment; filename=API docs.md");
         OutputStream os = null; //输出流
         try {
             os = response.getOutputStream();
@@ -154,7 +154,7 @@ public class ApiConfigController {
         List<ApiConfig> apiConfigs = apiConfigService.selectBatch(collect);
         String s = JSON.toJSONString(apiConfigs);
         response.setContentType("application/x-msdownload;charset=utf-8");
-        response.setHeader("Content-Disposition", "attachment; filename=api配置.json");
+        response.setHeader("Content-Disposition", "attachment; filename=api_config.json");
         OutputStream os = null;
         try {
             os = response.getOutputStream();
