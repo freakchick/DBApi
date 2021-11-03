@@ -40,7 +40,7 @@ public class ResponseDto {
         ResponseDto dto = new ResponseDto();
         dto.setData(data);
         dto.setSuccess(true);
-        dto.setMsg("接口访问成功");
+        dto.setMsg("Api access succeeded");
         return dto;
 
     }

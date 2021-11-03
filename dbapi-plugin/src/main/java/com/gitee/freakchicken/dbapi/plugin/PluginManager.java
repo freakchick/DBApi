@@ -22,8 +22,8 @@ public class PluginManager {
                 cachePlugins.put(className, plugin);
                 return cachePlugins.get(className);
             } catch (Exception e) {
-                log.error("获取缓存插件失败: " + className, e);
-                throw new RuntimeException("获取缓存插件失败: " + className);
+                log.error("get cache plugin failed: " + className, e);
+                throw new RuntimeException("get cache plugin failed: " + className);
             }
         }
     }
@@ -38,8 +38,8 @@ public class PluginManager {
                 transformPlugins.put(className, plugin);
                 return transformPlugins.get(className);
             } catch (Exception e) {
-                log.error("获取转换插件失败" + className, e);
-                throw new RuntimeException("获取转换插件失败: " + className);
+                log.error("get transform plugin failed: " + className, e);
+                throw new RuntimeException("get transform plugin failed: " + className);
             }
         }
     }
