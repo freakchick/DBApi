@@ -63,7 +63,15 @@ const cn = {
         send:'发送请求',
         json_format:'JSON格式化',
         view_in_table:'表格展示',
-        raw_data:'原始数据'
+        raw_data:'原始数据',
+
+        create_token:'创建Token',
+        create_time:'创建时间',
+        forever:'永久',
+        expire:'过期时间',
+        expired:'已过期',
+        token_tip:"请求私有接口时，需要把token值放入header的Authorization字段中携带，才可以访问成功。（如果是开放接口，不需要设置header）\n以python为例，访问api的代码示例如下：\n"
+
 
     },
     ...zhLocale

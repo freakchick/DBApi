@@ -2,36 +2,36 @@
   <div>
     <div class="gap">
       <router-link to="/token/add">
-        <el-button type="primary" plain>创建token</el-button>
+        <el-button type="primary" plain>{{ $t('m.create_token') }}</el-button>
       </router-link>
 
     </div>
 
 
     <el-table :data="tableData" border stripe max-height="700" class="gap">
-      <el-table-column prop="token" label="token">
+      <el-table-column prop="token" label="token" width="400px">
         <template slot-scope="scope">
           <span>{{ scope.row.token }}</span>
           <el-tag v-if="scope.row.expire != null && scope.row.expire < new Date().getTime()" type="danger" effect="dark"
-                  size="mini">已过期
+                  size="mini">{{$t('m.expired') }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="note" label="描述"></el-table-column>
-      <el-table-column prop="expire" label="有效期">
+      <el-table-column prop="note" :label="$t('m.note')"></el-table-column>
+      <el-table-column prop="expire" :label="$t('m.expire')">
         <template slot-scope="scope">
-          <span v-if="scope.row.expire == null">永久</span>
+          <span v-if="scope.row.expire == null">{{$t('m.forever')}}</span>
           <span v-else>{{ scope.row.expire | dateFormat }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column prop="createTime" label="创建时间">
+      <el-table-column prop="createTime" :label="$t('m.create_time')">
         <template slot-scope="scope">
           <span>{{ scope.row.createTime | dateFormat }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="操作">
+      <el-table-column :label="$t('m.operation')">
         <template slot-scope="scope">
 
           <!--          <el-button plain size="mini" type="info" @click="detail(scope.row.id)" circle>
@@ -61,11 +61,10 @@
       </span>
     </el-dialog>
 
-    <el-alert title="token使用说明" type="warning" show-icon>
-      <div>请求私有接口时，需要把token值放入header的Authorization字段中携带，才可以访问成功。（如果是开放接口，不需要设置header）</div>
-      <div>以python为例，访问api的代码示例如下：</div>
-      <div> <br/>
-        import requests  <br/>
+    <el-alert type="warning" show-icon>
+      <div class="tip">{{ $t('m.token_tip') }}</div>
+      <div><br/>
+        import requests <br/>
         headers = {"Authorization": "5ad0dcb4eb03d3b0b7e4b82ae0ba433f"} <br/>
         re = requests.post("http://127.0.0.1:8520/api/userById", {"idList": [1, 2]}, headers=headers) <br/>
         print(re.text) <br/>
@@ -131,5 +130,8 @@ export default {
 </script>
 
 <style scoped>
+.tip {
+  white-space: pre;
+}
 
 </style>

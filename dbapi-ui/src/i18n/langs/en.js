@@ -64,6 +64,12 @@ const en = {
         view_in_table:'View In Table',
         raw_data:'Raw Data',
 
+        create_token:'New Token',
+        create_time:'Create Time',
+        forever:'Forever',
+        expire:'Expiration Time',
+        expired:'Expired',
+        token_tip:"Private API can only be accessed with token in http request header('Authorization' field).\nPython code example is as follows:\n"
 
     },
     ...enLocale
