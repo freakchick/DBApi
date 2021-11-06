@@ -5,13 +5,13 @@
         DBAPI
       </div>
       <div class="item">
-        <el-input v-model="username" placeholder="用户名"></el-input>
+        <el-input v-model="username" :placeholder="$t('m.username')"></el-input>
       </div>
       <div class="item">
-        <el-input v-model="password" placeholder="密码" type="password"></el-input>
+        <el-input v-model="password" :placeholder="$t('m.password')" type="password"></el-input>
       </div>
       <div class="item">
-        <div class="buttton" @click="login">登&nbsp;录</div>
+        <div class="buttton" @click="login">{{$t('m.login')}}</div>
       </div>
     </div>
   </div>

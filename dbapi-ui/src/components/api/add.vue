@@ -56,7 +56,7 @@ export default {
         }
 
       }).catch((error) => {
-        this.$message.error("失败")
+        this.$message.error("failed")
       })
     }
   },

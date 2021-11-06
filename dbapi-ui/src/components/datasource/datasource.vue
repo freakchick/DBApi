@@ -4,16 +4,16 @@
       <ul>
         <li>
           <router-link to="/datasource/add">
-            <el-button type="primary" icon="el-icon-plus">创建数据源</el-button>
+            <el-button type="primary" icon="el-icon-plus">{{$t('m.create_ds')}}</el-button>
           </router-link>
         </li>
         <li>
-          <el-button type="warning" @click="show=true" icon="el-icon-download" round>导出数据源</el-button>
+          <el-button type="warning" @click="show=true" icon="el-icon-download" round>{{$t('m.export_ds')}}</el-button>
         </li>
         <li>
           <el-upload action="/datasource/import" accept=".json" :on-success="importSuccess" :headers="headers"
                      :on-error="importFail" :file-list="fileList">
-            <el-button type="warning" icon="el-icon-upload2" round>导入数据源</el-button>
+            <el-button type="warning" icon="el-icon-upload2" round>{{$t('m.import_ds')}}</el-button>
           </el-upload>
         </li>
       </ul>
@@ -21,15 +21,15 @@
 
     <el-table :data="tableData" border stripe max-height="700">
       <el-table-column prop="id" label="id" width="270px"></el-table-column>
-      <el-table-column label="名称">
+      <el-table-column :label="$t('m.name')">
         <template slot-scope="scope">
           <db-icon :type="scope.row.type"></db-icon>
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="note" label="描述"></el-table-column>
-      <el-table-column prop="updateTime" label="修改时间" width="170px"></el-table-column>
-      <el-table-column label="操作" width="220px">
+      <el-table-column prop="note" :label="$t('m.note')"></el-table-column>
+      <el-table-column prop="updateTime" :label="$t('m.update_time')" width="170px"></el-table-column>
+      <el-table-column :label="$t('m.operation')" width="220px">
         <template slot-scope="scope">
 
           <el-button plain size="mini" type="info" @click="detail(scope.row.id)" circle>
@@ -45,15 +45,15 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog title="导出数据源配置" :visible.sync="show">
+    <el-dialog :title="$t('m.export_ds')" :visible.sync="show">
       <ul>
         <li v-for="item in tableData">
           <el-checkbox v-model="item.checked">{{item.name}}</el-checkbox>
         </li>
       </ul>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="show = false">取 消</el-button>
-        <el-button type="primary" @click="show = false;exportConfig()">导出</el-button>
+        <el-button @click="show = false">{{$t('m.cancel')}}</el-button>
+        <el-button type="primary" @click="show = false;exportConfig()">{{$t('m.export')}}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -93,17 +93,17 @@ export default {
         link.click()
         document.body.removeChild(link)
       }).catch(error => {
-        this.$message.error("导出错误")
+        this.$message.error("Export Failed")
         console.error(error)
       })
     },
     importSuccess(response, file, fileList) {
       this.fileList = []
-      this.$message.success("import success")
+      this.$message.success("Import success")
       this.getAllSource()
     },
     importFail(error, file, fileList) {
-      this.$message.error("import failed!  "+ error.message)
+      this.$message.error("Import failed!  "+ error.message)
     },
     detail(id) {
       this.$router.push({path: '/datasource/detail', query: {id: id}});
@@ -115,19 +115,19 @@ export default {
       this.axios.post("/datasource/getAll").then((response) => {
         this.tableData = response.data
       }).catch((error) => {
-        this.$message.error("查询所有数据源失败")
+        // this.$message.error("Query all ")
       })
     },
     handleDelete(id) {
       this.axios.post("/datasource/delete/" + id).then((response) => {
         if (response.data.success) {
-          this.$message.success("删除成功")
+          this.$message.success("Delete Success")
         } else {
           this.$message.error(response.data.msg)
         }
         this.getAllSource()
       }).catch((error) => {
-        this.$message.error("删除失败")
+        this.$message.error("Delete Failed")
       })
     }
   },

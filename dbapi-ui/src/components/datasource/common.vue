@@ -1,8 +1,8 @@
 <template>
   <div>
 
-    <el-form label-width="140px">
-      <el-form-item label="数据库">
+    <el-form label-width="200px">
+      <el-form-item :label="$t('m.database')">
         <el-select v-model="detail.type" placeholder="请选择" @change="selectDB">
           <el-option v-for="item in options" :key="item.label" :label="item.label" :value="item.value">
             <db-icon :type="item.value"></db-icon>
@@ -10,35 +10,35 @@
           </el-option>
         </el-select>
 
-        <el-alert type="warning" show-icon v-show="detail.type == 'others'" title="如果是其他类型数据库，DBAPI中可能缺少相应的JDBC驱动jar包，请手动将驱动包放入lib目录下" style="margin-top: 10px;">
+        <el-alert type="warning" show-icon v-show="detail.type == 'others'" :title="$t('m.ds_driver_tip')" style="margin-top: 10px;">
 
         </el-alert>
       </el-form-item>
-      <el-form-item label="名称">
+      <el-form-item :label="$t('m.name')">
         <el-input v-model="detail.name"></el-input>
       </el-form-item>
-      <el-form-item label="描述">
+      <el-form-item :label="$t('m.note')">
         <el-input v-model="detail.note"></el-input>
       </el-form-item>
-      <el-form-item label="jdbc驱动Class">
+      <el-form-item :label="$t('m.jdbc_driver_class')">
         <el-input v-model="detail.driver"></el-input>
       </el-form-item>
-      <el-form-item label="jdbc url">
+      <el-form-item label="Jdbc Url">
         <el-input v-model="detail.url" type="textarea" class="my"></el-input>
       </el-form-item>
-      <el-form-item label="用户名">
+      <el-form-item :label="$t('m.username')">
         <el-input v-model="detail.username"></el-input>
       </el-form-item>
-      <el-form-item label="密码">
-        <el-input v-model="detail.password"></el-input>
+      <el-form-item :label="$t('m.password')">
+        <el-input v-model="detail.password" type="password"></el-input>
       </el-form-item>
-      <el-form-item label="查询所有表名称SQL">
+      <el-form-item :label="$t('m.sql_query_all_table_name')">
         <el-input v-model="detail.tableSql"></el-input>
-        <el-alert type="warning" title="创建或编辑API的时候，选择数据源，会执行此sql来获取该数据源下的所有表名称" show-icon style="margin-top: 10px;"></el-alert>
+        <el-alert type="warning" :title="$t('m.ds_sql_tip')" show-icon style="margin-top: 10px;"></el-alert>
       </el-form-item>
     </el-form>
 
-    <el-button type="primary" @click="connect" plain style="margin: 10px 0;">连接测试</el-button>
+    <el-button type="primary" @click="connect" plain style="margin: 10px 0;">{{$t('m.test_connection')}}</el-button>
   </div>
 </template>
 
@@ -64,35 +64,35 @@ export default {
       },
       ds: {
         mysql: {
-          url: 'jdbc:mysql://localhost:3306/db?useSSL=false&characterEncoding=UTF-8&serverTimezone=GMT%2B8',
+          url: 'jdbc:mysql://localhost:3306/<db>?useSSL=false&characterEncoding=UTF-8&serverTimezone=GMT%2B8',
           driver: 'com.mysql.cj.jdbc.Driver',
           sql: 'show tables'
         },
         postgresql: {
-          url: 'jdbc:postgresql://localhost:5432/db',
+          url: 'jdbc:postgresql://localhost:5432/<db>',
           driver: 'org.postgresql.Driver',
           sql: 'SELECT table_name FROM information_schema.tables WHERE table_schema = \'public\' ORDER BY table_name'
         },
         hive: {
-          url: 'jdbc:hive2://localhost:10000/db',
+          url: 'jdbc:hive2://localhost:10000/<db>',
           driver: 'org.apache.hive.jdbc.HiveDriver',
           sql: 'show tables'
         },
         sqlserver: {
-          url: 'jdbc:microsoft:sqlserver://localhost:1433;databaseName=db',
+          url: 'jdbc:microsoft:sqlserver://localhost:1433;databaseName=<db>',
           driver: 'com.microsoft.sqlserver.jdbc.SQLServerDriver',
           sql: 'select * from sys.tables'
         },
         clickhouse: {
-          url: 'jdbc:clickhouse://localhost:8123/db',
+          url: 'jdbc:clickhouse://localhost:8123/<db>',
           driver: 'ru.yandex.clickhouse.ClickHouseDriver'
         },
         kylin: {
-          url: 'jdbc:kylin://localhost:7070/db',
+          url: 'jdbc:kylin://localhost:7070/<db>',
           driver: 'org.apache.kylin.jdbc.Driver'
         },
         oracle: {
-          url: 'jdbc:oracle:thin:@localhost:1521:db',
+          url: 'jdbc:oracle:thin:@localhost:1521:<db>',
           driver: 'oracle.jdbc.OracleDriver',
           sql: "SELECT OWNER || '.' || TABLE_NAME FROM ALL_TABLES"
         }
@@ -111,7 +111,7 @@ export default {
       this.axios.post("/datasource/detail/" + id).then((response) => {
         this.detail = response.data
       }).catch((error) => {
-        this.$message.error("失败")
+        this.$message.error("failed")
       })
     },
     connect() {
@@ -122,11 +122,11 @@ export default {
         "driver": this.detail.driver
       }).then((response) => {
         if (response.data.success)
-          this.$message.success("成功")
+          this.$message.success("Success")
         else
           this.$message.error(response.data.msg)
       }).catch((error) => {
-        this.$message.error("失败")
+        this.$message.error("Failed")
       })
     },
   },

@@ -1,12 +1,10 @@
 <template>
   <div class="mycontent">
-    <el-button icon="el-icon-d-arrow-left" type="info" plain @click="$router.go(-1)" size="small">返回</el-button>
-    <h2>添加数据源</h2>
+    <el-button icon="el-icon-d-arrow-left" type="info" plain @click="$router.go(-1)" size="small">{{$t('m.back')}}</el-button>
+    <h2>{{$t('m.create_ds')}}</h2>
     <common ref="detail"></common>
 
-    <el-button type="primary" @click="save" plain>
-      保存
-    </el-button>
+    <el-button type="primary" @click="save" plain>{{$t('m.save')}}</el-button>
   </div>
 </template>
 
@@ -30,10 +28,10 @@ export default {
         "driver": data.driver,
         "tableSql": data.tableSql
       }).then((response) => {
-        this.$message.success("添加成功")
+        this.$message.success("Success")
         this.$router.push("/datasource")
       }).catch((error) => {
-        this.$message.error("添加失败")
+        this.$message.error("Failed")
       })
     }
   },

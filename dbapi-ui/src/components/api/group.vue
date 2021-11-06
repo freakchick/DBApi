@@ -7,7 +7,7 @@
               ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm">
     </el-input>
 
-    <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 添加新的分组
+    <el-button v-else class="button-new-tag" size="small" @click="showInput">+ {{$t('m.create_group')}}
     </el-button>
   </div>
 </template>
