@@ -30,7 +30,7 @@
         <el-input v-model="detail.username"></el-input>
       </el-form-item>
       <el-form-item label="密码">
-        <el-input v-model="detail.password"></el-input>
+        <el-input v-model="detail.password" show-password></el-input>
       </el-form-item>
       <el-form-item label="查询所有表名称SQL">
         <el-input v-model="detail.tableSql"></el-input>

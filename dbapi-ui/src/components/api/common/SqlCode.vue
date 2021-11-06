@@ -18,7 +18,7 @@
               <div v-for="(it) in item.columns" class="column">
                 <!--              <i class="iconfont icon-ziyuan"></i>-->
                 <span class="columnName">{{ it.label }}</span>
-                <span class="columnType">{{it.TypeName}}</span>
+                <span class="columnType">{{ it.TypeName }}</span>
               </div>
             </div>
           </div>
@@ -33,6 +33,7 @@
             <div class="item" @click="run(false)"><i class="iconfont icon-play"></i><span>运行SQL</span></div>
             <div class="item" @click="run(true)"><i class="iconfont icon-play"></i><span>运行选中SQL</span></div>
             <div class="item" @click="parseSql"><i class="iconfont icon-play"></i><span>解析动态SQL</span></div>
+            <div class="item" @click="formatSql"><i class="iconfont icon-play"></i><span>格式化SQL</span></div>
           </div>
         </div>
         <div class="quick">
@@ -76,7 +77,8 @@
           <div class="sql">{{ sqlMeta.jdbcParamValues }}</div>
         </div>
         <div class="table">
-          <el-table :data="resultList" border stripe style="width: 100%" v-if="resultList != null && resultList.length > 0" size="mini">
+          <el-table :data="resultList" border stripe style="width: 100%"
+                    v-if="resultList != null && resultList.length > 0" size="mini">
             <el-table-column :prop="item" :label="item" v-for="item in Object.keys(resultList[0])"></el-table-column>
           </el-table>
           <div v-if="resultList != null && resultList.length == 0">查询结果为空</div>
@@ -98,6 +100,7 @@ import "codemirror/addon/hint/show-hint.css";
 
 
 import 'codemirror/mode/sql/sql.js'
+import {format} from 'sql-formatter';
 
 require("codemirror/lib/codemirror");
 require("codemirror/mode/sql/sql");
@@ -126,7 +129,12 @@ export default {
         mode: 'text/x-mysql',
         theme: 'idea',
         lint: true,                     // 代码出错提醒
-        matchBrackets: true
+        matchBrackets: true,
+        extraKeys: {"Tab": "autocomplete"},  //Tab可以弹出选择项
+        hintOptions: { // 自定义提示选项
+          completeSingle: false, // 当匹配只有一项的时候是否自动补全
+          tables: {}
+        }
       },
       sqlMeta: null
     }
@@ -169,6 +177,9 @@ export default {
         // this.$message.error("查询所有数据源失败")
       })
     },
+    formatSql() {
+      this.codemirror.setValue(format(this.codemirror.getValue()));
+    },
     run(selected) {
       if (this.datasourceId == null) {
         this.$message.error("请先选择数据源")
@@ -203,7 +214,7 @@ export default {
           this.error = response.data.msg
         }
       }).catch((error) => {
-         this.$message.error(error)
+        this.$message.error(error)
       })
     },
     fullWindow() {
@@ -242,6 +253,12 @@ export default {
     getTables(datasourceId) {
       this.axios.post("/table/getAllTables", {sourceId: datasourceId}).then((response) => {
         this.tables = response.data
+
+        const hints = {}
+        this.tables.forEach(e => {
+          hints[`${e.label}`] = e.columns.map(j => j.label)
+        })
+        this.cmOptions.hintOptions.tables = hints
       }).catch((error) => {
         this.$message.error("查询所有表名称失败；但不影响使用！")
       })
@@ -257,10 +274,8 @@ export default {
     },
     onCmCodeChange(instance, changeObj) {
       //如果输入的是字母才提示，空格不提示
-      if (/^[a-zA-Z]/.test(changeObj.text[0])) {
-        this.codemirror.showHint({
-          completeSingle: false
-        })
+      if (/^[a-zA-Z.]/.test(changeObj.text[0])) {
+        this.codemirror.showHint()
       }
 
     },
