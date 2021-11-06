@@ -30,6 +30,8 @@ const en = {
         ds_driver_tip: 'If you choose other db,please make sure the corresponding jdbc driver jar exists.If not, you need to copy the jar file to lib/ directory.',
 
         create_api:'New API',
+        update_api:'Modify API',
+        api_detail:'API Detail',
         create_group:'New Group',
         api_group_manage:'API Group Manage',
         export_api_doc: 'Export API Doc',
@@ -45,11 +47,22 @@ const en = {
         access:'Access',
         private:'Private',
         public:'Public',
-        data_convert:'Data Convert',
+        data_convert:'Convert',
         cache:'Cache',
         basic_info:'Basic Info',
-        access_tip:'Public API can be accessed directly.Private API can only be accessed with token.Learn more from the Authority menu'
-
+        access_tip:'Public API can always be accessed directly. Private API can only be accessed with token. You can learn more from the Authority menu',
+        plugin_class:'Plugin Class',
+        plugin_parameter:'Plugin Parameter',
+        what_is_plugin:'What is plugin',
+        what_is_plugin_param:'What is plugin parameter',
+        request_test:'API Request Test',
+        url:'URL',
+        header:'Request Header',
+        result:'Result',
+        send:'Send Request',
+        json_format:'JSON Format',
+        view_in_table:'View In Table',
+        raw_data:'Raw Data',
 
 
     },

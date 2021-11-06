@@ -31,7 +31,9 @@ const cn = {
         ds_driver_tip: '如果是其他类型数据库，DBAPI中可能缺少相应的JDBC驱动jar包，请手动将驱动包放入lib目录下',
 
         create_api: '创建APi',
-        create_group:'创建API分组',
+        update_api:'修改API',
+        api_detail:'API详情',
+        create_group: '创建API分组',
         api_group_manage: 'API分组管理',
         export_api_doc: '导出API文档',
         export_api: '导出API',
@@ -49,7 +51,19 @@ const cn = {
         data_convert: '数据转换',
         cache: '缓存',
         basic_info: '基本信息',
-        access_tip: '开放接口可以直接访问。私有接口在访问时必须在请求头中携带token，且该token值对此接口有访问权限，具体请到权限菜单查看'
+        access_tip: '开放接口可以直接访问。私有接口在访问时必须在请求头中携带token，且该token值对此接口有访问权限，具体请到权限菜单查看',
+        plugin_class: '插件类名',
+        plugin_parameter: '插件参数',
+        what_is_plugin: '什么是插件',
+        what_is_plugin_param: '什么是插件参数',
+        request_test:'接口请求测试',
+        url:'URL',
+        header:'请求Header',
+        result:'返回结果',
+        send:'发送请求',
+        json_format:'JSON格式化',
+        view_in_table:'表格展示',
+        raw_data:'原始数据'
 
     },
     ...zhLocale

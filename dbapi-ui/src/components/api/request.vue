@@ -1,11 +1,11 @@
 <template>
   <div class="mycontent">
-    <el-button icon="el-icon-d-arrow-left" type="info" plain @click="$router.go(-1)" size="small">返回</el-button>
-    <h2>接口请求测试</h2>
-    <h4>接口地址：</h4>
+    <el-button icon="el-icon-d-arrow-left" type="info" plain @click="$router.go(-1)" size="small">{{$t('m.back')}}</el-button>
+    <h2>{{$t('m.request_test')}}</h2>
+    <h4>{{$t('m.url')}}：</h4>
     <div class="path">http://{{ address }}/api/{{ path }}</div>
 
-    <h4 v-show="previlege == 0">请求header：</h4>
+    <h4 v-show="previlege == 0">{{$t('m.header')}}：</h4>
 
     <el-form label-width="150px" style="width: 600px" size="medium" v-show="previlege == 0">
       <el-form-item label="token:">
@@ -14,7 +14,7 @@
     </el-form>
 
 
-    <h4>接口参数：</h4>
+    <h4>{{$t('m.parameters')}}：</h4>
     <el-form label-width="150px" style="width: 600px" size="medium">
       <el-form-item v-for="(item,index) in params" :key="index" style="margin-bottom: 5px">
         <template slot="label">
@@ -36,9 +36,9 @@
       </el-form-item>
 
     </el-form>
-    <el-button @click="request">发送请求</el-button>
+    <el-button @click="request">{{$t('m.send')}}</el-button>
 
-    <h4>返回结果：</h4>
+    <h4>{{ $t('m.result') }}：</h4>
 
     <el-table :data="tableData" v-show="showTable" size="mini" border stripe max-height="700">
       <el-table-column :prop="item" :label="item" v-for="item in keys" :key="item"></el-table-column>
@@ -46,9 +46,9 @@
     <el-input type="textarea" v-model="response" :autosize="{ minRows: 5, maxRows: 20 }" class="my"
               v-show="!showTable"></el-input>
 
-    <el-button size="small" @click="format" class="button">格式化json</el-button>
-    <el-button size="small" @click="tableShow" class="button">表格展示</el-button>
-    <el-button size="small" @click="tableHide" class="button">原始数据</el-button>
+    <el-button size="small" @click="format" class="button">{{$t('m.json_format')}}</el-button>
+    <el-button size="small" @click="tableShow" class="button">{{$t('m.view_in_table')}}</el-button>
+    <el-button size="small" @click="tableHide" class="button">{{$t('m.raw_data')}}</el-button>
 
   </div>
 </template>

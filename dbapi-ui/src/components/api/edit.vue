@@ -1,11 +1,11 @@
 <template>
   <div class="mycontent">
-    <el-button icon="el-icon-d-arrow-left" type="info" plain @click="$router.go(-1)" size="small">返回</el-button>
-    <h2>修改api</h2>
+    <el-button icon="el-icon-d-arrow-left" type="info" plain @click="$router.go(-1)" size="small">{{$t('m.back')}}</el-button>
+    <h2>{{$t('m.update_api')}}</h2>
 
     <common :id="$route.query.id" ref="apiEditCommon"></common>
 
-    <el-button @click="save">保存</el-button>
+    <el-button @click="save">{{$t('m.save')}}</el-button>
   </div>
 </template>
 

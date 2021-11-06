@@ -230,10 +230,10 @@ export default {
     },
     offline(id) {
       this.axios.post("/apiConfig/offline/" + id).then((response) => {
-        this.$message.success("已下线")
+        this.$message.success("Already Offline")
         this.getAllApis()
       }).catch((error) => {
-        this.$message.error("失败")
+        this.$message.error("Failed")
       })
     },
     httpTest(id) {

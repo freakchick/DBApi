@@ -2,7 +2,7 @@
   <div :class="['root', isFullScreen?'full':'']">
     <div class="left">
       <div>
-        <my-select v-model="datasourceId" :options="datasources" :nullable="false" label="数据源" size="mini" width="176px"
+        <my-select v-model="datasourceId" :options="datasources" :nullable="false" :label="$t('m.datasource')" size="mini" width="176px"
                    option_label="name" option_value="id" @onchange="getTables"></my-select>
       </div>
       <div class="bottom">

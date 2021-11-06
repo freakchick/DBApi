@@ -1,11 +1,11 @@
 <template>
   <div class="mycontent">
-    <el-button icon="el-icon-d-arrow-left" type="info" plain @click="$router.go(-1)" size="small">返回</el-button>
-    <h2>创建api</h2>
+    <el-button icon="el-icon-d-arrow-left" type="info" plain @click="$router.go(-1)" size="small">{{$t('m.back')}}</el-button>
+    <h2>{{$t('m.create_api')}}</h2>
 
     <common ref="apiAdd"></common>
 
-    <el-button @click="save" type="primary" plain>保存</el-button>
+    <el-button @click="save" type="primary" plain>{{$t('m.save')}}</el-button>
 
   </div>
 </template>

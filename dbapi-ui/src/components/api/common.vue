@@ -1,13 +1,13 @@
 <template>
   <div>
     <el-form label-width="100px">
-      <el-form-item label="API基本信息">
-        <my-input label="名称" :nullable="false" v-model="detail.name"></my-input>
-        <my-input label="请求路径" v-model="detail.path" :preffix="`http://${ address }/api/`" :nullable="false"
+      <el-form-item :label="$t('m.basic_info')">
+        <my-input :label="$t('m.name')" :nullable="false" v-model="detail.name"></my-input>
+        <my-input :label="$t('m.path')" v-model="detail.path" :preffix="`http://${ address }/api/`" :nullable="false"
                   width="400px"></my-input>
-        <my-select v-model="detail.groupId" :options="groups" label="API分组" option_label="name"
+        <my-select v-model="detail.groupId" :options="groups" :label="$t('m.api_group')" option_label="name"
                    option_value="id" :nullable="false"></my-select>
-        <my-input label="描述" v-model="detail.note" width="500px"></my-input>
+        <my-input :label="$t('m.note')" v-model="detail.note" width="500px"></my-input>
       </el-form-item>
 
       <el-form-item label="sql">
@@ -15,7 +15,7 @@
           <sql-code ref="sqlCode"></sql-code>
         </div>
       </el-form-item>
-      <el-form-item label="请求参数">
+      <el-form-item :label="$t('m.parameters')">
         <div v-for="(item,index) in detail.params" style="margin-bottom:5px;display: flex;align-items:center">
           <el-autocomplete v-model="item.name" :fetch-suggestions="parseParams" style="width:200px;margin-right:5px"
                            placeholder="*参数名称"></el-autocomplete>
@@ -33,41 +33,40 @@
 
       </el-form-item>
 
-      <el-form-item label="访问权限">
+      <el-form-item :label="$t('m.access')">
         <el-radio-group v-model="detail.previlege">
-          <el-radio :label="0">私有接口</el-radio>
-          <el-radio :label="1">开放接口</el-radio>
+          <el-radio :label="0">{{$t('m.private')}}</el-radio>
+          <el-radio :label="1">{{$t('m.public')}}</el-radio>
         </el-radio-group>
 
         <el-tooltip placement="top-start" effect="dark">
-          <div slot="content">开放接口可以直接访问<br/>
-
-            私有接口在访问时必须在请求头中携带token，且该token值对此接口有访问权限，具体请到权限菜单查看
+          <div slot="content">
+            {{$t('m.access_tip')}}
           </div>
           <i class="el-icon-info tip"></i>
         </el-tooltip>
       </el-form-item>
 
-      <el-form-item label="数据转换">
+      <el-form-item :label="$t('m.data_convert')">
         <el-tooltip placement="top-start" effect="dark">
           <div slot="content">填写“插件类名”表示开启数据转换功能，不填写表示不转换。转换逻辑是自定义插件中编写的逻辑</div>
           <i class="el-icon-info tip"></i>
         </el-tooltip>
-        <my-input label="插件类名" v-model="detail.transformPlugin" placeholder="填写数据转换插件java类名" width="400px"></my-input>
-        <my-input label="插件参数" v-model="detail.transformPluginParams" width="300px"></my-input>
+        <my-input :label="$t('m.plugin_class')" v-model="detail.transformPlugin" placeholder="填写数据转换插件java类名" width="400px"></my-input>
+        <my-input :label="$t('m.plugin_parameter')" v-model="detail.transformPluginParams" width="300px"></my-input>
       </el-form-item>
-      <el-form-item label="缓存">
+      <el-form-item :label="$t('m.cache')">
         <el-tooltip placement="top-start" effect="dark">
           <div slot="content">填写“插件类名”表示对结果数据开启缓存，不填写表示不开启缓存</div>
           <i class="el-icon-info tip"></i>
         </el-tooltip>
-        <my-input label="插件类名" v-model="detail.cachePlugin" placeholder="填写缓存插件java类名" width="400px"></my-input>
-        <my-input label="插件参数" v-model="detail.cachePluginParams" width="300px"></my-input>
+        <my-input :label="$t('m.plugin_class')" v-model="detail.cachePlugin" placeholder="填写缓存插件java类名" width="400px"></my-input>
+        <my-input :label="$t('m.plugin_parameter')" v-model="detail.cachePluginParams" width="300px"></my-input>
         <div>
           <a class="el-icon-question" target="_blank"
-             href="https://gitee.com/freakchicken/db-api/blob/master/dbapi-assembly/docs/instruction.md#%E6%8F%92%E4%BB%B6">什么是插件</a>
+             href="https://gitee.com/freakchicken/db-api/blob/master/dbapi-assembly/docs/instruction.md#%E6%8F%92%E4%BB%B6">{{$t('m.what_is_plugin')}}</a>
           <a class="el-icon-question" target="_blank"
-             href="https://gitee.com/freakchicken/db-api/blob/master/dbapi-assembly/docs/plugin%20development.md#252-%E5%B1%80%E9%83%A8%E5%8F%82%E6%95%B0">什么是插件参数</a>
+             href="https://gitee.com/freakchicken/db-api/blob/master/dbapi-assembly/docs/plugin%20development.md#252-%E5%B1%80%E9%83%A8%E5%8F%82%E6%95%B0">{{$t('m.what_is_plugin_param')}}</a>
         </div>
       </el-form-item>
 
@@ -147,7 +146,7 @@ export default {
       this.axios.post("/apiConfig/getIPPort").then((response) => {
         this.address = response.data
       }).catch((error) => {
-        this.$message.error("失败")
+        // this.$message.error("失败")
       })
     },
     getDetail(id) {
