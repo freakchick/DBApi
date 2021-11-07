@@ -4,40 +4,47 @@
       <ul>
         <li>
           <router-link to='/api/add'>
-            <el-button type="primary" icon="el-icon-plus">{{$t('m.create_api')}}</el-button>
+            <el-button type="primary" icon="el-icon-plus">{{ $t('m.create_api') }}</el-button>
           </router-link>
         </li>
         <li>
-          <el-button @click="dialogVisible = true" type="primary" >{{$t('m.api_group_manage')}}</el-button>
+          <el-button @click="dialogVisible = true" type="primary">{{ $t('m.api_group_manage') }}</el-button>
         </li>
         <li>
-          <el-button type="warning" plain @click="dialogVisible2=true" icon="el-icon-download" round>{{$t('m.export_api_doc')}}</el-button>
+          <el-button type="warning" plain @click="dialogVisible2=true" icon="el-icon-download" round>
+            {{ $t('m.export_api_doc') }}
+          </el-button>
         </li>
         <li>
-          <el-button type="warning"  @click="dialogVisible3=true" icon="el-icon-download" round>{{$t('m.export_api')}}</el-button>
+          <el-button type="warning" @click="dialogVisible3=true" icon="el-icon-download" round>
+            {{ $t('m.export_api') }}
+          </el-button>
         </li>
         <li>
           <el-upload action="/apiConfig/import" accept=".json" :on-success="importSuccess" :headers="headers"
                      :on-error="importFail" :file-list="fileList">
-            <el-button type="warning"  icon="el-icon-upload2" round>{{$t('m.import_api')}}</el-button>
+            <el-button type="warning" icon="el-icon-upload2" round>{{ $t('m.import_api') }}</el-button>
           </el-upload>
         </li>
         <li>
-          <el-button type="warning" @click="dialogVisible4=true" icon="el-icon-download" round>{{$t('m.export_api_groups')}}</el-button>
+          <el-button type="warning" @click="dialogVisible4=true" icon="el-icon-download" round>
+            {{ $t('m.export_api_groups') }}
+          </el-button>
         </li>
         <li>
           <el-upload action="/apiConfig/importGroup" accept=".json" :on-success="importGroupSuccess" :headers="headers"
                      :on-error="importFail" :file-list="groupFile">
-            <el-button type="warning" icon="el-icon-upload2" round>{{$t('m.import_api_groups')}}</el-button>
+            <el-button type="warning" icon="el-icon-upload2" round>{{ $t('m.import_api_groups') }}</el-button>
           </el-upload>
         </li>
       </ul>
       <div class="search">
-        <my-select  v-model="groupId"  :label="$t('m.api_group')" :options="groups" option_label="name" option_value="id"> </my-select>
-<!--        <el-select v-model="groupId" class="gap">
-          <el-option label="所有分组" value=""></el-option>
-          <el-option :label="item.name" :value="item.id" v-for="item in groups" :key="item.id"></el-option>
-        </el-select>-->
+        <my-select v-model="groupId" :label="$t('m.api_group')" :options="groups" option_label="name"
+                   option_value="id"></my-select>
+        <!--        <el-select v-model="groupId" class="gap">
+                  <el-option label="所有分组" value=""></el-option>
+                  <el-option :label="item.name" :value="item.id" v-for="item in groups" :key="item.id"></el-option>
+                </el-select>-->
         <el-input :placeholder="$t('m.input_keyword')" v-model="keyword" style="width:400px;" clearable
                   @keyup.enter.native="search">
           <el-select v-model="field" slot="prepend" placeholder="" style="width:80px;">
@@ -46,17 +53,17 @@
             <el-option :label="$t('m.path')" value="path"></el-option>
           </el-select>
         </el-input>
-        <el-button type="primary" icon="el-icon-search" @click="search" plain>{{$t('m.search')}}</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="search" plain>{{ $t('m.search') }}</el-button>
       </div>
 
       <el-table :data="tableData" border stripe max-height="700" width="100%">
         <el-table-column label="id" prop="id" width="270px"></el-table-column>
-        <el-table-column :label="$t('m.name')" >
+        <el-table-column :label="$t('m.name')">
           <template slot-scope="scope">
             <i class="iconfont icon-on_line1 circle" v-if="scope.row.status == 1"></i>
-            <i class="iconfont icon-off_line circle offline"  v-else></i>
+            <i class="iconfont icon-off_line circle offline" v-else></i>
             <i class="el-icon-lock circle lock" v-if="scope.row.previlege == 0"></i>
-            <i class="el-icon-unlock circle "  v-else></i>
+            <i class="el-icon-unlock circle " v-else></i>
             <span :title="scope.row.note">{{ scope.row.name }}</span>
           </template>
         </el-table-column>
@@ -81,17 +88,16 @@
             </el-button>
 
             <el-button plain size="mini" v-if="scope.row.status == 0" type="warning" @click="online(scope.row.id)"
-                       title="上线" circle>
+                       circle>
               <i class="iconfont icon-on_line2"></i>
             </el-button>
 
-            <el-button plain size="mini" v-if="scope.row.status == 1" type="info" @click="offline(scope.row.id)"
-                       title="下线" circle>
+            <el-button plain size="mini" v-if="scope.row.status == 1" type="info" @click="offline(scope.row.id)" circle>
               <i class="iconfont icon-off_line1"></i>
             </el-button>
 
             <el-button plain size="mini" v-if="scope.row.status == 1" type="primary" @click="httpTest(scope.row.id)"
-                       title="请求测试" circle>
+                       :title="$t('m.request_test')" circle>
               <i class="iconfont icon-HTTPRequest"></i>
             </el-button>
             <el-button plain size="mini" type="danger" @click="handleDelete(scope.row.id)" circle>
@@ -109,30 +115,30 @@
       <el-dialog :title="$t('m.export_api_doc')" :visible.sync="dialogVisible2" @open="getApiTree">
         <el-tree :data="treeData" show-checkbox node-key="id" :props="defaultProps" ref="tree"></el-tree>
         <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible2 = false">{{$t('m.cancel')}}</el-button>
-          <el-button type="primary" @click="dialogVisible2 = false;exportDocs()">{{$t('m.export')}}</el-button>
+          <el-button @click="dialogVisible2 = false">{{ $t('m.cancel') }}</el-button>
+          <el-button type="primary" @click="dialogVisible2 = false;exportDocs()">{{ $t('m.export') }}</el-button>
         </span>
       </el-dialog>
 
       <el-dialog :title="$t('m.export_api')" :visible.sync="dialogVisible3" @open="getApiTree">
         <el-tree :data="treeData" show-checkbox node-key="id" :props="defaultProps" ref="tree2"></el-tree>
         <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible3 = false">{{$t('m.cancel')}}</el-button>
-          <el-button type="primary" @click="dialogVisible3 = false;exportConfig()">{{$t('m.export')}}</el-button>
+          <el-button @click="dialogVisible3 = false">{{ $t('m.cancel') }}</el-button>
+          <el-button type="primary" @click="dialogVisible3 = false;exportConfig()">{{ $t('m.export') }}</el-button>
         </span>
       </el-dialog>
 
       <el-dialog :title="$t('m.export_api_groups')" :visible.sync="dialogVisible4" @open="getAllGroups">
         <el-checkbox-group v-model="checkList">
-          <el-checkbox v-for="item in groups" :label="item.id">{{item.name}}
-            <span style="color: #ccc">{{item.id}}</span>
+          <el-checkbox v-for="item in groups" :label="item.id">{{ item.name }}
+            <span style="color: #ccc">{{ item.id }}</span>
           </el-checkbox>
 
         </el-checkbox-group>
 
         <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogVisible4 = false">{{$t('m.cancel')}}</el-button>
-          <el-button type="primary" @click="dialogVisible4 = false;exportGroupConfig()">{{$t('m.export')}}</el-button>
+          <el-button @click="dialogVisible4 = false">{{ $t('m.cancel') }}</el-button>
+          <el-button type="primary" @click="dialogVisible4 = false;exportGroupConfig()">{{ $t('m.export') }}</el-button>
         </span>
       </el-dialog>
     </div>
@@ -164,9 +170,9 @@ export default {
       headers: {
         Authorization: localStorage.getItem('token')
       },
-      fileList:[],
-      groupFile:[],
-      checkList:[]
+      fileList: [],
+      groupFile: [],
+      checkList: []
     }
   },
   components: {dataTag, group},
@@ -176,13 +182,13 @@ export default {
       this.$message.success("Import Success")
       this.getAllApis()
     },
-    importGroupSuccess(response, file, fileList){
+    importGroupSuccess(response, file, fileList) {
       this.groupFile = []
       this.$message.success("Import Success")
       this.getAllGroups()
     },
     importFail(error, file, fileList) {
-      this.$message.error("Import failed!  "+ error.message)
+      this.$message.error("Import failed!  " + error.message)
     },
     getAllApis() {
       this.axios.post("/apiConfig/getAll").then((response) => {
@@ -313,7 +319,7 @@ export default {
         console.error(error)
       })
     },
-    exportGroupConfig(){
+    exportGroupConfig() {
       console.log(this.checkList)
       const ids = this.checkList.join(",")
       this.axios({
@@ -381,7 +387,7 @@ ul {
 
 }
 
-.search{
+.search {
   //padding: 10px ;
   //border: 1px solid #ccc;
 }
