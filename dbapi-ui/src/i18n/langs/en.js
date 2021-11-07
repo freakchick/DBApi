@@ -69,8 +69,10 @@ const en = {
         forever:'Forever',
         expire:'Expiration Time',
         expired:'Expired',
-        token_tip:"Private API can only be accessed with token in http request header('Authorization' field).\nPython code example is as follows:\n"
-
+        token_tip:"Private API can only be accessed with token in http request header('Authorization' field).\nPython code example is as follows:\n",
+        generate:'Generate Automatically',
+        expire_tip:'If set null, means forever',
+        grant:'Grant privilege to access APIs of the selected groups',
     },
     ...enLocale
 }

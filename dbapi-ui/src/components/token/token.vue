@@ -4,23 +4,21 @@
       <router-link to="/token/add">
         <el-button type="primary" plain>{{ $t('m.create_token') }}</el-button>
       </router-link>
-
     </div>
 
-
     <el-table :data="tableData" border stripe max-height="700" class="gap">
-      <el-table-column prop="token" label="token" width="400px">
+      <el-table-column prop="token" label="token" width="330px">
         <template slot-scope="scope">
           <span>{{ scope.row.token }}</span>
           <el-tag v-if="scope.row.expire != null && scope.row.expire < new Date().getTime()" type="danger" effect="dark"
-                  size="mini">{{$t('m.expired') }}
+                  size="mini">{{ $t('m.expired') }}
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="note" :label="$t('m.note')"></el-table-column>
       <el-table-column prop="expire" :label="$t('m.expire')">
         <template slot-scope="scope">
-          <span v-if="scope.row.expire == null">{{$t('m.forever')}}</span>
+          <span v-if="scope.row.expire == null">{{ $t('m.forever') }}</span>
           <span v-else>{{ scope.row.expire | dateFormat }}</span>
         </template>
       </el-table-column>
@@ -31,15 +29,8 @@
         </template>
       </el-table-column>
 
-      <el-table-column :label="$t('m.operation')">
+      <el-table-column :label="$t('m.operation')" width="100px">
         <template slot-scope="scope">
-
-          <!--          <el-button plain size="mini" type="info" @click="detail(scope.row.id)" circle>
-                      <i class="iconfont icon-detail"></i>
-                    </el-button>
-                    <el-button plain size="mini" type="warning" @click="handleEdit(scope.row.id)" circle>
-                      <i class="el-icon-edit"></i>
-                    </el-button>-->
           <el-button plain size="mini" type="warning" @click="handleAuth(scope.row.id)" circle>
             <i class="el-icon-lock"></i>
           </el-button>
@@ -50,14 +41,14 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog title="授权该token访问以下分组的API" :visible.sync="dialogVisible" @open="getAllGroups">
+    <el-dialog :title="$t('m.grant')" :visible.sync="dialogVisible" @open="getAllGroups">
       <el-checkbox-group v-model="checkList">
         <el-checkbox :label="item.id" v-for="item in groups">{{ item.name }}</el-checkbox>
       </el-checkbox-group>
 
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false;auth()">保存</el-button>
+        <el-button @click="dialogVisible = false">{{ $t('m.cancel') }}</el-button>
+        <el-button type="primary" @click="dialogVisible = false;auth()">{{ $t('m.save') }}</el-button>
       </span>
     </el-dialog>
 
@@ -102,15 +93,17 @@ export default {
     auth() {
       console.log(this.checkList)
       this.axios.post("/token/auth/", {tokenId: this.tokenId, groupIds: this.checkList.join(",")}).then((response) => {
-        this.$message.success("授权成功")
+        this.$message.success("Authorization Success")
       }).catch((error) => {
-        this.$message.error("授权失败")
+        this.$message.error("Authorization Failed")
       })
     },
     handleDelete(id) {
       this.axios.post("/token/delete/" + id).then((response) => {
+        this.$message.success("Delete Success")
         this.getAll()
       }).catch((error) => {
+        this.$message.error("Delete Failed")
       })
     },
     handleAuth(id) {

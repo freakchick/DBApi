@@ -70,8 +70,10 @@ const cn = {
         forever:'永久',
         expire:'过期时间',
         expired:'已过期',
-        token_tip:"请求私有接口时，需要把token值放入header的Authorization字段中携带，才可以访问成功。（如果是开放接口，不需要设置header）\n以python为例，访问api的代码示例如下：\n"
-
+        token_tip:"请求私有接口时，需要把token值放入header的Authorization字段中携带，才可以访问成功。（如果是开放接口，不需要设置header）\n以python为例，访问api的代码示例如下：\n",
+        generate:'自动生成',
+        expire_tip:'不设置表示永久有效',
+        grant:'授权该token访问以下分组的API'
 
     },
     ...zhLocale
