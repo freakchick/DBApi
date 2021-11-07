@@ -14,8 +14,8 @@
       <div class="menu iconfont icon-shezhi">
         {{ $t('m.settings') }}
         <div class="submenus">
-          <div class="submenu" @click="clickMenu('/setting/password')">修改密碼</div>
-          <div class="submenu" @click="clickMenu('/setting/firewall')">IP防火墙</div>
+          <div class="submenu" @click="clickMenu('/setting/password')">{{ $t('m.change_pass') }}</div>
+          <div class="submenu" @click="clickMenu('/setting/firewall')">{{ $t('m.firewall') }}</div>
         </div>
       </div>
 
@@ -103,6 +103,7 @@ export default {
       position: relative;
 
       .submenus {
+        padding: 5px 0;
         display: none;
         z-index: 1000;
         position: absolute;
@@ -110,15 +111,20 @@ export default {
         left: 0px;
         background-color: #06B176;
         //padding: 0 10px;
-        min-width: 150px;
+        width: 200px;
 
         //font-size: 20px;
         border-radius: 5px;
         //border: 1px solid #00ff00;
         .submenu {
-          font-size: 18px;
+          font-size: 16px;
           line-height: 40px;
           padding: 0 10px;
+          font-weight: 500;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow:ellipsis;
+
 
           &:hover {
             background-color: #059463;

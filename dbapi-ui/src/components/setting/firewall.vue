@@ -1,45 +1,45 @@
 <template>
   <div>
-    <h2>IP防火墙设置</h2>
-    <el-form label-width="120px">
-      <el-form-item label="API防火墙状态">
+    <h2>{{$t('m.firewall_settings')}}</h2>
+    <el-form label-width="200px">
+      <el-form-item :label="$t('m.status')">
         <el-switch
             v-model="status"
             active-color="#13ce66"
             active-value="on"
             inactive-value="off"
-            active-text="开启"
-            inactive-text="关闭">
+            :active-text="$t('m.on')"
+            :inactive-text="$t('m.off')">
         </el-switch>
       </el-form-item>
       <div v-show="status=='on'">
-        <el-form-item label="模式">
+        <el-form-item :label="$t('m.mode')">
           <el-radio-group v-model="mode" @change="modeChange">
-            <el-radio label="black">黑名单</el-radio>
-            <el-radio label="white">白名单</el-radio>
+            <el-radio label="black">{{$t('m.black_list')}}</el-radio>
+            <el-radio label="white">{{$t('m.white_list')}}</el-radio>
           </el-radio-group>
-          <el-alert title="除了黑名单列表中的IP禁止访问API，其他IP一律允许访问" type="warning" :closable="false"
+          <el-alert :title="$t('m.black_tip')" type="warning" :closable="false"
                     v-show="mode == 'black'"></el-alert>
-          <el-alert title="只有白名单列表中的IP才允许访问API，其他IP一律禁止访问" type="warning" :closable="false"
+          <el-alert :title="$t('m.white_tip')" type="warning" :closable="false"
                     v-show="mode == 'white'"></el-alert>
         </el-form-item>
-        <el-form-item label="IP黑名单列表" v-show="mode == 'black'">
+        <el-form-item :label="$t('m.ip_list')" v-show="mode == 'black'">
           <el-input type="textarea" :autosize="{ minRows: 8, maxRows: 20 }"
                     v-model="blackIP"
-                    placeholder="每行填写一个ip，多个ip用换行符隔开">
+                    :placeholder="$t('m.ip_list_tip')">
 
           </el-input>
         </el-form-item>
-        <el-form-item label="IP白名单列表" v-show="mode == 'white'">
+        <el-form-item :label="$t('m.ip_list')" v-show="mode == 'white'">
           <el-input type="textarea"
                     :autosize="{ minRows: 8, maxRows: 20 }"
-                    v-model="whiteIP" placeholder="每行填写一个ip，多个ip用换行符隔开">
+                    v-model="whiteIP" :placeholder="$t('m.ip_list_tip')">
 
           </el-input>
         </el-form-item>
       </div>
       <el-form-item>
-        <el-button type="primary" @click="submit" plain>提交</el-button>
+        <el-button type="primary" @click="submit" plain>{{$t('m.save')}}</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -63,9 +63,9 @@ export default {
       this.axios.post("/firewall/save",
           {status: this.status, mode: this.mode, whiteIP: this.whiteIP, blackIP: this.blackIP}
       ).then((response) => {
-        this.$message.success("提交成功")
+        this.$message.success("Success")
       }).catch((error) => {
-        this.$message.error("提交失败")
+        this.$message.error("Failed")
       })
     }
   },
@@ -78,7 +78,7 @@ export default {
       this.blackIP = response.data.blackIP
       this.whiteIP = response.data.whiteIP
     }).catch((error) => {
-      this.$message.error("error")
+      this.$message.error("Failed")
     })
   }
 }
