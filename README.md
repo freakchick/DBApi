@@ -5,18 +5,18 @@
 [![EN doc](https://img.shields.io/badge/document-English-blue.svg)](README.md)
 [![CN doc](https://img.shields.io/badge/文档-中文版-blue.svg)](README_zh_CN.md)
 
-## 1.介绍
-
-- 快速生成数据库的http接口服务，零代码开发，只需编写sql，就可以生成http api服务。是数据库的上层应用，方便数据库数据对外发布http服务
-- 体验地址： `http://101.34.234.234:8520/`  默认账户： admin/admin
-## 2.使用场景
+## 1.Instruction
+- DBApi is a no-code tool to generate HTTP API, you only need to write sql. 
+- It's also a platform to manage all the APIs about data.
+- Trial URL： `http://101.34.234.234:8520/`. default account: admin/admin
+## 2.Usage scenario
 
 - BI报表、数据可视化大屏的后端接口快速开发；
 - 前端程序员快速开发后端接口进行接口联调；
 - 企业数据资产对外快速发布http服务及统一管理
 - 企业数据接口的统一管理中心
 
-## 3.特点
+## 3.Feature
 - 支持动态添加、修改api；支持api上线、下线管理
 - 支持API级别的访问权限控制，支持IP白名单、黑名单控制
 - 支持多数据源连接，支持动态添加、修改、删除数据源
@@ -29,7 +29,7 @@
 - 支持API配置导入导出，方便测试环境到生产环境的API迁移
 - [查看视频教程](https://www.bilibili.com/video/BV1zL411G7Qh)
 
-## 4.软件架构
+## 4.Architecture
 
 - 采用B/S架构，springboot + vue.js 前后端分离开发
 - 考虑到部署的简便性，使用sqlite数据库
@@ -38,14 +38,14 @@
   ![](https://freakchicken.gitee.io/images/dbApi/20210502/lc.png)
 
 
-## 5.安装教程
+## 5.How to deploy
 
-- 依赖java环境，需要安装jdk8+
-- 下载地址： [天翼云盘](https://cloud.189.cn/t/Jza2MzeEZVNv) ，或者在发行版页面下载
+- Dependent on java , need to install java8+ first.
+- Download url: [here](https://cloud.189.cn/t/Jza2MzeEZVNv) , or download from release page.
 
-**有以下2种安装方式：**
+**There are two ways:**
 
-### 5.1 tar包安装
+### 5.1 tar package install
 
 - 下载`DBApi-[version]-bin.tar.gz`包
 - 解压tar包，修改`conf/application.properties`文件中的配置:
@@ -82,7 +82,7 @@ bin/dbApi.bat
 
 - 启动后浏览器访问 `http://ip:8520` ，默认登录账户： admin/admin
 
-### 5.2 docker安装
+### 5.2 docker install
 
 ```shell script
 docker run -d -p 8520:8520 freakchicken/db-api
@@ -110,7 +110,7 @@ docker run -d -p 8520:8520 freakchicken/db-api
 请阅读 [详细使用说明](./dbapi-assembly/docs/instruction.md)
 
 
-## 8.插件开发
+## 8.Plugin develop
 - 请阅读 [插件开发指南](./dbapi-assembly/docs/plugin%20development.md)
 - 作者已经开发了字段加密插件和redis缓存插件，请阅读[案例demo](https://gitee.com/freakchicken/dbapi-plugin-demo)
 
