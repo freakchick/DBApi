@@ -1,5 +1,8 @@
 # DBApi
 
+[![EN doc](https://img.shields.io/badge/document-English-blue.svg)](README.md)
+[![CN doc](https://img.shields.io/badge/文档-中文版-blue.svg)](README_zh_CN.md)
+
 ## 1.介绍
 
 - 快速生成数据库的http接口服务，零代码开发，只需编写sql，就可以生成http api服务。是数据库的上层应用，方便数据库数据对外发布http服务
