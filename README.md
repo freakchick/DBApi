@@ -60,7 +60,7 @@ spring.datasource.username=
 spring.datasource.password=
 ```
 
-- linux操作命令
+- linux command
 
 ```shell
 # 前台启动
@@ -71,26 +71,26 @@ sh bin/dbApi.sh -d start
 sh bin/dbApi.sh stop
 ```
 
-- windows操作命令
+- windows command
 
 ```shell
 # 前台启动
 bin/dbApi.bat
 ```
 
-或者直接双击 `bin/dbApi.bat` 文件启动
+Or just click `bin/dbApi.bat` file to start
 
 - 启动后浏览器访问 `http://ip:8520` ，默认登录账户： admin/admin
 
-### 5.2 docker install
+### 5.2 QuickStart in Docker
 
 ```shell script
 docker run -d -p 8520:8520 freakchicken/db-api
 ```
 
-- 启动后浏览器访问 `http://ip:8520` ，默认登录账户： admin/admin
+- 启动后浏览器访问 `http://ip:8520` ，default account： admin/admin
 
-## 6.软件截图
+## 6.User Interface Screenshots
 ![](https://freakchicken.gitee.io/images/dbApi/20210904/api.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20210502/datasource_create.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20210803/api_edit.png)
