@@ -1,7 +1,7 @@
 # DBApi
 
-<img src='https://gitee.com/freakchicken/db-api/badge/star.svg?theme=dark' alt='star'></img>
-<img src='https://gitee.com/freakchicken/db-api/badge/fork.svg?theme=dark' alt='fork'></img>
+<img src='https://gitee.com/freakchicken/db-api/badge/star.svg?theme=dark' alt='star' align='top'></img>
+<img src='https://gitee.com/freakchicken/db-api/badge/fork.svg?theme=dark' alt='fork' align='top'></img>
 [![EN doc](https://img.shields.io/badge/document-English-blue.svg)](README.md)
 [![CN doc](https://img.shields.io/badge/文档-中文版-blue.svg)](README_zh_CN.md)
 
