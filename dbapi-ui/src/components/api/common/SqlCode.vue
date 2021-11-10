@@ -178,7 +178,15 @@ export default {
       })
     },
     formatSql() {
-      this.codemirror.setValue(format(this.codemirror.getValue()));
+      var sql = format(this.codemirror.getValue())
+          .replace(/# /g, "#")
+          .replace(/{ /g, "{")
+          .replace(/ }/g, "}")
+          .replace(/\/ /g, "/")
+          .replace(/(<\n)|(< )/g, "<")
+          .replace(/(\n>)|( >)/g, ">")
+          .replace(/(where\n )|(\nwhere\n )/g, "where");
+      this.codemirror.setValue(sql);
     },
     run(selected) {
       if (this.datasourceId == null) {
@@ -348,7 +356,12 @@ export default {
     .code {
       height: calc(100vh - 350px) !important;
 
+      .myMirror {
+        width: 70%;
+      }
+
       .params {
+        width: 30%;
         display: block !important;
       }
     }
@@ -445,7 +458,7 @@ export default {
 
   .right {
     display: block;
-    width: 100%;
+    width: calc(100% - 250px);
     border: 1px solid #999999;
     border-left: 0px;
     background-color: #fff;
@@ -520,7 +533,7 @@ export default {
 
     .code {
       display: flex;
-      //width: 100%;
+      width: 100%;
 
       height: 400px;
       padding: 0px;
@@ -528,8 +541,8 @@ export default {
       //background-color: #f13838;
 
       .myMirror {
-        width: 100%;
-        //max-width: 100%;
+        //width: 100%;
+        //max-width: 800px;
         /deep/ .CodeMirror-line {
           font-family: 'Consolas', Helvetica, Arial, sans-serif !important;
           font-size: 18px !important;
@@ -546,7 +559,7 @@ export default {
 
       .params {
         padding: 5px;
-        width: 600px;
+        //width: 600px;
         border-left: 1px solid #82848a;
         //background-color: #ccc;
         display: none;
