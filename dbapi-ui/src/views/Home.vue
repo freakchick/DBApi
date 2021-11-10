@@ -7,7 +7,7 @@
         <div class="head">
           <div class="logo">DBApi</div>
           <el-menu
-              default-active="1"
+              v-bind:default-active="$route.path"
               class="menu"
               mode="horizontal"
               @select="handleSelect"
