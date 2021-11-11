@@ -58,6 +58,8 @@ public class JdbcUtil {
             try {
                 if (pst != null)
                     pst.close();
+                if (conn != null)
+                    conn.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -109,6 +111,8 @@ public class JdbcUtil {
             try {
                 if (pst != null)
                     pst.close();
+                if (conn != null)
+                    conn.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }

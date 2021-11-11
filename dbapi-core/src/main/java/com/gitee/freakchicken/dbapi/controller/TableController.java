@@ -42,7 +42,6 @@ public class TableController {
             jo.put("showColumns", false);
             return jo;
         }).collect(Collectors.toList());
-        connection.close();
         return list;
     }
 
@@ -51,7 +50,6 @@ public class TableController {
         DataSource dataSource = dataSourceMapper.selectById(sourceId);
         DruidPooledConnection connection = PoolManager.getPooledConnection(dataSource);
         List<JSONObject> columns = JdbcUtil.getRDBMSColumnProperties(connection, dataSource.getType(), table);
-        connection.close();
         return columns;
     }
 }
