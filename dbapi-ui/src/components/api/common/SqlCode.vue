@@ -2,7 +2,8 @@
   <div :class="['root', isFullScreen?'full':'']">
     <div class="left">
       <div>
-        <my-select v-model="datasourceId" :options="datasources" :nullable="false" :label="$t('m.datasource')" size="mini" width="176px"
+        <my-select v-model="datasourceId" :options="datasources" :nullable="false" :label="$t('m.datasource')"
+                   size="mini" width="176px"
                    option_label="name" option_value="id" @onchange="getTables"></my-select>
       </div>
       <div class="bottom">
@@ -18,7 +19,7 @@
               <div v-for="(it) in item.columns" class="column">
                 <!--              <i class="iconfont icon-ziyuan"></i>-->
                 <span class="columnName">{{ it.label }}</span>
-                <span class="columnType">{{it.TypeName}}</span>
+                <span class="columnType">{{ it.TypeName }}</span>
               </div>
             </div>
           </div>
@@ -33,6 +34,7 @@
             <div class="item" @click="run(false)"><i class="iconfont icon-play"></i><span>运行SQL</span></div>
             <div class="item" @click="run(true)"><i class="iconfont icon-play"></i><span>运行选中SQL</span></div>
             <div class="item" @click="parseSql"><i class="iconfont icon-play"></i><span>解析动态SQL</span></div>
+            <div class="item" @click="formatSql"><i class="iconfont icon-play"></i><span>格式化SQL</span></div>
           </div>
         </div>
         <div class="quick">
@@ -76,7 +78,8 @@
           <div class="sql">{{ sqlMeta.jdbcParamValues }}</div>
         </div>
         <div class="table">
-          <el-table :data="resultList" border stripe style="width: 100%" v-if="resultList != null && resultList.length > 0" size="mini">
+          <el-table :data="resultList" border stripe style="width: 100%"
+                    v-if="resultList != null && resultList.length > 0" size="mini">
             <el-table-column :prop="item" :label="item" v-for="item in Object.keys(resultList[0])"></el-table-column>
           </el-table>
           <div v-if="resultList != null && resultList.length == 0">查询结果为空</div>
@@ -91,6 +94,7 @@
 import dbIcon from "@/components/common/dbIcon";
 
 import {codemirror} from 'vue-codemirror'
+import {format} from 'sql-formatter';
 
 import 'codemirror/theme/solarized.css'
 import 'codemirror/theme/idea.css'
@@ -126,7 +130,12 @@ export default {
         mode: 'text/x-mysql',
         theme: 'idea',
         lint: true,                     // 代码出错提醒
-        matchBrackets: true
+        matchBrackets: true,
+        extraKeys: {"Tab": "autocomplete"},  //Tab可以弹出选择项
+        hintOptions: { // 自定义提示选项
+          completeSingle: false, // 当匹配只有一项的时候是否自动补全
+          tables: {}
+        }
       },
       sqlMeta: null
     }
@@ -169,6 +178,18 @@ export default {
         // this.$message.error("查询所有数据源失败")
       })
     },
+    formatSql() {
+      var sql = format(this.codemirror.getValue())
+          .replace(/# /g, "#")
+          .replace(/{ /g, "{")
+          .replace(/ }/g, "}")
+          .replace(/\/ /g, "/")
+          .replace(/(<\n)|(< )/g, "\n<")
+          .replace(/(\n>)|( >)/g, ">")
+          .replace(/(where\n )|(\nwhere\n )/g, "where")
+          .replace(/ open/g, "\n open");
+      this.codemirror.setValue(sql);
+    },
     run(selected) {
       if (this.datasourceId == null) {
         this.$message.error("请先选择数据源")
@@ -203,7 +224,7 @@ export default {
           this.error = response.data.msg
         }
       }).catch((error) => {
-         this.$message.error(error)
+        this.$message.error(error)
       })
     },
     fullWindow() {
@@ -242,6 +263,13 @@ export default {
     getTables(datasourceId) {
       this.axios.post("/table/getAllTables", {sourceId: datasourceId}).then((response) => {
         this.tables = response.data
+
+        const hints = {}
+        this.tables.forEach(e => {
+          hints[`${e.label}`] = e.columns.map(j => j.label)
+        })
+        this.cmOptions.hintOptions.tables = hints
+
       }).catch((error) => {
         this.$message.error("查询所有表名称失败；但不影响使用！")
       })
@@ -257,10 +285,8 @@ export default {
     },
     onCmCodeChange(instance, changeObj) {
       //如果输入的是字母才提示，空格不提示
-      if (/^[a-zA-Z]/.test(changeObj.text[0])) {
-        this.codemirror.showHint({
-          completeSingle: false
-        })
+      if (/^[a-zA-Z.]/.test(changeObj.text[0])) {
+        this.codemirror.showHint()
       }
 
     },
@@ -531,7 +557,7 @@ export default {
 
       .params {
         padding: 5px;
-        width: 600px;
+        //width: 600px;
         border-left: 1px solid #82848a;
         //background-color: #ccc;
         display: none;
