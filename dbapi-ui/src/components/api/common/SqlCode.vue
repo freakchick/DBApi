@@ -557,7 +557,7 @@ export default {
 
       .params {
         padding: 5px;
-        //width: 600px;
+        width: 600px;
         border-left: 1px solid #82848a;
         //background-color: #ccc;
         display: none;
