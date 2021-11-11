@@ -183,11 +183,14 @@ export default {
           .replace(/# /g, "#")
           .replace(/{ /g, "{")
           .replace(/ }/g, "}")
-          .replace(/\/ /g, "/")
-          .replace(/(<\n)|(< )/g, "\n<")
-          .replace(/(\n>)|( >)/g, ">")
-          .replace(/(where\n )|(\nwhere\n )/g, "where")
-          .replace(/ open/g, "\n open");
+          .replace(/< foreach/g, "\n<foreach\n")
+          .replace(/< \/ foreach >/g, "\n</foreach>\n")
+          .replace(/< if/g, "\n<if")
+          .replace(/< \/ if >/g, "\n</if>\n")
+          .replace(/<\nwhere\n  >/g, "\n<where>\n")
+          .replace(/< \/\nwhere\n  >/g, "\n</where>\n")
+          .replace(/< trim/g, "\n<trim")
+          .replace(/< \/ trim >/g, "\n</trim>\n");
       this.codemirror.setValue(sql);
     },
     run(selected) {
