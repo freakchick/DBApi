@@ -33,7 +33,7 @@
 
 ## 安装教程
 
-- 依赖java环境，需要安装jdk8+，并配置jav环境变量
+- 依赖java环境，需要安装jdk8+，并配置java环境变量
 - 下载地址： [天翼云盘](https://cloud.189.cn/t/Jza2MzeEZVNv) ，或者在发行版页面下载
 
 ### 1. tar包安装
