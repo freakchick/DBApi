@@ -104,8 +104,13 @@ re = requests.post("http://127.0.0.1:8520/api/userById", {"idList": [1, 2]}, hea
 print(re.text)
 ```
 
-## sql编写规范
-
+## 注意事项
+### 数据源支持
+- **如果您要使用Oracle或者其他类型的数据源，请将相应的jdbc驱动包手动放入DBApi部署后的`lib`目录下**
+### sql编写规范
 - 和mybatis动态sql语法一样，同样支持参数`#{}`、 `${}`，可以参考[mybatis文档](https://mybatis.org/mybatis-3/zh/dynamic-sql.html)
 ，不需要写最外层的`<select>` `<update>` 标签，直接写sql内容
 - 注意和mybatis一样，sql里的小于号不要写成`<`，要写成 `&lt;`
+
+## 权限校验流程
+  ![](https://freakchicken.gitee.io/images/dbApi/20210502/lc.png)

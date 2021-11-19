@@ -8,7 +8,7 @@
 ## 介绍
 
 - 快速生成数据库的http接口服务，零代码开发，只需编写sql，就可以生成http api服务。是数据库的上层应用，方便数据库数据对外发布http服务
-- 体验地址： http://101.34.234.234:8520/ 。  默认账户： admin/admin
+- 体验地址： `http://101.34.234.234:8520/` 。  默认账户： admin/admin
 ## 使用场景
 
 - BI报表、数据可视化大屏的后端接口快速开发；
@@ -28,25 +28,15 @@
 - 支持自定义代码逻辑的数据转换，比如数据脱敏
 - 支持API配置导入导出，方便测试环境到生产环境的API迁移
 
-## [查看视频教程](https://www.bilibili.com/video/BV1zL411G7Qh)
+## 视频教程
+[查看视频教程](https://www.bilibili.com/video/BV1zL411G7Qh)
 
-## 4.软件架构
-
-- 采用B/S架构，springboot + vue.js 前后端分离开发
-- 考虑到部署的简便性，使用sqlite数据库
-- 使用了开源的动态sql引擎[orange](https://gitee.com/freakchicken/orange)
-- 权限校验流程
-  ![](https://freakchicken.gitee.io/images/dbApi/20210502/lc.png)
-
-
-## 5.安装教程
+## 安装教程
 
 - 依赖java环境，需要安装jdk8+，并配置jav环境变量
 - 下载地址： [天翼云盘](https://cloud.189.cn/t/Jza2MzeEZVNv) ，或者在发行版页面下载
 
-**有以下2种安装方式：**
-
-### 5.1 tar包安装
+### 1. tar包安装
 
 - 下载`DBApi-[version]-bin.tar.gz`包
 - 解压tar包，修改`conf/application.properties`文件中的配置:
@@ -75,15 +65,12 @@ sh bin/dbApi.sh stop
 - windows操作命令
 
 ```shell
-# 前台启动
+# 前台启动, 或者直接双击 `bin/dbApi.bat` 文件启动
 bin/dbApi.bat
 ```
-
-或者直接双击 `bin/dbApi.bat` 文件启动
-
 - 启动后浏览器访问 `http://ip:8520` ，默认登录账户： admin/admin
 
-### 5.2 docker安装
+### 2.docker安装
 
 ```shell script
 docker run -d -p 8520:8520 freakchicken/db-api
@@ -91,7 +78,7 @@ docker run -d -p 8520:8520 freakchicken/db-api
 
 - 启动后浏览器访问 `http://ip:8520` ，默认登录账户： admin/admin
 
-## 6.软件截图
+## 软件截图
 ![](https://freakchicken.gitee.io/images/dbApi/20210904/api.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20210502/datasource_create.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20210803/api_edit.png)
@@ -106,67 +93,24 @@ docker run -d -p 8520:8520 freakchicken/db-api
 ![](https://freakchicken.gitee.io/images/dbApi/20210502/docs.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20210803/ip.png)
 
-## 7.使用说明
+## 使用说明
 
 请阅读 [详细使用说明](./dbapi-assembly/docs/instruction.md)
 
 
-## 8.插件开发
+## 插件开发
 - 请阅读 [插件开发指南](./dbapi-assembly/docs/plugin%20development.md)
 - 作者已经开发了字段加密插件和redis缓存插件，请阅读[案例demo](https://gitee.com/freakchicken/dbapi-plugin-demo)
 
-## 9.二次开发
+## 二次开发
+- 请阅读 [开发指南](./dbapi-assembly/docs/development.md)
 
-### 9.1环境依赖
-
-- 安装jdk8+
-- 安装node.js
-- (可选)npm设置国内源
-```shell
-npm config set registry https://registry.npm.taobao.org
-```
-### 9.2编译打包
-
-- maven打包会自动把前端安装依赖并编译打包，
-
-```shell script
-mvn clean package -P release
-```
-
-### 9.3构建镜像
-- 在`dbapi-assembly`目录下
-```shell script
-mvn docker:build
-mvn docker:push
-```
-
-### 9.4启动
-
-- 前端启动
-`dbapi-ui` 目录下 `npm run serve`
-
-- 后端启动:
-`dbapi-core`目录下启动主类`com.gitee.freakchicken.dbapi.DBApiApplication`
-
-- 前端访问地址：
-```
-http://localhost:8521
-```
-
-- 后端接口访问地址：
-```
-http://localhost:8520
-```
-## 10.springboot集成
+## springboot集成
 
 如果您想更加灵活的使用DBApi，在您自己的java springboot项目中使用代码配置接口，
 请使用[dbApi-spring-boot-starter开源框架](https://gitee.com/freakchicken/dbApi-spring-boot-starter)
 
-## 11.注意事项
-
-- **如果您要使用Oracle或者其他类型的数据源，请将相应的jdbc驱动包手动放入DBApi部署后的`lib`目录下**
-
-## 12.联系作者：
+## 联系作者：
 
 ### 微信：
 - 提问请先star支持一下，提问前请先把文档读一遍，文档里写过的问题不会回答
@@ -193,13 +137,3 @@ http://localhost:8520
 <img src="https://freakchicken.gitee.io/images/kafkaui/wechatpay.jpg" width = "30%" />
 <img src="https://freakchicken.gitee.io/images/kafkaui/alipay.jpg" width = "29%" />
 </div>
-
-## 13.TODO
-
-- 集群版本开发，支持微服务注册consul/eureka/nacos
-- api熔断支持
-- 请求路由参数支持
-- 流量监控支持，ip限流，分组限流
-- ~~api配置导入导出支持~~
-- 功能性api支持（RPC调用）
-- 分库分表数据源支持（shardingSphere/mycat）
