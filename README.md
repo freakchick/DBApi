@@ -1,7 +1,12 @@
 # DBApi
 
-<img src='https://gitee.com/freakchicken/db-api/badge/star.svg?theme=dark' alt='star' align='top'></img>
-<img src='https://gitee.com/freakchicken/db-api/badge/fork.svg?theme=dark' alt='fork' align='top'></img>
+![](https://gitee.com/freakchicken/db-api/badge/star.svg)
+![](https://gitee.com/freakchicken/db-api/badge/fork.svg?theme=gvp)
+![](https://img.shields.io/github/stars/freakchick/DBApi.svg?logo=GitHub)
+![](https://img.shields.io/github/forks/freakchick/DBApi.svg?logo=GitHub)
+![](https://img.shields.io/github/watchers/freakchick/DBApi.svg?logo=GitHub)
+![](https://img.shields.io/github/license/freakchick/DBApi.svg)
+
 [![EN doc](https://img.shields.io/badge/document-English-blue.svg)](README.md)
 [![CN doc](https://img.shields.io/badge/文档-中文版-blue.svg)](README_zh_CN.md)
 
