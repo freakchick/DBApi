@@ -16,8 +16,7 @@ import java.util.List;
 @Configuration
 public class MyConfig implements WebMvcConfigurer {
 
-	@Autowired
-	private ApiInterceptor apiInterceptor;
+
 	@Autowired
 	JwtAuthenticationInterceptor jwtAuthenticationInterceptor;
 
@@ -26,7 +25,6 @@ public class MyConfig implements WebMvcConfigurer {
 	 */
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(apiInterceptor).addPathPatterns("/api/**");
 
 		List<String > patterns = new ArrayList<>();
 		patterns.add("/user/login");
@@ -35,9 +33,9 @@ public class MyConfig implements WebMvcConfigurer {
 		patterns.add("/css/**");
 		patterns.add("/fonts/**");
 		patterns.add("/index.html");
+		patterns.add("/error");
 
-		registry.addInterceptor(jwtAuthenticationInterceptor).addPathPatterns("/**")
-				.excludePathPatterns(patterns);
+		registry.addInterceptor(jwtAuthenticationInterceptor).excludePathPatterns(patterns).addPathPatterns("/**");
 	}
 
 

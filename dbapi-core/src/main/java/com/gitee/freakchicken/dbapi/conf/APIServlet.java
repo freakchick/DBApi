@@ -2,97 +2,35 @@ package com.gitee.freakchicken.dbapi.conf;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.gitee.freakchicken.dbapi.common.ApiConfig;
+import com.gitee.freakchicken.dbapi.common.ResponseDto;
 import com.gitee.freakchicken.dbapi.domain.DataSource;
 import com.gitee.freakchicken.dbapi.domain.Token;
+import com.gitee.freakchicken.dbapi.plugin.CachePlugin;
+import com.gitee.freakchicken.dbapi.plugin.PluginManager;
+import com.gitee.freakchicken.dbapi.plugin.TransformPlugin;
 import com.gitee.freakchicken.dbapi.service.*;
 import com.gitee.freakchicken.dbapi.util.IPUtil;
 import com.gitee.freakchicken.dbapi.util.JdbcUtil;
 import com.gitee.freakchicken.dbapi.util.SqlEngineUtil;
 import com.github.freakchick.orange.SqlMeta;
-import com.gitee.freakchicken.dbapi.common.ResponseDto;
-import com.gitee.freakchicken.dbapi.common.ApiConfig;
-import com.gitee.freakchicken.dbapi.plugin.CachePlugin;
-import com.gitee.freakchicken.dbapi.plugin.TransformPlugin;
-import com.gitee.freakchicken.dbapi.plugin.PluginManager;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
-/**
- * api拦截器
- *
- * @author jiangqiang
- * @date 2019年3月19日下午4:30:56
- */
-@Component
 @Slf4j
-public class ApiInterceptor implements HandlerInterceptor {
-
-    @Override
-    public void afterCompletion(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2, Exception arg3) throws Exception {
-    }
-
-    @Override
-    public void postHandle(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2, ModelAndView arg3) throws Exception {
-
-    }
-
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2) throws Exception {
-        String originIp = IPUtil.getOriginIp(request);
-        log.debug(originIp);
-
-        String method = request.getMethod();
-        String servletPath = request.getServletPath();
-        servletPath = servletPath.substring(5);
-        log.debug(servletPath);
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("application/json; charset=utf-8");
-        // 跨域设置
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Credentials", "true");
-        response.setHeader("Access-Control-Allow-Headers", "Authorization");//这里很重要，要不然js header不能跨域携带  Authorization属性
-        response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE");
-
-        PrintWriter out = null;
-        try {
-
-            //js跨域的预检请求，不经过处理逻辑
-            if (method.equals("OPTIONS")) {
-                response.setStatus(HttpServletResponse.SC_OK);
-                return false;
-            }
-            out = response.getWriter();
-            boolean checkIP = checkIP(originIp);
-            if (!checkIP) {
-                out.append(JSON.toJSONString(ResponseDto.fail("Illegal ip (" + originIp + "), access forbidden")));
-                return false;
-            }
-            ResponseDto responseDto = process(servletPath, request, response);
-
-            log.debug(JSON.toJSONString(responseDto));
-            out.append(JSON.toJSONString(responseDto));
-            return false;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.sendError(500);
-            return false;
-        } finally {
-            if (out != null)
-                out.close();
-        }
-
-    }
+@WebServlet(name = "apiServlet", urlPatterns = "/api/*")
+public class APIServlet extends HttpServlet {
 
     @Autowired
     ApiConfigService apiConfigService;
@@ -105,26 +43,31 @@ public class ApiInterceptor implements HandlerInterceptor {
     @Autowired
     IPService ipService;
 
-    public boolean checkIP(String originIp) {
-        Map<String, String> map = ipService.detail();
-        String status = map.get("status");
-        if (status.equals("on")) {
-            String mode = map.get("mode");
-            if (mode.equals("black")) {
-                String blackIP = map.get("blackIP");
-                if (!ipService.check(mode, blackIP, originIp)) {
-                    log.warn("ip黑名单拦截");
-                    return false;
-                }
-            } else if (mode.equals("white")) {
-                String whiteIP = map.get("whiteIP");
-                if (!ipService.check(mode, whiteIP, originIp)) {
-                    log.warn("ip白名单检查不通过");
-                    return false;
-                }
-            }
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        String servletPath = request.getRequestURI();
+        servletPath = servletPath.substring(5);
+
+        PrintWriter out = null;
+        try {
+            out = response.getWriter();
+            ResponseDto responseDto = process(servletPath, request, response);
+            out.append(JSON.toJSONString(responseDto));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendError(500);
+        } finally {
+            if (out != null)
+                out.close();
         }
-        return true;
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        doGet(req, resp);
     }
 
     public ResponseDto process(String path, HttpServletRequest request, HttpServletResponse response) {
@@ -141,16 +84,16 @@ public class ApiInterceptor implements HandlerInterceptor {
                 log.debug(tokenStr);
                 if (StringUtils.isBlank(tokenStr)) {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    return ResponseDto.fail("No token! Private api can not be accessed!");
+                    return ResponseDto.fail("No token!");
                 } else {
                     Token token = tokenService.getToken(tokenStr);
                     if (token == null) {
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                        return ResponseDto.fail("Invalid token! Private api can not be accessed!");
+                        return ResponseDto.fail("Invalid token!");
                     } else {
                         if (token.getExpire() != null && token.getExpire() < System.currentTimeMillis()) {
                             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                            return ResponseDto.fail("Token expired! Private api can not be accessed!");
+                            return ResponseDto.fail("Token expired!");
                         } else {
                             // log.info("token存在且有效");
                             List<String> authGroups = tokenService.getAuthGroups(token.getId());
