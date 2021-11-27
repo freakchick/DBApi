@@ -38,7 +38,13 @@ public class TableController {
         List<JSONObject> list = tables.stream().map(t -> {
             JSONObject jo = new JSONObject();
             jo.put("label", t);
-            jo.put("columns", JdbcUtil.getRDBMSColumnProperties(connection, dataSource.getType(), t));
+            try {
+                DruidPooledConnection conn = PoolManager.getPooledConnection(dataSource);
+                jo.put("columns", JdbcUtil.getRDBMSColumnProperties(conn, dataSource.getType(), t));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+//            jo.put("columns",);
             jo.put("showColumns", false);
             return jo;
         }).collect(Collectors.toList());

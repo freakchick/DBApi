@@ -48,10 +48,10 @@
         </div>
       </div>
       <div class="code">
-        <codemirror ref="cmEditor" class="myMirror" :options="cmOptions" @ready="onCmReady" @focus="onCmFocus"
+        <codemirror class="myMirror" :options="cmOptions" @ready="onCmReady" @focus="onCmFocus"
                     @inputRead="onCmCodeChange">
         </codemirror>
-        <div class="params">
+        <div class="params"> 
           <div style="display: inline-block">参数设置：</div>
           <el-tooltip placement="top-start" effect="dark">
             <div slot="content">
@@ -123,6 +123,7 @@ export default {
       datasourceId: null, datasources: [],
       tables: [], table: null,
       // columns: [], current: null,
+      cmInstance:null,
       cmOptions: {
         value: '',
         styleActiveLine: true,
@@ -167,7 +168,7 @@ export default {
       this.error = null
       this.sqlMeta = null
       this.axios.post("/apiConfig/parseDynamicSql",
-          {sql: this.codemirror.getValue(), params: (this.params)}).then((response) => {
+          {sql: this.cmInstance.getValue(), params: (this.params)}).then((response) => {
         if (response.data.success) {
           this.sqlMeta = response.data.data
 
@@ -179,7 +180,7 @@ export default {
       })
     },
     formatSql() {
-      var sql = format(this.codemirror.getValue())
+      var sql = format(this.cmInstance.getValue())
           .replace(/# /g, "#")
           .replace(/{ /g, "{")
           .replace(/ }/g, "}")
@@ -191,7 +192,7 @@ export default {
           .replace(/< \/\nwhere\n  >/g, "\n</where>\n")
           .replace(/< trim/g, "\n<trim")
           .replace(/< \/ trim >/g, "\n</trim>\n");
-      this.codemirror.setValue(sql);
+      this.cmInstance.setValue(sql);
     },
     run(selected) {
       if (this.datasourceId == null) {
@@ -200,9 +201,9 @@ export default {
       }
       let sql
       if (selected) {
-        sql = this.codemirror.getSelection()
+        sql = this.cmInstance.getSelection()
       } else {
-        sql = this.codemirror.getValue()
+        sql = this.cmInstance.getValue()
       }
       if (sql == null || sql.trim() == '') {
         this.$message.error("请先输入sql")
@@ -233,12 +234,12 @@ export default {
     fullWindow() {
       this.mode = "large"
       this.isFullScreen = true
-      this.codemirror.setSize('100%', 'calc(100vh - 350px)')
+      this.cmInstance.setSize('100%', 'calc(100vh - 350px)')
     },
     miniWindow() {
       this.mode = "mini"
       this.isFullScreen = false
-      this.codemirror.setSize('100%', '400px')
+      this.cmInstance.setSize('100%', '400px')
     },
     getColumns(table, index) {
       if (this.tables[index].columns.length == 0) {
@@ -280,6 +281,7 @@ export default {
 
 
     onCmReady(cm) {
+      this.cmInstance = cm
       cm.setSize('100%', '400px')
       // console.log('the editor is readied!', cm)
     },
@@ -289,7 +291,7 @@ export default {
     onCmCodeChange(instance, changeObj) {
       //如果输入的是字母才提示，空格不提示
       if (/^[a-zA-Z.]/.test(changeObj.text[0])) {
-        this.codemirror.showHint()
+        this.cmInstance.showHint()
       }
 
     },
@@ -305,14 +307,14 @@ export default {
         val = "\n<trim prefix=\"\" suffix=\"\" suffixesToOverride=\"\" prefixesToOverride=\"\"></trim>"
       }
 
-      this.codemirror.setValue(this.codemirror.getValue() + val)
+      this.cmInstance.setValue(this.cmInstance.getValue() + val)
     },
   },
-  computed: {
-    codemirror() {
-      return this.$refs.cmEditor.codemirror
-    }
-  },
+  // computed: {
+  //   codemirror() {
+  //     return this.$refs.cmEditor.codemirror
+  //   }
+  // },
   created() {
     this.getAllSource()
 
