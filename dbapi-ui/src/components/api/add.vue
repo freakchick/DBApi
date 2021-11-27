@@ -22,6 +22,8 @@ export default {
 
     save() {
       const detail = this.$refs.apiAdd.detail
+
+      const sqlList = this.$refs.apiAdd.$refs.sqlCode.cmList.map((cm) => cm.getValue().trim())
       // debugger
       let p = {
         name: detail.name,
@@ -34,7 +36,8 @@ export default {
         transformPlugin: detail.transformPlugin,
         transformPluginParams: detail.transformPluginParams,
         datasourceId: this.$refs.apiAdd.$refs.sqlCode.datasourceId,
-        sql: this.$refs.apiAdd.$refs.sqlCode.codemirror.getValue().trim(),
+       // sql: this.$refs.apiAdd.$refs.sqlCode.codemirror.getValue().trim(),
+        sql: JSON.stringify(sqlList),
         params: JSON.stringify(detail.params)
       }
 

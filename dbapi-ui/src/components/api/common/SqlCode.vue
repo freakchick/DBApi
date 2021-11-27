@@ -48,9 +48,17 @@
         </div>
       </div>
       <div class="code">
-        <codemirror class="myMirror" :options="cmOptions" @ready="onCmReady" @focus="onCmFocus"
-                    @inputRead="onCmCodeChange">
-        </codemirror>
+        
+          <codemirror class="myMirror" :options="cmOptions" @ready="onCmReady" @focus="onCmFocus" @inputRead="onCmCodeChange" 
+            :key="index" v-for="(item,index) in cmFlag" v-show="currentIndex === index">
+          </codemirror>
+          <div class="tabs">
+          <div v-for="(item,index) in cmFlag" :class="{'tab':true,'tab-active':currentIndex === index}" :key="index">
+            <div @click="focusCM(index)">SQL{{index}}</div>
+            <div @click="removeTab(index)">remove</div>
+          </div>
+          <div class="tab" @click="addTab">add</div>
+          </div>
         <div class="params"> 
           <div style="display: inline-block">参数设置：</div>
           <el-tooltip placement="top-start" effect="dark">
@@ -123,7 +131,10 @@ export default {
       datasourceId: null, datasources: [],
       tables: [], table: null,
       // columns: [], current: null,
-      cmInstance:null,
+      cmFlag:[0],
+      currentIndex:0,// sql序号
+      cmInstance:null, // 当前codemirror实例
+      cmList:[],
       cmOptions: {
         value: '',
         styleActiveLine: true,
@@ -138,7 +149,7 @@ export default {
           tables: {}
         }
       },
-      sqlMeta: null
+      sqlMeta: null,
     }
   },
 
@@ -278,10 +289,17 @@ export default {
         this.$message.error("查询所有表名称失败；但不影响使用！")
       })
     },
-
+    removeTab(index){
+      this.cmList.slice(index)
+      this.cmFlag.slice(index)
+    },
+    addTab(){
+      this.cmFlag.push(0)
+    },
 
     onCmReady(cm) {
       this.cmInstance = cm
+      this.cmList.push(cm)
       cm.setSize('100%', '400px')
       // console.log('the editor is readied!', cm)
     },
@@ -294,6 +312,11 @@ export default {
         this.cmInstance.showHint()
       }
 
+    },
+    focusCM(index){
+      // 切换当前cm instance 
+      this.currentIndex = index
+      this.cmInstance = this.cmList[index]
     },
     tag(item) {
       let val = ''

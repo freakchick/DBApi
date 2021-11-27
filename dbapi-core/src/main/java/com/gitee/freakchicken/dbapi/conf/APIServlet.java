@@ -131,6 +131,8 @@ public class APIServlet extends HttpServlet {
             }
 
             String sql = config.getSql();
+            List<String> sqlList = JSONArray.parseArray(sql, String.class);
+            
             SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(sql, sqlParam);
             ResponseDto responseDto = JdbcUtil.executeSql(datasource, sqlMeta.getSql(), sqlMeta.getJdbcParamValues());
 

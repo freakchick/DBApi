@@ -47,7 +47,7 @@ public class ApiConfigService {
 
         int size = apiConfigMapper.selectCountByPath(apiConfig.getPath());
         if (size > 0) {
-            return ResponseDto.fail("path has been used, please update path and save again");
+            return ResponseDto.fail("Path has been used, please update path and save again!");
         } else {
             apiConfig.setStatus(0);
             apiConfig.setId(UUIDUtil.id());
