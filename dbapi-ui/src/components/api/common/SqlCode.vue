@@ -48,18 +48,26 @@
         </div>
       </div>
       <div class="code">
-        
-          <codemirror class="myMirror" :options="cmOptions" @ready="onCmReady" @focus="onCmFocus" @inputRead="onCmCodeChange" 
-            :key="index" v-for="(item,index) in cmFlag" v-show="currentIndex === index">
+        <div class="multi-sql">
+          <codemirror class="myMirror" :options="cmOptions" @ready="onCmReady" @focus="onCmFocus"
+                      @inputRead="onCmCodeChange" :key="flag"
+                      v-for="(flag,index) in cmFlag" v-show="currentIndex === index">
           </codemirror>
           <div class="tabs">
-          <div v-for="(item,index) in cmFlag" :class="{'tab':true,'tab-active':currentIndex === index}" :key="index">
-            <div @click="focusCM(index)">SQL{{index}}</div>
-            <div @click="removeTab(index)">remove</div>
+            <div v-for="(flag,index) in cmFlag" :class="{'tab':true,'tab-active':currentIndex === index}" :key="'tab'+flag">
+              <div @click="focusCM(index)" class="text">
+                SQL-{{ flag }}
+              </div>
+              <span @click="removeTab(index)" class="el-icon-circle-close close" v-if="index > 0"></span>
+            </div>
+            <div class="tab" @click="addTab">
+              <div class="text">
+                <i class="el-icon-circle-plus"></i>
+                添加</div>
+            </div>
           </div>
-          <div class="tab" @click="addTab">add</div>
-          </div>
-        <div class="params"> 
+        </div>
+        <div class="params">
           <div style="display: inline-block">参数设置：</div>
           <el-tooltip placement="top-start" effect="dark">
             <div slot="content">
@@ -106,6 +114,7 @@ import {format} from 'sql-formatter';
 
 import 'codemirror/theme/solarized.css'
 import 'codemirror/theme/idea.css'
+import 'codemirror/theme/darcula.css'
 import "codemirror/addon/hint/show-hint.css";
 
 
@@ -131,10 +140,11 @@ export default {
       datasourceId: null, datasources: [],
       tables: [], table: null,
       // columns: [], current: null,
-      cmFlag:[0],
-      currentIndex:0,// sql序号
-      cmInstance:null, // 当前codemirror实例
-      cmList:[],
+      cmFlag: [0],
+      currentIndex: 0,// sql序号
+      cmInstance: null, // 当前codemirror实例
+      cmList: [],
+      sequence: 0,
       cmOptions: {
         value: '',
         styleActiveLine: true,
@@ -245,12 +255,14 @@ export default {
     fullWindow() {
       this.mode = "large"
       this.isFullScreen = true
-      this.cmInstance.setSize('100%', 'calc(100vh - 350px)')
+      // this.cmInstance.
+      this.cmList.forEach(t => t.setSize('100%', 'calc(100vh - 350px)'))
     },
     miniWindow() {
       this.mode = "mini"
       this.isFullScreen = false
-      this.cmInstance.setSize('100%', '400px')
+      // this.cmInstance.setSize('100%', '400px')
+      this.cmList.forEach(t => t.setSize('100%', '400px'))
     },
     getColumns(table, index) {
       if (this.tables[index].columns.length == 0) {
@@ -289,18 +301,30 @@ export default {
         this.$message.error("查询所有表名称失败；但不影响使用！")
       })
     },
-    removeTab(index){
-      this.cmList.slice(index)
-      this.cmFlag.slice(index)
+    removeTab(index) {
+      this.cmList.splice(index, 1)
+      this.cmFlag.splice(index, 1)
+      //如果删除的是激活标签的左边标签,或激活标签本身
+      if(index <= this.currentIndex){
+        this.currentIndex -= 1
+      }
+
     },
-    addTab(){
-      this.cmFlag.push(0)
+    addTab() {
+      this.sequence += 1
+      this.cmFlag.push(this.sequence)
+      this.currentIndex = this.cmFlag.length - 1 //最后一个标签激活
+
     },
 
     onCmReady(cm) {
       this.cmInstance = cm
       this.cmList.push(cm)
-      cm.setSize('100%', '400px')
+      if (this.mode === "mini")
+        cm.setSize('100%', '400px')
+      else {
+        cm.setSize('100%', 'calc(100vh - 350px)')
+      }
       // console.log('the editor is readied!', cm)
     },
     onCmFocus(cm) {
@@ -313,7 +337,7 @@ export default {
       }
 
     },
-    focusCM(index){
+    focusCM(index) {
       // 切换当前cm instance 
       this.currentIndex = index
       this.cmInstance = this.cmList[index]
@@ -557,6 +581,7 @@ export default {
       }
     }
 
+
     .code {
       display: flex;
       //width: 100%;
@@ -565,19 +590,86 @@ export default {
       padding: 0px;
       overflow: auto;
       //background-color: #f13838;
-
-      .myMirror {
+      .multi-sql {
         width: 100%;
-        //max-width: 100%;
-        /deep/ .CodeMirror-line {
-          font-family: 'Consolas', Helvetica, Arial, sans-serif !important;
-          font-size: 18px !important;
-          line-height: 20px;
+        //background-color: #c73030;
+        position: relative;
 
-          .cm-comment {
+        .myMirror {
+          width: 100%;
+          //max-width: 100%;
+          /deep/ .CodeMirror-line {
             font-family: 'Consolas', Helvetica, Arial, sans-serif !important;
             font-size: 18px !important;
             line-height: 20px;
+
+            .cm-comment {
+              font-family: 'Consolas', Helvetica, Arial, sans-serif !important;
+              font-size: 18px !important;
+              line-height: 20px;
+            }
+          }
+        }
+
+        .tabs {
+          //height: 18px;
+          //z-index: 1000;
+          //background-color: #b96666;
+          position: absolute;
+          bottom: 0px;
+          left: 30px;
+          display: flex;
+
+          .tab-active {
+            font-weight: 700;
+            background-color: rgba(4, 103, 10, 0.18);
+          }
+
+          .tab {
+            z-index: 1000;
+            position: relative;
+            cursor: pointer;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            border: 1px solid #ccc;
+            border-bottom-width: 0;
+            //color: #fff;
+            //background-color: #03830a;
+            margin: 0 3px;
+            width: 80px;
+            height: 22px;
+            line-height: 22px;
+            //padding: 0 3px;
+            .text {
+              padding: 0 5px;
+              text-align: center;
+              //width: 50px;
+            }
+
+            .close {
+              position: absolute;;
+              right: -10px;
+              top: -10px;
+              width: 20px;
+              display: none;
+              background-color: rgba(4, 103, 10, 0.27);
+              padding: 3px;
+              border-radius: 50%;
+              &:hover{
+                font-weight: 900;
+              }
+
+            }
+
+            &:hover {
+              background-color: rgba(4, 103, 10, 0.11);
+
+              .close {
+                background-color: rgba(23, 19, 19, 0.17);
+                display: block;
+              }
+            }
+
           }
         }
       }
@@ -600,6 +692,7 @@ export default {
 
 
     }
+
 
     .result {
       height: 300px;
