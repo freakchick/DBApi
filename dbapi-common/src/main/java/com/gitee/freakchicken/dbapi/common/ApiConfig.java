@@ -1,10 +1,13 @@
 package com.gitee.freakchicken.dbapi.common;
 
+import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * @program: dbApi
@@ -33,9 +36,6 @@ public class ApiConfig {
 
     @TableField("`sql`")
     String sql;
-
-    @TableField(exist = false)
-    List<String> sqlList;
 
     @Deprecated
     @TableField(value = "real_sql")
@@ -76,4 +76,9 @@ public class ApiConfig {
 
     @TableField(value = "update_time")
     String updateTime;
+
+    public List<String> getSqlList(){
+        List<String> sqlList = JSONArray.parseArray(sql, String.class);
+        return sqlList;
+    }
 }

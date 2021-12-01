@@ -1,6 +1,7 @@
 package com.gitee.freakchicken.dbapi.conf;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
@@ -25,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -84,16 +86,16 @@ public class APIServlet extends HttpServlet {
                 log.debug(tokenStr);
                 if (StringUtils.isBlank(tokenStr)) {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    return ResponseDto.fail("No token!");
+                    return ResponseDto.fail("No Token!");
                 } else {
                     Token token = tokenService.getToken(tokenStr);
                     if (token == null) {
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                        return ResponseDto.fail("Invalid token!");
+                        return ResponseDto.fail("Invalid Token!");
                     } else {
                         if (token.getExpire() != null && token.getExpire() < System.currentTimeMillis()) {
                             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                            return ResponseDto.fail("Token expired!");
+                            return ResponseDto.fail("Token Expired!");
                         } else {
                             // log.info("token存在且有效");
                             List<String> authGroups = tokenService.getAuthGroups(token.getId());
@@ -101,7 +103,7 @@ public class APIServlet extends HttpServlet {
 
                             } else {
                                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                                return ResponseDto.fail("Token unauthorized to access this api");
+                                return ResponseDto.fail("Invalid Token!");
                             }
                         }
                     }
@@ -119,47 +121,45 @@ public class APIServlet extends HttpServlet {
 
             //从缓存获取数据
             if (StringUtils.isNoneBlank(config.getCachePlugin())) {
-                try {
-                    CachePlugin cachePlugin = PluginManager.getCachePlugin(config.getCachePlugin());
-                    Object o = cachePlugin.get(config, sqlParam);
-                    if (o != null) {
-                        return ResponseDto.apiSuccess(o); //如果缓存有数据直接返回
-                    }
-                } catch (Exception e) {
-                    log.error("Get from cache failed!", e);
+                CachePlugin cachePlugin = PluginManager.getCachePlugin(config.getCachePlugin());
+                Object o = cachePlugin.get(config, sqlParam);
+                if (o != null) {
+                    return ResponseDto.apiSuccess(o); //如果缓存有数据直接返回
                 }
             }
 
-            String sql = config.getSql();
-            List<String> sqlList = JSONArray.parseArray(sql, String.class);
-            
-            SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(sql, sqlParam);
-            ResponseDto responseDto = JdbcUtil.executeSql(datasource, sqlMeta.getSql(), sqlMeta.getJdbcParamValues());
+            List<String> sqlList = config.getSqlList();
+            List<Object> dataList = new ArrayList<>();
+            for (String sql : sqlList) {
+                SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(sql, sqlParam);
+                Object data = JdbcUtil.executeSql(datasource, sqlMeta.getSql(), sqlMeta.getJdbcParamValues());
+                dataList.add(data);
+            }
 
-            //数据转换
-            if (StringUtils.isNoneBlank(config.getTransformPlugin()) && responseDto.isSuccess()) {
-                List<JSONObject> data = (List<JSONObject>) (responseDto.getData());
+
+            Object res = dataList;
+            //如果只有单条sql,返回结果不是数组格式
+            if (dataList.size() == 1) {
+                res = dataList.get(0);
+            }
+            ResponseDto dto = ResponseDto.apiSuccess(res);
+
+            //数据转换，只对单条SQL类的API有效
+            if (StringUtils.isNoneBlank(config.getTransformPlugin())) {
+                List<JSONObject> data = (List<JSONObject>) (res); //只对单条SQL类的API有效
                 TransformPlugin transformPlugin = PluginManager.getTransformPlugin(config.getTransformPlugin());
                 Object transform = transformPlugin.transform(data, config);
-                responseDto.setData(transform);
+                dto.setData(transform);
 
             }
 
             //设置缓存
-            if (StringUtils.isNoneBlank(config.getCachePlugin()) && responseDto.isSuccess()) {
-                //缓存设置失败不影响主逻辑
-                try {
-                    CachePlugin cachePlugin = PluginManager.getCachePlugin(config.getCachePlugin());
-                    cachePlugin.set(config, sqlParam, responseDto.getData());
-                } catch (Exception e) {
-                    log.error("Set to cache failed!", e);
-                }
+            if (StringUtils.isNoneBlank(config.getCachePlugin())) {
+                CachePlugin cachePlugin = PluginManager.getCachePlugin(config.getCachePlugin());
+                cachePlugin.set(config, sqlParam, dto.getData());
             }
 
-            if (!responseDto.isSuccess()) {
-                response.setStatus(500);
-            }
-            return responseDto;
+            return dto;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             ResponseDto fail = ResponseDto.fail(e.getMessage() == null ? e.toString() : e.getMessage());

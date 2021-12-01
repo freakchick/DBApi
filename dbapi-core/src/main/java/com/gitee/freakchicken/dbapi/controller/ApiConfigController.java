@@ -219,8 +219,8 @@ public class ApiConfigController {
             DataSource dataSource = dataSourceService.detail(datasourceId);
             Map<String, Object> map = JSON.parseObject(params, Map.class);
             SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(sql, map);
-            ResponseDto responseDto = JdbcUtil.executeSql(dataSource, sqlMeta.getSql(), sqlMeta.getJdbcParamValues());
-            return responseDto;
+            Object data = JdbcUtil.executeSql(dataSource, sqlMeta.getSql(), sqlMeta.getJdbcParamValues());
+            return ResponseDto.successWithData(data);
         } catch (Exception e) {
             return ResponseDto.fail(e.getMessage());
         }

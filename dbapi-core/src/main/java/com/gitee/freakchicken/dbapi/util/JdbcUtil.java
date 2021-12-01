@@ -28,7 +28,7 @@ public class JdbcUtil {
             log.info("successfully connected");
             return connection;
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Please check whether the jdbc driver jar is missing, if missed copy the jdbc jar file to lib dir. "+ e.getMessage());
+            throw new RuntimeException("Please check whether the jdbc driver jar is missing, if missed copy the jdbc jar file to lib dir. " + e.getMessage());
         }
     }
 
@@ -119,7 +119,7 @@ public class JdbcUtil {
         }
     }
 
-    public static ResponseDto executeSql(DataSource datasource, String sql, List<Object> jdbcParamValues) {
+    public static Object executeSql(DataSource datasource, String sql, List<Object> jdbcParamValues) {
         log.debug(sql);
         log.debug(JSON.toJSONString(jdbcParamValues));
         DruidPooledConnection connection = null;
@@ -155,14 +155,13 @@ public class JdbcUtil {
                     });
                     list.add(jo);
                 }
-                return ResponseDto.apiSuccess(list);
+                return list;
             } else {
                 int updateCount = statement.getUpdateCount();
-                return ResponseDto.apiSuccess(updateCount + " rows affected");
+                return updateCount + " rows affected";
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseDto.fail(e.getMessage());
+            throw new RuntimeException(e);
         } finally {
             try {
                 if (connection != null)
