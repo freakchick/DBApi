@@ -43,7 +43,6 @@
 </template>
 
 <script>
-import dbIcon from "@/components/common/dbIcon";
 
 export default {
   name: "common",
@@ -134,7 +133,6 @@ export default {
     if (this.id != undefined)
       this.getDetail(this.id)
   },
-  components: {dbIcon}
 }
 </script>
 

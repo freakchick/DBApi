@@ -146,7 +146,7 @@
 </template>
 
 <script>
-import dataTag from "@/components/common/dataTag";
+// import dataTag from "@/components/common/dataTag";
 import group from "@/components/api/group";
 
 export default {
@@ -175,7 +175,7 @@ export default {
       checkList: []
     }
   },
-  components: {dataTag, group},
+  components: { group},
   methods: {
     importSuccess(response, file, fileList) {
       this.fileList = []

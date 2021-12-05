@@ -7,9 +7,9 @@
                    option_label="name" option_value="id" @onchange="getTables"></my-select>
       </div>
       <div class="bottom">
-        <div class="menus" :style="`top:${y}px;left:${x}px`" v-show="showMenuFlag" @onblur="showMenuFlag=false">
+<!--        <div class="menus" :style="`top:${y}px;left:${x}px`" v-show="showMenuFlag" @onblur="showMenuFlag=false">
           <div class="menu" @click="copy">复制</div>
-        </div>
+        </div>-->
         <div v-for="(item,index) in tables">
           <div>
             <div class="table" @click.prevent="getColumns(item.label,index)" @contextmenu.prevent="showMenu()">
@@ -49,23 +49,31 @@
       </div>
       <div class="code">
         <div class="multi-sql">
-          <codemirror class="myMirror" :options="cmOptions" @ready="onCmReady" @focus="onCmFocus"
-                      @inputRead="onCmCodeChange" :key="flag"
-                      v-for="(flag,index) in cmFlag" v-show="currentIndex === index">
-          </codemirror>
-          <div class="tabs">
-            <div v-for="(flag,index) in cmFlag" :class="{'tab':true,'tab-active':currentIndex === index}" :key="'tab'+flag">
-              <div @click="focusCM(index)" class="text">
-                SQL-{{ flag }}
-              </div>
-              <span @click="removeTab(index)" class="el-icon-circle-close close" v-if="index > 0"></span>
-            </div>
-            <div class="tab" @click="addTab">
-              <div class="text">
-                <i class="el-icon-circle-plus"></i>
-                添加</div>
-            </div>
-          </div>
+          <mytabs>
+            <mytab-pane :label="'SQL-'+index" v-for="(item,index) in sqlText" :key="index">
+              <code-ui :sql="item" :mode="mode"></code-ui>
+            </mytab-pane>
+
+          </mytabs>
+
+
+<!--          <code-ui sql="select 1" v-for="(item,index) in "></code-ui>-->
+
+<!--          <div class="tabs">-->
+<!--            <div v-for="(flag,index) in cmFlag" :class="{'tab':true,'tab-active':currentIndex === index}"-->
+<!--                 :key="'tab'+flag">-->
+<!--              <div @click="focusCM(index)" class="text">-->
+<!--                SQL-{{ flag }}-->
+<!--              </div>-->
+<!--              <span @click="removeTab(index)" class="el-icon-circle-close close" v-if="index > 0"></span>-->
+<!--            </div>-->
+<!--            <div class="tab" @click="addTab">-->
+<!--              <div class="text">-->
+<!--                <i class="el-icon-circle-plus"></i>-->
+<!--                添加-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
         </div>
         <div class="params">
           <div style="display: inline-block">参数设置：</div>
@@ -107,23 +115,12 @@
 </template>
 
 <script>
-import dbIcon from "@/components/common/dbIcon";
+import codeUi from "@/components/api/common/codeUI";
 
-import {codemirror} from 'vue-codemirror'
+
 import {format} from 'sql-formatter';
 
-import 'codemirror/theme/solarized.css'
-import 'codemirror/theme/idea.css'
-import 'codemirror/theme/darcula.css'
-import "codemirror/addon/hint/show-hint.css";
 
-
-import 'codemirror/mode/sql/sql.js'
-
-require("codemirror/lib/codemirror");
-require("codemirror/mode/sql/sql");
-require("codemirror/addon/hint/show-hint");
-require("codemirror/addon/hint/sql-hint");
 
 
 export default {
@@ -140,31 +137,20 @@ export default {
       datasourceId: null, datasources: [],
       tables: [], table: null,
       // columns: [], current: null,
-      cmFlag: [0],
       currentIndex: 0,// sql序号
-      cmInstance: null, // 当前codemirror实例
-      cmList: [],
-      sequence: 0,
-      cmOptions: {
-        value: '',
-        styleActiveLine: true,
-        lineNumbers: true,
-        mode: 'text/x-mysql',
-        theme: 'idea',
-        lint: true,                     // 代码出错提醒
-        matchBrackets: true,
-        extraKeys: {"Tab": "autocomplete"},  //Tab可以弹出选择项
-        hintOptions: { // 自定义提示选项
-          completeSingle: false, // 当匹配只有一项的时候是否自动补全
-          tables: {}
-        }
-      },
       sqlMeta: null,
+      cmFlag: [0],
+    }
+  },
+  props:{
+    sqlText:{
+      type:Array,
+      default:['select 1','update']
     }
   },
 
   components: {
-    codemirror, dbIcon
+     codeUi
   },
   methods: {
     copy() {
@@ -189,7 +175,7 @@ export default {
       this.error = null
       this.sqlMeta = null
       this.axios.post("/apiConfig/parseDynamicSql",
-          {sql: this.cmInstance.getValue(), params: (this.params)}).then((response) => {
+          {sql: this.cmList[this.currentIndex].getValue(), params: (this.params)}).then((response) => {
         if (response.data.success) {
           this.sqlMeta = response.data.data
 
@@ -201,7 +187,7 @@ export default {
       })
     },
     formatSql() {
-      var sql = format(this.cmInstance.getValue())
+      var sql = format(this.cmList[this.currentIndex].getValue())
           .replace(/# /g, "#")
           .replace(/{ /g, "{")
           .replace(/ }/g, "}")
@@ -213,7 +199,7 @@ export default {
           .replace(/< \/\nwhere\n  >/g, "\n</where>\n")
           .replace(/< trim/g, "\n<trim")
           .replace(/< \/ trim >/g, "\n</trim>\n");
-      this.cmInstance.setValue(sql);
+      this.cmList[this.currentIndex].setValue(sql);
     },
     run(selected) {
       if (this.datasourceId == null) {
@@ -222,9 +208,9 @@ export default {
       }
       let sql
       if (selected) {
-        sql = this.cmInstance.getSelection()
+        sql = this.cmList[this.currentIndex].getSelection()
       } else {
-        sql = this.cmInstance.getValue()
+        sql = this.cmList[this.currentIndex].getValue()
       }
       if (sql == null || sql.trim() == '') {
         this.$message.error("请先输入sql")
@@ -255,13 +241,11 @@ export default {
     fullWindow() {
       this.mode = "large"
       this.isFullScreen = true
-      // this.cmInstance.
       this.cmList.forEach(t => t.setSize('100%', 'calc(100vh - 350px)'))
     },
     miniWindow() {
       this.mode = "mini"
       this.isFullScreen = false
-      // this.cmInstance.setSize('100%', '400px')
       this.cmList.forEach(t => t.setSize('100%', '400px'))
     },
     getColumns(table, index) {
@@ -305,7 +289,7 @@ export default {
       this.cmList.splice(index, 1)
       this.cmFlag.splice(index, 1)
       //如果删除的是激活标签的左边标签,或激活标签本身
-      if(index <= this.currentIndex){
+      if (index <= this.currentIndex) {
         this.currentIndex -= 1
       }
 
@@ -317,30 +301,11 @@ export default {
 
     },
 
-    onCmReady(cm) {
-      this.cmInstance = cm
-      this.cmList.push(cm)
-      if (this.mode === "mini")
-        cm.setSize('100%', '400px')
-      else {
-        cm.setSize('100%', 'calc(100vh - 350px)')
-      }
-      // console.log('the editor is readied!', cm)
-    },
-    onCmFocus(cm) {
-      // console.log('the editor is focused!', cm)
-    },
-    onCmCodeChange(instance, changeObj) {
-      //如果输入的是字母才提示，空格不提示
-      if (/^[a-zA-Z.]/.test(changeObj.text[0])) {
-        this.cmInstance.showHint()
-      }
 
-    },
     focusCM(index) {
       // 切换当前cm instance 
       this.currentIndex = index
-      this.cmInstance = this.cmList[index]
+      // this.cmList[this.currentIndex ] = this.cmList[this.currentIndex ]
     },
     tag(item) {
       let val = ''
@@ -354,7 +319,7 @@ export default {
         val = "\n<trim prefix=\"\" suffix=\"\" suffixesToOverride=\"\" prefixesToOverride=\"\"></trim>"
       }
 
-      this.cmInstance.setValue(this.cmInstance.getValue() + val)
+      this.cmList[this.currentIndex].setValue(this.cmList[this.currentIndex].getValue() + val)
     },
   },
   // computed: {
@@ -592,86 +557,73 @@ export default {
       //background-color: #f13838;
       .multi-sql {
         width: 100%;
-        //background-color: #c73030;
-        position: relative;
+        background-color: rgba(199, 48, 48, 0.23);
+        //position: relative;
 
-        .myMirror {
-          width: 100%;
-          //max-width: 100%;
-          /deep/ .CodeMirror-line {
-            font-family: 'Consolas', Helvetica, Arial, sans-serif !important;
-            font-size: 18px !important;
-            line-height: 20px;
 
-            .cm-comment {
-              font-family: 'Consolas', Helvetica, Arial, sans-serif !important;
-              font-size: 18px !important;
-              line-height: 20px;
-            }
-          }
-        }
 
-        .tabs {
-          //height: 18px;
-          //z-index: 1000;
-          //background-color: #b96666;
-          position: absolute;
-          bottom: 0px;
-          left: 30px;
-          display: flex;
-
-          .tab-active {
-            font-weight: 700;
-            background-color: rgba(4, 103, 10, 0.18);
-          }
-
-          .tab {
-            z-index: 1000;
-            position: relative;
-            cursor: pointer;
-            border-top-left-radius: 5px;
-            border-top-right-radius: 5px;
-            border: 1px solid #ccc;
-            border-bottom-width: 0;
-            //color: #fff;
-            //background-color: #03830a;
-            margin: 0 3px;
-            width: 80px;
-            height: 22px;
-            line-height: 22px;
-            //padding: 0 3px;
-            .text {
-              padding: 0 5px;
-              text-align: center;
-              //width: 50px;
-            }
-
-            .close {
-              position: absolute;;
-              right: -10px;
-              top: -10px;
-              width: 20px;
-              display: none;
-              background-color: rgba(4, 103, 10, 0.27);
-              padding: 3px;
-              border-radius: 50%;
-              &:hover{
-                font-weight: 900;
-              }
-
-            }
-
-            &:hover {
-              background-color: rgba(4, 103, 10, 0.11);
-
-              .close {
-                background-color: rgba(23, 19, 19, 0.17);
-                display: block;
-              }
-            }
-
-          }
-        }
+        //.tabs {
+        //  //height: 18px;
+        //  //z-index: 1000;
+        //  //background-color: #b96666;
+        //  position: absolute;
+        //  bottom: 0px;
+        //  left: 30px;
+        //  display: flex;
+        //
+        //  .tab-active {
+        //    font-weight: 700;
+        //    background-color: rgba(4, 103, 10, 0.18);
+        //  }
+        //
+        //  .tab {
+        //    z-index: 1000;
+        //    position: relative;
+        //    cursor: pointer;
+        //    border-top-left-radius: 5px;
+        //    border-top-right-radius: 5px;
+        //    border: 1px solid #ccc;
+        //    border-bottom-width: 0;
+        //    //color: #fff;
+        //    //background-color: #03830a;
+        //    margin: 0 3px;
+        //    width: 80px;
+        //    height: 22px;
+        //    line-height: 22px;
+        //    //padding: 0 3px;
+        //    .text {
+        //      padding: 0 5px;
+        //      text-align: center;
+        //      //width: 50px;
+        //    }
+        //
+        //    .close {
+        //      position: absolute;;
+        //      right: -10px;
+        //      top: -10px;
+        //      width: 20px;
+        //      display: none;
+        //      background-color: rgba(4, 103, 10, 0.27);
+        //      padding: 3px;
+        //      border-radius: 50%;
+        //
+        //      &:hover {
+        //        font-weight: 900;
+        //      }
+        //
+        //    }
+        //
+        //    &:hover {
+        //      background-color: rgba(4, 103, 10, 0.11);
+        //
+        //      .close {
+        //        background-color: rgba(23, 19, 19, 0.17);
+        //        display: block;
+        //      }
+        //    }
+        //
+        //  }
+        //}
       }
 
 

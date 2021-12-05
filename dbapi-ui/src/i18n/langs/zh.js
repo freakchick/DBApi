@@ -30,7 +30,7 @@ const cn = {
         ds_sql_tip: '创建或编辑API的时候，选择数据源，会执行此sql来获取该数据源下的所有表名称',
         ds_driver_tip: '如果是其他类型数据库，DBAPI中可能缺少相应的JDBC驱动jar包，请手动将驱动包放入lib目录下',
 
-        create_api: '创建APi',
+        create_api: '创建API',
         update_api: '修改API',
         api_detail: 'API详情',
         create_group: '创建API分组',

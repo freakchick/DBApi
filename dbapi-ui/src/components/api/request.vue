@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import dataTag from "@/components/common/dataTag";
+// import dataTag from "@/components/common/dataTag";
 
 export default {
   name: "request",
@@ -157,7 +157,7 @@ export default {
       this.params[index].values.splice(childIndex, 1)
     }
   },
-  components: {dataTag},
+  // components: {dataTag},
   created() {
     this.getDetail(this.$route.query.id)
     this.getAddress()

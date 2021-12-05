@@ -22,6 +22,7 @@
 </template>
 <script>
 export default {
+  name: "mySelect",
   data() {
     return {
       showOptions: false,

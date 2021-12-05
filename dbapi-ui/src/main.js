@@ -15,6 +15,9 @@ import 'codemirror/lib/codemirror.css'
 
 Vue.use(VueCodeMirror)
 
+import install from '@/components/common/index.js'
+Vue.use(install)
+
 
 import moment from 'moment'; //导入模块
 moment.locale('zh-cn'); //设置语言 或 moment.lang('zh-cn');
@@ -26,14 +29,6 @@ Vue.config.productionTip = false
 
 //使用vue-axios，这样才可以全局使用this.axios调用
 Vue.use(VueAxios, axios);
-
-
-import MyInput from "@/components/common/MyInput";
-import MySelect from "@/components/common/MySelect";
-
-Vue.component('my-input', MyInput)
-Vue.component('my-select', MySelect)
-
 
 // axios.defaults.baseURL = '/api'
 

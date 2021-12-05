@@ -60,7 +60,6 @@
 </template>
 
 <script>
-import dbIcon from '@/components/common/dbIcon'
 
 export default {
   name: "datasource",
@@ -134,7 +133,6 @@ export default {
   created() {
     this.getAllSource()
   },
-  components: {dbIcon}
 }
 </script>
 

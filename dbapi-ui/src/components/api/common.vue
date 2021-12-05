@@ -35,13 +35,13 @@
 
       <el-form-item :label="$t('m.access')">
         <el-radio-group v-model="detail.previlege">
-          <el-radio :label="0">{{$t('m.private')}}</el-radio>
-          <el-radio :label="1">{{$t('m.public')}}</el-radio>
+          <el-radio :label="0">{{ $t('m.private') }}</el-radio>
+          <el-radio :label="1">{{ $t('m.public') }}</el-radio>
         </el-radio-group>
 
         <el-tooltip placement="top-start" effect="dark">
           <div slot="content">
-            {{$t('m.access_tip')}}
+            {{ $t('m.access_tip') }}
           </div>
           <i class="el-icon-info tip"></i>
         </el-tooltip>
@@ -52,7 +52,8 @@
           <div slot="content">填写“插件类名”表示开启数据转换功能，不填写表示不转换。转换逻辑是自定义插件中编写的逻辑</div>
           <i class="el-icon-info tip"></i>
         </el-tooltip>
-        <my-input :label="$t('m.plugin_class')" v-model="detail.transformPlugin" placeholder="填写数据转换插件java类名" width="400px"></my-input>
+        <my-input :label="$t('m.plugin_class')" v-model="detail.transformPlugin" placeholder="填写数据转换插件java类名"
+                  width="400px"></my-input>
         <my-input :label="$t('m.plugin_parameter')" v-model="detail.transformPluginParams" width="300px"></my-input>
       </el-form-item>
       <el-form-item :label="$t('m.cache')">
@@ -60,13 +61,18 @@
           <div slot="content">填写“插件类名”表示对结果数据开启缓存，不填写表示不开启缓存</div>
           <i class="el-icon-info tip"></i>
         </el-tooltip>
-        <my-input :label="$t('m.plugin_class')" v-model="detail.cachePlugin" placeholder="填写缓存插件java类名" width="400px"></my-input>
+        <my-input :label="$t('m.plugin_class')" v-model="detail.cachePlugin" placeholder="填写缓存插件java类名"
+                  width="400px"></my-input>
         <my-input :label="$t('m.plugin_parameter')" v-model="detail.cachePluginParams" width="300px"></my-input>
         <div>
           <a class="el-icon-question" target="_blank"
-             href="https://gitee.com/freakchicken/db-api/blob/master/dbapi-assembly/docs/instruction.md#%E6%8F%92%E4%BB%B6">{{$t('m.what_is_plugin')}}</a>
+             href="https://gitee.com/freakchicken/db-api/blob/master/dbapi-assembly/docs/instruction.md#%E6%8F%92%E4%BB%B6">{{
+              $t('m.what_is_plugin')
+            }}</a>
           <a class="el-icon-question" target="_blank"
-             href="https://gitee.com/freakchicken/db-api/blob/master/dbapi-assembly/docs/plugin%20development.md#252-%E5%B1%80%E9%83%A8%E5%8F%82%E6%95%B0">{{$t('m.what_is_plugin_param')}}</a>
+             href="https://gitee.com/freakchicken/db-api/blob/master/dbapi-assembly/docs/plugin%20development.md#252-%E5%B1%80%E9%83%A8%E5%8F%82%E6%95%B0">{{
+              $t('m.what_is_plugin_param')
+            }}</a>
         </div>
       </el-form-item>
 
@@ -77,7 +83,6 @@
 </template>
 
 <script>
-import dbIcon from "@/components/common/dbIcon";
 import sqlCode from "@/components/api/common/SqlCode";
 
 export default {
@@ -164,9 +169,28 @@ export default {
         this.detail.cachePluginParams = response.data.cachePluginParams
 
 
-        console.log(this.$refs.sqlCode.datasourceId, response.data.datasourceId)
         this.$refs.sqlCode.datasourceId = response.data.datasourceId
-        this.$refs.sqlCode.codemirror.setValue(response.data.sql)
+
+        const sqlList = JSON.parse(response.data.sql)
+        const list = []
+        for (let i = 0; i < sqlList.length; i++) {
+          list.push(i)
+          // this.$refs.sqlCode.currentIndex = i
+        }
+        this.$refs.sqlCode.cmFlag = list
+
+        list.forEach( t=> {
+          this.$refs.sqlCode.currentIndex = t
+        })
+        debugger
+        // alert(1)
+        for (let i = 0; i < sqlList.length; i++) {
+          const p = this.$refs.sqlCode.cmList
+          this.$refs.sqlCode.cmList[i].setValue(sqlList[i])
+        }
+
+        // debugger
+        // this.$refs.sqlCode.codemirror.setValue(response.data.sql)
       })
 
       /*   .catch((error) => {
@@ -188,7 +212,7 @@ export default {
 
     this.getAllGroups()
   },
-  components: {dbIcon, sqlCode}
+  components: { sqlCode}
 }
 </script>
 
