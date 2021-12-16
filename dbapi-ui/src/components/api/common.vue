@@ -12,7 +12,7 @@
 
       <el-form-item label="sql">
         <div>
-          <sql-code ref="sqlCode"></sql-code>
+          <sql-code ref="sqlCode" :sqlText="detail.sqlList"></sql-code>
         </div>
       </el-form-item>
       <el-form-item :label="$t('m.parameters')">
@@ -103,7 +103,8 @@ export default {
         transformPlugin: null,
         transformPluginParams: null,
         cachePlugin: null,
-        cachePluginParams: null
+        cachePluginParams: null,
+        sqlList:[''] //默认空字符串，当创建API的时候，默认打开一个标签
       },
       options: [
         {label: 'string', value: 'string'},
@@ -172,30 +173,9 @@ export default {
         this.$refs.sqlCode.datasourceId = response.data.datasourceId
 
         const sqlList = JSON.parse(response.data.sql)
-        const list = []
-        for (let i = 0; i < sqlList.length; i++) {
-          list.push(i)
-          // this.$refs.sqlCode.currentIndex = i
-        }
-        this.$refs.sqlCode.cmFlag = list
-
-        list.forEach( t=> {
-          this.$refs.sqlCode.currentIndex = t
-        })
         debugger
-        // alert(1)
-        for (let i = 0; i < sqlList.length; i++) {
-          const p = this.$refs.sqlCode.cmList
-          this.$refs.sqlCode.cmList[i].setValue(sqlList[i])
-        }
-
-        // debugger
-        // this.$refs.sqlCode.codemirror.setValue(response.data.sql)
+        this.detail.sqlList = sqlList
       })
-
-      /*   .catch((error) => {
-       this.$message.error("")
-     })*/
     },
 
     getAllGroups() {
@@ -207,6 +187,7 @@ export default {
   },
   created() {
     this.getAddress()
+    debugger
     if (this.id != undefined)
       this.getDetail(this.id)
 

@@ -7,9 +7,9 @@
                    option_label="name" option_value="id" @onchange="getTables"></my-select>
       </div>
       <div class="bottom">
-<!--        <div class="menus" :style="`top:${y}px;left:${x}px`" v-show="showMenuFlag" @onblur="showMenuFlag=false">
-          <div class="menu" @click="copy">复制</div>
-        </div>-->
+        <!--        <div class="menus" :style="`top:${y}px;left:${x}px`" v-show="showMenuFlag" @onblur="showMenuFlag=false">
+                  <div class="menu" @click="copy">复制</div>
+                </div>-->
         <div v-for="(item,index) in tables">
           <div>
             <div class="table" @click.prevent="getColumns(item.label,index)" @contextmenu.prevent="showMenu()">
@@ -49,31 +49,24 @@
       </div>
       <div class="code">
         <div class="multi-sql">
-          <mytabs>
-            <mytab-pane :label="'SQL-'+index" v-for="(item,index) in sqlText" :key="index">
-              <code-ui :sql="item" :mode="mode"></code-ui>
-            </mytab-pane>
 
-          </mytabs>
+          <code-ui :sql="item.text" :mode="mode" v-for="(item,index) in this.sqls" :key="item.id" :ref="'codeui-'+index"
+                   @appendCm="appendCm" v-show="currentIndex===index"></code-ui>
 
-
-<!--          <code-ui sql="select 1" v-for="(item,index) in "></code-ui>-->
-
-<!--          <div class="tabs">-->
-<!--            <div v-for="(flag,index) in cmFlag" :class="{'tab':true,'tab-active':currentIndex === index}"-->
-<!--                 :key="'tab'+flag">-->
-<!--              <div @click="focusCM(index)" class="text">-->
-<!--                SQL-{{ flag }}-->
-<!--              </div>-->
-<!--              <span @click="removeTab(index)" class="el-icon-circle-close close" v-if="index > 0"></span>-->
-<!--            </div>-->
-<!--            <div class="tab" @click="addTab">-->
-<!--              <div class="text">-->
-<!--                <i class="el-icon-circle-plus"></i>-->
-<!--                添加-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
+          <div class="tabs">
+            <div v-for="(item,index) in sqls" :class="{'tab':true,'tab-active':currentIndex === index}">
+              <div @click="focusCM(index)" class="text">
+                SQL-{{ item.id }}
+              </div>
+              <span @click="removeTab(index)" class="el-icon-circle-close close" v-if="index > 0"></span>
+            </div>
+            <div class="tab" @click="addTab">
+              <div class="text">
+                <i class="el-icon-circle-plus"></i>
+                添加
+              </div>
+            </div>
+          </div>
         </div>
         <div class="params">
           <div style="display: inline-block">参数设置：</div>
@@ -121,8 +114,6 @@ import codeUi from "@/components/api/common/codeUI";
 import {format} from 'sql-formatter';
 
 
-
-
 export default {
   data() {
     return {
@@ -139,28 +130,40 @@ export default {
       // columns: [], current: null,
       currentIndex: 0,// sql序号
       sqlMeta: null,
-      cmFlag: [0],
+      // cmFlag: [0],
+      seq: -1,
+
+      sqls: [{text:'',id:0}],
+      cmList: []
+
+
     }
   },
-  props:{
-    sqlText:{
-      type:Array,
-      default:['select 1','update']
+  props: {
+    //从父组件传过来的属性
+    sqlText: {
+      type: Array,
+      default: () => ['']
     }
   },
 
   components: {
-     codeUi
+    codeUi
   },
   methods: {
-    copy() {
-      this.showMenuFlag = false
+    appendCm(cm) {
+      this.cmList.push(cm)
     },
-    showMenu() {
-      event.preventDefault()
-      this.x = event.clientX
-      this.y = event.clientY + 10
-      this.showMenuFlag = true
+    getSql() {
+      // debugger
+      // const p = this.$refs
+      const sqlList = this.cmList.map(t => t.getValue())
+      return sqlList
+    },
+
+    addTab() {
+      this.sqls.push({id: ++this.seq, text: ''})
+      this.currentIndex = this.sqls.length - 1
     },
     formatJson() {
       const o = JSON.parse(this.params)
@@ -241,12 +244,12 @@ export default {
     fullWindow() {
       this.mode = "large"
       this.isFullScreen = true
-      this.cmList.forEach(t => t.setSize('100%', 'calc(100vh - 350px)'))
+      // this.cmList.forEach(t => t.setSize('100%', 'calc(100vh - 350px)'))
     },
     miniWindow() {
       this.mode = "mini"
       this.isFullScreen = false
-      this.cmList.forEach(t => t.setSize('100%', '400px'))
+      // this.cmList.forEach(t => t.setSize('100%', '400px'))
     },
     getColumns(table, index) {
       if (this.tables[index].columns.length == 0) {
@@ -286,18 +289,13 @@ export default {
       })
     },
     removeTab(index) {
+      this.sqls.splice(index, 1)
       this.cmList.splice(index, 1)
-      this.cmFlag.splice(index, 1)
+      // this.cmFlag.splice(index, 1)
       //如果删除的是激活标签的左边标签,或激活标签本身
       if (index <= this.currentIndex) {
         this.currentIndex -= 1
       }
-
-    },
-    addTab() {
-      this.sequence += 1
-      this.cmFlag.push(this.sequence)
-      this.currentIndex = this.cmFlag.length - 1 //最后一个标签激活
 
     },
 
@@ -329,9 +327,20 @@ export default {
   // },
   created() {
     this.getAllSource()
-
+    debugger
+    this.sqls = this.sqlText.map((text) => {
+      this.seq += 1
+      return {id: this.seq, text: text}
+    })
+  },
+  watch:{
+    sqlText(newV,oldV){
+      this.sqls = newV.map((text) => {
+        this.seq += 1
+        return {id: this.seq, text: text}
+      })
+    }
   }
-
 }
 </script>
 <style scoped lang="scss">
@@ -558,72 +567,71 @@ export default {
       .multi-sql {
         width: 100%;
         background-color: rgba(199, 48, 48, 0.23);
-        //position: relative;
+        position: relative;
 
 
+        .tabs {
+          //height: 18px;
+          //z-index: 1000;
+          //background-color: #b96666;
+          position: absolute;
+          bottom: 1px;
+          left: 30px;
+          display: flex;
 
-        //.tabs {
-        //  //height: 18px;
-        //  //z-index: 1000;
-        //  //background-color: #b96666;
-        //  position: absolute;
-        //  bottom: 0px;
-        //  left: 30px;
-        //  display: flex;
-        //
-        //  .tab-active {
-        //    font-weight: 700;
-        //    background-color: rgba(4, 103, 10, 0.18);
-        //  }
-        //
-        //  .tab {
-        //    z-index: 1000;
-        //    position: relative;
-        //    cursor: pointer;
-        //    border-top-left-radius: 5px;
-        //    border-top-right-radius: 5px;
-        //    border: 1px solid #ccc;
-        //    border-bottom-width: 0;
-        //    //color: #fff;
-        //    //background-color: #03830a;
-        //    margin: 0 3px;
-        //    width: 80px;
-        //    height: 22px;
-        //    line-height: 22px;
-        //    //padding: 0 3px;
-        //    .text {
-        //      padding: 0 5px;
-        //      text-align: center;
-        //      //width: 50px;
-        //    }
-        //
-        //    .close {
-        //      position: absolute;;
-        //      right: -10px;
-        //      top: -10px;
-        //      width: 20px;
-        //      display: none;
-        //      background-color: rgba(4, 103, 10, 0.27);
-        //      padding: 3px;
-        //      border-radius: 50%;
-        //
-        //      &:hover {
-        //        font-weight: 900;
-        //      }
-        //
-        //    }
-        //
-        //    &:hover {
-        //      background-color: rgba(4, 103, 10, 0.11);
-        //
-        //      .close {
-        //        background-color: rgba(23, 19, 19, 0.17);
-        //        display: block;
-        //      }
-        //    }
-        //
-        //  }
-        //}
+          .tab-active {
+            font-weight: 700;
+            background-color: rgba(4, 103, 10, 0.18);
+          }
+
+          .tab {
+            z-index: 1000;
+            position: relative;
+            cursor: pointer;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            border: 1px solid #ccc;
+            border-bottom-width: 0;
+            //color: #fff;
+            //background-color: #03830a;
+            margin: 0 3px;
+            width: 80px;
+            height: 22px;
+            line-height: 22px;
+            //padding: 0 3px;
+            .text {
+              padding: 0 5px;
+              text-align: center;
+              //width: 50px;
+            }
+
+            .close {
+              position: absolute;;
+              right: -10px;
+              top: -10px;
+              width: 20px;
+              display: none;
+              background-color: rgba(4, 103, 10, 0.27);
+              padding: 3px;
+              border-radius: 50%;
+
+              &:hover {
+                font-weight: 900;
+              }
+
+            }
+
+            &:hover {
+              background-color: rgba(4, 103, 10, 0.11);
+
+              .close {
+                background-color: rgba(23, 19, 19, 0.17);
+                display: block;
+              }
+            }
+
+          }
+        }
       }
 
 

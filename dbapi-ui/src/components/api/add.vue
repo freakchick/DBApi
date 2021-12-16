@@ -21,9 +21,10 @@ export default {
   methods: {
 
     save() {
+      // debugger
       const detail = this.$refs.apiAdd.detail
 
-      const sqlList = this.$refs.apiAdd.$refs.sqlCode.cmList.map((cm) => cm.getValue().trim())
+      const sqlList = this.$refs.apiAdd.$refs.sqlCode.getSql()
       // debugger
       let p = {
         name: detail.name,

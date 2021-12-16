@@ -61,6 +61,7 @@ export default {
     onCmReady(cm) {
       cm.setValue(this.sql)
       this.cmInstance = cm
+      this.$emit('appendCm',cm)
       // debugger
       // this.cmList.push(cm)
       if (this.mode === "mini")
@@ -73,13 +74,16 @@ export default {
     onCmFocus(cm) {
     },
     onCmCodeChange(cm, changeObj) {
+
       //如果输入的是字母才提示，空格不提示
       if (/^[a-zA-Z.]/.test(changeObj.text[0])) {
         cm.showHint()
       }
 
     },
-
+    getSql(){
+      // return this.cmInstance.getValue()
+    }
   },
   watch: {
     mode(val, oldVal) {
