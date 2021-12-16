@@ -20,7 +20,10 @@ export default {
   methods: {
     save() {
       const detail = this.$refs.apiEditCommon.detail
+      //这里有bug会多一条
       const sqlList = this.$refs.apiEditCommon.$refs.sqlCode.cmList.map((cm) => cm.getValue().trim())
+      debugger
+      //
       let p = {
         name: detail.name,
         path: detail.path,
@@ -33,7 +36,7 @@ export default {
         transformPluginParams: detail.transformPluginParams,
         datasourceId: this.$refs.apiEditCommon.$refs.sqlCode.datasourceId,
         // sql: this.$refs.apiEditCommon.$refs.sqlCode.codemirror.getValue().trim(),
-        sql: JSON.stringify(sqlList),
+        sql: sqlList,
         params: JSON.stringify(detail.params),
         id: this.$route.query.id
       }

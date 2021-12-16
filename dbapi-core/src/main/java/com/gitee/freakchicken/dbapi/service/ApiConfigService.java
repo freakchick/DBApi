@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
+import com.gitee.freakchicken.dbapi.common.ApiSql;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
 import com.gitee.freakchicken.dbapi.dao.ApiConfigMapper;
+import com.gitee.freakchicken.dbapi.dao.ApiSqlMapper;
 import com.gitee.freakchicken.dbapi.dao.DataSourceMapper;
 import com.gitee.freakchicken.dbapi.domain.ApiDto;
 import com.gitee.freakchicken.dbapi.plugin.CachePlugin;
@@ -18,6 +20,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
@@ -42,12 +45,15 @@ public class ApiConfigService {
     @Autowired
     DataSourceMapper dataSourceMapper;
 
+    @Autowired
+    ApiSqlMapper apiSqlMapper;
+
     @Transactional
     public ResponseDto add(ApiConfig apiConfig) {
 
         int size = apiConfigMapper.selectCountByPath(apiConfig.getPath());
         if (size > 0) {
-            return ResponseDto.fail("Path has been used, please update path and save again!");
+            return ResponseDto.fail("Path has been used!");
         } else {
             apiConfig.setStatus(0);
             apiConfig.setId(UUIDUtil.id());
@@ -56,6 +62,11 @@ public class ApiConfigService {
             apiConfig.setCreateTime(now);
             apiConfig.setUpdateTime(now);
             apiConfigMapper.insert(apiConfig);
+            apiConfig.getSql().stream().forEach(t -> {
+                ApiSql apiSql = new ApiSql(apiConfig.getId(), t);
+                apiSqlMapper.insert(apiSql);
+            });
+
             return ResponseDto.successWithMsg("create success");
         }
 
@@ -67,12 +78,18 @@ public class ApiConfigService {
 
         int size = apiConfigMapper.selectCountByPathWhenUpdate(apiConfig.getPath(), apiConfig.getId());
         if (size > 0) {
-            return ResponseDto.fail("path has been used, please update path and save again");
+            return ResponseDto.fail("Path has been used");
         } else {
             ApiConfig oldConfig = apiConfigMapper.selectById(apiConfig.getId());
             apiConfig.setStatus(0);
             apiConfig.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             apiConfigMapper.updateById(apiConfig);
+            apiSqlMapper.deleteByApiID(apiConfig.getId());
+            apiConfig.getSql().stream().forEach(t -> {
+                ApiSql apiSql = new ApiSql(apiConfig.getId(), t);
+                apiSqlMapper.insert(apiSql);
+            });
+
             //清除所有缓存
             if (StringUtils.isNoneBlank(apiConfig.getCachePlugin())) {
                 try {
@@ -93,6 +110,7 @@ public class ApiConfigService {
     public void delete(String id, String path) {
         ApiConfig apiConfig = apiConfigMapper.selectById(id);
         apiConfigMapper.deleteById(id);
+        apiSqlMapper.deleteByApiID(id);
         //清除所有缓存
         if (StringUtils.isNoneBlank(apiConfig.getCachePlugin())) {
             try {
@@ -106,7 +124,11 @@ public class ApiConfigService {
     }
 
     public ApiConfig detail(String id) {
-        return apiConfigMapper.selectById(id);
+        ApiConfig apiConfig = apiConfigMapper.selectById(id);
+        List<ApiSql>  list = apiSqlMapper.selectByApiId(apiConfig.getId());
+        List<String> collect = list.stream().map(t -> t.getSql()).collect(Collectors.toList());
+        apiConfig.setSql(collect);
+        return apiConfig;
     }
 
     public List<ApiConfig> getAll() {

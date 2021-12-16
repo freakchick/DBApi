@@ -172,9 +172,8 @@ export default {
 
         this.$refs.sqlCode.datasourceId = response.data.datasourceId
 
-        const sqlList = JSON.parse(response.data.sql)
-        debugger
-        this.detail.sqlList = sqlList
+        // debugger
+        this.detail.sqlList = response.data.sql
       })
     },
 

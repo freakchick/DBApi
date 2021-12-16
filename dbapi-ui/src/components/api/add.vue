@@ -38,7 +38,7 @@ export default {
         transformPluginParams: detail.transformPluginParams,
         datasourceId: this.$refs.apiAdd.$refs.sqlCode.datasourceId,
        // sql: this.$refs.apiAdd.$refs.sqlCode.codemirror.getValue().trim(),
-        sql: JSON.stringify(sqlList),
+        sql: sqlList,
         params: JSON.stringify(detail.params)
       }
 
