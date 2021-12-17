@@ -38,9 +38,9 @@ public class ApiConfig {
     @TableField(exist = false)
     List<String> sql;
 
-//    @Deprecated
-//    @TableField(value = "real_sql")
-//    String realSql;
+    @TableField(exist = false)
+    List<ApiSql> sqlList;
+
 
     @TableField
     String params;

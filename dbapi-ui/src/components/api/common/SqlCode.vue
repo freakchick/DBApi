@@ -117,9 +117,9 @@ import {format} from 'sql-formatter';
 export default {
   data() {
     return {
-      x: 0, //菜单坐标
-      y: 0,//菜单坐标
-      showMenuFlag: false,
+      // x: 0, //菜单坐标
+      // y: 0,//菜单坐标
+      // showMenuFlag: false,
       resultList: null,
       error: null, updateMsg: null,
       isFullScreen: false,
@@ -155,7 +155,7 @@ export default {
       this.cmList.push(cm)
     },
     getSql() {
-      // debugger
+      debugger
       // const p = this.$refs
       const sqlList = this.cmList.map(t => t.getValue())
       return sqlList
@@ -291,7 +291,6 @@ export default {
     removeTab(index) {
       this.sqls.splice(index, 1)
       this.cmList.splice(index, 1)
-      // this.cmFlag.splice(index, 1)
       //如果删除的是激活标签的左边标签,或激活标签本身
       if (index <= this.currentIndex) {
         this.currentIndex -= 1
@@ -301,9 +300,7 @@ export default {
 
 
     focusCM(index) {
-      // 切换当前cm instance 
       this.currentIndex = index
-      // this.cmList[this.currentIndex ] = this.cmList[this.currentIndex ]
     },
     tag(item) {
       let val = ''
@@ -320,11 +317,7 @@ export default {
       this.cmList[this.currentIndex].setValue(this.cmList[this.currentIndex].getValue() + val)
     },
   },
-  // computed: {
-  //   codemirror() {
-  //     return this.$refs.cmEditor.codemirror
-  //   }
-  // },
+
   created() {
     this.getAllSource()
     debugger
@@ -334,11 +327,16 @@ export default {
     })
   },
   watch:{
+    // sqlText是异步加载郭爱的，所以要监听
     sqlText(newV,oldV){
+      debugger
       this.sqls = newV.map((text) => {
         this.seq += 1
         return {id: this.seq, text: text}
       })
+      // 为了兼容创建api页面，sqls设置了一个默认元素，这会导致cmList多一个cmInstance，
+      // 编辑API页面监听到sqlText,需要清空掉这个cmInstance
+      this.cmList = []
     }
   }
 }

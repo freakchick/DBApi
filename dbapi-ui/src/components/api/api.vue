@@ -57,7 +57,7 @@
       </div>
 
       <el-table :data="tableData" border stripe max-height="700" width="100%">
-        <el-table-column label="id" prop="id" width="270px"></el-table-column>
+        <el-table-column label="id" prop="id" width="100px"></el-table-column>
         <el-table-column :label="$t('m.name')">
           <template slot-scope="scope">
             <i class="iconfont icon-on_line1 circle" v-if="scope.row.status == 1"></i>

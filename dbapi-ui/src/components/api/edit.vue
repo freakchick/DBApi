@@ -21,7 +21,7 @@ export default {
     save() {
       const detail = this.$refs.apiEditCommon.detail
       //这里有bug会多一条
-      const sqlList = this.$refs.apiEditCommon.$refs.sqlCode.cmList.map((cm) => cm.getValue().trim())
+      const sqlList = this.$refs.apiEditCommon.$refs.sqlCode.getSql()//this.$refs.apiEditCommon.$refs.sqlCode.cmList.map((cm) => cm.getValue().trim())
       debugger
       //
       let p = {

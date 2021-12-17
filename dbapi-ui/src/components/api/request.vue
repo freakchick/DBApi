@@ -47,8 +47,8 @@
               v-show="!showTable"></el-input>
 
     <el-button size="small" @click="format" class="button">{{$t('m.json_format')}}</el-button>
-    <el-button size="small" @click="tableShow" class="button">{{$t('m.view_in_table')}}</el-button>
-    <el-button size="small" @click="tableHide" class="button">{{$t('m.raw_data')}}</el-button>
+<!--    <el-button size="small" @click="tableShow" class="button">{{$t('m.view_in_table')}}</el-button>-->
+<!--    <el-button size="small" @click="tableHide" class="button">{{$t('m.raw_data')}}</el-button>-->
 
   </div>
 </template>

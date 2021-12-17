@@ -163,7 +163,10 @@ public class ApiConfigService {
 
     @Cacheable(value = "api", key = "#path", unless = "#result == null")
     public ApiConfig getConfig(String path) {
-        return apiConfigMapper.selectByPathOnline(path);
+        ApiConfig apiConfig = apiConfigMapper.selectByPathOnline(path);
+        List<ApiSql> apiSqls = apiSqlMapper.selectByApiId(apiConfig.getId());
+        apiConfig.setSqlList(apiSqls);
+        return apiConfig;
     }
 
     @CacheEvict(value = "api", key = "#path")

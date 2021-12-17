@@ -29,6 +29,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @WebServlet(name = "apiServlet", urlPatterns = "/api/*")
@@ -128,7 +129,7 @@ public class APIServlet extends HttpServlet {
                 }
             }
 
-            List<String> sqlList = config.getSql();
+            List<String> sqlList = config.getSqlList().stream().map(t -> t.getSql()).collect(Collectors.toList());
             List<Object> dataList = new ArrayList<>();
             for (String sql : sqlList) {
                 SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(sql, sqlParam);
