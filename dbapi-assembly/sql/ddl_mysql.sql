@@ -18,12 +18,9 @@ CREATE TABLE `api_config`
     `path`                    varchar(255) DEFAULT NULL,
     `name`                    varchar(255) DEFAULT NULL,
     `note`                    varchar(255) DEFAULT NULL,
-    `sql`                     text,
     `params`                  text,
     `status`                  int(11)      DEFAULT NULL,
     `datasource_id`           varchar(255) DEFAULT NULL,
-    `real_sql`                text,
-    `is_select`               int(11)      DEFAULT NULL,
     `previlege`               int(11)      DEFAULT NULL,
     `group_id`                varchar(255) DEFAULT NULL,
     `cache_plugin`            varchar(255) DEFAULT NULL,
@@ -37,6 +34,17 @@ CREATE TABLE `api_config`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
+DROP TABLE IF EXISTS `api_sql`;
+CREATE TABLE `api_sql`
+(
+    `id`                     int(11)     NOT NULL AUTO_INCREMENT,
+    `api_id`                 varchar(11) NOT NULL,
+    `sql_text`               text        NOT NULL,
+    `transform_plugin`       varchar(255) DEFAULT NULL,
+    `transform_plugin_param` varchar(255) DEFAULT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
 
 DROP TABLE IF EXISTS `api_group`;
 
