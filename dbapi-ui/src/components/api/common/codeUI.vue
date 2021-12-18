@@ -45,6 +45,7 @@ export default {
         }
       },
 
+
     }
   },
   props: {
@@ -55,6 +56,10 @@ export default {
     mode: {
       type: String,
       default: 'mini'
+    },
+    tableHints:{
+      type: Object,
+
     }
   },
   methods: {
@@ -92,9 +97,14 @@ export default {
       else {
         this.cmInstance.setSize('100%', 'calc(100vh - 350px)')
       }
+    },
+    tableHints(val,OldVal){
+      debugger
+      this.cmOptions.hintOptions.tables = val
     }
   },
   created() {
+    this.cmOptions.hintOptions.tables = this.tableHints
   }
 }
 </script>

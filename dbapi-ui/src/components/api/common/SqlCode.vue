@@ -51,7 +51,7 @@
         <div class="multi-sql">
 
           <code-ui :sql="item.text" :mode="mode" v-for="(item,index) in this.sqls" :key="item.id" :ref="'codeui-'+index"
-                   @appendCm="appendCm" v-show="currentIndex===index"></code-ui>
+                   :tableHints="tableHints" @appendCm="appendCm" v-show="currentIndex===index"></code-ui>
 
           <div class="tabs">
             <div v-for="(item,index) in sqls" :class="{'tab':true,'tab-active':currentIndex === index}">
@@ -130,7 +130,8 @@ export default {
       seq: -1,
 
       sqls: [{text: '', id: 0}],
-      cmList: []
+      cmList: [],
+      tableHints:{}
     }
   },
   props: {
@@ -273,7 +274,8 @@ export default {
         this.tables.forEach(e => {
           hints[`${e.label}`] = e.columns.map(j => j.label)
         })
-        this.cmOptions.hintOptions.tables = hints
+        this.tableHints = hints // 表名称注入codemirror 提示
+        // this.cmOptions.hintOptions.tables = hints
 
       }).catch((error) => {
         this.$message.error("查询所有表名称失败；但不影响使用！")
