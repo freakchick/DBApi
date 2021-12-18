@@ -6,7 +6,7 @@
 
     <common :id="$route.query.id" ref="apiEditCommon"></common>
 
-    <el-button @click="save">{{ $t('m.save') }}</el-button>
+    <el-button @click="save" style="margin: 10px 0">{{ $t('m.save') }}</el-button>
   </div>
 </template>
 

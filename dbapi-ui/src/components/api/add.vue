@@ -6,7 +6,7 @@
 
     <common ref="apiAdd"></common>
 
-    <el-button @click="save" type="primary" plain>{{ $t('m.save') }}</el-button>
+    <el-button @click="save" type="primary" plain style="margin:10px 0">{{ $t('m.save') }}</el-button>
 
   </div>
 </template>

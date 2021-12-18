@@ -1,83 +1,94 @@
 <template>
   <div>
-    <el-form label-width="100px">
-      <el-form-item :label="$t('m.basic_info')">
-        <my-input :label="$t('m.name')" :nullable="false" v-model="detail.name"></my-input>
-        <my-input :label="$t('m.path')" v-model="detail.path" :preffix="`http://${ address }/api/`" :nullable="false"
-                  width="400px"></my-input>
-        <my-select v-model="detail.groupId" :options="groups" :label="$t('m.api_group')" option_label="name"
-                   option_value="id" :nullable="false"></my-select>
-        <my-input :label="$t('m.note')" v-model="detail.note" width="500px"></my-input>
-      </el-form-item>
+    <el-tabs tab-position="top" style=""  type="border-card">
+      <el-tab-pane label="基础配置">
+        <el-form label-width="100px">
+          <el-form-item :label="$t('m.basic_info')">
+            <my-input :label="$t('m.name')" :nullable="false" v-model="detail.name"></my-input>
+            <my-input :label="$t('m.path')" v-model="detail.path" :preffix="`http://${ address }/api/`"
+                      :nullable="false"
+                      width="400px"></my-input>
+            <my-select v-model="detail.groupId" :options="groups" :label="$t('m.api_group')" option_label="name"
+                       option_value="id" :nullable="false"></my-select>
+            <my-input :label="$t('m.note')" v-model="detail.note" width="500px"></my-input>
+          </el-form-item>
 
-      <el-form-item label="sql">
-        <div>
-          <sql-code ref="sqlCode" :sqlText="detail.sqlList"></sql-code>
-        </div>
-      </el-form-item>
-      <el-form-item :label="$t('m.parameters')">
-        <div v-for="(item,index) in detail.params" style="margin-bottom:5px;display: flex;align-items:center">
-          <el-autocomplete v-model="item.name" :fetch-suggestions="parseParams" style="width:200px;margin-right:5px"
-                           placeholder="*参数名称"></el-autocomplete>
-          <el-select v-model="item.type" :options="options" placeholder="*数据类型" style="margin-right:5px">
-            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
-          </el-select>
-          <el-input v-model="item.note" placeholder="参数说明" style="width:400px;margin-right:5px"></el-input>
-          <!--          <el-cascader  v-model="item.type" separator=" > " :options="options"></el-cascader>-->
+          <el-form-item label="sql">
+            <div>
+              <sql-code ref="sqlCode" :sqlText="detail.sqlList"></sql-code>
+            </div>
+          </el-form-item>
+          <el-form-item :label="$t('m.parameters')">
+            <div v-for="(item,index) in detail.params" style="margin-bottom:5px;display: flex;align-items:center">
+              <el-autocomplete v-model="item.name" :fetch-suggestions="parseParams" style="width:200px;margin-right:5px"
+                               placeholder="*参数名称"></el-autocomplete>
+              <el-select v-model="item.type" :options="options" placeholder="*数据类型" style="margin-right:5px">
+                <el-option v-for="item in options" :key="item.value" :label="item.label"
+                           :value="item.value"></el-option>
+              </el-select>
+              <el-input v-model="item.note" placeholder="参数说明" style="width:400px;margin-right:5px"></el-input>
+              <!--          <el-cascader  v-model="item.type" separator=" > " :options="options"></el-cascader>-->
 
-          <el-button @click="deleteRow(index)" circle type="danger" icon="el-icon-delete" size="mini"
-                     v-if="$route.path != '/api/detail'"></el-button>
-        </div>
-        <el-button @click="addRow" icon="el-icon-plus" type="primary" circle size="mini"
-                   v-if="$route.path != '/api/detail'"></el-button>
+              <el-button @click="deleteRow(index)" circle type="danger" icon="el-icon-delete" size="mini"
+                         v-if="$route.path != '/api/detail'"></el-button>
+            </div>
+            <el-button @click="addRow" icon="el-icon-plus" type="primary" circle size="mini"
+                       v-if="$route.path != '/api/detail'"></el-button>
 
-      </el-form-item>
+          </el-form-item>
 
-      <el-form-item :label="$t('m.access')">
-        <el-radio-group v-model="detail.previlege">
-          <el-radio :label="0">{{ $t('m.private') }}</el-radio>
-          <el-radio :label="1">{{ $t('m.public') }}</el-radio>
-        </el-radio-group>
+          <el-form-item :label="$t('m.access')">
+            <el-radio-group v-model="detail.previlege">
+              <el-radio :label="0">{{ $t('m.private') }}</el-radio>
+              <el-radio :label="1">{{ $t('m.public') }}</el-radio>
+            </el-radio-group>
 
-        <el-tooltip placement="top-start" effect="dark">
-          <div slot="content">
-            {{ $t('m.access_tip') }}
-          </div>
-          <i class="el-icon-info tip"></i>
-        </el-tooltip>
-      </el-form-item>
-
-      <el-form-item :label="$t('m.data_convert')">
-        <el-tooltip placement="top-start" effect="dark">
-          <div slot="content">填写“插件类名”表示开启数据转换功能，不填写表示不转换。转换逻辑是自定义插件中编写的逻辑</div>
-          <i class="el-icon-info tip"></i>
-        </el-tooltip>
-        <my-input :label="$t('m.plugin_class')" v-model="detail.transformPlugin" placeholder="填写数据转换插件java类名"
-                  width="400px"></my-input>
-        <my-input :label="$t('m.plugin_parameter')" v-model="detail.transformPluginParams" width="300px"></my-input>
-      </el-form-item>
-      <el-form-item :label="$t('m.cache')">
-        <el-tooltip placement="top-start" effect="dark">
-          <div slot="content">填写“插件类名”表示对结果数据开启缓存，不填写表示不开启缓存</div>
-          <i class="el-icon-info tip"></i>
-        </el-tooltip>
-        <my-input :label="$t('m.plugin_class')" v-model="detail.cachePlugin" placeholder="填写缓存插件java类名"
-                  width="400px"></my-input>
-        <my-input :label="$t('m.plugin_parameter')" v-model="detail.cachePluginParams" width="300px"></my-input>
-        <div>
-          <a class="el-icon-question" target="_blank"
-             href="https://gitee.com/freakchicken/db-api/blob/master/dbapi-assembly/docs/instruction.md#%E6%8F%92%E4%BB%B6">{{
-              $t('m.what_is_plugin')
-            }}</a>
-          <a class="el-icon-question" target="_blank"
-             href="https://gitee.com/freakchicken/db-api/blob/master/dbapi-assembly/docs/plugin%20development.md#252-%E5%B1%80%E9%83%A8%E5%8F%82%E6%95%B0">{{
-              $t('m.what_is_plugin_param')
-            }}</a>
-        </div>
-      </el-form-item>
+            <el-tooltip placement="top-start" effect="dark">
+              <div slot="content">
+                {{ $t('m.access_tip') }}
+              </div>
+              <i class="el-icon-info tip"></i>
+            </el-tooltip>
+          </el-form-item>
 
 
-    </el-form>
+        </el-form>
+      </el-tab-pane>
+      <el-tab-pane label="高级配置">
+        <el-form label-width="100px">
+          <el-form-item :label="$t('m.data_convert')">
+            <el-tooltip placement="top-start" effect="dark">
+              <div slot="content">填写“插件类名”表示开启数据转换功能，不填写表示不转换。转换逻辑是自定义插件中编写的逻辑</div>
+              <i class="el-icon-info tip"></i>
+            </el-tooltip>
+            <my-input :label="$t('m.plugin_class')" v-model="detail.transformPlugin" placeholder="填写数据转换插件java类名"
+                      width="400px"></my-input>
+            <my-input :label="$t('m.plugin_parameter')" v-model="detail.transformPluginParams" width="300px"></my-input>
+          </el-form-item>
+          <el-form-item :label="$t('m.cache')">
+            <el-tooltip placement="top-start" effect="dark">
+              <div slot="content">填写“插件类名”表示对结果数据开启缓存，不填写表示不开启缓存</div>
+              <i class="el-icon-info tip"></i>
+            </el-tooltip>
+            <my-input :label="$t('m.plugin_class')" v-model="detail.cachePlugin" placeholder="填写缓存插件java类名"
+                      width="400px"></my-input>
+            <my-input :label="$t('m.plugin_parameter')" v-model="detail.cachePluginParams" width="300px"></my-input>
+            <div>
+              <a class="el-icon-question" target="_blank"
+                 href="https://gitee.com/freakchicken/db-api/blob/master/dbapi-assembly/docs/instruction.md#%E6%8F%92%E4%BB%B6">{{
+                  $t('m.what_is_plugin')
+                }}</a>
+              <a class="el-icon-question" target="_blank"
+                 href="https://gitee.com/freakchicken/db-api/blob/master/dbapi-assembly/docs/plugin%20development.md#252-%E5%B1%80%E9%83%A8%E5%8F%82%E6%95%B0">{{
+                  $t('m.what_is_plugin_param')
+                }}</a>
+            </div>
+          </el-form-item>
+        </el-form>
+      </el-tab-pane>
+
+    </el-tabs>
+
 
   </div>
 </template>
@@ -104,7 +115,7 @@ export default {
         transformPluginParams: null,
         cachePlugin: null,
         cachePluginParams: null,
-        sqlList:[''] //默认空字符串，当创建API的时候，默认打开一个标签
+        sqlList: [''] //默认空字符串，当创建API的时候，默认打开一个标签
       },
       options: [
         {label: 'string', value: 'string'},
@@ -172,7 +183,9 @@ export default {
 
         this.$refs.sqlCode.datasourceId = response.data.datasourceId
 
-        this.detail.sqlList = response.data.sqlList.map(t => {return t.sqlText})
+        this.detail.sqlList = response.data.sqlList.map(t => {
+          return t.sqlText
+        })
       })
     },
 
@@ -190,7 +203,7 @@ export default {
 
     this.getAllGroups()
   },
-  components: { sqlCode}
+  components: {sqlCode}
 }
 </script>
 

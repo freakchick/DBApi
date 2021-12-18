@@ -38,8 +38,8 @@ import {
     // BreadcrumbItem,
     Form,
     FormItem,
-    // Tabs,
-    // TabPane,
+    Tabs,
+    TabPane,
     Tag,
     Tree,
     Alert,
@@ -127,8 +127,8 @@ Vue.use(Form);
 Vue.use(FormItem);
 Vue.use(Tree);
 //
-// Vue.use(Tabs);
-// Vue.use(TabPane);
+Vue.use(Tabs);
+Vue.use(TabPane);
 Vue.use(Tag);
 //
 Vue.use(Alert);
