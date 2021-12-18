@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: dbapi-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        username: nacos
+        password: nacos
+    gateway:
+      routes:
+        - id: api_route
+          uri: lb://dbApi # uri?lb://???lb??????????????????????????????
+          predicates:
+            - Path=/api/**
+server:
+  port: 8525
