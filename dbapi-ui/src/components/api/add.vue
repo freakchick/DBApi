@@ -1,11 +1,12 @@
 <template>
   <div class="mycontent">
-    <el-button icon="el-icon-d-arrow-left" type="info" plain @click="$router.go(-1)" size="small">{{$t('m.back')}}</el-button>
-    <h2>{{$t('m.create_api')}}</h2>
+    <el-button icon="el-icon-d-arrow-left" type="info" plain @click="$router.go(-1)" size="small">{{ $t('m.back') }}
+    </el-button>
+    <h2>{{ $t('m.create_api') }}</h2>
 
     <common ref="apiAdd"></common>
 
-    <el-button @click="save" type="primary" plain>{{$t('m.save')}}</el-button>
+    <el-button @click="save" type="primary" plain>{{ $t('m.save') }}</el-button>
 
   </div>
 </template>
@@ -21,11 +22,9 @@ export default {
   methods: {
 
     save() {
-      // debugger
       const detail = this.$refs.apiAdd.detail
 
       const sqlList = this.$refs.apiAdd.$refs.sqlCode.getSql()
-      // debugger
       let p = {
         name: detail.name,
         path: detail.path,
@@ -37,12 +36,12 @@ export default {
         transformPlugin: detail.transformPlugin,
         transformPluginParams: detail.transformPluginParams,
         datasourceId: this.$refs.apiAdd.$refs.sqlCode.datasourceId,
-       // sql: this.$refs.apiAdd.$refs.sqlCode.codemirror.getValue().trim(),
-        sql: sqlList,
+        sqlList: sqlList,
         params: JSON.stringify(detail.params)
       }
 
-      // console.log(detail)
+      console.log(p)
+
       debugger
       if (p.sql == "" || p.datasourceId == null || p.name == null
           || p.path == null || p.groupId == null) {
@@ -50,7 +49,9 @@ export default {
         return
       }
 
-      this.axios.post("/apiConfig/add", p).then((response) => {
+      this.axios.post("/apiConfig/add", p,
+          {headers: {'Content-Type': 'application/json'}}
+      ).then((response) => {
         if (response.data.success) {
           this.$message.success(response.data.msg)
           debugger

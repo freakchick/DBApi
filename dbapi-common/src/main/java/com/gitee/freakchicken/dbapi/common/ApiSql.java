@@ -17,10 +17,13 @@ public class ApiSql {
     String apiId;
 
     @TableField("sql_text")
-    String sql;
+    String sqlText;
 
     public ApiSql(String apiId, String sql) {
         this.apiId = apiId;
-        this.sql = sql;
+        this.sqlText = sql;
+    }
+
+    public ApiSql() {
     }
 }

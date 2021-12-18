@@ -113,13 +113,9 @@ import codeUi from "@/components/api/common/codeUI";
 
 import {format} from 'sql-formatter';
 
-
 export default {
   data() {
     return {
-      // x: 0, //菜单坐标
-      // y: 0,//菜单坐标
-      // showMenuFlag: false,
       resultList: null,
       error: null, updateMsg: null,
       isFullScreen: false,
@@ -133,10 +129,8 @@ export default {
       // cmFlag: [0],
       seq: -1,
 
-      sqls: [{text:'',id:0}],
+      sqls: [{text: '', id: 0}],
       cmList: []
-
-
     }
   },
   props: {
@@ -155,9 +149,8 @@ export default {
       this.cmList.push(cm)
     },
     getSql() {
-      debugger
-      // const p = this.$refs
-      const sqlList = this.cmList.map(t => t.getValue())
+      const sqlList = this.cmList.map(t => {return {sqlText: t.getValue()}}) //转换成后端需要的格式
+      // debugger
       return sqlList
     },
 
@@ -244,12 +237,10 @@ export default {
     fullWindow() {
       this.mode = "large"
       this.isFullScreen = true
-      // this.cmList.forEach(t => t.setSize('100%', 'calc(100vh - 350px)'))
     },
     miniWindow() {
       this.mode = "mini"
       this.isFullScreen = false
-      // this.cmList.forEach(t => t.setSize('100%', '400px'))
     },
     getColumns(table, index) {
       if (this.tables[index].columns.length == 0) {
@@ -320,15 +311,14 @@ export default {
 
   created() {
     this.getAllSource()
-    debugger
     this.sqls = this.sqlText.map((text) => {
       this.seq += 1
       return {id: this.seq, text: text}
     })
   },
-  watch:{
-    // sqlText是异步加载郭爱的，所以要监听
-    sqlText(newV,oldV){
+  watch: {
+    // sqlText是异步加载过来的，所以要监听
+    sqlText(newV, oldV) {
       debugger
       this.sqls = newV.map((text) => {
         this.seq += 1

@@ -1,11 +1,12 @@
 <template>
   <div class="mycontent">
-    <el-button icon="el-icon-d-arrow-left" type="info" plain @click="$router.go(-1)" size="small">{{$t('m.back')}}</el-button>
-    <h2>{{$t('m.update_api')}}</h2>
+    <el-button icon="el-icon-d-arrow-left" type="info" plain @click="$router.go(-1)" size="small">{{ $t('m.back') }}
+    </el-button>
+    <h2>{{ $t('m.update_api') }}</h2>
 
     <common :id="$route.query.id" ref="apiEditCommon"></common>
 
-    <el-button @click="save">{{$t('m.save')}}</el-button>
+    <el-button @click="save">{{ $t('m.save') }}</el-button>
   </div>
 </template>
 
@@ -20,10 +21,7 @@ export default {
   methods: {
     save() {
       const detail = this.$refs.apiEditCommon.detail
-      //这里有bug会多一条
-      const sqlList = this.$refs.apiEditCommon.$refs.sqlCode.getSql()//this.$refs.apiEditCommon.$refs.sqlCode.cmList.map((cm) => cm.getValue().trim())
-      debugger
-      //
+      const sqlList = this.$refs.apiEditCommon.$refs.sqlCode.getSql()
       let p = {
         name: detail.name,
         path: detail.path,
@@ -36,7 +34,7 @@ export default {
         transformPluginParams: detail.transformPluginParams,
         datasourceId: this.$refs.apiEditCommon.$refs.sqlCode.datasourceId,
         // sql: this.$refs.apiEditCommon.$refs.sqlCode.codemirror.getValue().trim(),
-        sql: sqlList,
+        sqlList: sqlList,
         params: JSON.stringify(detail.params),
         id: this.$route.query.id
       }
@@ -48,7 +46,9 @@ export default {
         return
       }
 
-      this.axios.post("/apiConfig/update", p).then((response) => {
+      this.axios.post("/apiConfig/update", p,
+          {headers: {'Content-Type': 'application/json'}}
+      ).then((response) => {
         if (response.data.success) {
           this.$message.success(response.data.msg)
           this.$router.push("/api")

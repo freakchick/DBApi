@@ -62,9 +62,9 @@ public class ApiConfigService {
             apiConfig.setCreateTime(now);
             apiConfig.setUpdateTime(now);
             apiConfigMapper.insert(apiConfig);
-            apiConfig.getSql().stream().forEach(t -> {
-                ApiSql apiSql = new ApiSql(apiConfig.getId(), t);
-                apiSqlMapper.insert(apiSql);
+            apiConfig.getSqlList().stream().forEach(t -> {
+                t.setApiId(apiConfig.getId());
+                apiSqlMapper.insert(t);
             });
 
             return ResponseDto.successWithMsg("create success");
@@ -85,9 +85,9 @@ public class ApiConfigService {
             apiConfig.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             apiConfigMapper.updateById(apiConfig);
             apiSqlMapper.deleteByApiID(apiConfig.getId());
-            apiConfig.getSql().stream().forEach(t -> {
-                ApiSql apiSql = new ApiSql(apiConfig.getId(), t);
-                apiSqlMapper.insert(apiSql);
+            apiConfig.getSqlList().stream().forEach(t -> {
+                t.setApiId(apiConfig.getId());
+                apiSqlMapper.insert(t);
             });
 
             //清除所有缓存
@@ -126,8 +126,8 @@ public class ApiConfigService {
     public ApiConfig detail(String id) {
         ApiConfig apiConfig = apiConfigMapper.selectById(id);
         List<ApiSql>  list = apiSqlMapper.selectByApiId(apiConfig.getId());
-        List<String> collect = list.stream().map(t -> t.getSql()).collect(Collectors.toList());
-        apiConfig.setSql(collect);
+//        List<String> collect = list.stream().map(t -> t.getSql()).collect(Collectors.toList());
+        apiConfig.setSqlList(list);
         return apiConfig;
     }
 

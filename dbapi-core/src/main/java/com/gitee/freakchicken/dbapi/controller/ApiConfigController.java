@@ -16,16 +16,12 @@ import com.gitee.freakchicken.dbapi.common.ResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
@@ -54,7 +50,7 @@ public class ApiConfigController {
     GroupService groupService;
 
     @RequestMapping("/add")
-    public ResponseDto add(ApiConfig apiConfig) {
+    public ResponseDto add(@RequestBody ApiConfig apiConfig) {
         return apiConfigService.add(apiConfig);
     }
 
@@ -103,7 +99,7 @@ public class ApiConfigController {
     }
 
     @RequestMapping("/update")
-    public ResponseDto update(ApiConfig apiConfig) {
+    public ResponseDto update(@RequestBody ApiConfig apiConfig) {
         return apiConfigService.update(apiConfig);
     }
 

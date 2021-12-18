@@ -172,8 +172,7 @@ export default {
 
         this.$refs.sqlCode.datasourceId = response.data.datasourceId
 
-        // debugger
-        this.detail.sqlList = response.data.sql
+        this.detail.sqlList = response.data.sqlList.map(t => {return t.sqlText})
       })
     },
 
@@ -186,7 +185,6 @@ export default {
   },
   created() {
     this.getAddress()
-    debugger
     if (this.id != undefined)
       this.getDetail(this.id)
 

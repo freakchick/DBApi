@@ -34,13 +34,8 @@ public class ApiConfig {
     @TableField(value = "datasource_id")
     String datasourceId;
 
-//    @TableField("`sql`")
-    @TableField(exist = false)
-    List<String> sql;
-
     @TableField(exist = false)
     List<ApiSql> sqlList;
-
 
     @TableField
     String params;
@@ -78,8 +73,4 @@ public class ApiConfig {
     @TableField(value = "update_time")
     String updateTime;
 
-//    public List<String> getSqlList(){
-//        List<String> sqlList = JSONArray.parseArray(sql, String.class);
-//        return sqlList;
-//    }
 }

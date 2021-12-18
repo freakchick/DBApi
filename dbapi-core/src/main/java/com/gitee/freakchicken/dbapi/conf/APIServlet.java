@@ -129,7 +129,7 @@ public class APIServlet extends HttpServlet {
                 }
             }
 
-            List<String> sqlList = config.getSqlList().stream().map(t -> t.getSql()).collect(Collectors.toList());
+            List<String> sqlList = config.getSqlList().stream().map(t -> t.getSqlText()).collect(Collectors.toList());
             List<Object> dataList = new ArrayList<>();
             for (String sql : sqlList) {
                 SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(sql, sqlParam);
