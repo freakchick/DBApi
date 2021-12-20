@@ -73,6 +73,24 @@
             </includes>
         </fileSet>
         <fileSet>
+            <directory>${project.parent.basedir}/dbapi-service/src/main/resources</directory>
+            <outputDirectory>conf</outputDirectory>
+            <includes>
+                <include>*.properties</include>
+                <include>*.xml</include>
+                <include>*.db</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>${project.parent.basedir}/dbapi-gateway/src/main/resources</directory>
+            <outputDirectory>conf</outputDirectory>
+            <includes>
+                <include>*.properties</include>
+                <include>*.xml</include>
+                <include>*.yml</include>
+            </includes>
+        </fileSet>
+        <fileSet>
             <directory>${project.parent.basedir}/dbapi-common/src/main/resources</directory>
             <outputDirectory>conf</outputDirectory>
             <includes>

@@ -7,9 +7,7 @@
     <groupId>com.gitee.freakchicken.dbapi</groupId>
     <artifactId>dbapi</artifactId>
     <version>3.0.0</version>
-    <modules>
-        <module>dbapi-gateway</module>
-    </modules>
+
     <name>DBApi</name>
     <description>build http api from sql without other code</description>
     <url>https://gitee.com/freakchicken/db-api</url>
@@ -53,7 +51,9 @@
                 <module>dbapi-ui</module>
                 <module>dbapi-common</module>
                 <module>dbapi-plugin</module>
+                <module>dbapi-service</module>
                 <module>dbapi-core</module>
+                <module>dbapi-gateway</module>
                 <module>dbapi-assembly</module>
             </modules>
         </profile>
@@ -167,7 +167,17 @@
             </dependency>
             <dependency>
                 <groupId>com.gitee.freakchicken.dbapi</groupId>
+                <artifactId>dbapi-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.gitee.freakchicken.dbapi</groupId>
                 <artifactId>dbapi-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.gitee.freakchicken.dbapi</groupId>
+                <artifactId>dbapi-gateway</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

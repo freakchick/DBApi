@@ -26,8 +26,14 @@
 
         <dependency>
             <groupId>com.gitee.freakchicken.dbapi</groupId>
+            <artifactId>dbapi-gateway</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.gitee.freakchicken.dbapi</groupId>
             <artifactId>dbapi-core</artifactId>
         </dependency>
+
     </dependencies>
 
 
