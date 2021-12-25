@@ -30,14 +30,14 @@ export LOG_DIR=$HOME/logs
 if [ $1 = "start" ]; then
 
   if [ "$bool" = "false" ]; then
-    java -Dlogging.file=$LOG_DIR/dbApi.log -classpath $CONF_DIR:$LIB_JARS com.gitee.freakchicken.dbapi.DBApiApplication
+    java -Dlogging.file=$LOG_DIR/dbApi.log -classpath $CONF_DIR:$LIB_JARS com.gitee.freakchicken.dbapi.DBApiStandalone
   else
-    nohup java -Dlogging.file=$LOG_DIR/dbApi.log -classpath $CONF_DIR:$LIB_JARS com.gitee.freakchicken.dbapi.DBApiApplication >/dev/null 2>&1 &
+    nohup java -Dlogging.file=$LOG_DIR/dbApi.log -classpath $CONF_DIR:$LIB_JARS com.gitee.freakchicken.dbapi.DBApiStandalone >/dev/null 2>&1 &
     echo $! >$PID
   fi
 
-  nohup java -Dlogging.file=$LOG_DIR/dbApi.log -classpath $CONF_DIR:$LIB_JARS com.gitee.freakchicken.dbapi.DBApiApplication >/dev/null 2>&1 &
-  echo $! >$PID
+#  nohup java -Dlogging.file=$LOG_DIR/dbApi.log -classpath $CONF_DIR:$LIB_JARS com.gitee.freakchicken.dbapi.DBApiStandalone >/dev/null 2>&1 &
+#  echo $! >$PID
 
 elif [ $1 = "stop" ]; then
   TARGET_PID=$(cat $PID)
