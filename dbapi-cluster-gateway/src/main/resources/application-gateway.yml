@@ -1,6 +1,6 @@
 spring:
   application:
-    name: dbapi-gateway
+    name: DBApi-cluster-gateway
   cloud:
     nacos:
       discovery:

@@ -61,7 +61,7 @@
         </fileSet>
 
         <fileSet>
-            <directory>${project.parent.basedir}/dbapi-core/src/main/resources</directory>
+            <directory>${project.parent.basedir}/dbapi-standalone/src/main/resources</directory>
             <outputDirectory>conf</outputDirectory>
             <!--            不要设置文件编码格式之类的，否则sqlite数据库文件会损坏-->
             <!--            <lineEnding>unix</lineEnding>-->
@@ -82,11 +82,26 @@
             </includes>
         </fileSet>
         <fileSet>
-            <directory>${project.parent.basedir}/dbapi-gateway/src/main/resources</directory>
+            <directory>${project.parent.basedir}/dbapi-cluster-gateway/src/main/resources</directory>
             <outputDirectory>conf</outputDirectory>
             <includes>
                 <include>*.properties</include>
-                <include>*.xml</include>
+                <include>*.yml</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>${project.parent.basedir}/dbapi-cluster-manager/src/main/resources</directory>
+            <outputDirectory>conf</outputDirectory>
+            <includes>
+                <include>*.properties</include>
+                <include>*.yml</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>${project.parent.basedir}/dbapi-cluster-apiServer/src/main/resources</directory>
+            <outputDirectory>conf</outputDirectory>
+            <includes>
+                <include>*.properties</include>
                 <include>*.yml</include>
             </includes>
         </fileSet>

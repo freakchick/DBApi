@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>dbapi-core</artifactId>
+    <artifactId>dbapi-standalone</artifactId>
     <description>包含controller html; servlet; filter</description>
 
     <properties>

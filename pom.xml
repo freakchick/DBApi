@@ -12,14 +12,6 @@
     <description>build http api from sql without other code</description>
     <url>https://gitee.com/freakchicken/db-api</url>
 
-    <!--   <modules>
-           <module>dbapi-ui</module>
-           <module>dbapi-common</module>
-           <module>dbapi-plugin</module>
-           <module>dbapi-core</module>
-           <module>dbapi-assembly</module>
-       </modules>-->
-
     <packaging>pom</packaging>
 
     <properties>
@@ -41,11 +33,11 @@
                 <module>dbapi-plugin</module>
                 <module>dbapi-service</module>
                 <module>dbapi-controller</module>
-                <module>dbapi-core</module>
+                <module>dbapi-standalone</module>
                 <module>dbapi-cluster-apiServer</module>
                 <module>dbapi-cluster-manager</module>
                 <module>dbapi-cluster-gateway</module>
-<!--                <module>dbapi-assembly</module>-->
+                <module>dbapi-assembly</module>
             </modules>
             <activation>
                 <activeByDefault>true</activeByDefault>
@@ -169,9 +161,10 @@
                 <artifactId>dbapi-controller</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>com.gitee.freakchicken.dbapi</groupId>
-                <artifactId>dbapi-core</artifactId>
+                <artifactId>dbapi-standalone</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

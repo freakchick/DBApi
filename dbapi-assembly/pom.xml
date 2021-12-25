@@ -31,8 +31,17 @@
 
         <dependency>
             <groupId>com.gitee.freakchicken.dbapi</groupId>
-            <artifactId>dbapi-core</artifactId>
+            <artifactId>dbapi-standalone</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.gitee.freakchicken.dbapi</groupId>
+            <artifactId>dbapi-cluster-manager</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.gitee.freakchicken.dbapi</groupId>
+            <artifactId>dbapi-cluster-apiServer</artifactId>
+        </dependency>
+
 
     </dependencies>
 

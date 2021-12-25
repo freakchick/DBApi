@@ -18,7 +18,7 @@ import java.util.ArrayList;
 @SpringBootApplication
 @MapperScan("com.gitee.freakchicken.dbapi.dao")
 @EnableCaching
-@PropertySource("application-core.properties")
+@PropertySource("application-standalone.properties")
 public class DBApiStandalone {
     public static void main(String[] args) {
         SpringApplication.run(DBApiStandalone.class, args);
