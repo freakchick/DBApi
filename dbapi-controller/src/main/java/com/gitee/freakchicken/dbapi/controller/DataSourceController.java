@@ -1,7 +1,6 @@
 package com.gitee.freakchicken.dbapi.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.domain.DataSource;
 import com.gitee.freakchicken.dbapi.service.DataSourceService;
 import com.gitee.freakchicken.dbapi.util.JdbcUtil;

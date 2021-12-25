@@ -30,7 +30,7 @@ public class DBApiApiServer {
 
 
     @Bean
-    public ServletRegistrationBean getServletRegistrationBean() {
+    public ServletRegistrationBean clusterApiServlet() {
         ServletRegistrationBean bean = new ServletRegistrationBean(APIServlet);
         bean.addUrlMappings("/api/*");
         return bean;

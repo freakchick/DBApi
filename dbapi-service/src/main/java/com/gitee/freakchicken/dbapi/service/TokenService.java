@@ -1,7 +1,7 @@
 package com.gitee.freakchicken.dbapi.service;
 
-import com.gitee.freakchicken.dbapi.dao.TokenMapper;
 import com.gitee.freakchicken.dbapi.dao.ApiAuthMapper;
+import com.gitee.freakchicken.dbapi.dao.TokenMapper;
 import com.gitee.freakchicken.dbapi.domain.ApiAuth;
 import com.gitee.freakchicken.dbapi.domain.Token;
 import org.apache.commons.lang3.StringUtils;

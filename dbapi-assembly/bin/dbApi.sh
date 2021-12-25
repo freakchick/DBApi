@@ -24,25 +24,28 @@ HOME=$BIN_DIR/..
 PID=$BIN_DIR/server.pid
 
 export CONF_DIR=$HOME/conf
-export LIB_JARS=$HOME/lib/*
+export LIB_JARS=$HOME/lib/
 export LOG_DIR=$HOME/logs
+ls $LIB_JARS
 
-if [ $1 = "start" ]; then
-
-  if [ "$bool" = "false" ]; then
-    java -Dlogging.file=$LOG_DIR/dbApi.log -classpath $CONF_DIR:$LIB_JARS com.gitee.freakchicken.dbapi.DBApiStandalone
-  else
-    nohup java -Dlogging.file=$LOG_DIR/dbApi.log -classpath $CONF_DIR:$LIB_JARS com.gitee.freakchicken.dbapi.DBApiStandalone >/dev/null 2>&1 &
-    echo $! >$PID
-  fi
-
-#  nohup java -Dlogging.file=$LOG_DIR/dbApi.log -classpath $CONF_DIR:$LIB_JARS com.gitee.freakchicken.dbapi.DBApiStandalone >/dev/null 2>&1 &
-#  echo $! >$PID
-
-elif [ $1 = "stop" ]; then
-  TARGET_PID=$(cat $PID)
-  kill $TARGET_PID
-
-else
-  echo "parameter invalid"
-fi
+#for dir in $(ls $LIB_JARS)
+#do
+#  echo $dir
+#done
+#
+#if [ $1 = "start" ]; then
+#
+#  if [ "$bool" = "false" ]; then
+#    java -Dlogging.file=$LOG_DIR/dbApi.log -classpath $CONF_DIR:$LIB_JARS com.gitee.freakchicken.dbapi.DBApiStandalone
+#  else
+#    nohup java -Dlogging.file=$LOG_DIR/dbApi.log -classpath $CONF_DIR:$LIB_JARS com.gitee.freakchicken.dbapi.DBApiStandalone >/dev/null 2>&1 &
+#    echo $! >$PID
+#  fi
+#
+#elif [ $1 = "stop" ]; then
+#  TARGET_PID=$(cat $PID)
+#  kill $TARGET_PID
+#
+#else
+#  echo "parameter invalid"
+#fi
