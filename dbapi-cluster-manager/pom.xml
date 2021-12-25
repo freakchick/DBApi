@@ -3,14 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>com.gitee.freakchicken.dbapi</groupId>
         <artifactId>dbapi</artifactId>
+        <groupId>com.gitee.freakchicken.dbapi</groupId>
         <version>3.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>dbapi-core</artifactId>
-    <description>包含controller html; servlet; filter</description>
+    <artifactId>dbapi-cluster-manager</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -23,6 +22,11 @@
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.gitee.freakchicken.dbapi</groupId>
@@ -40,23 +44,6 @@
         <finalName>${project.artifactId}-${project.version}</finalName>
 
         <plugins>
-            <!--  mvn clean 命令执行的时候删除static文件夹-->
-            <plugin>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>3.1.0</version>
-                <configuration>
-                    <failOnError>true</failOnError>
-                    <filesets>
-                        <fileset>
-                            <directory>${basedir}/src/main/resources/static/</directory>
-                            <includes>
-                                <include>**/*</include>
-                            </includes>
-
-                        </fileset>
-                    </filesets>
-                </configuration>
-            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

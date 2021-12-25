@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>dbapi-gateway</artifactId>
+    <artifactId>dbapi-cluster-gateway</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

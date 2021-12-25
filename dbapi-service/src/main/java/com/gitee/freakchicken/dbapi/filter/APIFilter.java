@@ -1,4 +1,4 @@
-package com.gitee.freakchicken.dbapi.conf;
+package com.gitee.freakchicken.dbapi.filter;
 
 import com.alibaba.fastjson.JSON;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
@@ -6,6 +6,7 @@ import com.gitee.freakchicken.dbapi.service.IPService;
 import com.gitee.freakchicken.dbapi.util.IPUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -16,7 +17,7 @@ import java.io.PrintWriter;
 import java.util.Map;
 
 @Slf4j
-@WebFilter(filterName = "APIFilter", urlPatterns = "/api/*")
+@Component
 public class APIFilter implements Filter {
 
     @Autowired
@@ -29,6 +30,7 @@ public class APIFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException {
+        log.debug("filter execute");
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 

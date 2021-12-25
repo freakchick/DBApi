@@ -3,4 +3,4 @@
 **/*.iml
 .idea/
 **/dist/
-dbapi-core/src/main/resources/static/
+dbapi-controller/src/main/resources/static/

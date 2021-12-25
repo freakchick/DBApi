@@ -32,18 +32,6 @@
     </properties>
 
     <profiles>
-        <!--开发模式，只编译后端，不打tar包-->
-        <profile>
-            <id>dev</id>
-            <modules>
-                <module>dbapi-common</module>
-                <module>dbapi-plugin</module>
-                <module>dbapi-core</module>
-            </modules>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-        </profile>
         <!--release模式，编译所有模块，打tar包-->
         <profile>
             <id>release</id>
@@ -52,10 +40,16 @@
                 <module>dbapi-common</module>
                 <module>dbapi-plugin</module>
                 <module>dbapi-service</module>
+                <module>dbapi-controller</module>
                 <module>dbapi-core</module>
-                <module>dbapi-gateway</module>
-                <module>dbapi-assembly</module>
+                <module>dbapi-cluster-apiServer</module>
+                <module>dbapi-cluster-manager</module>
+                <module>dbapi-cluster-gateway</module>
+<!--                <module>dbapi-assembly</module>-->
             </modules>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
         </profile>
         <!--部署模式，只编译两个模块，并发布到中央仓库-->
         <profile>
@@ -172,12 +166,27 @@
             </dependency>
             <dependency>
                 <groupId>com.gitee.freakchicken.dbapi</groupId>
+                <artifactId>dbapi-controller</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.gitee.freakchicken.dbapi</groupId>
                 <artifactId>dbapi-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.gitee.freakchicken.dbapi</groupId>
-                <artifactId>dbapi-gateway</artifactId>
+                <artifactId>dbapi-cluster-gateway</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.gitee.freakchicken.dbapi</groupId>
+                <artifactId>dbapi-cluster-manager</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.gitee.freakchicken.dbapi</groupId>
+                <artifactId>dbapi-cluster-apiServer</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

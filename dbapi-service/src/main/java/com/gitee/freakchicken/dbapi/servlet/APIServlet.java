@@ -1,7 +1,6 @@
-package com.gitee.freakchicken.dbapi.conf;
+package com.gitee.freakchicken.dbapi.servlet;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
@@ -11,16 +10,15 @@ import com.gitee.freakchicken.dbapi.plugin.CachePlugin;
 import com.gitee.freakchicken.dbapi.plugin.PluginManager;
 import com.gitee.freakchicken.dbapi.plugin.TransformPlugin;
 import com.gitee.freakchicken.dbapi.service.*;
-import com.gitee.freakchicken.dbapi.util.IPUtil;
 import com.gitee.freakchicken.dbapi.util.JdbcUtil;
 import com.gitee.freakchicken.dbapi.util.SqlEngineUtil;
 import com.github.freakchick.orange.SqlMeta;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +30,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
-@WebServlet(name = "apiServlet", urlPatterns = "/api/*")
+@Component
 public class APIServlet extends HttpServlet {
 
     @Autowired
@@ -48,7 +46,7 @@ public class APIServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
+        log.debug("servlet execute");
         String servletPath = request.getRequestURI();
         servletPath = servletPath.substring(5);
 

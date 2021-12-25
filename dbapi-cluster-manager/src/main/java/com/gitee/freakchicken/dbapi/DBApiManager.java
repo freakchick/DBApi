@@ -1,31 +1,25 @@
 package com.gitee.freakchicken.dbapi;
 
+import com.gitee.freakchicken.dbapi.filter.APIFilter;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.PropertySource;
 
-/**
- * @program: dbApi
- * @description:
- * @author: jiangqiang
- * @create: 2021-01-19 16:31
- **/
-//@SpringBootApplication(exclude= {DataSourceAutoConfiguration.class})
+
 @SpringBootApplication
-@ServletComponentScan
+@ComponentScan(value = "com.gitee.freakchicken.dbapi",
+        excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {APIFilter.class})})  //filter会自动注册
 @MapperScan("com.gitee.freakchicken.dbapi.dao")
 @EnableCaching
-@PropertySource("application-core.properties")
+@PropertySource("application-manager.properties")
 //@EnableDiscoveryClient
-public class DBApiApplication {
+public class DBApiManager {
     public static void main(String[] args) {
-        SpringApplication.run(DBApiApplication.class, args);
+        SpringApplication.run(DBApiManager.class, args);
     }
 
 }

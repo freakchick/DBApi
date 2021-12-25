@@ -73,13 +73,13 @@
                             <!-- 删除static文件夹内容-->
                             <target>
                                 <delete>
-                                    <fileset dir="${basedir}/../dbapi-core/src/main/resources/static/"
+                                    <fileset dir="${basedir}/../dbapi-controller/src/main/resources/static/"
                                              includes="**/*.*"/>
                                 </delete>
                             </target>
                             <!--   复制dist文件夹到static文件夹-->
                             <target>
-                                <copy todir="${basedir}/../dbapi-core/src/main/resources/static">
+                                <copy todir="${basedir}/../dbapi-controller/src/main/resources/static">
                                     <fileset dir="${basedir}/dist">
                                         <include name="**/*.*"/>
                                     </fileset>
