@@ -26,26 +26,52 @@ PID=$BIN_DIR/server.pid
 export CONF_DIR=$HOME/conf
 export LIB_JARS=$HOME/lib/
 export LOG_DIR=$HOME/logs
-ls $LIB_JARS
 
-#for dir in $(ls $LIB_JARS)
-#do
-#  echo $dir
-#done
-#
-#if [ $1 = "start" ]; then
-#
+
+standalone_cp=$CONF_DIR
+# shellcheck disable=SC2045
+for tmp in $(ls $LIB_JARS)
+do
+  if [[ $tmp != dbapi-cluster-* ]]; then
+    standalone_cp=$standalone_cp:$LIB_JARS$tmp
+  fi
+done
+
+manager_cp=$CONF_DIR
+# shellcheck disable=SC2045
+for tmp in $(ls $LIB_JARS)
+do
+  if [[ $tmp != dbapi-standalone-* ]] && [[ $tmp != dbapi-cluster-apiServer-* ]] ; then
+    manager_cp=$manager_cp:$LIB_JARS$tmp
+  fi
+done
+
+api_cp=$CONF_DIR
+# shellcheck disable=SC2045
+for tmp in $(ls $LIB_JARS)
+do
+  if [[ $tmp != dbapi-standalone-* ]] && [[ $tmp != dbapi-cluster-manager-* ]] ; then
+    api_cp=$api_cp:$LIB_JARS$tmp
+  fi
+done
+
+if [ $1 = "standalone" ]; then
+
+  java -Dspring.profiles.active=standalone -classpath $standalone_cp com.gitee.freakchicken.dbapi.DBApiStandalone
 #  if [ "$bool" = "false" ]; then
 #    java -Dlogging.file=$LOG_DIR/dbApi.log -classpath $CONF_DIR:$LIB_JARS com.gitee.freakchicken.dbapi.DBApiStandalone
 #  else
 #    nohup java -Dlogging.file=$LOG_DIR/dbApi.log -classpath $CONF_DIR:$LIB_JARS com.gitee.freakchicken.dbapi.DBApiStandalone >/dev/null 2>&1 &
 #    echo $! >$PID
 #  fi
-#
-#elif [ $1 = "stop" ]; then
-#  TARGET_PID=$(cat $PID)
-#  kill $TARGET_PID
-#
-#else
-#  echo "parameter invalid"
-#fi
+elif [ $1 = "manager" ]; then
+  java -Dspring.profiles.active=manager -classpath $manager_cp com.gitee.freakchicken.dbapi.DBApiManager
+elif [ $1 = "apiServer" ]; then
+  java -Dspring.profiles.active=apiServer -classpath $api_cp com.gitee.freakchicken.dbapi.DBApiApiServer
+elif [ $1 = "stop" ]; then
+  TARGET_PID=$(cat $PID)
+  kill $TARGET_PID
+
+else
+  echo "parameter invalid"
+fi
