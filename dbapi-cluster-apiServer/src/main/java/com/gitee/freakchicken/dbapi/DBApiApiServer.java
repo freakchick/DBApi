@@ -1,4 +1,4 @@
-package com.gitee.frezkchicken.dbapi;
+package com.gitee.freakchicken.dbapi;
 
 import com.gitee.freakchicken.dbapi.filter.APIFilter;
 import com.gitee.freakchicken.dbapi.servlet.APIServlet;
