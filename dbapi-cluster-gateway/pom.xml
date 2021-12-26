@@ -25,16 +25,16 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
-            <exclusions>
+         <!--   <exclusions>
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-web</artifactId>
                 </exclusion>
-               <!-- <exclusion>
+               <exclusion>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-webflux</artifactId>
-                </exclusion>-->
-            </exclusions>
+                </exclusion>
+            </exclusions>-->
 
         </dependency>
 
@@ -43,6 +43,43 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.gitee.freakchicken.dbapi</groupId>
+            <artifactId>dbapi-service</artifactId>
+        </dependency>
+
     </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <excludes><!--不把配置文件打的jar包里面-->
+                        <exclude>**/*.xml</exclude>
+                        <exclude>**/*.properties</exclude>
+                        <exclude>**/*.db</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+
+                    </execution>
+                </executions>
+
+            </plugin>
+
+        </plugins>
+    </build>
+
 
 </project>
