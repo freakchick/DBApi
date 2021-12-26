@@ -10,7 +10,7 @@ spring:
     gateway:
       routes:
         - id: api_route
-          uri: lb://dbApi
+          uri: lb://DBApi-cluster-apiServer
           predicates:
             - Path=/api/**
 server:

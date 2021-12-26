@@ -55,6 +55,19 @@ do
   fi
 done
 
+gateway_cp=$CONF_DIR/application.yml
+# shellcheck disable=SC2045
+for tmp in $(ls $LIB_DIR)
+do
+  if [[ $tmp != dbapi-standalone-* ]] && [[ $tmp != dbapi-cluster-* ]] ; then
+    gateway_cp=$gateway_cp:$LIB_DIR$tmp
+  fi
+
+  if [[ $tmp == dbapi-cluster-gateway-* ]] ; then
+    gateway_cp=$gateway_cp:$LIB_DIR$tmp
+  fi
+done
+
 if [ $1 = "standalone" ]; then
   echo $standalone_cp
   java -Dspring.profiles.active=standalone -classpath $standalone_cp com.gitee.freakchicken.dbapi.DBApiStandalone
@@ -70,7 +83,10 @@ elif [ $1 = "manager" ]; then
 elif [ $1 = "apiServer" ]; then
   echo $api_cp
   java -Dspring.profiles.active=apiServer -classpath $api_cp com.gitee.freakchicken.dbapi.DBApiApiServer
-  
+elif [ $1 = "gateway" ]; then
+  echo gateway_cp
+  java -classpath $gateway_cp com.gitee.freakchicken.dbapi.DBApiGateWay
+
 elif [ $1 = "stop" ]; then
   TARGET_PID=$(cat $PID)
   kill $TARGET_PID
