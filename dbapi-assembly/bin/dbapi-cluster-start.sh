@@ -40,29 +40,39 @@ function contain() {
   return 1
 }
 
+
+exclude_jars=("dbapi-cluster" )
 standalone_cp=$CONF_DIR
-# shellcheck disable=SC2045
 for tmp in $(ls $LIB_DIR); do
-  if [[ $tmp != dbapi-cluster-* ]]; then
-    standalone_cp=$standalone_cp:$LIB_DIR$tmp
+  contain "${exclude_jars[*]}" $tmp
+  res=$(echo $?)
+  if [ $res = "1" ]; then
+    standalone_cp=$standalone_cp:$LIB_DIR$tmp #不包含在其中就拼接
   fi
 done
 
+
+exclude_jars=("dbapi-standalone" "dbapi-cluster-apiServer" )
 manager_cp=$CONF_DIR
-# shellcheck disable=SC2045
 for tmp in $(ls $LIB_DIR); do
-  if [[ $tmp != dbapi-standalone-* ]] && [[ $tmp != dbapi-cluster-apiServer-* ]]; then
-    manager_cp=$manager_cp:$LIB_DIR$tmp
+  contain "${exclude_jars[*]}" $tmp
+  res=$(echo $?)
+  if [ $res = "1" ]; then
+    manager_cp=$manager_cp:$LIB_DIR$tmp #不包含在其中就拼接
   fi
 done
 
+
+exclude_jars=("dbapi-standalone" "dbapi-cluster-manager" )
 api_cp=$CONF_DIR
-# shellcheck disable=SC2045
 for tmp in $(ls $LIB_DIR); do
-  if [[ $tmp != dbapi-standalone-* ]] && [[ $tmp != dbapi-cluster-manager-* ]]; then
-    api_cp=$api_cp:$LIB_DIR$tmp
+  contain "${exclude_jars[*]}" $tmp
+  res=$(echo $?)
+  if [ $res = "1" ]; then
+    api_cp=$api_cp:$LIB_DIR$tmp #不包含在其中就拼接
   fi
 done
+
 
 exclude_jars=("spring-boot-starter-tomcat" "spring-boot-starter-web" "tomcat-embed-websocket" "tomcat-embed-core" "spring-webmvc" "dbapi-cluster-apiServer" "dbapi-cluster-manager" "dbapi-controller" "dbapi-standalone")
 gateway_cp=$CONF_DIR
@@ -73,6 +83,7 @@ for tmp in $(ls $LIB_DIR); do
     gateway_cp=$gateway_cp:$LIB_DIR$tmp #不包含在其中就拼接
   fi
 done
+
 
 if [ $1 = "standalone" ]; then
   echo $standalone_cp
@@ -91,12 +102,11 @@ elif [ $1 = "apiServer" ]; then
   java -Dspring.profiles.active=apiServer -classpath $api_cp com.gitee.freakchicken.dbapi.DBApiApiServer
 elif [ $1 = "gateway" ]; then
   echo $gateway_cp
-  java -classpath $gateway_cp com.gitee.freakchicken.dbapi.DBApiGateWay
+  java -Dspring.profiles.active=gateway -classpath $gateway_cp com.gitee.freakchicken.dbapi.DBApiGateWay
 
-elif [ $1 = "stop" ]; then
-  TARGET_PID=$(cat $PID)
-  kill $TARGET_PID
-
+#elif [ $1 = "stop" ]; then
+#  TARGET_PID=$(cat $PID)
+#  kill $TARGET_PID
 else
   echo "parameter invalid"
 fi
