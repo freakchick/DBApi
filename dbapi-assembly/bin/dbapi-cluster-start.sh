@@ -30,7 +30,7 @@ export LOG_DIR=$HOME/logs
 
 # 判断第一个参数包含第二个参数开头的字符串
 function contain() {
-  array=$1
+  local array=$1
   for item in ${array[*]}; do
     if [[ $2 =~ ^"${item}-".* ]]; then
       echo $2
@@ -40,52 +40,16 @@ function contain() {
   return 1
 }
 
-
-exclude_jars=("dbapi-cluster" )
-standalone_cp=$CONF_DIR
-for tmp in $(ls $LIB_DIR); do
-  contain "${exclude_jars[*]}" $tmp
-  res=$(echo $?)
-  if [ $res = "1" ]; then
-    standalone_cp=$standalone_cp:$LIB_DIR$tmp #不包含在其中就拼接
-  fi
-done
-
-
-exclude_jars=("dbapi-standalone" "dbapi-cluster-apiServer" )
-manager_cp=$CONF_DIR
-for tmp in $(ls $LIB_DIR); do
-  contain "${exclude_jars[*]}" $tmp
-  res=$(echo $?)
-  if [ $res = "1" ]; then
-    manager_cp=$manager_cp:$LIB_DIR$tmp #不包含在其中就拼接
-  fi
-done
-
-
-exclude_jars=("dbapi-standalone" "dbapi-cluster-manager" )
-api_cp=$CONF_DIR
-for tmp in $(ls $LIB_DIR); do
-  contain "${exclude_jars[*]}" $tmp
-  res=$(echo $?)
-  if [ $res = "1" ]; then
-    api_cp=$api_cp:$LIB_DIR$tmp #不包含在其中就拼接
-  fi
-done
-
-
-exclude_jars=("spring-boot-starter-tomcat" "spring-boot-starter-web" "tomcat-embed-websocket" "tomcat-embed-core" "spring-webmvc" "dbapi-cluster-apiServer" "dbapi-cluster-manager" "dbapi-controller" "dbapi-standalone")
-gateway_cp=$CONF_DIR
-for tmp in $(ls $LIB_DIR); do
-  contain "${exclude_jars[*]}" $tmp
-  res=$(echo $?)
-  if [ $res = "1" ]; then
-    gateway_cp=$gateway_cp:$LIB_DIR$tmp #不包含在其中就拼接
-  fi
-done
-
-
 if [ $1 = "standalone" ]; then
+	standalone_exclude_jars=("dbapi-cluster" "spring-boot-starter-webflux" "spring-webflux" "spring-cloud-gateway-server" "spring-cloud-starter-gateway")
+	standalone_cp=$CONF_DIR
+	for tmp in $(ls $LIB_DIR); do
+	  contain "${standalone_exclude_jars[*]}" $tmp
+	  res=$(echo $?)
+	  if [ $res = "1" ]; then
+		standalone_cp=$standalone_cp:$LIB_DIR$tmp #不包含在其中就拼接
+	  fi
+	done
   echo $standalone_cp
   java -Dspring.profiles.active=standalone -classpath $standalone_cp com.gitee.freakchicken.dbapi.DBApiStandalone
 #  if [ "$bool" = "false" ]; then
@@ -94,13 +58,43 @@ if [ $1 = "standalone" ]; then
 #    nohup java -Dlogging.file=$LOG_DIR/dbApi.log -classpath $CONF_DIR:$LIB_DIR com.gitee.freakchicken.dbapi.DBApiStandalone >/dev/null 2>&1 &
 #    echo $! >$PID
 #  fi
+
 elif [ $1 = "manager" ]; then
+	manager_exclude_jars=("dbapi-standalone" "dbapi-cluster-apiServer" "dbapi-cluster-gateway" "spring-boot-starter-webflux" "spring-webflux" "spring-cloud-gateway-server" "spring-cloud-starter-gateway")
+	manager_cp=$CONF_DIR
+	for tmp in $(ls $LIB_DIR); do
+	  contain "${manager_exclude_jars[*]}" $tmp
+	  res=$(echo $?)
+	  if [ $res = "1" ]; then
+		manager_cp=$manager_cp:$LIB_DIR$tmp #不包含在其中就拼接
+	  fi
+	done
   echo $manager_cp
   java -Dspring.profiles.active=manager -classpath $manager_cp com.gitee.freakchicken.dbapi.DBApiManager
+
 elif [ $1 = "apiServer" ]; then
+	api_exclude_jars=("dbapi-standalone" "dbapi-cluster-manager" "dbapi-cluster-gateway" "spring-boot-starter-webflux" "spring-webflux" "spring-cloud-gateway-server" "spring-cloud-starter-gateway")
+	api_cp=$CONF_DIR
+	for tmp in $(ls $LIB_DIR); do
+	  contain "${api_exclude_jars[*]}" $tmp
+	  res=$(echo $?)
+	  if [ $res = "1" ]; then
+		api_cp=$api_cp:$LIB_DIR$tmp #不包含在其中就拼接
+	  fi
+	done
   echo $api_cp
   java -Dspring.profiles.active=apiServer -classpath $api_cp com.gitee.freakchicken.dbapi.DBApiApiServer
+
 elif [ $1 = "gateway" ]; then
+	exclude_jars=("spring-boot-starter-tomcat" "spring-boot-starter-web" "tomcat-embed-websocket" "tomcat-embed-core" "spring-webmvc" "dbapi-cluster-apiServer" "dbapi-cluster-manager" "dbapi-controller" "dbapi-standalone")
+	gateway_cp=$CONF_DIR
+	for tmp in $(ls $LIB_DIR); do
+	  contain "${exclude_jars[*]}" $tmp
+	  res=$(echo $?)
+	  if [ $res = "1" ]; then
+		gateway_cp=$gateway_cp:$LIB_DIR$tmp #不包含在其中就拼接
+	  fi
+	done
   echo $gateway_cp
   java -Dspring.profiles.active=gateway -classpath $gateway_cp com.gitee.freakchicken.dbapi.DBApiGateWay
 
