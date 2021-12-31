@@ -50,7 +50,7 @@ if [ $1 = "standalone" ]; then
 		standalone_cp=$standalone_cp:$LIB_DIR$tmp #不包含在其中就拼接
 	  fi
 	done
-  echo $standalone_cp
+#  echo $standalone_cp
   java -Dspring.profiles.active=standalone -classpath $standalone_cp com.gitee.freakchicken.dbapi.DBApiStandalone
 #  if [ "$bool" = "false" ]; then
 #    java -Dlogging.file=$LOG_DIR/dbApi.log -classpath $CONF_DIR:$LIB_DIR com.gitee.freakchicken.dbapi.DBApiStandalone
@@ -69,7 +69,7 @@ elif [ $1 = "manager" ]; then
 		manager_cp=$manager_cp:$LIB_DIR$tmp #不包含在其中就拼接
 	  fi
 	done
-  echo $manager_cp
+#  echo $manager_cp
   java -Dspring.profiles.active=manager -classpath $manager_cp com.gitee.freakchicken.dbapi.DBApiManager
 
 elif [ $1 = "apiServer" ]; then
@@ -82,7 +82,7 @@ elif [ $1 = "apiServer" ]; then
 		api_cp=$api_cp:$LIB_DIR$tmp #不包含在其中就拼接
 	  fi
 	done
-  echo $api_cp
+#  echo $api_cp
   java -Dspring.profiles.active=apiServer -classpath $api_cp com.gitee.freakchicken.dbapi.DBApiApiServer
 
 elif [ $1 = "gateway" ]; then
@@ -95,7 +95,7 @@ elif [ $1 = "gateway" ]; then
 		gateway_cp=$gateway_cp:$LIB_DIR$tmp #不包含在其中就拼接
 	  fi
 	done
-  echo $gateway_cp
+#  echo $gateway_cp
   java -Dspring.profiles.active=gateway -classpath $gateway_cp com.gitee.freakchicken.dbapi.DBApiGateWay
 
 #elif [ $1 = "stop" ]; then
