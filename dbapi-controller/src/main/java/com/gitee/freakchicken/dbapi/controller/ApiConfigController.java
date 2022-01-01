@@ -8,6 +8,7 @@ import com.gitee.freakchicken.dbapi.domain.Group;
 import com.gitee.freakchicken.dbapi.service.ApiConfigService;
 import com.gitee.freakchicken.dbapi.service.DataSourceService;
 import com.gitee.freakchicken.dbapi.service.GroupService;
+import com.gitee.freakchicken.dbapi.service.NacosService;
 import com.gitee.freakchicken.dbapi.util.JdbcUtil;
 import com.gitee.freakchicken.dbapi.util.SqlEngineUtil;
 import com.github.freakchick.orange.SqlMeta;
@@ -48,6 +49,9 @@ public class ApiConfigController {
 
     @Autowired
     GroupService groupService;
+
+    @Autowired
+    NacosService nacosService;
 
     @RequestMapping("/add")
     public ResponseDto add(@RequestBody ApiConfig apiConfig) {
@@ -119,7 +123,9 @@ public class ApiConfigController {
 
     @RequestMapping("/getIPPort")
     public String getIPPort(HttpServletRequest request) {
-        return request.getServerName() + ":" + request.getServerPort();
+        String gatewayAddress = nacosService.getGatewayAddress();
+        return gatewayAddress;
+//        return request.getServerName() + ":" + request.getServerPort();
     }
 
     @RequestMapping("/apiDocs")

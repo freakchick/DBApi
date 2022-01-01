@@ -27,6 +27,12 @@
         <dependency>
             <groupId>com.gitee.freakchicken.dbapi</groupId>
             <artifactId>dbapi-controller</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.alibaba.cloud</groupId>
+                    <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>

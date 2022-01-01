@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: DBApi-cluster-gateway
+  cloud:
+
+    nacos:
+      discovery:
+        password: nacos
+        username: nacos
+        namespace: public
+      server-addr: 127.0.0.1:8848
+    gateway:
+      routes:
+        - id: api_route
+          uri: lb://DBApi-cluster-apiServer
+          predicates:
+            - Path=/api/**
+
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origins: '*'
+            allowed-methods: '*'
+            allowed-headers: "*"
+
+server:
+  port: 8525
