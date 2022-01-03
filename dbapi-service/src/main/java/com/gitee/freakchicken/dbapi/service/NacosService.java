@@ -15,7 +15,7 @@ import com.alibaba.nacos.api.naming.pojo.Instance;
 @Service
 public class NacosService {
 
-    @Value("${dbapi.mode}")
+    @Value("${dbapi.mode:standalone}")
     String mode;
 
     @Autowired

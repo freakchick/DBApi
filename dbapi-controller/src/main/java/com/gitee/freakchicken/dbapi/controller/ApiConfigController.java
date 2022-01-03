@@ -17,6 +17,7 @@ import com.gitee.freakchicken.dbapi.common.ResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,6 +41,9 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequestMapping("/apiConfig")
 public class ApiConfigController {
+
+    @Value("${dbapi.mode}")
+    String mode;
 
     @Autowired
     ApiConfigService apiConfigService;
@@ -123,9 +127,14 @@ public class ApiConfigController {
 
     @RequestMapping("/getIPPort")
     public String getIPPort(HttpServletRequest request) {
-        String gatewayAddress = nacosService.getGatewayAddress();
-        return gatewayAddress;
-//        return request.getServerName() + ":" + request.getServerPort();
+
+        if ("standalone".equals(mode)) {
+            return request.getServerName() + ":" + request.getServerPort();
+        } else if ("cluster".equals(mode)) {
+            return nacosService.getGatewayAddress();
+        } else {
+            return null;
+        }
     }
 
     @RequestMapping("/apiDocs")
