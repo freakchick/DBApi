@@ -16,6 +16,8 @@ import com.gitee.freakchicken.dbapi.plugin.PluginManager;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -47,6 +49,9 @@ public class ApiConfigService {
     @Autowired
     ApiSqlMapper apiSqlMapper;
 
+    @Autowired
+    CacheManager cacheManager;
+
     @Transactional
     public ResponseDto add(ApiConfig apiConfig) {
 
@@ -71,10 +76,10 @@ public class ApiConfigService {
 
     }
 
-    @CacheEvict(value = "api", key = "#apiConfig.path")
+//    @CacheEvict(value = "api", key = "#apiConfig.path")
     @Transactional
     public ResponseDto update(ApiConfig apiConfig) {
-
+        cacheManager.getCache("api").evict(apiConfig.getPath());
         int size = apiConfigMapper.selectCountByPathWhenUpdate(apiConfig.getPath(), apiConfig.getId());
         if (size > 0) {
             return ResponseDto.fail("Path has been used");
@@ -162,6 +167,7 @@ public class ApiConfigService {
 
     @Cacheable(value = "api", key = "#path", unless = "#result == null")
     public ApiConfig getConfig(String path) {
+        log.info("--------------------");
         ApiConfig apiConfig = apiConfigMapper.selectByPathOnline(path);
         List<ApiSql> apiSqls = apiSqlMapper.selectByApiId(apiConfig.getId());
         apiConfig.setSqlList(apiSqls);

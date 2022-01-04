@@ -41,7 +41,7 @@ CREATE TABLE `api_sql`
     `api_id`                 varchar(11) NOT NULL,
     `sql_text`               text        NOT NULL,
     `transform_plugin`       varchar(255) DEFAULT NULL,
-    `transform_plugin_param` varchar(255) DEFAULT NULL,
+    `transform_plugin_params` varchar(255) DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;

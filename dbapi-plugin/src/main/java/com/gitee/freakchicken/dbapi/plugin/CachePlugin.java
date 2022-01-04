@@ -20,10 +20,10 @@ public abstract class CachePlugin {
      * 缓存设置
      *
      * @param config api配置
-     * @param params request参数
+     * @param requestParams request参数
      * @param data   要缓存的数据
      */
-    public abstract void set(ApiConfig config, Map<String, Object> params, Object data);
+    public abstract void set(ApiConfig config, Map<String, Object> requestParams, Object data);
 
     /**
      * 清除所有缓存，API修改、删除、下线的时候会触发清除缓存
@@ -36,8 +36,8 @@ public abstract class CachePlugin {
      * 查询缓存
      *
      * @param config api配置
-     * @param params request参数
+     * @param requestParams request参数
      * @return
      */
-    public abstract Object get(ApiConfig config, Map<String, Object> params);
+    public abstract Object get(ApiConfig config, Map<String, Object> requestParams);
 }

@@ -19,6 +19,12 @@ public class ApiSql {
     @TableField("sql_text")
     String sqlText;
 
+    @TableField(value = "transform_plugin")
+    String transformPlugin;
+
+    @TableField(value = "transform_plugin_params")
+    String transformPluginParams;
+
     public ApiSql(String apiId, String sql) {
         this.apiId = apiId;
         this.sqlText = sql;

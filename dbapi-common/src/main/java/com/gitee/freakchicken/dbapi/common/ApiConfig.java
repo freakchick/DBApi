@@ -52,20 +52,11 @@ public class ApiConfig {
     @TableField(value = "cache_plugin")
     String cachePlugin;
 
-    @TableField(value = "transform_plugin")
-    String transformPlugin;
-
     /**
      * 缓存插件参数
      */
     @TableField(value = "cache_plugin_params")
     String cachePluginParams;
-
-    /**
-     * 数据转换插件参数
-     */
-    @TableField(value = "transform_plugin_params")
-    String transformPluginParams;
 
     @TableField(value = "create_time")
     String createTime;

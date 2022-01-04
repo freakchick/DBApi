@@ -15,6 +15,6 @@ public interface ApiSqlMapper extends BaseMapper<ApiSql> {
     @Delete("delete from api_sql where api_id = #{id}")
     void deleteByApiID(String id);
 
-    @Select("select api_id,sql_text from api_sql where api_id = #{id}")
+    @Select("select * from api_sql where api_id = #{id}")
     List<ApiSql> selectByApiId(String id);
 }

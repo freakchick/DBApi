@@ -3,6 +3,7 @@ package com.gitee.freakchicken.dbapi.servlet;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
+import com.gitee.freakchicken.dbapi.common.ApiSql;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
 import com.gitee.freakchicken.dbapi.domain.DataSource;
 import com.gitee.freakchicken.dbapi.domain.Token;
@@ -27,7 +28,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -126,12 +126,20 @@ public class APIServlet extends HttpServlet {
                     return ResponseDto.apiSuccess(o); //如果缓存有数据直接返回
                 }
             }
-
-            List<String> sqlList = config.getSqlList().stream().map(t -> t.getSqlText()).collect(Collectors.toList());
+            List<ApiSql> sqlList = config.getSqlList();
             List<Object> dataList = new ArrayList<>();
-            for (String sql : sqlList) {
-                SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(sql, sqlParam);
+            // sql 执行并转换
+            for (ApiSql apiSql : sqlList) {
+                SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(apiSql.getSqlText(), sqlParam);
                 Object data = JdbcUtil.executeSql(datasource, sqlMeta.getSql(), sqlMeta.getJdbcParamValues());
+                //如果此单条sql配置了数据转换插件
+                if (StringUtils.isNoneBlank(apiSql.getTransformPlugin())) {
+
+                    List<JSONObject> sourceData = (List<JSONObject>) (data); //查询类sql的返回结果才可以这样强制转换，只有查询类sql才可以配置转换插件
+                    TransformPlugin transformPlugin = PluginManager.getTransformPlugin(apiSql.getTransformPlugin());
+                    data = transformPlugin.transform(sourceData, apiSql.getTransformPluginParams());
+                }
+
                 dataList.add(data);
             }
 
@@ -142,15 +150,6 @@ public class APIServlet extends HttpServlet {
                 res = dataList.get(0);
             }
             ResponseDto dto = ResponseDto.apiSuccess(res);
-
-            //数据转换，只对单条SQL类的API有效
-            if (StringUtils.isNoneBlank(config.getTransformPlugin())) {
-                List<JSONObject> data = (List<JSONObject>) (res); //只对单条SQL类的API有效
-                TransformPlugin transformPlugin = PluginManager.getTransformPlugin(config.getTransformPlugin());
-                Object transform = transformPlugin.transform(data, config);
-                dto.setData(transform);
-
-            }
 
             //设置缓存
             if (StringUtils.isNoneBlank(config.getCachePlugin())) {
