@@ -1,11 +1,17 @@
 <template>
   <div class="mycontent">
-    <el-button icon="el-icon-d-arrow-left" type="info" plain @click="$router.go(-1)" size="small">{{$t('m.back')}}</el-button>
-    <h2>{{$t('m.request_test')}}</h2>
-    <h4>{{$t('m.url')}}：</h4>
-    <div class="path">http://{{ address }}/api/{{ path }}</div>
-
-    <h4 v-show="previlege == 0">{{$t('m.header')}}：</h4>
+    <el-button icon="el-icon-d-arrow-left" type="info" plain @click="$router.go(-1)" size="small">{{ $t('m.back') }}
+    </el-button>
+    <h2>{{ $t('m.request_test') }}</h2>
+    <h4>{{ $t('m.url') }}：</h4>
+    <el-input v-model="url"></el-input>
+<!--    <div class="url">
+      http://
+      <input v-model="address" class="input"></input>
+      /api/
+      <input v-model="path" class="input"></input>
+    </div>-->
+    <h4 v-show="previlege == 0">{{ $t('m.header') }}：</h4>
 
     <el-form label-width="150px" style="width: 600px" size="medium" v-show="previlege == 0">
       <el-form-item label="token:">
@@ -14,7 +20,7 @@
     </el-form>
 
 
-    <h4>{{$t('m.parameters')}}：</h4>
+    <h4>{{ $t('m.parameters') }}：</h4>
     <el-form label-width="150px" style="width: 600px" size="medium">
       <el-form-item v-for="(item,index) in params" :key="index" style="margin-bottom: 5px">
         <template slot="label">
@@ -36,7 +42,7 @@
       </el-form-item>
 
     </el-form>
-    <el-button @click="request">{{$t('m.send')}}</el-button>
+    <el-button @click="request">{{ $t('m.send') }}</el-button>
 
     <h4>{{ $t('m.result') }}：</h4>
 
@@ -46,9 +52,9 @@
     <el-input type="textarea" v-model="response" :autosize="{ minRows: 5, maxRows: 20 }" class="my"
               v-show="!showTable"></el-input>
 
-    <el-button size="small" @click="format" class="button">{{$t('m.json_format')}}</el-button>
-<!--    <el-button size="small" @click="tableShow" class="button">{{$t('m.view_in_table')}}</el-button>-->
-<!--    <el-button size="small" @click="tableHide" class="button">{{$t('m.raw_data')}}</el-button>-->
+    <el-button size="small" @click="format" class="button">{{ $t('m.json_format') }}</el-button>
+    <!--    <el-button size="small" @click="tableShow" class="button">{{$t('m.view_in_table')}}</el-button>-->
+    <!--    <el-button size="small" @click="tableHide" class="button">{{$t('m.raw_data')}}</el-button>-->
 
   </div>
 </template>
@@ -70,12 +76,13 @@ export default {
       keys: [],
       tableData: [],
       showTable: false,
-      token: null
+      token: null,
+      url: ''
     }
   },
   methods: {
-    getDetail(id) {
-      this.axios.post("/apiConfig/detail/" + id).then((response) => {
+    async getDetail(id) {
+      await this.axios.post("/apiConfig/detail/" + id).then((response) => {
         this.path = response.data.path
         this.previlege = response.data.previlege
         let params = JSON.parse(response.data.params)
@@ -86,18 +93,22 @@ export default {
         })
         this.params = params
         this.isSelect = response.data.isSelect
+
+        this.url = `http://${this.address}/api/${this.path}`
       }).catch((error) => {
         this.$message.error("失败")
       })
     },
-    getAddress() {
-      this.axios.post("/apiConfig/getIPPort").then((response) => {
+    async getAddress() {
+      await this.axios.post("/apiConfig/getIPPort").then((response) => {
         this.address = response.data
+        this.url = `http://${this.address}/api/${this.path}`
       }).catch((error) => {
         this.$message.error("失败")
       })
     },
     request() {
+      this.response = null
       let p = {}
       this.params.forEach(t => {
         //构造数组类型的请求参数
@@ -107,9 +118,9 @@ export default {
         } else
           p[t.name] = t.value
       })
-      let url = `http://${this.address}/api/${this.path}`
+      // let url = `http://${this.address}/api/${this.path}`
 
-      this.axios.post(url, p, {
+      this.axios.post(this.url, p, {
         headers: {
           "Content-type": "application/x-www-form-urlencoded",
           "Authorization": this.token == null ? '' : this.token
@@ -123,7 +134,7 @@ export default {
         }
 
       }).catch((error) => {
-        this.$message.error(error.response.data.msg)
+        this.$message.error("Failed")
       })
 
     },
@@ -161,13 +172,18 @@ export default {
   created() {
     this.getDetail(this.$route.query.id)
     this.getAddress()
+  },
+  computed: {
+    // url(){
+    //   return `http://${ this.address }/api/${ this.path }`
+    // }
   }
 
 }
 </script>
 
-<style scoped>
-.my >>> .el-textarea__inner {
+<style scoped lang="scss">
+.my > > > .el-textarea__inner {
   font-family: 'Consolas', Helvetica, Arial, sans-serif;
   /*font-size: 18px;*/
 }
@@ -188,6 +204,20 @@ h4 {
 
 
 }
+
+.url {
+  padding: 5px;
+  border: 1px solid #ccc;
+  .input {
+    background-color: rgba(1, 87, 36, 0.06);
+    font-size: 16px;
+    padding: 5px;
+    border-width: 0px;
+    outline: none;
+  }
+
+}
+
 
 .button {
   margin: 10px 10px 10px 0;
