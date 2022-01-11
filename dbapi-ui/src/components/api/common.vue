@@ -57,22 +57,38 @@
       <el-tab-pane label="高级配置">
         <el-form label-width="100px">
           <el-form-item :label="$t('m.data_convert')">
-            <el-tooltip placement="top-start" effect="dark">
-              <div slot="content">填写“插件类名”表示开启数据转换功能，不填写表示不转换。转换逻辑是自定义插件中编写的逻辑</div>
-              <i class="el-icon-info tip"></i>
-            </el-tooltip>
-            <my-input :label="$t('m.plugin_class')" v-model="detail.transformPlugin" placeholder="填写数据转换插件java类名"
-                      width="400px"></my-input>
-            <my-input :label="$t('m.plugin_parameter')" v-model="detail.transformPluginParams" width="300px"></my-input>
+<!--            <el-tooltip placement="top-start" effect="dark">-->
+<!--              <div slot="content">填写“插件类名”表示开启数据转换功能，不填写表示不转换。转换逻辑是自定义插件中编写的逻辑</div>-->
+<!--              <i class="el-icon-info tip"></i>-->
+<!--            </el-tooltip>-->
+            <el-tabs tab-position="bottom" style="height: 200px;">
+              <el-tab-pane label="sql-1">
+                <my-input :label="$t('m.plugin_class')" v-model="detail.transformPlugin" placeholder="填写数据转换插件java类名"
+                          width="400px"></my-input>
+                <my-input :label="$t('m.plugin_parameter')" v-model="detail.transformPluginParams" width="300px"></my-input>
+              </el-tab-pane>
+              <el-tab-pane label="sql-2">
+                <my-input :label="$t('m.plugin_class')" v-model="detail.transformPlugin" placeholder="填写数据转换插件java类名"
+                          width="400px"></my-input>
+                <my-input :label="$t('m.plugin_parameter')" v-model="detail.transformPluginParams" width="300px"></my-input>
+              </el-tab-pane>
+            </el-tabs>
+            <el-alert type="warning" show-icon>
+              填写“插件类名”表示开启数据转换功能，不填写表示不转换。转换逻辑是自定义插件中编写的逻辑
+            </el-alert>
+
           </el-form-item>
           <el-form-item :label="$t('m.cache')">
             <el-tooltip placement="top-start" effect="dark">
-              <div slot="content">填写“插件类名”表示对结果数据开启缓存，不填写表示不开启缓存</div>
-              <i class="el-icon-info tip"></i>
+<!--              <div slot="content"></div>
+              <i class="el-icon-info tip"></i>-->
             </el-tooltip>
             <my-input :label="$t('m.plugin_class')" v-model="detail.cachePlugin" placeholder="填写缓存插件java类名"
                       width="400px"></my-input>
             <my-input :label="$t('m.plugin_parameter')" v-model="detail.cachePluginParams" width="300px"></my-input>
+            <el-alert type="warning" show-icon>
+              填写“插件类名”表示对结果数据开启缓存，不填写表示不开启缓存
+            </el-alert>
             <div>
               <a class="el-icon-question" target="_blank"
                  href="https://gitee.com/freakchicken/db-api/blob/master/dbapi-assembly/docs/instruction.md#%E6%8F%92%E4%BB%B6">{{

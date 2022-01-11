@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
+import store from './store'
 import './plugins/element.js'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
@@ -22,8 +23,6 @@ Vue.use(install)
 import moment from 'moment'; //导入模块
 moment.locale('zh-cn'); //设置语言 或 moment.lang('zh-cn');
 Vue.prototype.$moment = moment;//赋值使用
-
-// import store from './store'
 
 Vue.config.productionTip = false
 
@@ -87,6 +86,6 @@ Vue.filter('dateFormat', function (originVal) {
 new Vue({
     router,
     i18n,
-    // store,
+    store,
     render: h => h(App)
 }).$mount('#app')
