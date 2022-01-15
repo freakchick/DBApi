@@ -79,15 +79,10 @@ export default {
     onCmFocus(cm) {
     },
     onCmCodeChange(cm, changeObj) {
-
       //如果输入的是字母才提示，空格不提示
       if (/^[a-zA-Z.]/.test(changeObj.text[0])) {
         cm.showHint()
       }
-
-    },
-    getSql(){
-      // return this.cmInstance.getValue()
     }
   },
   watch: {
@@ -99,7 +94,6 @@ export default {
       }
     },
     tableHints(val,OldVal){
-      debugger
       this.cmOptions.hintOptions.tables = val
     }
   },

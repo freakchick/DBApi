@@ -24,7 +24,8 @@ export default {
     save() {
       const detail = this.$refs.apiAdd.detail
 
-      const sqlList = this.$refs.apiAdd.$refs.sqlCode.getSql()
+      debugger
+      const sqlList = this.$store.getters.getSql
       let p = {
         name: detail.name,
         path: detail.path,
@@ -42,7 +43,6 @@ export default {
 
       console.log(p)
 
-      debugger
       if (p.sql == "" || p.datasourceId == null || p.name == null
           || p.path == null || p.groupId == null) {
         this.$message.error("必填项未填")

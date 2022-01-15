@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-tabs tab-position="top" style=""  type="border-card">
+    <el-tabs tab-position="top" style="" type="border-card">
       <el-tab-pane label="基础配置">
         <el-form label-width="100px">
           <el-form-item :label="$t('m.basic_info')">
@@ -15,7 +15,7 @@
 
           <el-form-item label="sql">
             <div>
-              <sql-code ref="sqlCode" :sqlText="detail.sqlList"></sql-code>
+              <sql-code ref="sqlCode" :apiSql="detail.sqlList"></sql-code>
             </div>
           </el-form-item>
           <el-form-item :label="$t('m.parameters')">
@@ -57,31 +57,24 @@
       <el-tab-pane label="高级配置">
         <el-form label-width="100px">
           <el-form-item :label="$t('m.data_convert')">
-<!--            <el-tooltip placement="top-start" effect="dark">-->
-<!--              <div slot="content">填写“插件类名”表示开启数据转换功能，不填写表示不转换。转换逻辑是自定义插件中编写的逻辑</div>-->
-<!--              <i class="el-icon-info tip"></i>-->
-<!--            </el-tooltip>-->
-            <el-tabs tab-position="bottom" style="height: 200px;">
-              <el-tab-pane label="sql-1">
-                <my-input :label="$t('m.plugin_class')" v-model="detail.transformPlugin" placeholder="填写数据转换插件java类名"
-                          width="400px"></my-input>
-                <my-input :label="$t('m.plugin_parameter')" v-model="detail.transformPluginParams" width="300px"></my-input>
-              </el-tab-pane>
-              <el-tab-pane label="sql-2">
-                <my-input :label="$t('m.plugin_class')" v-model="detail.transformPlugin" placeholder="填写数据转换插件java类名"
-                          width="400px"></my-input>
-                <my-input :label="$t('m.plugin_parameter')" v-model="detail.transformPluginParams" width="300px"></my-input>
-              </el-tab-pane>
-            </el-tabs>
+            <div v-for="(item,index) in this.$store.state.sqls">
+              <span>sql-{{ item.id }} : </span>
+              <my-input :label="$t('m.plugin_class')" v-model="item.transformPlugin" placeholder="填写数据转换插件java类名"
+                        width="400px"></my-input>
+              <my-input :label="$t('m.plugin_parameter')" v-model="item.transformPluginParams" width="300px"></my-input>
+            </div>
+
+
             <el-alert type="warning" show-icon>
-              填写“插件类名”表示开启数据转换功能，不填写表示不转换。转换逻辑是自定义插件中编写的逻辑
+              填写“插件类名”表示对sql执行结果开启数据转换功能，不填写表示不转换。
+              如果有多条sql，每个sql对应一个数据转换插件
             </el-alert>
 
           </el-form-item>
           <el-form-item :label="$t('m.cache')">
             <el-tooltip placement="top-start" effect="dark">
-<!--              <div slot="content"></div>
-              <i class="el-icon-info tip"></i>-->
+              <!--              <div slot="content"></div>
+                            <i class="el-icon-info tip"></i>-->
             </el-tooltip>
             <my-input :label="$t('m.plugin_class')" v-model="detail.cachePlugin" placeholder="填写缓存插件java类名"
                       width="400px"></my-input>
@@ -127,11 +120,9 @@ export default {
         params: [],
         groupId: null,
         previlege: 0,//访问权限
-        transformPlugin: null,
-        transformPluginParams: null,
         cachePlugin: null,
         cachePluginParams: null,
-        sqlList: [''] //默认空字符串，当创建API的时候，默认打开一个标签
+        sqlList: [{sqlText: '', transformPlugin: null, transformPluginParams: null}] //默认空字符串，当创建API的时候，默认打开一个标签
       },
       options: [
         {label: 'string', value: 'string'},
@@ -192,15 +183,17 @@ export default {
         this.detail.groupId = response.data.groupId
         this.detail.params = JSON.parse(response.data.params)
         this.detail.cachePlugin = response.data.cachePlugin
-        this.detail.transformPlugin = response.data.transformPlugin
-        this.detail.transformPluginParams = response.data.transformPluginParams
         this.detail.cachePluginParams = response.data.cachePluginParams
 
 
         this.$refs.sqlCode.datasourceId = response.data.datasourceId
 
         this.detail.sqlList = response.data.sqlList.map(t => {
-          return t.sqlText
+          return {
+            sqlText: t.sqlText,
+            transformPlugin: t.transformPlugin,
+            transformPluginParams: t.transformPluginParams
+          }
         })
       })
     },

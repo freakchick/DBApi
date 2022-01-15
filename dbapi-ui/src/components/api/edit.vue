@@ -21,7 +21,7 @@ export default {
   methods: {
     save() {
       const detail = this.$refs.apiEditCommon.detail
-      const sqlList = this.$refs.apiEditCommon.$refs.sqlCode.getSql()
+      const sqlList = this.$store.getters.getSql
       let p = {
         name: detail.name,
         path: detail.path,
@@ -33,7 +33,6 @@ export default {
         cachePluginParams: detail.cachePluginParams,
         transformPluginParams: detail.transformPluginParams,
         datasourceId: this.$refs.apiEditCommon.$refs.sqlCode.datasourceId,
-        // sql: this.$refs.apiEditCommon.$refs.sqlCode.codemirror.getValue().trim(),
         sqlList: sqlList,
         params: JSON.stringify(detail.params),
         id: this.$route.query.id

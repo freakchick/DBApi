@@ -50,11 +50,13 @@
       <div class="code">
         <div class="multi-sql">
 
-          <code-ui :sql="item.text" :mode="mode" v-for="(item,index) in this.sqls" :key="item.id" :ref="'codeui-'+index"
+          <code-ui :sql="item.sqlText" :mode="mode" v-for="(item,index) in this.$store.state.sqls" :key="item.id"
+                   :ref="'codeui-'+index"
                    :tableHints="tableHints" @appendCm="appendCm" v-show="currentIndex===index"></code-ui>
 
           <div class="tabs">
-            <div v-for="(item,index) in sqls" :class="{'tab':true,'tab-active':currentIndex === index}">
+            <div v-for="(item,index) in this.$store.state.sqls"
+                 :class="{'tab':true,'tab-active':currentIndex === index}">
               <div @click="focusCM(index)" class="text">
                 SQL-{{ item.id }}
               </div>
@@ -123,22 +125,17 @@ export default {
       params: "{}",
       datasourceId: null, datasources: [],
       tables: [], table: null,
-      // columns: [], current: null,
       currentIndex: 0,// sql序号
       sqlMeta: null,
-      // cmFlag: [0],
-      seq: -1,
 
-      sqls: [{text: '', id: 0}],
-      cmList: [],
-      tableHints:{}
+      tableHints: {}
     }
   },
   props: {
     //从父组件传过来的属性
-    sqlText: {
+    apiSql: {
       type: Array,
-      default: () => ['']
+      default: () => [{sqlText: '', transformPlugin: null, transformPluginParams: null}]
     }
   },
 
@@ -147,17 +144,12 @@ export default {
   },
   methods: {
     appendCm(cm) {
-      this.cmList.push(cm)
-    },
-    getSql() {
-      const sqlList = this.cmList.map(t => {return {sqlText: t.getValue()}}) //转换成后端需要的格式
-      // debugger
-      return sqlList
+      this.$store.commit('addCm', cm)
     },
 
     addTab() {
-      this.sqls.push({id: ++this.seq, text: ''})
-      this.currentIndex = this.sqls.length - 1
+      this.$store.commit('addSql')
+      this.currentIndex = this.$store.state.sqls.length - 1
     },
     formatJson() {
       const o = JSON.parse(this.params)
@@ -172,7 +164,7 @@ export default {
       this.error = null
       this.sqlMeta = null
       this.axios.post("/apiConfig/parseDynamicSql",
-          {sql: this.cmList[this.currentIndex].getValue(), params: (this.params)}).then((response) => {
+          {sql: this.$store.getters.currentCm(this.currentIndex).getValue(), params: (this.params)}).then((response) => {
         if (response.data.success) {
           this.sqlMeta = response.data.data
 
@@ -184,7 +176,7 @@ export default {
       })
     },
     formatSql() {
-      var sql = format(this.cmList[this.currentIndex].getValue())
+      var sql = format(this.$store.getters.currentCm(this.currentIndex).getValue())
           .replace(/# /g, "#")
           .replace(/{ /g, "{")
           .replace(/ }/g, "}")
@@ -196,7 +188,7 @@ export default {
           .replace(/< \/\nwhere\n  >/g, "\n</where>\n")
           .replace(/< trim/g, "\n<trim")
           .replace(/< \/ trim >/g, "\n</trim>\n");
-      this.cmList[this.currentIndex].setValue(sql);
+      this.$store.getters.currentCm(this.currentIndex).setValue(sql);
     },
     run(selected) {
       if (this.datasourceId == null) {
@@ -205,9 +197,9 @@ export default {
       }
       let sql
       if (selected) {
-        sql = this.cmList[this.currentIndex].getSelection()
+        sql = this.$store.getters.currentCm(this.currentIndex).getSelection()
       } else {
-        sql = this.cmList[this.currentIndex].getValue()
+        sql = this.$store.getters.currentCm(this.currentIndex).getValue()
       }
       if (sql == null || sql.trim() == '') {
         this.$message.error("请先输入sql")
@@ -282,16 +274,13 @@ export default {
       })
     },
     removeTab(index) {
-      this.sqls.splice(index, 1)
-      this.cmList.splice(index, 1)
+      this.$store.commit('removeSql',index)
       //如果删除的是激活标签的左边标签,或激活标签本身
       if (index <= this.currentIndex) {
         this.currentIndex -= 1
       }
 
     },
-
-
     focusCM(index) {
       this.currentIndex = index
     },
@@ -307,28 +296,18 @@ export default {
         val = "\n<trim prefix=\"\" suffix=\"\" suffixesToOverride=\"\" prefixesToOverride=\"\"></trim>"
       }
 
-      this.cmList[this.currentIndex].setValue(this.cmList[this.currentIndex].getValue() + val)
+      this.$store.getters.currentCm(this.currentIndex).setValue(this.$store.getters.currentCm(this.currentIndex).getValue() + val)
     },
   },
 
   created() {
     this.getAllSource()
-    this.sqls = this.sqlText.map((text) => {
-      this.seq += 1
-      return {id: this.seq, text: text}
-    })
   },
   watch: {
-    // sqlText是异步加载过来的，所以要监听
-    sqlText(newV, oldV) {
+    // props:apiSql是异步加载过来的，所以要监听
+    apiSql(newV, oldV) {
       debugger
-      this.sqls = newV.map((text) => {
-        this.seq += 1
-        return {id: this.seq, text: text}
-      })
-      // 为了兼容创建api页面，sqls设置了一个默认元素，这会导致cmList多一个cmInstance，
-      // 编辑API页面监听到sqlText,需要清空掉这个cmInstance
-      this.cmList = []
+      this.$store.commit('initSqls',this.apiSql)
     }
   }
 }
