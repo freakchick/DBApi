@@ -25,8 +25,6 @@ CREATE TABLE `api_config`
     `group_id`                varchar(255) DEFAULT NULL,
     `cache_plugin`            varchar(255) DEFAULT NULL,
     `cache_plugin_params`     varchar(255) DEFAULT NULL,
-    `transform_plugin`        varchar(255) DEFAULT NULL,
-    `transform_plugin_params` varchar(255) DEFAULT NULL,
     `create_time`             varchar(20)  DEFAULT NULL,
     `update_time`             varchar(20)  DEFAULT NULL,
     PRIMARY KEY (`id`),
