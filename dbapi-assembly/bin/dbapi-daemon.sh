@@ -49,7 +49,7 @@ export DBAPI_OPTS="-server -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=128m -Xss
 #export SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-"default"}
 
 if [ "$command" = "standalone" ]; then
-  LOG_FILE="-Dlogging.config=classpath:logback-api.xml"
+  LOG_FILE="-Dlogging.config=classpath:logback-standalone.xml"
   CLASS=com.gitee.freakchicken.dbapi.DBApiStandalone
   HEAP_OPTS="-Xms1g -Xmx1g -Xmn512m"
   PROFILES="-Dspring.profiles.active=standalone"
@@ -57,7 +57,7 @@ if [ "$command" = "standalone" ]; then
 #  export SPRING_PROFILES_ACTIVE="${SPRING_PROFILES_ACTIVE},api,${DATABASE_TYPE}"
 
 elif [ "$command" = "manager" ]; then
-  LOG_FILE="-Dlogging.config=classpath:logback-master.xml"
+  LOG_FILE="-Dlogging.config=classpath:logback-manager.xml"
   CLASS=com.gitee.freakchicken.dbapi.DBApiManager
   HEAP_OPTS="-Xms4g -Xmx4g -Xmn2g"
   PROFILES="-Dspring.profiles.active=manager"
@@ -65,14 +65,14 @@ elif [ "$command" = "manager" ]; then
 #  export SPRING_PROFILES_ACTIVE="${SPRING_PROFILES_ACTIVE},master,${DATABASE_TYPE}"
 
 elif [ "$command" = "apiServer" ]; then
-  LOG_FILE="-Dlogging.config=classpath:logback-worker.xml"
+  LOG_FILE="-Dlogging.config=classpath:logback-apiServer.xml"
   CLASS=com.gitee.freakchicken.dbapi.DBApiApiServer
   HEAP_OPTS="-Xms2g -Xmx2g -Xmn1g"
   PROFILES="-Dspring.profiles.active=apiServer"
   export DBAPI_OPTS="$HEAP_OPTS $DBAPI_OPTS"
 
 elif [ "$command" = "gateway" ]; then
-  LOG_FILE="-Dlogback.configurationFile=conf/logback-alert.xml"
+  LOG_FILE="-Dlogback.configurationFile=conf/logback-gateway.xml"
   CLASS=com.gitee.freakchicken.dbapi.DBApiGateWay
   HEAP_OPTS="-Xms1g -Xmx1g -Xmn512m"
   PROFILES="-Dspring.profiles.active=gateway"

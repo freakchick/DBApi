@@ -70,6 +70,7 @@
                 <include>*.properties</include>
                 <include>*.xml</include>
                 <include>*.db</include>
+                <include>*.yml</include>
             </includes>
         </fileSet>
         <fileSet>
@@ -79,6 +80,7 @@
                 <include>*.properties</include>
                 <include>*.xml</include>
                 <include>*.db</include>
+                <include>*.yml</include>
             </includes>
         </fileSet>
         <fileSet>
@@ -86,6 +88,8 @@
             <outputDirectory>conf</outputDirectory>
             <includes>
                 <include>*.properties</include>
+                <include>*.xml</include>
+                <include>*.db</include>
                 <include>*.yml</include>
             </includes>
         </fileSet>
@@ -94,6 +98,8 @@
             <outputDirectory>conf</outputDirectory>
             <includes>
                 <include>*.properties</include>
+                <include>*.xml</include>
+                <include>*.db</include>
                 <include>*.yml</include>
             </includes>
         </fileSet>
@@ -102,6 +108,8 @@
             <outputDirectory>conf</outputDirectory>
             <includes>
                 <include>*.properties</include>
+                <include>*.xml</include>
+                <include>*.db</include>
                 <include>*.yml</include>
             </includes>
         </fileSet>
@@ -111,6 +119,8 @@
             <includes>
                 <include>*.properties</include>
                 <include>*.xml</include>
+                <include>*.db</include>
+                <include>*.yml</include>
             </includes>
         </fileSet>
         <fileSet>
@@ -119,6 +129,8 @@
             <includes>
                 <include>*.properties</include>
                 <include>*.xml</include>
+                <include>*.db</include>
+                <include>*.yml</include>
             </includes>
         </fileSet>
 
