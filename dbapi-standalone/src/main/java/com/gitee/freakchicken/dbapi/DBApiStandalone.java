@@ -21,6 +21,7 @@ import java.util.ArrayList;
 @PropertySource("application-standalone.properties")
 public class DBApiStandalone {
     public static void main(String[] args) {
+        System.setProperty("spring.profiles.active","standalone");
         SpringApplication.run(DBApiStandalone.class, args);
     }
 

@@ -18,10 +18,11 @@ import org.springframework.context.annotation.PropertySource;
         excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {APIFilter.class})})  //filter会自动注册
 @MapperScan("com.gitee.freakchicken.dbapi.dao")
 @EnableCaching
-@PropertySource("application-apiServer.properties")
+//@PropertySource("application-apiServer.properties")
 //@EnableDiscoveryClient
 public class DBApiApiServer {
     public static void main(String[] args) {
+        System.setProperty("spring.profiles.active","apiServer");
         SpringApplication.run(DBApiApiServer.class, args);
     }
 
