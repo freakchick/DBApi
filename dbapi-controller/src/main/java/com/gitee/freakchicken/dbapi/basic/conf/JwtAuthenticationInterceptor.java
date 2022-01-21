@@ -1,4 +1,4 @@
-package com.gitee.freakchicken.dbapi.conf;
+package com.gitee.freakchicken.dbapi.basic.conf;
 
 import com.gitee.freakchicken.dbapi.basic.service.UserService;
 import com.gitee.freakchicken.dbapi.basic.domain.User;

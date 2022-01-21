@@ -14,8 +14,6 @@ import org.springframework.context.annotation.FilterType;
                 "com.gitee.freakchicken.dbapi.basic.filter.*"
         })
 })
-//@ComponentScan(value = "com.gitee.freakchicken.dbapi",
-//        excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {APIFilter.class})})  //filter会自动注册
 @MapperScan("com.gitee.freakchicken.dbapi.basic.dao")
 @EnableCaching
 //@PropertySource("application-manager.properties")

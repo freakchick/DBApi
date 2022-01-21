@@ -1,4 +1,4 @@
-package com.gitee.freakchicken.dbapi.controller;
+package com.gitee.freakchicken.dbapi.basic.controller;
 
 import com.gitee.freakchicken.dbapi.basic.dao.TokenMapper;
 import com.gitee.freakchicken.dbapi.basic.domain.Token;

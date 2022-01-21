@@ -1,4 +1,4 @@
-package com.gitee.freakchicken.dbapi.controller;
+package com.gitee.freakchicken.dbapi.basic.controller;
 
 import com.gitee.freakchicken.dbapi.basic.service.IPService;
 import lombok.extern.slf4j.Slf4j;

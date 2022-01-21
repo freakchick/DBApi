@@ -1,4 +1,4 @@
-package com.gitee.freakchicken.dbapi.controller;
+package com.gitee.freakchicken.dbapi.basic.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;

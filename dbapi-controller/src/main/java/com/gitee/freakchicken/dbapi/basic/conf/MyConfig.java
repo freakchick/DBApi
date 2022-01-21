@@ -1,4 +1,4 @@
-package com.gitee.freakchicken.dbapi.conf;
+package com.gitee.freakchicken.dbapi.basic.conf;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
