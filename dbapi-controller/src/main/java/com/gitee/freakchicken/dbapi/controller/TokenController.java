@@ -1,8 +1,8 @@
 package com.gitee.freakchicken.dbapi.controller;
 
-import com.gitee.freakchicken.dbapi.dao.TokenMapper;
-import com.gitee.freakchicken.dbapi.domain.Token;
-import com.gitee.freakchicken.dbapi.service.TokenService;
+import com.gitee.freakchicken.dbapi.basic.dao.TokenMapper;
+import com.gitee.freakchicken.dbapi.basic.domain.Token;
+import com.gitee.freakchicken.dbapi.basic.service.TokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;

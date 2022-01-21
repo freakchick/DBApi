@@ -1,8 +1,8 @@
 package com.gitee.freakchicken.dbapi.controller;
 
-import com.gitee.freakchicken.dbapi.service.UserService;
-import com.gitee.freakchicken.dbapi.domain.User;
-import com.gitee.freakchicken.dbapi.util.JwtUtils;
+import com.gitee.freakchicken.dbapi.basic.service.UserService;
+import com.gitee.freakchicken.dbapi.basic.domain.User;
+import com.gitee.freakchicken.dbapi.basic.util.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

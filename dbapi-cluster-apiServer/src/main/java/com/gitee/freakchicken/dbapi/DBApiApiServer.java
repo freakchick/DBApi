@@ -1,7 +1,6 @@
 package com.gitee.freakchicken.dbapi;
 
-import com.gitee.freakchicken.dbapi.filter.APIFilter;
-import com.gitee.freakchicken.dbapi.servlet.APIServlet;
+import com.gitee.freakchicken.dbapi.basic.servlet.APIServlet;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -11,13 +10,17 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
-@ComponentScan(value = "com.gitee.freakchicken.dbapi",
-        excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {APIFilter.class})})  //filter会自动注册
-@MapperScan("com.gitee.freakchicken.dbapi.dao")
+//@ComponentScan(value = "com.gitee.freakchicken.dbapi",
+//        excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {APIFilter.class})})  //filter会自动注册
+@MapperScan("com.gitee.freakchicken.dbapi.basic.dao")
 @EnableCaching
+@ComponentScan(value = "com.gitee.freakchicken.dbapi.basic", excludeFilters = {
+        @ComponentScan.Filter(type = FilterType.REGEX, pattern = {
+                "com.gitee.freakchicken.dbapi.basic.filter.*"
+        })
+})
 //@PropertySource("application-apiServer.properties")
 //@EnableDiscoveryClient
 public class DBApiApiServer {

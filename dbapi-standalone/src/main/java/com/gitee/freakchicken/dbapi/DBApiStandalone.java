@@ -1,7 +1,7 @@
 package com.gitee.freakchicken.dbapi;
 
-import com.gitee.freakchicken.dbapi.filter.APIFilter;
-import com.gitee.freakchicken.dbapi.servlet.APIServlet;
+import com.gitee.freakchicken.dbapi.basic.filter.APIFilter;
+import com.gitee.freakchicken.dbapi.basic.servlet.APIServlet;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -10,15 +10,18 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.PropertySource;
 
 import java.util.ArrayList;
 
 
 @SpringBootApplication
-@MapperScan("com.gitee.freakchicken.dbapi.dao")
+@MapperScan("com.gitee.freakchicken.dbapi.basic.dao")
 @EnableCaching
-@PropertySource("application-standalone.properties")
+@ComponentScan(value = "com.gitee.freakchicken.dbapi.basic")
+//@PropertySource("application-standalone.properties")
 public class DBApiStandalone {
     public static void main(String[] args) {
         System.setProperty("spring.profiles.active","standalone");

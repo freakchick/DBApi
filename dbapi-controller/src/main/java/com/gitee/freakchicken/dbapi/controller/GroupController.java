@@ -1,7 +1,7 @@
 package com.gitee.freakchicken.dbapi.controller;
 
-import com.gitee.freakchicken.dbapi.domain.Group;
-import com.gitee.freakchicken.dbapi.service.GroupService;
+import com.gitee.freakchicken.dbapi.basic.domain.Group;
+import com.gitee.freakchicken.dbapi.basic.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

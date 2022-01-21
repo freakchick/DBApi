@@ -1,9 +1,9 @@
 package com.gitee.freakchicken.dbapi.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.gitee.freakchicken.dbapi.domain.DataSource;
-import com.gitee.freakchicken.dbapi.service.DataSourceService;
-import com.gitee.freakchicken.dbapi.util.JdbcUtil;
+import com.gitee.freakchicken.dbapi.basic.domain.DataSource;
+import com.gitee.freakchicken.dbapi.basic.service.DataSourceService;
+import com.gitee.freakchicken.dbapi.basic.util.JdbcUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;

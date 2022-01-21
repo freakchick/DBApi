@@ -2,18 +2,20 @@ package com.gitee.freakchicken.dbapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 
 @SpringBootApplication
-@ComponentScan(value = "com.gitee.freakchicken.dbapi", excludeFilters = {
+@ComponentScan(value = "com.gitee.freakchicken.dbapi.basic", excludeFilters = {
         @ComponentScan.Filter(type = FilterType.REGEX, pattern = {
-                "com.gitee.freakchicken.dbapi.dao.*",
-                "com.gitee.freakchicken.dbapi.filter.*",
-                "com.gitee.freakchicken.dbapi.service.*",
-                "com.gitee.freakchicken.dbapi.servlet.*"
+                "com.gitee.freakchicken.dbapi.basic.dao.*",
+                "com.gitee.freakchicken.dbapi.basic.filter.*",
+                "com.gitee.freakchicken.dbapi.basic.service.*",
+                "com.gitee.freakchicken.dbapi.basic.servlet.*"
         })
 })
+//@EnableCaching
 //@PropertySource("classpath:application-gateway.yml")
 public class DBApiGateWay {
     public static void main(String[] args) {

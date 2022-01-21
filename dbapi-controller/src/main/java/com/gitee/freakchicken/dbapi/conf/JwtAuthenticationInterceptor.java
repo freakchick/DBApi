@@ -1,8 +1,8 @@
 package com.gitee.freakchicken.dbapi.conf;
 
-import com.gitee.freakchicken.dbapi.service.UserService;
-import com.gitee.freakchicken.dbapi.domain.User;
-import com.gitee.freakchicken.dbapi.util.JwtUtils;
+import com.gitee.freakchicken.dbapi.basic.service.UserService;
+import com.gitee.freakchicken.dbapi.basic.domain.User;
+import com.gitee.freakchicken.dbapi.basic.util.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;

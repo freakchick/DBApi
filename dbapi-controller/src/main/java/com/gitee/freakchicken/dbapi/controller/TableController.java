@@ -2,10 +2,10 @@ package com.gitee.freakchicken.dbapi.controller;
 
 import com.alibaba.druid.pool.DruidPooledConnection;
 import com.alibaba.fastjson.JSONObject;
-import com.gitee.freakchicken.dbapi.domain.DataSource;
-import com.gitee.freakchicken.dbapi.util.JdbcUtil;
-import com.gitee.freakchicken.dbapi.util.PoolManager;
-import com.gitee.freakchicken.dbapi.dao.DataSourceMapper;
+import com.gitee.freakchicken.dbapi.basic.domain.DataSource;
+import com.gitee.freakchicken.dbapi.basic.util.JdbcUtil;
+import com.gitee.freakchicken.dbapi.basic.util.PoolManager;
+import com.gitee.freakchicken.dbapi.basic.dao.DataSourceMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
