@@ -41,7 +41,7 @@ function contain() {
 }
 
 if [ $1 = "standalone" ]; then
-	standalone_exclude_jars=("dbapi-cluster" "spring-boot-starter-webflux" "spring-webflux" "spring-cloud-gateway-server" "spring-cloud-starter-gateway")
+	standalone_exclude_jars=("spring-boot-starter-webflux" "spring-webflux" "spring-cloud-gateway-server" "spring-cloud-starter-gateway")
 	standalone_cp=$CONF_DIR
 	for tmp in $(ls $LIB_DIR); do
 	  contain "${standalone_exclude_jars[*]}" $tmp
@@ -52,15 +52,10 @@ if [ $1 = "standalone" ]; then
 	done
 #  echo $standalone_cp
   java -Dspring.profiles.active=standalone -classpath $standalone_cp com.gitee.freakchicken.dbapi.DBApiStandalone
-#  if [ "$bool" = "false" ]; then
-#    java -Dlogging.file=$LOG_DIR/dbApi.log -classpath $CONF_DIR:$LIB_DIR com.gitee.freakchicken.dbapi.DBApiStandalone
-#  else
-#    nohup java -Dlogging.file=$LOG_DIR/dbApi.log -classpath $CONF_DIR:$LIB_DIR com.gitee.freakchicken.dbapi.DBApiStandalone >/dev/null 2>&1 &
-#    echo $! >$PID
-#  fi
+
 
 elif [ $1 = "manager" ]; then
-	manager_exclude_jars=("dbapi-standalone" "dbapi-cluster-apiServer" "dbapi-cluster-gateway" "spring-boot-starter-webflux" "spring-webflux" "spring-cloud-gateway-server" "spring-cloud-starter-gateway")
+	manager_exclude_jars=("spring-boot-starter-webflux" "spring-webflux" "spring-cloud-gateway-server" "spring-cloud-starter-gateway")
 	manager_cp=$CONF_DIR
 	for tmp in $(ls $LIB_DIR); do
 	  contain "${manager_exclude_jars[*]}" $tmp
@@ -73,7 +68,7 @@ elif [ $1 = "manager" ]; then
   java -Dspring.profiles.active=manager -classpath $manager_cp com.gitee.freakchicken.dbapi.DBApiManager
 
 elif [ $1 = "apiServer" ]; then
-	api_exclude_jars=("dbapi-standalone" "dbapi-cluster-manager" "dbapi-cluster-gateway" "spring-boot-starter-webflux" "spring-webflux" "spring-cloud-gateway-server" "spring-cloud-starter-gateway")
+	api_exclude_jars=("spring-boot-starter-webflux" "spring-webflux" "spring-cloud-gateway-server" "spring-cloud-starter-gateway")
 	api_cp=$CONF_DIR
 	for tmp in $(ls $LIB_DIR); do
 	  contain "${api_exclude_jars[*]}" $tmp
@@ -86,7 +81,7 @@ elif [ $1 = "apiServer" ]; then
   java -Dspring.profiles.active=apiServer -classpath $api_cp com.gitee.freakchicken.dbapi.DBApiApiServer
 
 elif [ $1 = "gateway" ]; then
-	exclude_jars=("spring-boot-starter-tomcat" "spring-boot-starter-web" "tomcat-embed-websocket" "tomcat-embed-core" "spring-webmvc" "dbapi-cluster-apiServer" "dbapi-cluster-manager" "dbapi-controller" "dbapi-standalone")
+	exclude_jars=("spring-boot-starter-tomcat" "spring-boot-starter-web" "tomcat-embed-websocket" "tomcat-embed-core" "spring-webmvc")
 	gateway_cp=$CONF_DIR
 	for tmp in $(ls $LIB_DIR); do
 	  contain "${exclude_jars[*]}" $tmp
@@ -98,9 +93,6 @@ elif [ $1 = "gateway" ]; then
 #  echo $gateway_cp
   java -Dspring.profiles.active=gateway -classpath $gateway_cp com.gitee.freakchicken.dbapi.DBApiGateWay
 
-#elif [ $1 = "stop" ]; then
-#  TARGET_PID=$(cat $PID)
-#  kill $TARGET_PID
 else
   echo "parameter invalid"
 fi
