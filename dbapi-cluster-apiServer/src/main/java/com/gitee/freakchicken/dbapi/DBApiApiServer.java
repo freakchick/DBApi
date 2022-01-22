@@ -16,11 +16,12 @@ import org.springframework.context.annotation.FilterType;
 @EnableCaching
 @ComponentScan(value = "com.gitee.freakchicken.dbapi.basic", excludeFilters = {
         @ComponentScan.Filter(type = FilterType.REGEX, pattern = {
-                "com.gitee.freakchicken.dbapi.basic.filter.*"
+                "com.gitee.freakchicken.dbapi.basic.filter.*",
+                "com.gitee.freakchicken.dbapi.basic.conf.*",
+                "com.gitee.freakchicken.dbapi.basic.controller.*"
         })
-})
+}) //安装包启动的时候排除controller相关
 //@PropertySource("application-apiServer.properties")
-//@EnableDiscoveryClient
 public class DBApiApiServer {
     public static void main(String[] args) {
         System.setProperty("spring.profiles.active","apiServer");

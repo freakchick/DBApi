@@ -69,7 +69,7 @@
         </el-table-column>
         <el-table-column :label="$t('m.path')">
           <template slot-scope="scope">
-            <span>/api/{{ scope.row.path }}</span>
+            <span>/{{context}}/{{ scope.row.path }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$t('m.parameters')">
@@ -172,7 +172,8 @@ export default {
       },
       fileList: [],
       groupFile: [],
-      checkList: []
+      checkList: [],
+      context:null
     }
   },
   components: { group},
@@ -216,6 +217,13 @@ export default {
         this.tableData = list
       }).catch((error) => {
         this.$message.error("Search Failed")
+      })
+    },
+    getContext() {
+      this.axios.post("/apiConfig/context").then((response) => {
+        this.context = response.data
+      }).catch((error) => {
+        this.$message.error("Failed")
       })
     },
     handleDelete(id) {
@@ -347,6 +355,7 @@ export default {
   created() {
     this.getAllApis()
     this.getAllGroups()
+    this.getContext()
   }
 }
 </script>

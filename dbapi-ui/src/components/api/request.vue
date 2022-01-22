@@ -94,7 +94,7 @@ export default {
         this.params = params
         this.isSelect = response.data.isSelect
 
-        this.url = `http://${this.address}/api/${this.path}`
+        this.url = `http://${this.address}/${this.path}`
       }).catch((error) => {
         this.$message.error("失败")
       })
@@ -102,7 +102,7 @@ export default {
     async getAddress() {
       await this.axios.post("/apiConfig/getIPPort").then((response) => {
         this.address = response.data
-        this.url = `http://${this.address}/api/${this.path}`
+        this.url = `http://${this.address}/${this.path}`
       }).catch((error) => {
         this.$message.error("失败")
       })

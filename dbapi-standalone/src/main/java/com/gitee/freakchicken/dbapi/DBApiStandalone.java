@@ -4,6 +4,7 @@ import com.gitee.freakchicken.dbapi.basic.filter.APIFilter;
 import com.gitee.freakchicken.dbapi.basic.servlet.APIServlet;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -28,6 +29,9 @@ public class DBApiStandalone {
         SpringApplication.run(DBApiStandalone.class, args);
     }
 
+    @Value("${dbapi.api.context}")
+    String apiContext;
+
     @Autowired
     APIServlet APIServlet;
 
@@ -38,7 +42,7 @@ public class DBApiStandalone {
     @Bean
     public ServletRegistrationBean getServletRegistrationBean() {
         ServletRegistrationBean bean = new ServletRegistrationBean(APIServlet);
-        bean.addUrlMappings("/api/*");
+        bean.addUrlMappings(String.format("/%s/*", apiContext));
         return bean;
     }
 
@@ -47,7 +51,7 @@ public class DBApiStandalone {
         FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         registrationBean.setFilter(apiFilter);
         ArrayList<String> urls = new ArrayList<>();
-        urls.add("/api/*");//配置过滤规则
+        urls.add(String.format("/%s/*", apiContext));//配置过滤规则
         registrationBean.setUrlPatterns(urls);
 //        registrationBean.setOrder(3);
         return registrationBean;

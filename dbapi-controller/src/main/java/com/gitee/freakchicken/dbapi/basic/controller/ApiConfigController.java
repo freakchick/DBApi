@@ -57,6 +57,14 @@ public class ApiConfigController {
     @Autowired
     NacosService nacosService;
 
+    @Value("${dbapi.api.context}")
+    String apiContext;
+
+    @RequestMapping("/context")
+    public String add() {
+        return apiContext;
+    }
+
     @RequestMapping("/add")
     public ResponseDto add(@RequestBody ApiConfig apiConfig) {
         return apiConfigService.add(apiConfig);
@@ -129,9 +137,9 @@ public class ApiConfigController {
     public String getIPPort(HttpServletRequest request) {
 
         if ("standalone".equals(mode)) {
-            return request.getServerName() + ":" + request.getServerPort();
+            return request.getServerName() + ":" + request.getServerPort() + "/" + apiContext;
         } else if ("cluster".equals(mode)) {
-            return nacosService.getGatewayAddress();
+            return nacosService.getGatewayAddress() + "/" + apiContext;
         } else {
             return null;
         }
