@@ -1,5 +1,8 @@
 package com.gitee.freakchicken.dbapi.common;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+
 /**
  * @program: api
  * @description:
@@ -8,9 +11,12 @@ package com.gitee.freakchicken.dbapi.common;
  **/
 
 public class ResponseDto {
+
     String msg;
-    Object data;
     boolean success;
+
+    @JSONField(serialzeFeatures = {SerializerFeature.WriteMapNullValue})
+    Object data;
 
     public String getMsg() {
         return msg;
