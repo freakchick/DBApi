@@ -30,7 +30,7 @@ export HOSTNAME=`hostname`
 export DBAPI_PID_DIR=$DBAPI_HOME/pid
 export DBAPI_LOG_DIR=$DBAPI_HOME/logs
 export DBAPI_CONF_DIR=$DBAPI_HOME/conf
-export DBAPI_LIB_JARS=$DBAPI_HOME/lib/*
+export DBAPI_LIB_DIR=$DBAPI_HOME/lib/
 
 export STOP_TIMEOUT=5
 
@@ -48,31 +48,59 @@ export DBAPI_OPTS="-server -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=128m -Xss
 #export DATABASE_TYPE=${DATABASE_TYPE:-"h2"}
 #export SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-"default"}
 
+# 判断第一个参数包含第二个参数开头的字符串
+function contain() {
+  local array=$1
+  for item in ${array[*]}; do
+    if [[ $2 =~ ^"${item}-".* ]]; then
+      echo $2
+      return 0
+    fi
+  done
+  return 1
+}
+#定义classpath变量
+cp=
+exclude_jars=()
+# 给cp拼接jar包全路径，排除掉不需要的jar
+function generate_classpath() {
+  cp=$DBAPI_CONF_DIR
+  for tmp in $(ls $DBAPI_LIB_DIR); do
+    contain "${exclude_jars[*]}" $tmp
+    res=$(echo $?)
+    if [ $res = "1" ]; then
+      cp=$cp:$DBAPI_LIB_DIR$tmp #不包含在其中就拼接
+    fi
+  done
+}
+
 if [ "$command" = "standalone" ]; then
-  LOG_FILE="-Dlogging.config=classpath:logback-standalone.xml"
+  exclude_jars=("spring-boot-starter-webflux" "spring-webflux" "spring-cloud-gateway-server" "spring-cloud-starter-gateway")
+  generate_classpath
   CLASS=com.gitee.freakchicken.dbapi.DBApiStandalone
   HEAP_OPTS="-Xms1g -Xmx1g -Xmn512m"
   PROFILES="-Dspring.profiles.active=standalone"
   export DBAPI_OPTS="$HEAP_OPTS $DBAPI_OPTS"
-#  export SPRING_PROFILES_ACTIVE="${SPRING_PROFILES_ACTIVE},api,${DATABASE_TYPE}"
 
 elif [ "$command" = "manager" ]; then
-  LOG_FILE="-Dlogging.config=classpath:logback-manager.xml"
+  exclude_jars=("spring-boot-starter-webflux" "spring-webflux" "spring-cloud-gateway-server" "spring-cloud-starter-gateway")
+  generate_classpath
   CLASS=com.gitee.freakchicken.dbapi.DBApiManager
   HEAP_OPTS="-Xms4g -Xmx4g -Xmn2g"
   PROFILES="-Dspring.profiles.active=manager"
   export DBAPI_OPTS="$HEAP_OPTS $DBAPI_OPTS"
-#  export SPRING_PROFILES_ACTIVE="${SPRING_PROFILES_ACTIVE},master,${DATABASE_TYPE}"
 
 elif [ "$command" = "apiServer" ]; then
-  LOG_FILE="-Dlogging.config=classpath:logback-apiServer.xml"
+  exclude_jars=("spring-boot-starter-webflux" "spring-webflux" "spring-cloud-gateway-server" "spring-cloud-starter-gateway")
+  generate_classpath
   CLASS=com.gitee.freakchicken.dbapi.DBApiApiServer
   HEAP_OPTS="-Xms2g -Xmx2g -Xmn1g"
   PROFILES="-Dspring.profiles.active=apiServer"
   export DBAPI_OPTS="$HEAP_OPTS $DBAPI_OPTS"
 
 elif [ "$command" = "gateway" ]; then
-  LOG_FILE="-Dlogback.configurationFile=conf/logback-gateway.xml"
+  exclude_jars=("spring-boot-starter-tomcat" "spring-boot-starter-web" "tomcat-embed-websocket" "tomcat-embed-core" "spring-webmvc")
+  generate_classpath
   CLASS=com.gitee.freakchicken.dbapi.DBApiGateWay
   HEAP_OPTS="-Xms1g -Xmx1g -Xmn512m"
   PROFILES="-Dspring.profiles.active=gateway"
@@ -88,8 +116,8 @@ case $startStop in
     if [ "$DOCKER" = "true" ]; then
       echo start $command in docker
       export DBAPI_OPTS="$DBAPI_OPTS -XX:-UseContainerSupport"
-      exec_command="$PROFILES $LOG_FILE $DBAPI_OPTS -classpath $DBAPI_CONF_DIR:$DBAPI_LIB_JARS $CLASS"
-      $JAVA_HOME/bin/java $exec_command
+      exec_command="$PROFILES $DBAPI_OPTS -classpath $cp $CLASS"
+      java $exec_command
     else
       [ -w "$DBAPI_PID_DIR" ] || mkdir -p "$DBAPI_PID_DIR"
 
@@ -101,9 +129,9 @@ case $startStop in
       fi
 
       echo starting $command, logging to $log
-      exec_command="$PROFILES $LOG_FILE $DBAPI_OPTS -classpath $DBAPI_CONF_DIR:$DBAPI_LIB_JARS $CLASS"
-      echo "nohup $JAVA_HOME/bin/java $exec_command > $log 2>&1 &"
-      nohup $JAVA_HOME/bin/java $exec_command > $log 2>&1 &
+      exec_command="$PROFILES -classpath $cp $CLASS"
+      echo "nohup java $exec_command > $log 2>&1 &"
+      nohup java $exec_command > $log 2>&1 &
       echo $! > $pid
     fi
     ;;

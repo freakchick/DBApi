@@ -39,59 +39,40 @@ function contain() {
   done
   return 1
 }
+#定义classpath变量
+cp=
+exclude_jars=()
+# 给cp拼接jar包全路径，排除掉不需要的jar
+function generate_classpath() {
+  cp=$CONF_DIR
+  for tmp in $(ls $LIB_DIR); do
+    contain "${exclude_jars[*]}" $tmp
+    res=$(echo $?)
+    if [ $res = "1" ]; then
+      cp=$cp:$LIB_DIR$tmp #不包含在其中就拼接
+    fi
+  done
+}
 
 if [ $1 = "standalone" ]; then
-	standalone_exclude_jars=("spring-boot-starter-webflux" "spring-webflux" "spring-cloud-gateway-server" "spring-cloud-starter-gateway")
-	standalone_cp=$CONF_DIR
-	for tmp in $(ls $LIB_DIR); do
-	  contain "${standalone_exclude_jars[*]}" $tmp
-	  res=$(echo $?)
-	  if [ $res = "1" ]; then
-		standalone_cp=$standalone_cp:$LIB_DIR$tmp #不包含在其中就拼接
-	  fi
-	done
-#  echo $standalone_cp
-  java -Dspring.profiles.active=standalone -classpath $standalone_cp com.gitee.freakchicken.dbapi.DBApiStandalone
-
+  exclude_jars=("spring-boot-starter-webflux" "spring-webflux" "spring-cloud-gateway-server" "spring-cloud-starter-gateway")
+  generate_classpath
+  java -Dspring.profiles.active=standalone -classpath $cp com.gitee.freakchicken.dbapi.DBApiStandalone
 
 elif [ $1 = "manager" ]; then
-	manager_exclude_jars=("spring-boot-starter-webflux" "spring-webflux" "spring-cloud-gateway-server" "spring-cloud-starter-gateway")
-	manager_cp=$CONF_DIR
-	for tmp in $(ls $LIB_DIR); do
-	  contain "${manager_exclude_jars[*]}" $tmp
-	  res=$(echo $?)
-	  if [ $res = "1" ]; then
-		manager_cp=$manager_cp:$LIB_DIR$tmp #不包含在其中就拼接
-	  fi
-	done
-#  echo $manager_cp
-  java -Dspring.profiles.active=manager -classpath $manager_cp com.gitee.freakchicken.dbapi.DBApiManager
+  exclude_jars=("spring-boot-starter-webflux" "spring-webflux" "spring-cloud-gateway-server" "spring-cloud-starter-gateway")
+  generate_classpath
+  java -Dspring.profiles.active=manager -classpath $cp com.gitee.freakchicken.dbapi.DBApiManager
 
 elif [ $1 = "apiServer" ]; then
-	api_exclude_jars=("spring-boot-starter-webflux" "spring-webflux" "spring-cloud-gateway-server" "spring-cloud-starter-gateway")
-	api_cp=$CONF_DIR
-	for tmp in $(ls $LIB_DIR); do
-	  contain "${api_exclude_jars[*]}" $tmp
-	  res=$(echo $?)
-	  if [ $res = "1" ]; then
-		api_cp=$api_cp:$LIB_DIR$tmp #不包含在其中就拼接
-	  fi
-	done
-#  echo $api_cp
-  java -Dspring.profiles.active=apiServer -classpath $api_cp com.gitee.freakchicken.dbapi.DBApiApiServer
+  exclude_jars=("spring-boot-starter-webflux" "spring-webflux" "spring-cloud-gateway-server" "spring-cloud-starter-gateway")
+  generate_classpath
+  java -Dspring.profiles.active=apiServer -classpath $cp com.gitee.freakchicken.dbapi.DBApiApiServer
 
 elif [ $1 = "gateway" ]; then
-	exclude_jars=("spring-boot-starter-tomcat" "spring-boot-starter-web" "tomcat-embed-websocket" "tomcat-embed-core" "spring-webmvc")
-	gateway_cp=$CONF_DIR
-	for tmp in $(ls $LIB_DIR); do
-	  contain "${exclude_jars[*]}" $tmp
-	  res=$(echo $?)
-	  if [ $res = "1" ]; then
-		gateway_cp=$gateway_cp:$LIB_DIR$tmp #不包含在其中就拼接
-	  fi
-	done
-#  echo $gateway_cp
-  java -Dspring.profiles.active=gateway -classpath $gateway_cp com.gitee.freakchicken.dbapi.DBApiGateWay
+  exclude_jars=("spring-boot-starter-tomcat" "spring-boot-starter-web" "tomcat-embed-websocket" "tomcat-embed-core" "spring-webmvc")
+  generate_classpath
+  java -Dspring.profiles.active=gateway -classpath $cp com.gitee.freakchicken.dbapi.DBApiGateWay
 
 else
   echo "parameter invalid"
