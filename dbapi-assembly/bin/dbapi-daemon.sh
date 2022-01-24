@@ -77,7 +77,7 @@ if [ "$command" = "standalone" ]; then
   exclude_jars=("spring-boot-starter-webflux" "spring-webflux" "spring-cloud-gateway-server" "spring-cloud-starter-gateway")
   generate_classpath
   CLASS=com.gitee.freakchicken.dbapi.DBApiStandalone
-  HEAP_OPTS="-Xms1g -Xmx1g -Xmn512m"
+  HEAP_OPTS="-Xms4g -Xmx4g -Xmn2g"
   PROFILES="-Dspring.profiles.active=standalone"
   export DBAPI_OPTS="$HEAP_OPTS $DBAPI_OPTS"
 
@@ -85,7 +85,7 @@ elif [ "$command" = "manager" ]; then
   exclude_jars=("spring-boot-starter-webflux" "spring-webflux" "spring-cloud-gateway-server" "spring-cloud-starter-gateway")
   generate_classpath
   CLASS=com.gitee.freakchicken.dbapi.DBApiManager
-  HEAP_OPTS="-Xms4g -Xmx4g -Xmn2g"
+  HEAP_OPTS="-Xms1g -Xmx1g -Xmn512m"
   PROFILES="-Dspring.profiles.active=manager"
   export DBAPI_OPTS="$HEAP_OPTS $DBAPI_OPTS"
 
@@ -93,7 +93,7 @@ elif [ "$command" = "apiServer" ]; then
   exclude_jars=("spring-boot-starter-webflux" "spring-webflux" "spring-cloud-gateway-server" "spring-cloud-starter-gateway")
   generate_classpath
   CLASS=com.gitee.freakchicken.dbapi.DBApiApiServer
-  HEAP_OPTS="-Xms2g -Xmx2g -Xmn1g"
+  HEAP_OPTS="-Xms4g -Xmx4g -Xmn2g"
   PROFILES="-Dspring.profiles.active=apiServer"
   export DBAPI_OPTS="$HEAP_OPTS $DBAPI_OPTS"
 
@@ -101,7 +101,7 @@ elif [ "$command" = "gateway" ]; then
   exclude_jars=("spring-boot-starter-tomcat" "spring-boot-starter-web" "tomcat-embed-websocket" "tomcat-embed-core" "spring-webmvc")
   generate_classpath
   CLASS=com.gitee.freakchicken.dbapi.DBApiGateWay
-  HEAP_OPTS="-Xms1g -Xmx1g -Xmn512m"
+  HEAP_OPTS="-Xms4g -Xmx4g -Xmn2g"
   PROFILES="-Dspring.profiles.active=gateway"
   export DBAPI_OPTS="$HEAP_OPTS $DBAPI_OPTS"
 
