@@ -53,7 +53,6 @@ function contain() {
   local array=$1
   for item in ${array[*]}; do
     if [[ $2 =~ ^"${item}-".* ]]; then
-      echo $2
       return 0
     fi
   done
@@ -128,10 +127,10 @@ case $startStop in
         fi
       fi
 
-      echo starting $command, logging to $log
+      echo starting $command, logging to /dev/null
       exec_command="$PROFILES -classpath $cp $CLASS"
-      echo "nohup java $exec_command > $log 2>&1 &"
-      nohup java $exec_command > $log 2>&1 &
+    #  echo "nohup java $exec_command > $log 2>&1 &"
+      nohup java $exec_command > /dev/null 2>&1 &
       echo $! > $pid
     fi
     ;;
