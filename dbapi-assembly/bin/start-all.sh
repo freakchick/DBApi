@@ -3,10 +3,7 @@
 workDir=`dirname $0`
 workDir=`cd ${workDir};pwd`
 
-set -a
-source $workDir/../conf/install_config.conf
-set +a
-
+source $workDir/../conf/install_config.sh
 
 apiServerHost=(${apiServers//,/ })
 for apiServer in ${apiServerHost[@]}

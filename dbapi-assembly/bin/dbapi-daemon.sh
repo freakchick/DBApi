@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 usage="Usage: dbapi-daemon.sh (start|stop|status) <standalone|manager|apiServer|gateway> "
 
@@ -19,12 +19,6 @@ BIN_DIR=`dirname $0`
 BIN_DIR=`cd "$BIN_DIR"; pwd`
 DBAPI_HOME=`cd "$BIN_DIR/.."; pwd`
 
-#source /etc/profile
-#set -a
-#source "${DBAPI_HOME}/conf/env/dbapi_env.sh"
-#source "${DBAPI_HOME}/conf/config/install_config.conf"
-#set +a
-
 export HOSTNAME=`hostname`
 
 export DBAPI_PID_DIR=$DBAPI_HOME/pid
@@ -44,9 +38,6 @@ pid=$DBAPI_PID_DIR/dbapi-$command.pid
 cd $DBAPI_HOME
 
 export DBAPI_OPTS="-server -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=128m -Xss512k -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:LargePageSizeInBytes=128m -XX:+UseCMSInitiatingOccupancyOnly -XX:CMSInitiatingOccupancyFraction=70 -XX:+PrintGCDetails -Xloggc:$DBAPI_LOG_DIR/gc.log -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=dump.hprof -XshowSettings:vm $DBAPI_OPTS"
-
-#export DATABASE_TYPE=${DATABASE_TYPE:-"h2"}
-#export SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-"default"}
 
 # 判断第一个参数包含第二个参数开头的字符串
 function contain() {

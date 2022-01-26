@@ -4,7 +4,7 @@ workDir=`dirname $0`
 workDir=`cd ${workDir};pwd`
 
 set -a
-source $workDir/../conf/install_config.conf
+source $workDir/../conf/install_config.sh
 set +a
 
 apiServerHost=(${apiServers//,/ })

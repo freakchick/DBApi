@@ -1,12 +1,12 @@
 
 spring:
   application:
-    name: DBApi-cluster-gateway
+    name: ${dbapi.cluster.gateway.name}
   cloud:
     gateway:
       routes:
         - id: api_route
-          uri: lb://DBApi-cluster-apiServer
+          uri: lb://${dbapi.cluster.api.name}
           predicates:
             - Path=/${dbapi.api.context}/**
 
