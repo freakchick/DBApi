@@ -1,4 +1,4 @@
-package com.gitee.freakchicken.dbapi.conf;
+package com.gitee.freakchicken.dbapi.apiserver.conf;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
