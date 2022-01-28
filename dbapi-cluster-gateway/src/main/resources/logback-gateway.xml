@@ -27,6 +27,28 @@
         </encoder>
     </appender>
 
+    <!--gateway网关日志-->
+    <appender name="accessLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.base}/dbapi-gateway-access.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${log.base}/dbapi-gateway-access.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxHistory>168</maxHistory>
+            <maxFileSize>200MB</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <pattern>
+                %date{yyyy-MM-dd HH:mm:ss.SSS} - %msg%n
+            </pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+    <appender name="async" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="accessLog" />
+    </appender>
+    <logger name="reactor.netty.http.server.AccessLog" level="INFO" additivity="false">
+        <appender-ref ref="async"/>
+    </logger>
+
     <logger name="org.apache.zookeeper" level="WARN"/>
     <logger name="org.apache.hbase" level="WARN"/>
     <logger name="org.apache.hadoop" level="WARN"/>
