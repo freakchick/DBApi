@@ -14,9 +14,8 @@ do
 done
 
 ssh -p $sshPort $manager  "cd $DBAPI_HOME/; sh bin/dbapi-daemon.sh start manager;"
-
 ssh -p $sshPort $gateway  "cd $DBAPI_HOME/; sh bin/dbapi-daemon.sh start gateway;"
 
 # query server status
 echo "query server status"
-cd $installPath/; sh bin/status-all.sh
+cd $DBAPI_HOME/; sh bin/status-all.sh

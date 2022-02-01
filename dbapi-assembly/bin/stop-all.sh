@@ -2,22 +2,20 @@
 
 workDir=`dirname $0`
 workDir=`cd ${workDir};pwd`
-
-set -a
-source $workDir/../conf/install_config.sh
-set +a
+DBAPI_HOME=`cd "$workDir/.."; pwd`
+source $DBAPI_HOME/conf/install_config.conf
 
 apiServerHost=(${apiServers//,/ })
 for apiServer in ${apiServerHost[@]}
 do
   echo "$apiServer api server is starting"
-	ssh -p $sshPort $apiServer  "cd $installPath/; sh bin/dbapi-daemon.sh stop apiServer;"
+	ssh -p $sshPort $apiServer  "cd $DBAPI_HOME/; sh bin/dbapi-daemon.sh stop apiServer;"
 done
 
-ssh -p $sshPort $manager  "cd $installPath/; sh bin/dbapi-daemon.sh stop manager;"
+ssh -p $sshPort $manager  "cd $DBAPI_HOME/; sh bin/dbapi-daemon.sh stop manager;"
 
-ssh -p $sshPort $gateway  "cd $installPath/; sh bin/dbapi-daemon.sh stop gateway;"
+ssh -p $sshPort $gateway  "cd $DBAPI_HOME/; sh bin/dbapi-daemon.sh stop gateway;"
 
 # query server status
 echo "query server status"
-cd $installPath/; sh bin/status-all.sh
+cd $DBAPI_HOME/; sh bin/status-all.sh
