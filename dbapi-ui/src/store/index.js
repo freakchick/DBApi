@@ -26,7 +26,9 @@ export default new Vuex.Store({
         },
         //编辑或新增页面初始化sql
         initSqls(state, payload) {
-            state.seq = 0
+            debugger
+            console.log('execute init sql function')
+            // state.seq = 0
             state.cmList = []
             state.sqls = payload.map((item) => {
                 state.seq += 1
@@ -37,15 +39,18 @@ export default new Vuex.Store({
                     transformPluginParams: item.transformPluginParams
                 }
             })
+            // debugger
+            console.log('--------------'+ state.sqls)
         }
     },
     actions: {},
     getters: {
         getSql: state => {
+
             const p = []
             for (let i = 0; i < state.sqls.length; i++) {
                 let obj = {}
-
+                // debugger
                 obj.transformPlugin = state.sqls[i].transformPlugin
                 obj.transformPluginParams = state.sqls[i].transformPluginParams
                 obj.sqlText = state.cmList[i].getValue()

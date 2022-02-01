@@ -5,7 +5,7 @@
         <el-form label-width="100px">
           <el-form-item :label="$t('m.basic_info')">
             <my-input :label="$t('m.name')" :nullable="false" v-model="detail.name"></my-input>
-            <my-input :label="$t('m.path')" v-model="detail.path" :preffix="`http://${ address }/api/`"
+            <my-input :label="$t('m.path')" v-model="detail.path" :preffix="`http://${ address }/`"
                       :nullable="false"
                       width="400px"></my-input>
             <my-select v-model="detail.groupId" :options="groups" :label="$t('m.api_group')" option_label="name"
@@ -205,13 +205,22 @@ export default {
       })
     }
   },
-  created() {
+  mounted() {
+    console.log('mount----+++')
     this.getAddress()
-    if (this.id != undefined)
+    if (this.id != undefined) {
+      console.log('edit api page')
       this.getDetail(this.id)
-
+    }
+    else {
+      console.log('add api page')
+      this.$store.commit('initSqls', [{sqlText: '-- 请输入sql', transformPlugin: null, transformPluginParams: null}])
+    }
     this.getAllGroups()
   },
+  // mounted() {
+    // console.log('mount----+++')
+  // },
   components: {sqlCode}
 }
 </script>

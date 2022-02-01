@@ -3,9 +3,9 @@
     <div>
       <ul>
         <li>
-          <router-link to='/api/add'>
-            <el-button type="primary" icon="el-icon-plus">{{ $t('m.create_api') }}</el-button>
-          </router-link>
+<!--          <router-link to='/api/add'>-->
+            <el-button type="primary" icon="el-icon-plus" @click="handleAdd">{{ $t('m.create_api') }}</el-button>
+<!--          </router-link>-->
         </li>
         <li>
           <el-button @click="dialogVisible = true" type="primary">{{ $t('m.api_group_manage') }}</el-button>
@@ -258,6 +258,9 @@ export default {
     },
     handleEdit(id) {
       this.$router.push({path: '/api/edit', query: {id: id}});
+    },
+    handleAdd(){
+      this.$router.push({path: '/api/add'})
     },
     getAllGroups() {
       this.axios.post("/group/getAll/").then((response) => {
