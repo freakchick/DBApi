@@ -118,7 +118,7 @@ case $startStop in
         fi
       fi
 
-      echo starting $command, logging to /dev/null
+      echo starting $command
       exec_command="$PROFILES -classpath $cp $CLASS"
     #  echo "nohup java $exec_command > $log 2>&1 &"
       nohup java $exec_command > /dev/null 2>&1 &
