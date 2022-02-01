@@ -8,7 +8,7 @@ source $DBAPI_HOME/conf/install_config.conf
 apiServerHost=(${apiServers//,/ })
 for apiServer in ${apiServerHost[@]}
 do
-  echo "$apiServer api server is starting"
+  echo "$apiServer api server is stopping"
 	ssh -p $sshPort $apiServer  "cd $DBAPI_HOME/; sh bin/dbapi-daemon.sh stop apiServer;"
 done
 
