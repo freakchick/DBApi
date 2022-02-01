@@ -30,6 +30,15 @@
         </fileSet>
         <fileSet>
             <directory>${project.basedir}/bin</directory>
+            <outputDirectory>conf</outputDirectory>
+            <lineEnding>unix</lineEnding>
+            <fileMode>744</fileMode>
+            <includes>
+                <include>install_config.conf</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}/bin</directory>
             <outputDirectory>bin</outputDirectory>
             <!--            <lineEnding>windows</lineEnding>-->
             <includes>
