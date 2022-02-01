@@ -1,4 +1,4 @@
-package com.gitee.freakchicken.dbapi;
+package com.gitee.freakchicken.manager;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
