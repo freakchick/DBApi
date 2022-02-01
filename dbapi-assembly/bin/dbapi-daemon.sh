@@ -93,7 +93,7 @@ elif [ "$command" = "gateway" ]; then
   generate_classpath
   CLASS=com.gitee.freakchicken.dbapi.DBApiGateWay
   HEAP_OPTS="-Xms4g -Xmx4g -Xmn2g"
-  PROFILES="-Dspring.profiles.active=gateway"
+  PROFILES="-Dspring.profiles.active=gateway -Dreactor.netty.http.server.accessLogEnabled=true "
   export DBAPI_OPTS="$HEAP_OPTS $DBAPI_OPTS"
 
 else
