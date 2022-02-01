@@ -1,5 +1,6 @@
-package com.gitee.freakchicken.dbapi;
+package com.gitee.freakchicken.dbapi.gateway;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.FilterType;
                 "com.gitee.freakchicken.dbapi.basic.conf.*" //安装包启动的时候排除 controller.jar
         })
 })
+@MapperScan("com.gitee.freakchicken.dbapi.basic.dao")
 @EnableCaching
 //@PropertySource("classpath:application-gateway.yml")
 public class DBApiGateWay {
