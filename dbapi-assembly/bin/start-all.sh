@@ -13,7 +13,10 @@ do
 	ssh -p $sshPort $apiServer  "cd $DBAPI_HOME/; sh bin/dbapi-daemon.sh start apiServer;"
 done
 
+echo "$manager manager is starting"
 ssh -p $sshPort $manager  "cd $DBAPI_HOME/; sh bin/dbapi-daemon.sh start manager;"
+
+echo "$gateway gateway is starting"
 ssh -p $sshPort $gateway  "cd $DBAPI_HOME/; sh bin/dbapi-daemon.sh start gateway;"
 
 # query server status
