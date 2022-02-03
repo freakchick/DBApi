@@ -8,7 +8,8 @@ import com.gitee.freakchicken.dbapi.basic.util.UUIDUtil;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +31,12 @@ import java.util.stream.Collectors;
 public class DataSourceService {
 
     @Autowired
+    CacheManager cacheManager;
+
+    @Autowired
+    MetaDataCacheManager metaDataCacheManager;
+
+    @Autowired
     DataSourceMapper dataSourceMapper;
     @Autowired
     ApiConfigMapper apiConfigMapper;
@@ -42,20 +49,31 @@ public class DataSourceService {
         dataSourceMapper.insert(dataSource);
     }
 
-    @CacheEvict(value = "datasource", key = "#dataSource.id")
+    //    @CacheEvict(value = "datasource", key = "#dataSource.id")
     @Transactional
     public void update(DataSource dataSource) {
         dataSource.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         dataSourceMapper.updateById(dataSource);
+        PoolManager.removeJdbcConnectionPool(dataSource.getId());
+        cacheManager.getCache("datasource").evictIfPresent(dataSource.getId());
+
+        //如果是集群模式，清除每个apiServer节点内的元数据ehcache缓存
+        metaDataCacheManager.cleanDatasourceMetaCacheIfCluster(dataSource.getId());
     }
 
-    @CacheEvict(value = "datasource", key = "#id")
+    //    @CacheEvict(value = "datasource", key = "#id")
     @Transactional
     public ResponseDto delete(String id) {
         int i = apiConfigMapper.countByDatasoure(id);
         if (i == 0) {
             dataSourceMapper.deleteById(id);
+
             PoolManager.removeJdbcConnectionPool(id);
+            cacheManager.getCache("datasource").evictIfPresent(id);
+
+            //如果是集群模式，清除每个apiServer节点内的元数据ehcache缓存
+
+            metaDataCacheManager.cleanDatasourceMetaCacheIfCluster(id);
             return ResponseDto.successWithMsg("delete success");
         } else {
             return ResponseDto.fail("datasource has been used, can not delete");

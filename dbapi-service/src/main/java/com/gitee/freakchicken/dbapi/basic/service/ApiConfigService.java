@@ -40,10 +40,6 @@ import java.util.stream.Collectors;
 @Service
 public class ApiConfigService {
 
-    @Value("${dbapi.mode:cluster}")
-    String mode;
-
-
     @Autowired
     ApiConfigMapper apiConfigMapper;
     @Autowired
@@ -99,7 +95,7 @@ public class ApiConfigService {
                 apiSqlMapper.insert(t);
             });
 
-            //清除所有缓存
+            //清除缓存插件对应的所有缓存
             if (StringUtils.isNoneBlank(apiConfig.getCachePlugin())) {
                 try {
                     CachePlugin cachePlugin = PluginManager.getCachePlugin(oldConfig.getCachePlugin());
@@ -110,11 +106,9 @@ public class ApiConfigService {
                 }
             }
 
-            cacheManager.getCache("api").evict(apiConfig.getPath());
-            //如果是集群模式，清楚每个apiServer节点内的元数据ehcache缓存
-            if (mode.equals("cluster")) {
-                metaDataCacheManager.cleanMetaDataCache("api", apiConfig.getPath());
-            }
+            cacheManager.getCache("api").evictIfPresent(apiConfig.getPath());
+            //如果是集群模式，清除每个apiServer节点内的元数据ehcache缓存
+            metaDataCacheManager.cleanApiMetaCacheIfCluster(apiConfig.getPath());
 
             return ResponseDto.successWithMsg("update success");
         }
@@ -139,9 +133,7 @@ public class ApiConfigService {
             }
         }
         //如果是集群模式，清楚每个apiServer节点内的元数据ehcache缓存
-        if (mode.equals("cluster")) {
-            metaDataCacheManager.cleanMetaDataCache("api", path);
-        }
+        metaDataCacheManager.cleanApiMetaCacheIfCluster(path);
     }
 
     public ApiConfig detail(String id) {
@@ -191,24 +183,21 @@ public class ApiConfigService {
         return apiConfig;
     }
 
-    @CacheEvict(value = "api", key = "#path")
     public void online(String id, String path) {
         ApiConfig apiConfig = apiConfigMapper.selectById(id);
         apiConfig.setStatus(1);
         apiConfigMapper.updateById(apiConfig);
-
-        //如果是集群模式，清楚每个apiServer节点内的元数据ehcache缓存
-        if (mode.equals("cluster")) {
-            metaDataCacheManager.cleanMetaDataCache("api", path);
-        }
     }
 
-    @CacheEvict(value = "api", key = "#path")
+//    @CacheEvict(value = "api", key = "#path")
     public void offline(String id, String path) {
 
         ApiConfig apiConfig = apiConfigMapper.selectById(id);
         apiConfig.setStatus(0);
         apiConfigMapper.updateById(apiConfig);
+
+        cacheManager.getCache("api").evictIfPresent(path);
+
         if (StringUtils.isNoneBlank(apiConfig.getCachePlugin())) {
             try {
                 CachePlugin cachePlugin = PluginManager.getCachePlugin(apiConfig.getCachePlugin());
@@ -219,10 +208,8 @@ public class ApiConfigService {
             }
         }
 
-        //如果是集群模式，清楚每个apiServer节点内的元数据ehcache缓存
-        if (mode.equals("cluster")) {
-            metaDataCacheManager.cleanMetaDataCache("api", path);
-        }
+        //如果是集群模式，清除每个apiServer节点内的元数据ehcache缓存
+        metaDataCacheManager.cleanApiMetaCacheIfCluster(path);
     }
 
     public String getPath(String id) {
