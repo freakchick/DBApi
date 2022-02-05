@@ -50,6 +50,7 @@ public class GatewayIPFilter implements GlobalFilter, Ordered {
         Map<String, String> map = ipService.detail();
         String status = map.get("status");
         if (status.equals("on")) {
+            log.debug("gateway filter ip check...");
             String mode = map.get("mode");
             if (mode.equals("black")) {
                 String blackIP = map.get("blackIP");

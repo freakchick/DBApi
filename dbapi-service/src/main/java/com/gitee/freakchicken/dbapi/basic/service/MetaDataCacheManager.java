@@ -36,9 +36,9 @@ public class MetaDataCacheManager {
                 List<ServiceInstance> instances = discoveryClient.getInstances(apiName);
 
                 for (ServiceInstance instance : instances) {
-                    String url = String.format("http://%s:%s/cache/clean/api?key=%s", instance.getHost(), instance.getPort(), key);
+                    String url = String.format("http://%s:%s/metacache/clean/api?key=%s", instance.getHost(), instance.getPort(), key);
                     restTemplate.getForEntity(url, ResponseDto.class);
-                    log.info("meta cache clean " + instance.getHost());
+                    log.info("api meta cache clean to node: {}", instance.getHost());
                 }
             }
         } catch (Exception e) {
@@ -47,21 +47,54 @@ public class MetaDataCacheManager {
     }
 
     public void cleanDatasourceMetaCacheIfCluster(String id) {
-
         try {
             if (mode.equals("cluster")) {
                 RestTemplate restTemplate = new RestTemplate();
                 List<ServiceInstance> instances = discoveryClient.getInstances(apiName);
 
                 for (ServiceInstance instance : instances) {
-                    String url = String.format("http://%s:%s/cache/clean/datasource?id=%s", instance.getHost(), instance.getPort(), id);
+                    String url = String.format("http://%s:%s/metacache/clean/datasource?id=%s", instance.getHost(), instance.getPort(), id);
                     restTemplate.getForEntity(url, ResponseDto.class);
-                    log.info("meta cache clean " + instance.getHost());
+                    log.info("datasource meta cache clean to node: {}", instance.getHost());
                 }
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
-
     }
+
+    public void cleanTokenAuthMetaCacheIfCluster(String tokenId) {
+        try {
+            if (mode.equals("cluster")) {
+                RestTemplate restTemplate = new RestTemplate();
+                List<ServiceInstance> instances = discoveryClient.getInstances(apiName);
+
+                for (ServiceInstance instance : instances) {
+                    String url = String.format("http://%s:%s/metacache/clean/tokenAuth?id=%s", instance.getHost(), instance.getPort(), tokenId);
+                    restTemplate.getForEntity(url, ResponseDto.class);
+                    log.info("token auth meta cache clean to node: {}", instance.getHost());
+                }
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
+    public void cleanTokenMetaCacheIfCluster(String tokenId) {
+        try {
+            if (mode.equals("cluster")) {
+                RestTemplate restTemplate = new RestTemplate();
+                List<ServiceInstance> instances = discoveryClient.getInstances(apiName);
+
+                for (ServiceInstance instance : instances) {
+                    String url = String.format("http://%s:%s/metacache/clean/token?id=%s", instance.getHost(), instance.getPort(), tokenId);
+                    restTemplate.getForEntity(url, ResponseDto.class);
+                    log.info("token meta cache clean to node: {}", instance.getHost());
+                }
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
 }

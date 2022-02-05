@@ -1,6 +1,5 @@
 package com.gitee.freakchicken.dbapi.basic.service;
 
-import com.gitee.freakchicken.dbapi.basic.util.Cache;
 import com.gitee.freakchicken.dbapi.basic.dao.IPMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -22,37 +21,37 @@ public class IPService {
     public void on(String mode, String ip) {
         ipMapper.turnOn(mode);
         ipMapper.saveIP(ip, mode);
-        Cache.status = null;
+//        Cache.status = null;
     }
 
     @Transactional
     public void off() {
         ipMapper.turnoff();
-        Cache.status = null;
+//        Cache.status = null;
     }
 
     public Map<String, String> detail() {
-        if (Cache.status == null) {
+//        if (Cache.status == null) {
 //            log.info("sql 查询 ipRules");
-            List<Map<String, String>> ipRule = ipMapper.getIPRule();
-            Map<String, String> status = ipMapper.getStatus();
-            ipRule.stream().forEach(t -> {
-                String type = t.get("type");
-                String ip = t.get("ip");
-                if (type.equals("white")) {
-                    status.put("whiteIP", ip);
-                } else if (type.equals("black")) {
-                    status.put("blackIP", ip);
-                }
-            });
-            // set cache
-            Cache.status = status;
+        List<Map<String, String>> ipRule = ipMapper.getIPRule();
+        Map<String, String> status = ipMapper.getStatus();
+        ipRule.stream().forEach(t -> {
+            String type = t.get("type");
+            String ip = t.get("ip");
+            if (type.equals("white")) {
+                status.put("whiteIP", ip);
+            } else if (type.equals("black")) {
+                status.put("blackIP", ip);
+            }
+        });
+        // set cache
+//            Cache.status = status;
 //            log.info("set cache");
-            return status;
-        } else {
+        return status;
+//        } else {
 //            log.info("get from cache");
-            return Cache.status;
-        }
+//            return Cache.status;
+//        }
     }
 
     public boolean check(String mode, String ipList, String originIp) {

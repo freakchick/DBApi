@@ -6,6 +6,7 @@ import com.gitee.freakchicken.dbapi.basic.domain.ApiAuth;
 import com.gitee.freakchicken.dbapi.basic.domain.Token;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,10 @@ public class TokenService {
 
     @Autowired
     TokenMapper tokenMapper;
+    @Autowired
+    MetaDataCacheManager metaDataCacheManager;
+    @Autowired
+    CacheManager cacheManager;
 
     @Transactional
     @CacheEvict(value = "token_AuthGroups", key = "#tokenId")
@@ -36,7 +41,7 @@ public class TokenService {
                 apiAuthMapper.insert(auth);
             });
         }
-
+        metaDataCacheManager.cleanTokenAuthMetaCacheIfCluster(tokenId.toString());
     }
 
     @Cacheable(value = "token_AuthGroups", key = "#tokenId", unless = "#result == null")
@@ -45,6 +50,11 @@ public class TokenService {
         return list;
     }
 
+    /**
+     * 带本地缓存的查询
+     * @param tokenStr
+     * @return
+     */
     @Cacheable(value = "token", key = "#tokenStr", unless = "#result == null")
     public Token getToken(String tokenStr) {
         Token token = tokenMapper.selectByToken(tokenStr);
@@ -57,8 +67,18 @@ public class TokenService {
     }
 
     @Transactional
-    @CacheEvict(value = "token_AuthGroups", key = "#tokenId")
+//    @CacheEvict(value = "token_AuthGroups", key = "#tokenId")
     public void deleteById(Integer tokenId) {
+        Token old = tokenMapper.selectById(tokenId);
+
         tokenMapper.deleteById(tokenId);
+        apiAuthMapper.deleteByTokenId(tokenId);
+
+        cacheManager.getCache("token").evictIfPresent(old.getToken());
+        cacheManager.getCache("token_AuthGroups").evictIfPresent(tokenId);
+
+        metaDataCacheManager.cleanTokenAuthMetaCacheIfCluster(tokenId.toString());
+        metaDataCacheManager.cleanTokenMetaCacheIfCluster(tokenId.toString());
+
     }
 }
