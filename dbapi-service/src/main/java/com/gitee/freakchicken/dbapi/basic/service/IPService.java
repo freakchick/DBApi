@@ -31,15 +31,7 @@ public class IPService {
         _on(mode, ip);
 
         // 设置缓存
-        IPRuleCache.status = "on";
-        IPRuleCache.mode = mode;
-        if (mode.equals("white")) {
-            IPRuleCache.whiteIPSet = Arrays.asList(ip.split("\n")).stream().map(t -> t.trim())
-                    .filter(t -> StringUtils.isNoneBlank(t)).collect(Collectors.toSet());
-        } else if (mode.equals("black")) {
-            IPRuleCache.blackIPSet = Arrays.asList(ip.split("\n")).stream().map(t -> t.trim())
-                    .filter(t -> StringUtils.isNoneBlank(t)).collect(Collectors.toSet());
-        }
+        init();
         metaDataCacheManager.gatewayIPRuleCacheSyncIfCluster();
 
     }
@@ -53,7 +45,7 @@ public class IPService {
     public void off() {
         _off();
         // 设置缓存
-        IPRuleCache.status = "off";
+        init();
         metaDataCacheManager.gatewayIPRuleCacheSyncIfCluster();
     }
 
