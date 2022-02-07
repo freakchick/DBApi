@@ -20,14 +20,14 @@
       </div>
 
     </div>
-    <div class="right">
+<!--    <div class="right">
       <span>{{ languageName }}</span>
       <span class="lang el-icon-arrow-down">
       </span>
       <div class="options">
         <div class="option" v-for="item in langs" @click="changeLanguage(item)">{{ item.name }}</div>
       </div>
-    </div>
+    </div>-->
   </div>
 </template>
 

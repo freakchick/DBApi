@@ -26,7 +26,6 @@ public class IPService {
      * @param mode
      * @param ip   字符串
      */
-//    @Transactional
     public void on(String mode, String ip) {
         _on(mode, ip);
 
