@@ -6,7 +6,7 @@
                   overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="600"
                   timeToLiveSeconds="600" memoryStoreEvictionPolicy="LRU"/>
     <!--数据源缓存1小时-->
-    <cache name="datasource" eternal="false" maxElementsInMemory="10000"
+    <cache name="datasource" eternal="false" maxElementsInMemory="100"
            overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="3600"
            memoryStoreEvictionPolicy="LRU"/>
 

@@ -20,6 +20,9 @@ public class MetaDataCacheManager {
     @Value("${dbapi.cluster.api.name}")
     String apiName;
 
+    @Value("${dbapi.cluster.gateway.name}")
+    String gatewayName;
+
     @Value("${dbapi.mode:cluster}")
     String mode;
 
@@ -95,6 +98,21 @@ public class MetaDataCacheManager {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
+    }
+
+    public void gatewayIPRuleCacheSyncIfCluster() {
+
+        if (mode.equals("cluster")) {
+            RestTemplate restTemplate = new RestTemplate();
+            List<ServiceInstance> instances = discoveryClient.getInstances(gatewayName);
+
+            for (ServiceInstance instance : instances) {
+                String url = String.format("http://%s:%s/metacache/iprule/sync", instance.getHost(), instance.getPort());
+                restTemplate.getForEntity(url, ResponseDto.class);
+                log.info("sync ip rule cache to gateway node: {}", instance.getHost());
+            }
+        }
+
     }
 
 }

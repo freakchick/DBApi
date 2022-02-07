@@ -1,12 +1,14 @@
 package com.gitee.freakchicken.dbapi.basic.service;
 
 import com.gitee.freakchicken.dbapi.basic.dao.IPMapper;
+import com.gitee.freakchicken.dbapi.basic.util.IPRuleCache;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -14,25 +16,70 @@ import java.util.stream.Collectors;
 @Service
 public class IPService {
 
-    @Autowired
-    IPMapper ipMapper;
 
-    @Transactional
+    @Autowired
+    private IPMapper ipMapper;
+    @Autowired
+    private MetaDataCacheManager metaDataCacheManager;
+
+    /**
+     * @param mode
+     * @param ip   字符串
+     */
+//    @Transactional
     public void on(String mode, String ip) {
-        ipMapper.turnOn(mode);
-        ipMapper.saveIP(ip, mode);
-//        Cache.status = null;
+        _on(mode, ip);
+
+        // 设置缓存
+        IPRuleCache.status = "on";
+        IPRuleCache.mode = mode;
+        if (mode.equals("white")) {
+            IPRuleCache.whiteIPSet = Arrays.asList(ip.split("\n")).stream().map(t -> t.trim())
+                    .filter(t -> StringUtils.isNoneBlank(t)).collect(Collectors.toSet());
+        } else if (mode.equals("black")) {
+            IPRuleCache.blackIPSet = Arrays.asList(ip.split("\n")).stream().map(t -> t.trim())
+                    .filter(t -> StringUtils.isNoneBlank(t)).collect(Collectors.toSet());
+        }
+        metaDataCacheManager.gatewayIPRuleCacheSyncIfCluster();
+
     }
 
     @Transactional
+    public void _on(String mode, String ip){
+        ipMapper.turnOn(mode);
+        ipMapper.saveIP(ip, mode);
+    }
+
     public void off() {
-        ipMapper.turnoff();
-//        Cache.status = null;
+        _off();
+        // 设置缓存
+        IPRuleCache.status = "off";
+        metaDataCacheManager.gatewayIPRuleCacheSyncIfCluster();
+    }
+
+    @Transactional
+    public void _off() {
+        ipMapper.turnOff();
+    }
+
+
+    @PostConstruct
+    public void init() {
+        log.info("init ip service...");
+        String blackIP = ipMapper.getBlackIP();
+        String whiteIP = ipMapper.getWhiteIP();
+
+        IPRuleCache.blackIPSet = Arrays.asList(blackIP.split("\n")).stream().map(t -> t.trim())
+                .filter(t -> StringUtils.isNoneBlank(t)).collect(Collectors.toSet());
+        IPRuleCache.whiteIPSet = Arrays.asList(whiteIP.split("\n")).stream().map(t -> t.trim())
+                .filter(t -> StringUtils.isNoneBlank(t)).collect(Collectors.toSet());
+
+        Map<String, String> map = ipMapper.getStatus();
+        IPRuleCache.mode = map.get("mode");
+        IPRuleCache.status = map.get("status");
     }
 
     public Map<String, String> detail() {
-//        if (Cache.status == null) {
-//            log.info("sql 查询 ipRules");
         List<Map<String, String>> ipRule = ipMapper.getIPRule();
         Map<String, String> status = ipMapper.getStatus();
         ipRule.stream().forEach(t -> {
@@ -44,32 +91,27 @@ public class IPService {
                 status.put("blackIP", ip);
             }
         });
-        // set cache
-//            Cache.status = status;
-//            log.info("set cache");
         return status;
-//        } else {
-//            log.info("get from cache");
-//            return Cache.status;
-//        }
     }
 
-    public boolean check(String mode, String ipList, String originIp) {
-        String[] items = ipList.split("\n");
-        Set<String> set = Arrays.asList(items).stream().map(t -> t.trim())
-                .filter(t -> StringUtils.isNoneBlank(t)).collect(Collectors.toSet());
+    public boolean checkIP(String originIp) {
+        if (IPRuleCache.status.equals("on")) {
+            if (IPRuleCache.mode.equals("black")) {
+                if (IPRuleCache.blackIPSet.contains(originIp)) {
+                    return false;
+                } else {
+                    return true;
+                }
+            } else if (IPRuleCache.mode.equals("white")) {
+                if (IPRuleCache.whiteIPSet.contains(originIp)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
 
-        if (mode.equals("black")) {
-            if (set.contains(originIp)) {
-                return false;
-            } else
-                return true;
-        } else if (mode.equals("white")) {
-            if (set.contains(originIp)) {
-                return true;
-            } else
-                return false;
         }
-        return false;
+        return true;
     }
+
 }

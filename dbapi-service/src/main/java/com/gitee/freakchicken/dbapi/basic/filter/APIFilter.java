@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
 
 @Slf4j
 @Component
@@ -54,7 +53,7 @@ public class APIFilter implements Filter {
                 return;
             }
 
-            boolean checkIP = checkIP(originIp);
+            boolean checkIP = ipService.checkIP(originIp);
             if (!checkIP) {
 //                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 out = response.getWriter();
@@ -77,27 +76,5 @@ public class APIFilter implements Filter {
     @Override
     public void destroy() {
 
-    }
-
-    public boolean checkIP(String originIp) {
-        Map<String, String> map = ipService.detail();
-        String status = map.get("status");
-        if (status.equals("on")) {
-            String mode = map.get("mode");
-            if (mode.equals("black")) {
-                String blackIP = map.get("blackIP");
-                if (!ipService.check(mode, blackIP, originIp)) {
-                    log.warn("ip黑名单拦截");
-                    return false;
-                }
-            } else if (mode.equals("white")) {
-                String whiteIP = map.get("whiteIP");
-                if (!ipService.check(mode, whiteIP, originIp)) {
-                    log.warn("ip白名单检查不通过");
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 }

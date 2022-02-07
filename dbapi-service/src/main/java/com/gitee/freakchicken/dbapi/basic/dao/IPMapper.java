@@ -12,7 +12,7 @@ import java.util.Map;
 public interface IPMapper {
 
     @Update("update firewall set status = 'off' ")
-    void turnoff();
+    void turnOff();
 
     @Update("update firewall set status = 'on' , mode = #{mode}")
     void turnOn(String mode);
@@ -25,5 +25,11 @@ public interface IPMapper {
 
     @Select("select type, ip from ip_rules")
     List<Map<String, String>> getIPRule();
+
+    @Select("select ip from ip_rules where type = 'white' ")
+    String getWhiteIP();
+
+    @Select("select ip from ip_rules where type = 'black' ")
+    String getBlackIP();
 
 }

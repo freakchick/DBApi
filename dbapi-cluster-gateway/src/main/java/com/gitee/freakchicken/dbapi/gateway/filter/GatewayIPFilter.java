@@ -16,8 +16,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.util.Map;
-
 @Component
 @Slf4j
 public class GatewayIPFilter implements GlobalFilter, Ordered {
@@ -31,8 +29,9 @@ public class GatewayIPFilter implements GlobalFilter, Ordered {
         ServerHttpResponse response = exchange.getResponse();
         // 从request对象中获取客户端ip
         String clientIp = request.getRemoteAddress().getHostString();
-        if (!checkIP(clientIp)) {
-            response.setStatusCode(HttpStatus.UNAUTHORIZED);
+        if (!ipService.checkIP(clientIp)) {
+            log.info("ip forbidden : {}", clientIp);
+//            response.setStatusCode(HttpStatus.UNAUTHORIZED);
             String data = JSON.toJSONString(ResponseDto.fail("Illegal ip (" + clientIp + "), access forbidden"));
             DataBuffer wrap = response.bufferFactory().wrap(data.getBytes());
             return response.writeWith(Mono.just(wrap));
@@ -44,28 +43,5 @@ public class GatewayIPFilter implements GlobalFilter, Ordered {
     @Override
     public int getOrder() {
         return 0;
-    }
-
-    public boolean checkIP(String originIp) {
-        Map<String, String> map = ipService.detail();
-        String status = map.get("status");
-        if (status.equals("on")) {
-            log.debug("gateway filter ip check...");
-            String mode = map.get("mode");
-            if (mode.equals("black")) {
-                String blackIP = map.get("blackIP");
-                if (!ipService.check(mode, blackIP, originIp)) {
-                    log.warn("ip黑名单拦截");
-                    return false;
-                }
-            } else if (mode.equals("white")) {
-                String whiteIP = map.get("whiteIP");
-                if (!ipService.check(mode, whiteIP, originIp)) {
-                    log.warn("ip白名单检查不通过");
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 }
