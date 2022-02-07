@@ -45,7 +45,7 @@ public class IPService {
     }
 
     @Transactional
-    public void _on(String mode, String ip){
+    public void _on(String mode, String ip) {
         ipMapper.turnOn(mode);
         ipMapper.saveIP(ip, mode);
     }
@@ -68,12 +68,18 @@ public class IPService {
         log.info("init ip service...");
         String blackIP = ipMapper.getBlackIP();
         String whiteIP = ipMapper.getWhiteIP();
-
-        IPRuleCache.blackIPSet = Arrays.asList(blackIP.split("\n")).stream().map(t -> t.trim())
-                .filter(t -> StringUtils.isNoneBlank(t)).collect(Collectors.toSet());
-        IPRuleCache.whiteIPSet = Arrays.asList(whiteIP.split("\n")).stream().map(t -> t.trim())
-                .filter(t -> StringUtils.isNoneBlank(t)).collect(Collectors.toSet());
-
+        if (StringUtils.isNoneBlank(blackIP)) {
+            IPRuleCache.blackIPSet = Arrays.asList(blackIP.split("\n")).stream().map(t -> t.trim())
+                    .filter(t -> StringUtils.isNoneBlank(t)).collect(Collectors.toSet());
+        } else {
+            IPRuleCache.blackIPSet = new HashSet<>();
+        }
+        if (StringUtils.isNoneBlank(whiteIP)) {
+            IPRuleCache.whiteIPSet = Arrays.asList(whiteIP.split("\n")).stream().map(t -> t.trim())
+                    .filter(t -> StringUtils.isNoneBlank(t)).collect(Collectors.toSet());
+        } else {
+            IPRuleCache.whiteIPSet = new HashSet<>();
+        }
         Map<String, String> map = ipMapper.getStatus();
         IPRuleCache.mode = map.get("mode");
         IPRuleCache.status = map.get("status");
