@@ -50,10 +50,10 @@ public class DBApiStandalone {
     public FilterRegistrationBean getFilter() {
         FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         registrationBean.setFilter(apiFilter);
-        ArrayList<String> urls = new ArrayList<>();
-        urls.add(String.format("/%s/*", apiContext));//配置过滤规则
-        registrationBean.setUrlPatterns(urls);
-//        registrationBean.setOrder(3);
+        //ArrayList<String> urls = new ArrayList<>();
+       // urls.add(String.format("/%s/*", apiContext));//配置过滤规则
+        registrationBean.addUrlPatterns(String.format("/%s/*", apiContext));
+        registrationBean.setOrder(1);
         return registrationBean;
     }
 }
