@@ -138,8 +138,8 @@ public class APIServlet extends HttpServlet {
             for (ApiSql apiSql : sqlList) {
                 SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(apiSql.getSqlText(), sqlParam);
                 Object data = JdbcUtil.executeSql(datasource, sqlMeta.getSql(), sqlMeta.getJdbcParamValues());
-                //如果此单条sql配置了数据转换插件
-                if (StringUtils.isNoneBlank(apiSql.getTransformPlugin())) {
+                //如果此单条sql是查询类sql，并且配置了数据转换插件
+                if (data instanceof List<JSONObject> && StringUtils.isNoneBlank(apiSql.getTransformPlugin())) {
 
                     List<JSONObject> sourceData = (List<JSONObject>) (data); //查询类sql的返回结果才可以这样强制转换，只有查询类sql才可以配置转换插件
                     TransformPlugin transformPlugin = PluginManager.getTransformPlugin(apiSql.getTransformPlugin());
