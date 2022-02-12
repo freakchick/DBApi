@@ -79,41 +79,11 @@ public class APIServlet extends HttpServlet {
 
     public ResponseDto process(String path, HttpServletRequest request, HttpServletResponse response) {
         try {
-            // 校验接口是否存在
+//            // 校验接口是否存在
             ApiConfig config = apiConfigService.getConfig(path);
             if (config == null) {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                 return ResponseDto.fail("Api not exists");
-            }
-            // 如果是私有接口，校验权限
-            if (config.getPrevilege() == 0) {
-                String tokenStr = request.getHeader("Authorization");
-                log.debug(tokenStr);
-                if (StringUtils.isBlank(tokenStr)) {
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    return ResponseDto.fail("No Token!");
-                } else {
-                    Token token = tokenService.getToken(tokenStr);
-                    if (token == null) {
-                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                        return ResponseDto.fail("Invalid Token!");
-                    } else {
-                        if (token.getExpire() != null && token.getExpire() < System.currentTimeMillis()) {
-                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                            return ResponseDto.fail("Token Expired!");
-                        } else {
-                            // log.info("token存在且有效");
-                            List<String> authGroups = tokenService.getAuthGroups(token.getId());
-                            if (checkAuth(authGroups, config.getGroupId())) {
-
-                            } else {
-                                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                                return ResponseDto.fail("Invalid Token!");
-                            }
-                        }
-                    }
-
-                }
             }
 
             DataSource datasource = dataSourceService.detail(config.getDatasourceId());
@@ -139,8 +109,8 @@ public class APIServlet extends HttpServlet {
                 SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(apiSql.getSqlText(), sqlParam);
                 Object data = JdbcUtil.executeSql(datasource, sqlMeta.getSql(), sqlMeta.getJdbcParamValues());
                 //如果此单条sql是查询类sql，并且配置了数据转换插件
-                if (data instanceof List<JSONObject> && StringUtils.isNoneBlank(apiSql.getTransformPlugin())) {
-
+                if (data instanceof Iterable && StringUtils.isNoneBlank(apiSql.getTransformPlugin())) {
+                    log.info("transform plugin execute");
                     List<JSONObject> sourceData = (List<JSONObject>) (data); //查询类sql的返回结果才可以这样强制转换，只有查询类sql才可以配置转换插件
                     TransformPlugin transformPlugin = PluginManager.getTransformPlugin(apiSql.getTransformPlugin());
                     data = transformPlugin.transform(sourceData, apiSql.getTransformPluginParams());
@@ -169,15 +139,6 @@ public class APIServlet extends HttpServlet {
             ResponseDto fail = ResponseDto.fail(e.getMessage() == null ? e.toString() : e.getMessage());
             return fail;
         }
-    }
-
-    public boolean checkAuth(List<String> authGroups, String group) {
-        for (String authGroup : authGroups) {
-            if (authGroup.equals(group)) {
-                return true;
-            }
-        }
-        return false;
     }
 
 }

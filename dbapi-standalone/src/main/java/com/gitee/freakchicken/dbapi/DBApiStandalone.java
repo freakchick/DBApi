@@ -1,6 +1,7 @@
 package com.gitee.freakchicken.dbapi;
 
-import com.gitee.freakchicken.dbapi.basic.filter.APIFilter;
+import com.gitee.freakchicken.dbapi.basic.filter.ApiAuthFilter;
+import com.gitee.freakchicken.dbapi.basic.filter.ApiIPFilter;
 import com.gitee.freakchicken.dbapi.basic.servlet.APIServlet;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,6 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.context.annotation.PropertySource;
-
-import java.util.ArrayList;
 
 
 @SpringBootApplication
@@ -37,7 +34,10 @@ public class DBApiStandalone {
 
     //filter 会自动全局注册
     @Autowired
-    APIFilter apiFilter;
+    ApiIPFilter apiIPFilter;
+
+    @Autowired
+    ApiAuthFilter apiAuthFilter;
 
     @Bean
     public ServletRegistrationBean getServletRegistrationBean() {
@@ -47,13 +47,22 @@ public class DBApiStandalone {
     }
 
     @Bean
-    public FilterRegistrationBean getFilter() {
+    public FilterRegistrationBean IPFilter() {
         FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-        registrationBean.setFilter(apiFilter);
-        //ArrayList<String> urls = new ArrayList<>();
-       // urls.add(String.format("/%s/*", apiContext));//配置过滤规则
+        registrationBean.setFilter(apiIPFilter);
         registrationBean.addUrlPatterns(String.format("/%s/*", apiContext));
         registrationBean.setOrder(1);
+        registrationBean.setEnabled(true);
+        return registrationBean;
+    }
+
+    @Bean
+    public FilterRegistrationBean authFilter() {
+        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+        registrationBean.setFilter(apiAuthFilter);
+        registrationBean.addUrlPatterns(String.format("/%s/*", apiContext));
+        registrationBean.setOrder(2);
+        registrationBean.setEnabled(true);
         return registrationBean;
     }
 }

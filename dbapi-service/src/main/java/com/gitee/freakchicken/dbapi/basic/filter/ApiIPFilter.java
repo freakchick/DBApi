@@ -16,7 +16,7 @@ import java.io.PrintWriter;
 
 @Slf4j
 @Component
-public class APIFilter implements Filter {
+public class ApiIPFilter implements Filter {
 
     @Autowired
     IPService ipService;
@@ -28,7 +28,7 @@ public class APIFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException {
-        log.debug("filter execute");
+        log.debug("IP filter execute");
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
