@@ -55,16 +55,17 @@ public class ApiIPFilter implements Filter {
 
             boolean checkIP = ipService.checkIP(originIp);
             if (!checkIP) {
-//                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 out = response.getWriter();
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 out.append(JSON.toJSONString(ResponseDto.fail("Illegal ip (" + originIp + "), access forbidden")));
 
             } else {
                 filterChain.doFilter(servletRequest, servletResponse);
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.append(JSON.toJSONString(ResponseDto.fail(e.toString())));
+            log.error(e.toString());
 
         } finally {
             if (out != null)

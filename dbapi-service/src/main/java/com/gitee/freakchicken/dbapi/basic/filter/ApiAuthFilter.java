@@ -95,8 +95,9 @@ public class ApiAuthFilter implements Filter {
             filterChain.doFilter(servletRequest, servletResponse);
 
         } catch (Exception e) {
-            e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.append(JSON.toJSONString(ResponseDto.fail(e.toString())));
+            log.error(e.toString());
 
         } finally {
             if (out != null)

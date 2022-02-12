@@ -176,7 +176,7 @@ public class ApiConfigService {
 
     @Cacheable(value = "api", key = "#path", unless = "#result == null")
     public ApiConfig getConfig(String path) {
-        log.info("--------------------");
+        log.info("get api config from db");
         ApiConfig apiConfig = apiConfigMapper.selectByPathOnline(path);
         List<ApiSql> apiSqls = apiSqlMapper.selectByApiId(apiConfig.getId());
         apiConfig.setSqlList(apiSqls);

@@ -129,12 +129,11 @@ export default {
         if (response.status == 200) {
           this.showTable = false
           this.response = JSON.stringify(response.data)
-        } else {
-          this.$message.error(response.response.data.msg)
         }
 
       }).catch((error) => {
-        this.$message.error("Failed")
+        // 只要状态码不是200都会进入catch逻辑
+        this.$message.error(error.response.data.msg)
       })
 
     },
