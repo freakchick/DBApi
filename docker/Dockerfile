@@ -1,9 +1,9 @@
-FROM openjdk:8-jre-slim-buster
+FROM freakchicken/java8:1.0
 
 ARG VERSION
 ENV DOCKER true
 
-ADD ./DBApi-${VERSION}-bin.tar.gz /opt/
+ADD ../dist/DBApi-${VERSION}-bin.tar.gz /opt/
 WORKDIR /opt/DBApi-${VERSION}-bin
 
 
