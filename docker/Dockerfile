@@ -3,9 +3,9 @@ FROM freakchicken/java8:1.0
 ARG VERSION
 ENV DOCKER true
 
-ADD ../dist/DBApi-${VERSION}-bin.tar.gz /opt/
-WORKDIR /opt/DBApi-${VERSION}-bin
+ADD DBApi-${VERSION}-bin.tar.gz /opt/
 
+WORKDIR /opt/DBApi-${VERSION}
 
 COPY ./init_config.sh /opt/init_config.sh
 
@@ -14,4 +14,4 @@ RUN sh /opt/init_config.sh
 
 EXPOSE 8520 8523 8524 8525
 
-ENTRYPOINT sh bin/dbapi.sh start $1
+ENTRYPOINT sh bin/dbapi.sh start standalone

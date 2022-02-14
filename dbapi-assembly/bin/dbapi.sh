@@ -106,7 +106,7 @@ case $startStop in
     if [ "$DOCKER" = "true" ]; then
       echo start $command in docker
       export DBAPI_OPTS="$DBAPI_OPTS -XX:-UseContainerSupport"
-      exec_command="$PROFILES $DBAPI_OPTS -classpath $cp $CLASS"
+      exec_command="$PROFILES -classpath $cp $CLASS"
       java $exec_command
     else
       [ -w "$DBAPI_PID_DIR" ] || mkdir -p "$DBAPI_PID_DIR"
