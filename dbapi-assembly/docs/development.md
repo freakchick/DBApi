@@ -21,18 +21,3 @@ mvn clean package -P release
 mvn docker:build
 mvn docker:push
 ```
-
-### 启动
-
-- 前端启动
-`dbapi-ui` 目录下 `npm run serve`
-- 后端启动:
-`dbapi-core`目录下启动主类`com.gitee.freakchicken.DBApiManager`
-- 前端访问地址：
-```
-http://localhost:8521
-```
-- 后端接口访问地址：
-```
-http://localhost:8520
-```

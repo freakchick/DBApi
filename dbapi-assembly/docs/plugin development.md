@@ -21,7 +21,7 @@
 <dependency>
     <groupId>com.gitee.freakchicken.dbapi</groupId>
     <artifactId>dbapi-plugin</artifactId>
-    <version>2.3.2</version>
+    <version>3.0.0</version>
     <scope>provided</scope>
 </dependency>
 ```
@@ -48,11 +48,11 @@ public class Cdemo extends CachePlugin {
    * 缓存设置
    *
    * @param config api配置
-   * @param params request参数
+   * @param requestParams request参数
    * @param data   要缓存的数据
    */
   @Override
-  public void set(ApiConfig config, Map<String, Object> params, Object data) {
+  public void set(ApiConfig config, Map<String, Object> requestParams, Object data) {
 
   }
 
@@ -70,11 +70,11 @@ public class Cdemo extends CachePlugin {
    * 查询缓存
    *
    * @param config api配置
-   * @param params request参数
+   * @param requestParams request参数
    * @return
    */
   @Override
-  public Object get(ApiConfig config, Map<String, Object> params) {
+  public Object get(ApiConfig config, Map<String, Object> requestParams) {
     return null;
   }
 }
@@ -101,18 +101,17 @@ import java.util.List;
 public class Tdemo extends TransformPlugin {
     
     /**
-     * sql查询结果数据转换
-     * @param data sql查询出来的结果
-     * @param config Api配置信息
+     * 数据转换逻辑
+     * @param data sql查询结果
+     * @param params 缓存插件局部参数
      * @return
      */
-    @Override
-    public Object transform(List<JSONObject> data, ApiConfig config) {
+    public abstract Object transform(List<JSONObject> data, String params){
         return null;
     }
 }
 ```
-- 数据转换逻辑写在`transform`方法里，第一个参数就是sql查询结果，第二个参数是API的配置
+- 数据转换逻辑写在`transform`方法里，第一个参数就是sql查询结果，第二个参数是插件局部参数
 
 ### 2.4 插件日志打印
 - 如果想在插件内打印日志，推荐直接调用父类的`logger`
@@ -144,14 +143,17 @@ String ip = PluginConf.getKey("RedisCachePlugin.ip")
 - 比如针对redis缓存插件，不同的API需要设置不同的缓存时间， 那么每个API调用同一个缓存插件的时候，就可以传递不同的时间参数进去。
 又比如针对字段加密插件，每个API需要加密的字段都不一样，那么每个API调用同一个字段加密插件的时候，就可以传递不同的字段名参数进去。
 这样可以让一个插件灵活的被多个API复用。
-- 代码获取插件局部参数值，从`ApiConfig`类中获取：
+
+- 代码获取插件局部参数值的方法：
 ```java
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
 
-// 获取缓存插件参数
+// 缓存插件获取局部参数，从ApiConfig获取
 String params = ApiConfig.getCachePluginParams();
-// 获取转换插件参数
-String params2 = ApiConfig.getTransformPluginParams();
+
+// 数据转换插件获取局部参数，直接就是transform方法的params参数
+public abstract Object transform(List<JSONObject> data, String params){
+
 ```
 ![](https://freakchicken.gitee.io/images/dbApi/20211016/plugin_param.png)
 
