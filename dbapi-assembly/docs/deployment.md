@@ -1,5 +1,14 @@
 # 部署教程
 
+## 本地部署单机版
+
+## 本地部署集群版
+
+
+## docker部署单机版
+
+## docker部署集群版
+
 ```shell
 docker run -it \
 -e ROLE=standalone \
