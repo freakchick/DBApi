@@ -1,4 +1,5 @@
 #!/bin/bash
+echo "execute init_config.sh"
 
 export DBAPI_API_CONTEXT=${API_CONTEXT:-"api"}
 
