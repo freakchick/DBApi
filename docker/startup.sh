@@ -6,4 +6,4 @@ echo `pwd`
 source /opt/init_config.sh
 echo `pwd`
 echo "bin/dbapi.sh start $1"
-source bin/dbapi.sh start $1
+exec bin/dbapi.sh start $1
