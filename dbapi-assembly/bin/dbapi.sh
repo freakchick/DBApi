@@ -16,10 +16,8 @@ shift
 echo "Begin $startStop $command......"
 
 BIN_DIR=`dirname $0`
-echo $BIN_DIR
 BIN_DIR=`cd "$BIN_DIR"; pwd`
 DBAPI_HOME=`cd "$BIN_DIR/.."; pwd`
-echo $DBAPI_HOME
 
 export HOSTNAME=`hostname`
 
@@ -109,7 +107,7 @@ case $startStop in
       echo start $command in docker
       export DBAPI_OPTS="$DBAPI_OPTS -XX:-UseContainerSupport"
       exec_command="$PROFILES -classpath $cp $CLASS"
-      echo $exec_command
+#      echo $exec_command
       java $exec_command
     else
       [ -w "$DBAPI_PID_DIR" ] || mkdir -p "$DBAPI_PID_DIR"

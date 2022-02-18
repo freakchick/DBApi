@@ -1,5 +1,6 @@
-#!/bin/bash
-echo "execute init_config.sh"
+#!/bin/sh
+
+# 将docker启动时命令行中指定的-e参数设置到spring认识的环境变量
 
 export DBAPI_API_CONTEXT=${API_CONTEXT:-"api"}
 
