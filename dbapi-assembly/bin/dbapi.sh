@@ -16,8 +16,10 @@ shift
 echo "Begin $startStop $command......"
 
 BIN_DIR=`dirname $0`
+echo $BIN_DIR
 BIN_DIR=`cd "$BIN_DIR"; pwd`
 DBAPI_HOME=`cd "$BIN_DIR/.."; pwd`
+echo $DBAPI_HOME
 
 export HOSTNAME=`hostname`
 
