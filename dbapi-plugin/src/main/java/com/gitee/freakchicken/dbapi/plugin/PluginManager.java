@@ -35,6 +35,7 @@ public class PluginManager {
             try {
                 Class clazz = Class.forName(className);
                 TransformPlugin plugin = (TransformPlugin) clazz.newInstance();
+                plugin.init();
                 transformPlugins.put(className, plugin);
                 return transformPlugins.get(className);
             } catch (Exception e) {

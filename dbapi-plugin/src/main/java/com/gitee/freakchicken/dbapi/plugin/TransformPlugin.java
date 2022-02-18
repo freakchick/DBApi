@@ -9,11 +9,17 @@ import java.util.List;
 
 public abstract class TransformPlugin {
 
-    Logger logger = LoggerFactory.getLogger(TransformPlugin.class);
+    public Logger logger = LoggerFactory.getLogger(CachePlugin.class);
+
+    /**
+     * 插件初始化方法，实例化插件的时候执行，永远只会执行一次，
+     */
+    public abstract void init();
 
     /**
      * 数据转换逻辑
-     * @param data sql查询结果
+     *
+     * @param data   sql查询结果
      * @param params 缓存插件局部参数
      * @return
      */
