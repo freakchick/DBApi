@@ -3,6 +3,7 @@
 
 - 安装jdk8+
 - 安装node.js
+- 安装nacos
 - (可选)npm设置国内源
 ```shell
 npm config set registry https://registry.npm.taobao.org
@@ -12,12 +13,8 @@ npm config set registry https://registry.npm.taobao.org
 ```shell script
 mvn clean package -P release
 ```
-
 ### 构建镜像
 
-- 在`dbapi-assembly`目录下
-
 ```shell script
-mvn docker:build
-mvn docker:push
+sh docker/build.sh
 ```
