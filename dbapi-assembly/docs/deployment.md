@@ -8,7 +8,7 @@
 - 下载安装包解压到需要安装的目录
 - 修改`conf/application.properties`文件中的以下配置
 ```properties
-# api访问路径的统一根路径，example: http://127.0.0.1:8520/api/xxx
+# api访问路径的统一根路径，example: http://192.168.xx.xx:8520/api/xxx
 # api context
 dbapi.api.context=api
 
@@ -26,6 +26,8 @@ sh bin/dbapi-daemon.sh start standalone
 sh bin/dbapi-daemon.sh stop standalone
 ```
 - 如果是windows系统请双击`bin/dbapi.bat`文件启动
+
+- 浏览器访问`http://192.168.xx.xx:8520`进入UI
 
 ## 本地部署集群版
 
@@ -48,7 +50,7 @@ done
 
 - 修改`conf/application.properties`文件中的以下配置
 ```properties
-# api访问路径的统一根路径，example: http://127.0.0.1:8520/api/xxx
+# api访问路径的统一根路径，example: http://192.168.xx.xx:8520/api/xxx
 # api context
 dbapi.api.context=api
 
@@ -66,7 +68,7 @@ spring.datasource.password=root
 ```
 
 - 修改`conf/install_config.conf`文件，配置要安装的机器节点
-```
+```shell
 # 所有要安装DBApi的主机ip或hostname，用逗号分隔
 ips=host1,host2,host3
 
@@ -106,6 +108,8 @@ sh bin/dbapi-daemon.sh stop apiServer
 
 ```
 
+- 浏览器访问`http://192.168.xx.xx:8523`进入UI; API通过gateway来访问`http://192.168.xx.xx:8525/api/xx`
+
 ## docker部署单机版
 
 - 一键启动（使用dbapi自带的元数据库sqlite）
@@ -124,24 +128,12 @@ docker run -it \
 -e DB_DRIVER="com.mysql.cj.jdbc.Driver" \
 freakchicken/db-api:3.0.0
 ```
+- 浏览器访问`http://192.168.xx.xx:8520`进入UI
 
 ## docker部署集群版
 
 - 集群部署依赖nacos和mysql，请先自行安装nacos和mysql
-- 在mysql创建新的数据库
-- 初始化数据库，进行创建表及基础数据导入
-
-```shell
-# 下载安装包，执行包内的mysql初始化脚本sql/ddl_mysql.sql
-# 或者使用docker进行数据库初始化
-docker run -it 
--e DB_URL="jdbc:mysql://192.168.xx.xx:3306/dbapi?useSSL=false&characterEncoding=UTF-8&serverTimezone=GMT%2B8" \
--e DB_USERNAME="root" \
--e DB_PASSWORD="root" \
--e DB_DRIVER="com.mysql.cj.jdbc.Driver" \
---entrypoint="sh bin/init-mysql.sh" \
-freakchicken/db-api:3.0.0
-```
+- 在mysql创建新的数据库，执行数据库初始化脚本（下载安装包解压获取`sql/ddl_mysql.sql`脚本）
 
 - 启动UI服务manager
 ```shell
@@ -190,3 +182,5 @@ docker run -it \
 -e NACOS_NAMESPACE="public" \
 freakchicken/db-api:3.0.0
 ```
+
+- 浏览器访问`http://192.168.xx.xx:8523`进入UI; API通过gateway来访问`http://192.168.xx.xx:8525/api/xx`
