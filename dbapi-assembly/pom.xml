@@ -17,7 +17,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
-        <docker.image.prefix>freakchicken</docker.image.prefix>
         <maven.install.skip>true</maven.install.skip> <!--install的时候跳过-->
         <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
@@ -67,38 +66,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>1.2.2</version>
-
-                <configuration>
-
-                    <imageName>${docker.image.prefix}/db-api</imageName>
-                    <baseImage>openjdk:8</baseImage>
-                    <workdir>DBApi-${project.version}/bin</workdir>
-                    <entryPoint>["sh", "dbApi.sh", "start"]</entryPoint>
-                    <exposes>
-                        <expose>8520</expose>
-                    </exposes>
-                    <imageTags>
-                        <imageTag>${project.version}</imageTag>
-                    </imageTags>
-                    <forceTags>true</forceTags>
-                    <resources>
-                        <resource>
-                            <targetPath>/</targetPath>
-                            <directory>${project.basedir}/../dist</directory>
-                            <!--tar包上传会自动解压-->
-                            <include>DBApi-${project.version}-bin.tar.gz</include>
-                        </resource>
-                    </resources>
-                    <serverId>docker-hub</serverId>
-                    <registryUrl>https://index.docker.io/v1/</registryUrl>
-
-                </configuration>
             </plugin>
 
         </plugins>
