@@ -31,7 +31,7 @@ sh bin/dbapi-daemon.sh stop standalone
 
 ## 本地部署集群版
 
-- 集群部署依赖nacos和mysql，请先自行安装nacos和mysql
+- 集群部署依赖nacos和mysql，请先自行安装nacos(推荐1.4.2版本)和mysql
 - 准备多台机器，每台安装jdk8+并配置java环境变量
 - 选一台机器host1作为部署机，配置host1到其他每台机器的ssh免密登录
 ```shell
@@ -132,7 +132,7 @@ freakchicken/db-api:3.0.0
 
 ## docker部署集群版
 
-- 集群部署依赖nacos和mysql，请先自行安装nacos和mysql
+- 集群部署依赖nacos和mysql，请先自行安装nacos(推荐1.4.2版本)和mysql
 - 在mysql创建新的数据库，执行数据库初始化脚本（下载安装包解压获取`sql/ddl_mysql.sql`脚本）
 
 - 启动UI服务manager
@@ -184,3 +184,9 @@ freakchicken/db-api:3.0.0
 ```
 
 - 浏览器访问`http://192.168.xx.xx:8523`进入UI; API通过gateway来访问`http://192.168.xx.xx:8525/api/xx`
+
+## 附：
+- docker快速安装nacos
+```
+docker run --env MODE=standalone --name nacos -d -p 8848:8848 nacos/nacos-server:1.4.2
+```
