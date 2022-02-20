@@ -145,6 +145,11 @@ public class ApiConfigController {
         }
     }
 
+    @RequestMapping("/mode")
+    public String mode() {
+        return mode;
+    }
+
     @RequestMapping("/apiDocs")
     public void apiDocs(String ids, HttpServletResponse response) {
         List<String> collect = Arrays.asList(ids.split(","));

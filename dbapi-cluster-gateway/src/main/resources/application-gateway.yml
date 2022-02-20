@@ -1,4 +1,3 @@
-
 spring:
   application:
     name: ${dbapi.cluster.gateway.name}
@@ -16,8 +15,10 @@ spring:
             allowed-origins: '*'
             allowed-methods: '*'
             allowed-headers: "*"
+logging:
+  config: classpath:logback-gateway.xml
+
+#################################### please modify config below #####################################
 
 server:
   port: 8525
-logging:
-  config: classpath:logback-gateway.xml
