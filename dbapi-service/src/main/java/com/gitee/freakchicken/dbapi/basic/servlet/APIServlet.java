@@ -65,7 +65,7 @@ public class APIServlet extends HttpServlet {
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             out.append(JSON.toJSONString(ResponseDto.fail(e.toString())));
-            log.error(e.toString());
+            log.error(e.toString(), e);
         } finally {
             if (out != null)
                 out.close();
