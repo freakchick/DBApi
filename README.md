@@ -23,65 +23,21 @@
 
 ## 特点
 - 开箱即用，不需要编程，不需要依赖其他软件（只需要java运行环境）
-- 支持动态添加、修改api；支持api上线、下线管理
+- 支持单机模式、集群模式；支持云原生容器化部署
 - 支持API级别的访问权限控制，支持IP白名单、黑名单控制
-- 支持多数据源连接，支持动态添加、修改、删除数据源
-- 支持所有类型数据库（JDBC连接方式），包括mysql/sqlserver/postgreSql/hive/kylin/clickhouse/oracle等等
-- 支持动态sql，类似mybatis的动态sql
-- 支持sql编辑调试，包括动态sql的调试
-- 支持API结果缓存，支持缓存开启/关闭（通过缓存插件实现）
-- 支持自定义代码逻辑的数据转换，比如数据脱敏
+- 支持所有类型数据库（JDBC连接方式），包括mysql/sqlserver/postgreSql/hive/oracle等等
+- 支持动态sql，类似mybatis的动态sql，支持sql编辑运行调试
+- 支持API结果缓存，支持缓存开启/关闭（通过插件实现）
+- 支持自定义代码逻辑的数据转换，比如数据脱敏（通过插件实现）
 - 支持API配置导入导出，方便测试环境到生产环境的API迁移
+- 支持一个接口内多条SQL执行（例如分页功能）
 
 ## 视频教程
 [查看视频教程](https://www.bilibili.com/video/BV1zL411G7Qh)
 
 ## 安装教程
 
-- 依赖java环境，需要安装jdk8+，并配置java环境变量
-- 下载地址： [天翼云盘](https://cloud.189.cn/t/Jza2MzeEZVNv) ，或者在发行版页面下载
-
-### 1. tar包安装
-
-- 下载`DBApi-[version]-bin.tar.gz`包
-- 解压tar包，修改`conf/application.properties`文件中的配置:
-
-- （可选）如果您想使用自己的mysql作为元数据库，请修改`conf/application.properties`文件中的以下配置
-
-```properties
-# 如果您使用了mysql作为自己的元数据库，启动前请在数据库执行初始化sql脚本，脚本在sql/目录下
-spring.datasource.driver-class-name=
-spring.datasource.url=
-spring.datasource.username=
-spring.datasource.password=
-```
-
-- linux操作命令
-
-```shell
-# 前台启动
-sh bin/dbApi.sh start
-# 后台启动
-sh bin/dbApi.sh -d start
-# 关闭后台启动的进程
-sh bin/dbApi.sh stop
-```
-
-- windows操作命令
-
-```shell
-# 前台启动, 或者直接双击 `bin/dbApi.bat` 文件启动
-bin/dbApi.bat
-```
-- 启动后浏览器访问 `http://ip:8520` ，默认登录账户： admin/admin
-
-### 2.docker安装
-
-```shell script
-docker run -d -p 8520:8520 freakchicken/db-api
-```
-
-- 启动后浏览器访问 `http://ip:8520` ，默认登录账户： admin/admin
+- 请阅读 [安装教程](./dbapi-assembly/docs/deployment.md)
 
 ## 软件截图
 ![](https://freakchicken.gitee.io/images/dbApi/20210904/api.png)
@@ -119,6 +75,7 @@ docker run -d -p 8520:8520 freakchicken/db-api
 
 ### 微信：
 - 提问请先star支持一下，提问前请先把文档读一遍，文档里写过的问题不会回答
+- 加微信群请备注`dbapi加群`
 <div style="text-align: center"> 
 <img src="https://freakchicken.gitee.io/images/kafkaui/wechat.jpg" width = "30%" />
 </div>
@@ -142,3 +99,14 @@ docker run -d -p 8520:8520 freakchicken/db-api
 <img src="https://freakchicken.gitee.io/images/kafkaui/wechatpay.jpg" width = "30%" />
 <img src="https://freakchicken.gitee.io/images/kafkaui/alipay.jpg" width = "29%" />
 </div>
+
+## TODO
+- 支持`object`、`List<object>` 类型参数
+- 支持API调用记录监控
+- 支持API报错邮件告警
+- 数据源密码加密
+- api熔断支持
+- 请求路由参数支持
+- 流量监控支持，ip限流，分组限流
+- 功能性api支持（RPC调用）
+- 分库分表数据源支持（shardingSphere/mycat）

@@ -11,6 +11,6 @@ COPY docker/startup.sh /opt/startup.sh
 
 WORKDIR /opt/DBApi-${VERSION}
 
-EXPOSE 8520 8523 8524 8525
+EXPOSE 8520 8523 8525
 
 ENTRYPOINT sh /opt/startup.sh $ROLE

@@ -23,16 +23,14 @@
 
 ## 特点
 - 开箱即用，不需要编程，不需要依赖其他软件（只需要java运行环境）
-- 支持集群/standalone/docker多种模式部署
-- 支持动态添加、修改api；支持api上线、下线管理
+- 支持单机模式、集群模式；支持云原生容器化部署
 - 支持API级别的访问权限控制，支持IP白名单、黑名单控制
-- 支持多数据源连接，支持动态添加、修改、删除数据源
-- 支持所有类型数据库（JDBC连接方式），包括mysql/sqlserver/postgreSql/hive/kylin/clickhouse/oracle等等
-- 支持动态sql，类似mybatis的动态sql
-- 支持sql编辑调试，包括动态sql的调试
-- 支持API结果缓存，支持缓存开启/关闭（通过缓存插件实现）
-- 支持自定义代码逻辑的数据转换，比如数据脱敏
+- 支持所有类型数据库（JDBC连接方式），包括mysql/sqlserver/postgreSql/hive/oracle等等
+- 支持动态sql，类似mybatis的动态sql，支持sql编辑运行调试
+- 支持API结果缓存，支持缓存开启/关闭（通过插件实现）
+- 支持自定义代码逻辑的数据转换，比如数据脱敏（通过插件实现）
 - 支持API配置导入导出，方便测试环境到生产环境的API迁移
+- 支持一个接口内多条SQL执行（例如分页功能）
 
 ## 视频教程
 [查看视频教程](https://www.bilibili.com/video/BV1zL411G7Qh)
@@ -103,14 +101,12 @@
 </div>
 
 ## TODO
-- 支持object、List<object> 类型参数
+- 支持`object`、`List<object>` 类型参数
 - 支持API调用记录监控
 - 支持API报错邮件告警
 - 数据源密码加密
-- 集群版本开发，支持微服务注册consul/eureka/nacos
 - api熔断支持
 - 请求路由参数支持
 - 流量监控支持，ip限流，分组限流
-
 - 功能性api支持（RPC调用）
 - 分库分表数据源支持（shardingSphere/mycat）
