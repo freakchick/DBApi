@@ -8,6 +8,7 @@ export default new Vuex.Store({
         sqls: [{sqlText: 'test', id: 0, transformPlugin: null, transformPluginParams: null}],
         seq: 0,
         cmList: [],
+        mode: null
     },
     mutations: {
         addSql(state) {
@@ -41,6 +42,9 @@ export default new Vuex.Store({
             })
             // debugger
             console.log('--------------'+ state.sqls)
+        },
+        setMode(state, payload){
+            state.mode = payload
         }
     },
     actions: {},

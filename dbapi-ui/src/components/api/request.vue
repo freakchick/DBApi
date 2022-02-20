@@ -5,12 +5,10 @@
     <h2>{{ $t('m.request_test') }}</h2>
     <h4>{{ $t('m.url') }}：</h4>
     <el-input v-model="url"></el-input>
-<!--    <div class="url">
-      http://
-      <input v-model="address" class="input"></input>
-      /api/
-      <input v-model="path" class="input"></input>
-    </div>-->
+
+    <el-alert type="warning" show-icon v-show="this.$store.state.mode == 'cluster'"
+              title="如果是外网访问请将网关地址设置为外网IP端口" style="margin-top: 10px;">
+    </el-alert>
     <h4 v-show="previlege == 0">{{ $t('m.header') }}：</h4>
 
     <el-form label-width="150px" style="width: 600px" size="medium" v-show="previlege == 0">

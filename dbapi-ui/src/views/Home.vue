@@ -4,9 +4,9 @@
       <home-header></home-header>
     </div>
 
-        <div class="main">
-          <router-view></router-view>
-        </div>
+    <div class="main">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -25,11 +25,18 @@ export default {
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
     },
+    getMode() {
+      this.axios.post("/apiConfig/mode").then((response) => {
+        this.$store.commit('setMode', response.data)
+      }).catch((error) => {
+
+      })
+    }
 
   },
   components: {homeHeader},
   created() {
-
+    this.getMode()
 
   }
 }

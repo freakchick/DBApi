@@ -20,14 +20,15 @@
       </div>
 
     </div>
-<!--    <div class="right">
-      <span>{{ languageName }}</span>
-      <span class="lang el-icon-arrow-down">
-      </span>
-      <div class="options">
-        <div class="option" v-for="item in langs" @click="changeLanguage(item)">{{ item.name }}</div>
-      </div>
-    </div>-->
+    <div class="right">
+      <div class="mode">{{ this.$store.state.mode }}</div>
+      <!--      <span>{{ languageName }}</span>
+            <span class="lang el-icon-arrow-down">
+            </span>
+            <div class="options">
+              <div class="option" v-for="item in langs" @click="changeLanguage(item)">{{ item.name }}</div>
+            </div>-->
+    </div>
   </div>
 </template>
 
@@ -76,7 +77,6 @@ export default {
     line-height: 60px;
     text-align: center;
     color: #045008;
-    //background-color: #fff;
     display: block;
     min-width: 150px;
     width: 200px;
@@ -123,7 +123,7 @@ export default {
           font-weight: 500;
           white-space: nowrap;
           overflow: hidden;
-          text-overflow:ellipsis;
+          text-overflow: ellipsis;
 
 
           &:hover {
@@ -148,6 +148,15 @@ export default {
     position: relative;
 
     background-color: #06B176;
+
+    .mode {
+      font-family: Helvetica;
+      font-weight: 900;
+      font-size: 15px;
+      //color: #045008;
+      //text-shadow: 2px 2px 1px #a5d4b7;
+      line-height: 60px;
+    }
 
     span {
       cursor: pointer;
