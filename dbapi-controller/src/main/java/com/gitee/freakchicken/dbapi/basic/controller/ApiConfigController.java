@@ -3,6 +3,7 @@ package com.gitee.freakchicken.dbapi.basic.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.gitee.freakchicken.dbapi.basic.domain.DataSource;
 import com.gitee.freakchicken.dbapi.basic.domain.Group;
 import com.gitee.freakchicken.dbapi.basic.service.ApiConfigService;
@@ -11,6 +12,7 @@ import com.gitee.freakchicken.dbapi.basic.service.GroupService;
 import com.gitee.freakchicken.dbapi.basic.service.NacosService;
 import com.gitee.freakchicken.dbapi.basic.util.JdbcUtil;
 import com.gitee.freakchicken.dbapi.basic.util.SqlEngineUtil;
+import com.gitee.freakchicken.dbapi.common.ApiSql;
 import com.github.freakchick.orange.SqlMeta;
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
@@ -180,8 +182,8 @@ public class ApiConfigController {
     @RequestMapping("/downloadConfig")
     public void downloadConfig(String ids, HttpServletResponse response) {
         List<String> collect = Arrays.asList(ids.split(","));
-        List<ApiConfig> apiConfigs = apiConfigService.selectBatch(collect);
-        String s = JSON.toJSONString(apiConfigs);
+        JSONObject jo = apiConfigService.selectBatch(collect);
+        String s = jo.toString(SerializerFeature.WriteMapNullValue);
         response.setContentType("application/x-msdownload;charset=utf-8");
         response.setHeader("Content-Disposition", "attachment; filename=api_config.json");
         OutputStream os = null;
@@ -227,9 +229,10 @@ public class ApiConfigController {
     public void uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
 
         String s = IOUtils.toString(file.getInputStream(), "utf-8");
-        List<ApiConfig> configs = JSON.parseArray(s, ApiConfig.class);
-        configs.stream().forEach(t -> t.setStatus(0));
-        apiConfigService.insertBatch(configs);
+        JSONObject jsonObject = JSON.parseObject(s);
+        List<ApiConfig> configs = JSON.parseArray(jsonObject.getJSONArray("api").toJSONString(), ApiConfig.class);
+        List<ApiSql> sqls = JSON.parseArray(jsonObject.getJSONArray("sql").toJSONString(), ApiSql.class);
+        apiConfigService.insertBatch(configs, sqls);
 
     }
 

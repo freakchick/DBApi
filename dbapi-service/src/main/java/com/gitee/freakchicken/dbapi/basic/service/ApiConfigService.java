@@ -189,7 +189,7 @@ public class ApiConfigService {
         apiConfigMapper.updateById(apiConfig);
     }
 
-//    @CacheEvict(value = "api", key = "#path")
+    //    @CacheEvict(value = "api", key = "#path")
     public void offline(String id, String path) {
 
         ApiConfig apiConfig = apiConfigMapper.selectById(id);
@@ -254,17 +254,25 @@ public class ApiConfigService {
 
     }
 
-    public List<ApiConfig> selectBatch(List<String> ids) {
+    public JSONObject selectBatch(List<String> ids) {
         List<ApiConfig> list = apiConfigMapper.selectBatchIds(ids);
-        return list;
+        List<ApiSql> sqls = apiSqlMapper.selectByApiIds(ids);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("api", list);
+        jsonObject.put("sql", sqls);
+        return jsonObject;
     }
 
+
     @Transactional
-    public void insertBatch(List<ApiConfig> configs) {
+    public void insertBatch(List<ApiConfig> configs, List<ApiSql> sqls) {
         configs.stream().forEach(t -> {
             t.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             t.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+            t.setStatus(0);
             apiConfigMapper.insert(t);
         });
+        sqls.stream().forEach(t -> apiSqlMapper.insert(t));
+
     }
 }
