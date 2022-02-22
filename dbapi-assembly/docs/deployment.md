@@ -25,7 +25,6 @@ spring.datasource.password=
 sh bin/dbapi-daemon.sh start standalone
 sh bin/dbapi-daemon.sh stop standalone
 ```
-- 如果是windows系统请双击`bin/dbapi.bat`文件启动
 
 - 浏览器访问`http://192.168.xx.xx:8520`进入UI
 
