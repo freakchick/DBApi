@@ -1,9 +1,11 @@
 package com.gitee.freakchicken.dbapi.basic.servlet;
 
+import com.alibaba.druid.pool.DruidPooledConnection;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.gitee.freakchicken.dbapi.basic.service.*;
 
+import com.gitee.freakchicken.dbapi.basic.util.PoolManager;
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.common.ApiSql;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
@@ -28,6 +30,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -78,7 +82,7 @@ public class APIServlet extends HttpServlet {
         doGet(req, resp);
     }
 
-    public ResponseDto process(String path, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseDto process(String path, HttpServletRequest request, HttpServletResponse response) throws SQLException {
 
 //            // 校验接口是否存在
         ApiConfig config = apiConfigService.getConfig(path);
@@ -103,39 +107,66 @@ public class APIServlet extends HttpServlet {
                 return ResponseDto.apiSuccess(o); //如果缓存有数据直接返回
             }
         }
+
         List<ApiSql> sqlList = config.getSqlList();
-        List<Object> dataList = new ArrayList<>();
-        // sql 执行并转换
-        for (ApiSql apiSql : sqlList) {
-            SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(apiSql.getSqlText(), sqlParam);
-            Object data = JdbcUtil.executeSql(datasource, sqlMeta.getSql(), sqlMeta.getJdbcParamValues());
+        DruidPooledConnection  connection = PoolManager.getPooledConnection(datasource);
+        //执行sql
+        List<Object> dataList = executeSql(connection, sqlList, sqlParam);
+
+        //执行数据转换
+        for (int i = 0; i < sqlList.size(); i++) {
+            ApiSql apiSql = sqlList.get(i);
+            Object data = dataList.get(i);
             //如果此单条sql是查询类sql，并且配置了数据转换插件
-            if (data instanceof Iterable && StringUtils.isNoneBlank(apiSql.getTransformPlugin())) {
+            if (data instanceof Iterable && StringUtils.isNoneBlank()) {
                 log.info("transform plugin execute");
                 List<JSONObject> sourceData = (List<JSONObject>) (data); //查询类sql的返回结果才可以这样强制转换，只有查询类sql才可以配置转换插件
                 TransformPlugin transformPlugin = PluginManager.getTransformPlugin(apiSql.getTransformPlugin());
                 data = transformPlugin.transform(sourceData, apiSql.getTransformPluginParams());
             }
-
-            dataList.add(data);
         }
-
-
         Object res = dataList;
         //如果只有单条sql,返回结果不是数组格式
         if (dataList.size() == 1) {
             res = dataList.get(0);
         }
         ResponseDto dto = ResponseDto.apiSuccess(res);
-
         //设置缓存
         if (StringUtils.isNoneBlank(config.getCachePlugin())) {
             CachePlugin cachePlugin = PluginManager.getCachePlugin(config.getCachePlugin());
             cachePlugin.set(config, sqlParam, dto.getData());
         }
-
         return dto;
+    }
 
+    public List<Object> executeSql(Connection connection, List<ApiSql> sqlList, Map<String, Object> sqlParam) {
+        List<Object> dataList = new ArrayList<>();
+        try {
+            connection.setAutoCommit(false);
+
+            for (ApiSql apiSql : sqlList) {
+                SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(apiSql.getSqlText(), sqlParam);
+                Object data = JdbcUtil.executeSql(connection, sqlMeta.getSql(), sqlMeta.getJdbcParamValues());
+                dataList.add(data);
+            }
+            connection.commit();
+            return dataList;
+        } catch (Exception e) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            throw new RuntimeException(e);
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
 }

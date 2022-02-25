@@ -1,5 +1,6 @@
 package com.gitee.freakchicken.dbapi.basic.controller;
 
+import com.alibaba.druid.pool.DruidPooledConnection;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -11,6 +12,7 @@ import com.gitee.freakchicken.dbapi.basic.service.DataSourceService;
 import com.gitee.freakchicken.dbapi.basic.service.GroupService;
 import com.gitee.freakchicken.dbapi.basic.service.NacosService;
 import com.gitee.freakchicken.dbapi.basic.util.JdbcUtil;
+import com.gitee.freakchicken.dbapi.basic.util.PoolManager;
 import com.gitee.freakchicken.dbapi.basic.util.SqlEngineUtil;
 import com.gitee.freakchicken.dbapi.common.ApiSql;
 import com.github.freakchick.orange.SqlMeta;
@@ -27,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -247,14 +250,23 @@ public class ApiConfigController {
 
     @RequestMapping("/sql/execute")
     public ResponseDto executeSql(String datasourceId, String sql, String params) {
+        DruidPooledConnection connection = null;
         try {
             DataSource dataSource = dataSourceService.detail(datasourceId);
+            connection = PoolManager.getPooledConnection(dataSource);
             Map<String, Object> map = JSON.parseObject(params, Map.class);
             SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(sql, map);
-            Object data = JdbcUtil.executeSql(dataSource, sqlMeta.getSql(), sqlMeta.getJdbcParamValues());
+            Object data = JdbcUtil.executeSql(connection, sqlMeta.getSql(), sqlMeta.getJdbcParamValues());
             return ResponseDto.successWithData(data);
         } catch (Exception e) {
             return ResponseDto.fail(e.getMessage());
+        } finally {
+            try {
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
     }
