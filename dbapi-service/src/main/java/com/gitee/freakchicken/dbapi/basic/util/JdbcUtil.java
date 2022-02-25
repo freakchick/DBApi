@@ -19,10 +19,11 @@ public class JdbcUtil {
         return resultSet;
     }
 
-    public static Connection getConnection(DataSource ds) throws SQLException {
+    public static Connection getConnection(DataSource ds) throws Exception {
         try {
             Class.forName(ds.getDriver());
-            Connection connection = DriverManager.getConnection(ds.getUrl(), ds.getUsername(), ds.getPassword());
+            String password = ds.isEdit_password() ? ds.getPassword() : DESUtils.decrypt(ds.getPassword());
+            Connection connection = DriverManager.getConnection(ds.getUrl(), ds.getUsername(),password);
             log.info("successfully connected");
             return connection;
         } catch (ClassNotFoundException e) {

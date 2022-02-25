@@ -17,6 +17,7 @@ const cn = {
         jdbc_driver_class: 'JDBC驱动Class',
         username: '用户名',
         password: '密码',
+        edit_password: '修改',
         sql_query_all_table_name: '查询所有表名称的SQL',
         test_connection: '连接测试',
         save: '保存',

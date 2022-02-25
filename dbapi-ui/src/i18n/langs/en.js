@@ -16,6 +16,7 @@ const en = {
         jdbc_driver_class: 'JDBC Driver Class',
         username: 'Username',
         password: 'Password',
+        edit_password: 'Edit',
         sql_query_all_table_name: 'SQL that get table names',
         test_connection: 'Test Connection',
         save: 'Save',

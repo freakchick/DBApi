@@ -27,6 +27,7 @@ export default {
         "url": data.url,
         "username": data.username,
         "password": data.password,
+        "edit_password": data.edit_password,
         "type": data.type,
         "id": data.id,
         "driver": data.driver,

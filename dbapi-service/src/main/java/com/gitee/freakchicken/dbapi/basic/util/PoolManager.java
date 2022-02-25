@@ -4,6 +4,7 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.DruidPooledConnection;
 import com.gitee.freakchicken.dbapi.basic.domain.DataSource;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -37,6 +38,12 @@ public class PoolManager {
             druidDataSource.setDriverClassName(ds.getDriver());
             druidDataSource.setConnectionErrorRetryAttempts(3);       //失败后重连次数
             druidDataSource.setBreakAfterAcquireFailure(true);
+
+            try {
+                druidDataSource.setPassword(DESUtils.decrypt(ds.getPassword()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             map.put(ds.getId(), druidDataSource);
             log.info("create druid datasource：{}", ds.getName());
