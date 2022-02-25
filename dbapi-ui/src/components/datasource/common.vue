@@ -29,9 +29,11 @@
       <el-form-item :label="$t('m.username')">
         <el-input v-model="detail.username"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('m.password')" style="display: inline-block">
-        <el-input v-model="detail.password" style="min-width: 400px;" type="password"
-                  :disabled="!detail.edit_password"></el-input>
+
+      <el-form-item :label="$t('m.password')"  prop="password" style="display: inline-block">
+        <el-input prefix-icon="el-icon-lock" placeholder="请输入密码" style="min-width: 400px;" :type="[flag?'text':'password']"  v-model="detail.password" :disabled="!detail.edit_password">
+          <i slot="suffix" :class="[flag?'el-icon-minus':'el-icon-view']" style="margin-top:8px;font-size:18px;" autocomplete="auto"  @click="flag=!flag" />
+        </el-input>
       </el-form-item>
       <el-form-item :label="$t('m.edit_password')" label-width="100%" style="margin-left:20px; display: inline-block">
         <el-checkbox v-model="detail.edit_password" @change="checked"></el-checkbox>
@@ -52,6 +54,7 @@ export default {
   name: "common",
   data() {
     return {
+      flag: false,
       options: [{label: 'mysql', value: 'mysql'}, {label: 'postgresql',value: 'postgresql'}, {label: 'hive',value: 'hive'},
         {label: 'sqlserver',value: 'sqlserver'}, {label: 'clickhouse',value: 'clickhouse'}, {label: 'kylin',value: 'kylin'},
          {label: 'oracle',value: 'oracle'}, {label: '其他',value:'others'}],
