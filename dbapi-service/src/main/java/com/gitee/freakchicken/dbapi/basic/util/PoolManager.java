@@ -34,7 +34,7 @@ public class PoolManager {
             druidDataSource.setName(ds.getName());
             druidDataSource.setUrl(ds.getUrl());
             druidDataSource.setUsername(ds.getUsername());
-            druidDataSource.setPassword(ds.getPassword());
+//            druidDataSource.setPassword(ds.getPassword());
             druidDataSource.setDriverClassName(ds.getDriver());
             druidDataSource.setConnectionErrorRetryAttempts(3);       //失败后重连次数
             druidDataSource.setBreakAfterAcquireFailure(true);
@@ -42,7 +42,7 @@ public class PoolManager {
             try {
                 druidDataSource.setPassword(DESUtils.decrypt(ds.getPassword()));
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
 
             map.put(ds.getId(), druidDataSource);
