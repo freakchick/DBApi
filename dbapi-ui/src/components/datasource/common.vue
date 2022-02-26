@@ -29,8 +29,14 @@
       <el-form-item :label="$t('m.username')">
         <el-input v-model="detail.username"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('m.password')">
-        <el-input v-model="detail.password" type="password"></el-input>
+
+      <el-form-item :label="$t('m.password')"  prop="password" style="display: inline-block">
+        <el-input prefix-icon="el-icon-lock" placeholder="请输入密码" style="min-width: 400px;" :type="[flag?'text':'password']"  v-model="detail.password" :disabled="!detail.edit_password">
+          <i slot="suffix" :class="[flag?'el-icon-minus':'el-icon-view']" style="margin-top:8px;font-size:18px;" autocomplete="auto"  @click="flag=!flag" />
+        </el-input>
+      </el-form-item>
+      <el-form-item :label="$t('m.edit_password')" label-width="100%" style="margin-left:20px; display: inline-block">
+        <el-checkbox v-model="detail.edit_password" @change="checked"></el-checkbox>
       </el-form-item>
       <el-form-item :label="$t('m.sql_query_all_table_name')">
         <el-input v-model="detail.tableSql"></el-input>
@@ -48,6 +54,7 @@ export default {
   name: "common",
   data() {
     return {
+      flag: false,
       options: [{label: 'mysql', value: 'mysql'}, {label: 'postgresql',value: 'postgresql'}, {label: 'hive',value: 'hive'},
         {label: 'sqlserver',value: 'sqlserver'}, {label: 'clickhouse',value: 'clickhouse'}, {label: 'kylin',value: 'kylin'},
          {label: 'oracle',value: 'oracle'}, {label: '其他',value:'others'}],
@@ -58,6 +65,7 @@ export default {
         type: null,
         username: null,
         password: null,
+        edit_password: false,
         driver: null,
         tableSql: null
       },
@@ -101,6 +109,11 @@ export default {
   },
   props: ["id"],
   methods: {
+    checked(){
+      if (this.detail.edit_password){
+        this.detail.password = null;
+      }
+    },
     selectDB() {
       this.detail.url = (this.ds[this.detail.type]).url
       this.detail.driver = (this.ds[this.detail.type]).driver
@@ -118,6 +131,7 @@ export default {
         "url": this.detail.url,
         "username": this.detail.username,
         "password": this.detail.password,
+        "edit_password": this.detail.edit_password,
         "driver": this.detail.driver
       }).then((response) => {
         if (response.data.success)

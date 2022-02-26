@@ -34,6 +34,12 @@ public class DataSource {
     @TableField
     String password;
 
+    /**
+     * true 修改密码 false不修改
+     */
+    @TableField(exist = false)
+    boolean edit_password;
+
     @TableField
     String type;
 

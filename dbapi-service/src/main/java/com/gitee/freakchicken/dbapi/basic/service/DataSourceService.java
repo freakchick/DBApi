@@ -3,6 +3,7 @@ package com.gitee.freakchicken.dbapi.basic.service;
 import com.gitee.freakchicken.dbapi.basic.dao.ApiConfigMapper;
 import com.gitee.freakchicken.dbapi.basic.dao.DataSourceMapper;
 import com.gitee.freakchicken.dbapi.basic.domain.DataSource;
+import com.gitee.freakchicken.dbapi.basic.util.DESUtils;
 import com.gitee.freakchicken.dbapi.basic.util.PoolManager;
 import com.gitee.freakchicken.dbapi.basic.util.UUIDUtil;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
@@ -46,6 +47,13 @@ public class DataSourceService {
         dataSource.setId(UUIDUtil.id());
         dataSource.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         dataSource.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+
+        //新增数据源对密码加密
+        try {
+            dataSource.setPassword(DESUtils.encrypt(dataSource.getPassword()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         dataSourceMapper.insert(dataSource);
     }
 
@@ -53,6 +61,14 @@ public class DataSourceService {
     @Transactional
     public void update(DataSource dataSource) {
         dataSource.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        //如果修改了密码, 需要对密码加密
+        if (dataSource.isEdit_password()){
+            try {
+                dataSource.setPassword(DESUtils.encrypt(dataSource.getPassword()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         dataSourceMapper.updateById(dataSource);
         PoolManager.removeJdbcConnectionPool(dataSource.getId());
         cacheManager.getCache("datasource").evictIfPresent(dataSource.getId());
