@@ -58,7 +58,7 @@
             <div v-for="(item,index) in this.$store.state.sqls"
                  :class="{'tab':true,'tab-active':currentIndex === index}">
               <div @click="focusCM(index)" class="text">
-                SQL-{{ item.id }}
+                SQL-{{ item.label }}
               </div>
               <span @click="removeTab(index)" class="el-icon-circle-close close" v-if="index > 0"></span>
             </div>

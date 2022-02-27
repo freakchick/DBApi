@@ -206,15 +206,14 @@ export default {
     }
   },
   mounted() {
-    console.log('mount----+++')
     this.getAddress()
+    //编辑页面
     if (this.id != undefined) {
-      console.log('edit api page')
       this.getDetail(this.id)
     }
+    // 新增页面
     else {
-      console.log('add api page')
-      this.$store.commit('initSqls', [{sqlText: '-- 请输入sql', transformPlugin: null, transformPluginParams: null}])
+      this.$store.commit('initSqls', [{sqlText: '-- 请输入sql，一个标签只能输入一条sql', transformPlugin: null, transformPluginParams: null}])
     }
     this.getAllGroups()
   },
