@@ -25,6 +25,7 @@ export DBAPI_PID_DIR=$DBAPI_HOME/pid
 export DBAPI_LOG_DIR=$DBAPI_HOME/logs
 export DBAPI_CONF_DIR=$DBAPI_HOME/conf
 export DBAPI_LIB_DIR=$DBAPI_HOME/lib/
+export DBAPI_EXT_LIB_DIR=$DBAPI_HOME/ext_lib/
 
 export STOP_TIMEOUT=5
 
@@ -51,7 +52,15 @@ function contain() {
 }
 #定义classpath变量
 cp=
+# 拼接扩展包目录的jar
+if [ ! -d $DBAPI_EXT_LIB_DIR ];then
+  for tmp in $(ls $DBAPI_EXT_LIB_DIR); do
+    cp=$cp:$DBAPI_EXT_LIB_DIR$tmp #不包含在其中就拼接
+  done
+fi
+
 exclude_jars=()
+
 # 给cp拼接jar包全路径，排除掉不需要的jar
 function generate_classpath() {
   cp=$DBAPI_CONF_DIR
@@ -107,7 +116,7 @@ case $startStop in
       echo start $command in docker
       export DBAPI_OPTS="$DBAPI_OPTS -XX:-UseContainerSupport"
       exec_command="$PROFILES -classpath $cp $CLASS"
-#      echo $exec_command
+      echo $exec_command
       java $exec_command
     else
       [ -w "$DBAPI_PID_DIR" ] || mkdir -p "$DBAPI_PID_DIR"
