@@ -17,9 +17,7 @@ public class DESUtils {
     private final static String DES = "DES";
     private final static String ENCODE = "UTF-8";
 
-    //key 随便写
-    private final static String DES_KEY = "db-api-key";
-
+    private final static String DES_KEY = PropertiesUtil.getKey("dbapi.secret.key");
 
     public static void main(String[] args) {
         String pass = "root123456";
@@ -35,12 +33,10 @@ public class DESUtils {
     }
 
 
-
     /**
      * Description 根据键值进行加密
      *
      * @param data 待加密数据
-     * @param key  密钥
      * @return
      * @throws Exception
      */
@@ -54,17 +50,15 @@ public class DESUtils {
      * 根据键值进行解密
      *
      * @param data 待解密数据
-     * @param key  密钥
      * @return
      * @throws IOException
      * @throws Exception
      */
-    public static String decrypt(String data) throws IOException,
-            Exception {
+    public static String decrypt(String data) throws Exception {
         if (data == null)
             return null;
         BASE64Decoder decoder = new BASE64Decoder();
-        byte[]        buf     = decoder.decodeBuffer(data);
+        byte[] buf = decoder.decodeBuffer(data);
         byte[] bt = decrypt(buf, DES_KEY.getBytes(ENCODE));
         return new String(bt, ENCODE);
     }
@@ -114,7 +108,7 @@ public class DESUtils {
 
         // 创建一个密钥工厂，然后用它把DESKeySpec转换成SecretKey对象
         SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(DES);
-        SecretKey        securekey  = keyFactory.generateSecret(dks);
+        SecretKey securekey = keyFactory.generateSecret(dks);
 
         // Cipher对象实际完成解密操作
         Cipher cipher = Cipher.getInstance(DES);
