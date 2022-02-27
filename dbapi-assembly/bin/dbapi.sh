@@ -52,12 +52,6 @@ function contain() {
 }
 #定义classpath变量
 cp=
-# 拼接扩展包目录的jar
-if [ ! -d $DBAPI_EXT_LIB_DIR ];then
-  for tmp in $(ls $DBAPI_EXT_LIB_DIR); do
-    cp=$cp:$DBAPI_EXT_LIB_DIR$tmp #不包含在其中就拼接
-  done
-fi
 
 exclude_jars=()
 
@@ -109,6 +103,10 @@ else
   echo "Error: No command named '$command' was found."
   exit 1
 fi
+
+for tmp in $(ls $DBAPI_EXT_LIB_DIR); do
+  cp=$cp:$DBAPI_EXT_LIB_DIR$tmp #不包含在其中就拼接
+done
 
 case $startStop in
   (start)
