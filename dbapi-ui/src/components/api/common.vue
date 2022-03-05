@@ -2,7 +2,7 @@
   <div>
     <el-tabs tab-position="top" style="" type="border-card">
       <el-tab-pane label="基础配置">
-        <el-form label-width="100px">
+        <el-form label-width="120px">
           <el-form-item :label="$t('m.basic_info')">
             <my-input :label="$t('m.name')" :nullable="false" v-model="detail.name"></my-input>
             <my-input :label="$t('m.path')" v-model="detail.path" :preffix="`http://${ address }/`"
@@ -18,6 +18,13 @@
               <sql-code ref="sqlCode" :apiSql="detail.sqlList"></sql-code>
             </div>
           </el-form-item>
+
+<!--          <el-form-item label="Content-Type">
+            <el-select v-model="contentType" style="width:300px"disabled>
+              <el-option v-for="item in types" :label="item" :value="item"></el-option>
+            </el-select>
+          </el-form-item>-->
+
           <el-form-item :label="$t('m.parameters')">
             <div v-for="(item,index) in detail.params" style="margin-bottom:5px;display: flex;align-items:center">
               <el-autocomplete v-model="item.name" :fetch-suggestions="parseParams" style="width:200px;margin-right:5px"
@@ -104,6 +111,7 @@
 
 <script>
 import sqlCode from "@/components/api/common/SqlCode";
+import MySelect from "../common/MySelect";
 
 export default {
   data() {
@@ -138,7 +146,9 @@ export default {
       ],
       table: null, tables: [], columns: [], column: null,
       isFullScreen: false,
-      mode: 'mini'
+      mode: 'mini',
+      contentType:'application/x-www-form-urlencoded',
+      types:['application/x-www-form-urlencoded','application/json']
     }
   },
   props: ["id"],
@@ -220,7 +230,7 @@ export default {
   // mounted() {
     // console.log('mount----+++')
   // },
-  components: {sqlCode}
+  components: {MySelect, sqlCode}
 }
 </script>
 

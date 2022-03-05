@@ -28,7 +28,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -109,7 +111,7 @@ public class APIServlet extends HttpServlet {
         }
 
         List<ApiSql> sqlList = config.getSqlList();
-        DruidPooledConnection  connection = PoolManager.getPooledConnection(datasource);
+        DruidPooledConnection connection = PoolManager.getPooledConnection(datasource);
         //执行sql
         List<Object> dataList = executeSql(connection, sqlList, sqlParam);
 
@@ -168,5 +170,25 @@ public class APIServlet extends HttpServlet {
             }
         }
     }
+
+/*    private JSONObject getJsonInfo(HttpServletRequest request) {
+        try {
+            InputStreamReader in = new InputStreamReader(request.getInputStream(), "utf-8");
+            BufferedReader br = new BufferedReader(in);
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+            br.close();
+            JSONObject jsonObject = JSON.parseObject(sb.toString());
+            return jsonObject;
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+
+        }
+        return null;
+    }*/
 
 }
