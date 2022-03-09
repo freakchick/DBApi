@@ -101,6 +101,11 @@ import com.gitee.freakchicken.dbapi.plugin.TransformPlugin;
 import java.util.List;
 
 public class Tdemo extends TransformPlugin {
+
+    /**
+     * 插件初始化方法，实例化插件的时候执行，永远只会执行一次，
+     */
+    public abstract void init();
     
     /**
      * 数据转换逻辑
@@ -161,8 +166,8 @@ public abstract Object transform(List<JSONObject> data, String params){
 
 ### 2.6 插件使用
 - 用户开发完插件后，请打包，将最后生成的jar包和插件依赖的jar包拷贝进DBApi的`lib`目录下，
-再重启DBApi服务，就可以使用插件了
-- 如果插件中使用了全局参数，还需要在`conf/plugin.properties`文件添加相应配置
+再重启DBApi服务（**如果是集群模式，每个节点都需要拷贝jar包并重启集群**），就可以使用插件了
+- 如果插件中使用了全局参数，还需要在`conf/plugin.properties`文件添加相应配置并重启生效（**如果是集群模式，每个节点都需要添加相应配置并重启生效**）
 
 ## 3.插件开发完整案例
 [案例demo](https://gitee.com/freakchicken/dbapi-plugin-demo)

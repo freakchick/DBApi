@@ -26,7 +26,7 @@
 - 支持单机模式、集群模式；支持云原生容器化部署
 - 支持API级别的访问权限控制，支持IP白名单、黑名单控制
 - 支持所有类型数据库（JDBC连接方式），包括mysql/sqlserver/postgreSql/hive/oracle等等
-- 支持动态sql，类似mybatis的动态sql，支持sql编辑运行调试
+- 支持动态sql，类似mybatis的动态sql，支持sql编辑、运行、调试
 - 支持API结果缓存，支持缓存开启/关闭（通过插件实现）
 - 支持自定义代码逻辑的数据转换，比如数据脱敏（通过插件实现）
 - 支持API配置导入导出，方便测试环境到生产环境的API迁移
@@ -81,7 +81,7 @@
 </div>
 
 ### 微信交流群：
-
+- 在群里提问前请先把文档读一遍
 <div style="text-align: center"> 
 <img src="https://freakchicken.gitee.io/images/dbApi/wechatGroup.png" width = "40%" />
 </div>
@@ -101,10 +101,9 @@
 </div>
 
 ## TODO
-- 支持`object`、`List<object>` 类型参数
+- 支持application/json
 - 支持API调用记录监控
 - 支持API报错邮件告警
-- 数据源密码加密
 - api熔断支持
 - 请求路由参数支持
 - 流量监控支持，ip限流，分组限流

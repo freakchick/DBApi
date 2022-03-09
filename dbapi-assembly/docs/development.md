@@ -3,7 +3,7 @@
 
 - 安装jdk8+
 - 安装node.js
-- 安装nacos 1.4.2
+- 安装nacos （推荐1.4.2）
 - (可选)npm设置国内源
 ```shell
 npm config set registry https://registry.npm.taobao.org
