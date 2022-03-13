@@ -65,7 +65,7 @@
         <el-form label-width="100px">
           <el-form-item :label="$t('m.data_convert')">
             <div v-for="(item,index) in this.$store.state.sqls">
-              <span>sql-{{ item.id }} : </span>
+              <span>sql-{{ item.label }} : </span>
               <my-input :label="$t('m.plugin_class')" v-model="item.transformPlugin" placeholder="填写数据转换插件java类名"
                         width="400px"></my-input>
               <my-input :label="$t('m.plugin_parameter')" v-model="item.transformPluginParams" width="300px"></my-input>

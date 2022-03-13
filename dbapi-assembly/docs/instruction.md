@@ -1,6 +1,6 @@
 
 
-# DBApi使用说明
+# DBApi用户使用手册
 
 ## 数据源
 - 理论上支持所有支持JDBC协议的数据库
@@ -10,7 +10,7 @@
 由于不同数据库查询所有表名称的方式都不一样，所以需要用户手动去填写这个sql
 
 
-![](https://freakchicken.gitee.io/images/dbApi/20211011/api_add.png)
+![](https://freakchicken.gitee.io/images/dbApi/20220313/API_add.png)
 
 ## 插件
 - DBApi的插件分两类，一类是数据转换插件，一类是缓存插件
@@ -28,35 +28,34 @@
 
 ## 基本操作
 
-### 创建数据源
+### 创建/修改数据源
 
-![](https://freakchicken.gitee.io/images/dbApi/20210502/datasource_create.png)
+![](https://freakchicken.gitee.io/images/dbApi/20220313/datasource_add.png)
 
-### 创建/修改api
+### 创建/修改API
 
-![](https://freakchicken.gitee.io/images/dbApi/20211011/api_add.png)
+![](https://freakchicken.gitee.io/images/dbApi/20220313/API_add.png)
+![](https://freakchicken.gitee.io/images/dbApi/20220313/API_add_high.png)
 
 - 请求路径，这就是将来http请求的路径
 - 选择数据源，就是接口执行sql逻辑的数据库地址
-- 填入sql ,类似mybatis的动态sql语法，**不需要写最外层的select update 标签**，参数名用 #{} ${}
-  表示，可以参考[这里](https://mybatis.org/mybatis-3/zh/dynamic-sql.html)
+- 填入sql ,类似mybatis的动态sql语法，**不需要写最外层的`<select>` `<update>` 标签**，参数名用 `#{}` `${}`
+  表示，可以参考[mybatis文档](https://mybatis.org/mybatis-3/zh/dynamic-sql.html)
 - 一个sql编写窗口内只能写一条sql
 - 点击添加可以新增sql，一个API内可以执行多条sql，最后的多个结果封装后一起返回，比如分页查询，一个接口内既要查询详情也要查询总条数
 - 添加参数，参数名称就是sql中的参数名，sql中涉及到的每个参数都要填写
-- API分组，选择api所属的分组，这个分组可以将来授权使用
+- API分组，选择API所属的分组，这个分组可以将来授权使用
 - 访问权限，开放接口可以直接访问，私有接口需要申请token才能访问
-- 数据转换，如果需要数据转换，就填写数据转换插件的java类名，不填写表示不转换。插件如果需要传参数就填写参数。**每条sql对应一个数据转换插件**
+- 数据转换，如果需要数据转换，就填写数据转换插件的java类名，不填写表示不转换。插件如果需要传参数就填写参数。
+**如果一个API内包含多条sql，那么每条sql会对应一个数据转换插件配置，数据转换插件永远是针对单条sql查询结果进行转换**
 - 缓存，如果需要数据缓存，就填写缓存插件的java类名，不填写表示不开启缓存。插件如果需要传参数就填写参数。
-- 点击保存，返回api列表页面，可以看到新增一条记录
 
-![](https://freakchicken.gitee.io/images/dbApi/20210803/api_list.png)
-
-### api分组管理
+### API分组管理
 - 可以添加、删除分组
   ![](https://freakchicken.gitee.io/images/dbApi/20210502/group.png)
 
-### api请求测试
-- 在页面快速访问API，查看结果
+### API请求测试
+- 在页面快速访问API，查看结果，注意如果是内网部署，您需要手动修改访问的IP、端口为外网IP、端口
   ![](https://freakchicken.gitee.io/images/dbApi/20210502/request.png)
 
 ### sql调试
@@ -69,7 +68,7 @@
 ![](https://freakchicken.gitee.io/images/dbApi/20210502/token_add.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20210502/token.png)
 
-### 授权token可以访问哪些api
+### 授权token可以访问哪些API
 ![](https://freakchicken.gitee.io/images/dbApi/20210502/token_auth.png)
 
 ### ip防火墙设置
@@ -82,12 +81,12 @@
 ## Token使用说明
 
 - 请求私有接口时，需要把token值放入header的`Authorization`字段中携带，才可以访问成功。（如果是开放接口，不需要设置header）
-- 以python为例，访问api的代码示例如下：
+- 以python为例，访问API的代码示例如下：
 
 ```python
 import requests
 headers = {"Authorization": "5ad0dcb4eb03d3b0b7e4b82ae0ba433f"}
-re = requests.post("http://127.0.0.1:8520/api/userById", {"idList": [1, 2]}, headers=headers)
+re = requests.post("http://127.0.0.1:8520/API/userById", {"idList": [1, 2]}, headers=headers)
 print(re.text)
 ```
 

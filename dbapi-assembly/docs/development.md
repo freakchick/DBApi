@@ -19,5 +19,9 @@ mvn clean package -P release
 sh docker/build.sh
 ```
 
+### 注意事项
+
+ 请使用最新的发行版本的代码，不要使用dev分支代码，dev分支不保证可运行
+
 ### 附：
 - [nacos版本说明](https://github.com/alibaba/spring-cloud-alibaba/wiki/%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E) 
