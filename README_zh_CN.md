@@ -31,6 +31,7 @@
 - 支持自定义代码逻辑的数据转换，比如数据脱敏（通过插件实现）
 - 支持API配置导入导出，方便测试环境到生产环境的API迁移
 - 支持一个接口内多条SQL执行（例如分页功能）
+- 支持页面上的API请求测试
 
 ## 视频教程
 [查看视频教程](https://www.bilibili.com/video/BV1zL411G7Qh)
@@ -41,8 +42,9 @@
 
 ## 软件截图
 ![](https://freakchicken.gitee.io/images/dbApi/20210904/api.png)
-![](https://freakchicken.gitee.io/images/dbApi/20210502/datasource_create.png)
-![](https://freakchicken.gitee.io/images/dbApi/20210803/api_edit.png)
+![](https://freakchicken.gitee.io/images/dbApi/20220213/datasource_add.png)
+![](https://freakchicken.gitee.io/images/dbApi/20220313/API_add.png)
+![](https://freakchicken.gitee.io/images/dbApi/20220313/API_add_high.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20210803/sql_run.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20210803/api_list.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20210502/group.png)

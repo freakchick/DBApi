@@ -42,8 +42,9 @@
 
 ## 软件截图
 ![](https://freakchicken.gitee.io/images/dbApi/20210904/api.png)
-![](https://freakchicken.gitee.io/images/dbApi/20210502/datasource_create.png)
-![](https://freakchicken.gitee.io/images/dbApi/20210803/api_edit.png)
+![](https://freakchicken.gitee.io/images/dbApi/20220313/datasource_add.png)
+![](https://freakchicken.gitee.io/images/dbApi/20220313/API_add.png)
+![](https://freakchicken.gitee.io/images/dbApi/20220313/API_add_high.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20210803/sql_run.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20210803/api_list.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20210502/group.png)
