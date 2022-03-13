@@ -10,7 +10,7 @@
 由于不同数据库查询所有表名称的方式都不一样，所以需要用户手动去填写这个sql
 
 
-![](https://freakchicken.gitee.io/images/dbApi/20220313/API_add.png)
+![](https://freakchicken.gitee.io/images/dbApi/20220313/api_add.png)
 
 ## 插件
 - DBApi的插件分两类，一类是数据转换插件，一类是缓存插件
@@ -34,8 +34,8 @@
 
 ### 创建/修改API
 
-![](https://freakchicken.gitee.io/images/dbApi/20220313/API_add.png)
-![](https://freakchicken.gitee.io/images/dbApi/20220313/API_add_high.png)
+![](https://freakchicken.gitee.io/images/dbApi/20220313/api_add.png)
+![](https://freakchicken.gitee.io/images/dbApi/20220313/api_add_high.png)
 
 - 请求路径，这就是将来http请求的路径
 - 选择数据源，就是接口执行sql逻辑的数据库地址
