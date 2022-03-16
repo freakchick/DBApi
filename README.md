@@ -73,23 +73,24 @@
 如果您想更加灵活的使用DBApi，在您自己的java springboot项目中使用代码配置接口，
 请使用[dbApi-spring-boot-starter开源框架](https://gitee.com/freakchicken/dbApi-spring-boot-starter)
 
+
 ## 联系作者：
 
 ### 微信：
-- 提问请先star支持一下，提问前请先把文档读一遍，文档里写过的问题不会回答
+- 提问请先star支持一下，提问前请先把文档读一遍，并阅读[常见问题汇总](https://gitee.com/freakchicken/db-api/issues/I4XLLJ)
 - 加微信群请备注`dbapi加群`
 <div style="text-align: center"> 
 <img src="https://freakchicken.gitee.io/images/kafkaui/wechat.jpg" width = "30%" />
 </div>
 
 ### 微信交流群：
-- 在群里提问前请先把文档读一遍
+- 在群里提问前请先把文档读一遍，并阅读[常见问题汇总](https://gitee.com/freakchicken/db-api/issues/I4XLLJ)
 <div style="text-align: center"> 
 <img src="https://freakchicken.gitee.io/images/dbApi/wechatGroup.png" width = "40%" />
 </div>
 
 ### qq交流群：
-
+- 在群里提问前请先把文档读一遍，并阅读[常见问题汇总](https://gitee.com/freakchicken/db-api/issues/I4XLLJ)
 <div style="text-align: center"> 
 <img src="https://freakchicken.gitee.io/images/dbApi/qqgroup.jpg" width = "40%" />
 </div>
