@@ -41,7 +41,8 @@ export default {
         params: JSON.stringify(detail.params),
         contentType: detail.contentType,
         jsonParam: detail.jsonParam,
-        openTrans: detail.openTrans
+        openTrans: detail.openTrans,
+        mail: detail.mail
       }
 
       console.log(p)

@@ -6,10 +6,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.gitee.freakchicken.dbapi.basic.dao.ApiConfigMapper;
 import com.gitee.freakchicken.dbapi.basic.dao.ApiSqlMapper;
 import com.gitee.freakchicken.dbapi.basic.dao.DataSourceMapper;
+import com.gitee.freakchicken.dbapi.basic.dao.AlarmMapper;
 import com.gitee.freakchicken.dbapi.basic.domain.ApiDto;
 import com.gitee.freakchicken.dbapi.basic.util.Constants;
 import com.gitee.freakchicken.dbapi.basic.util.UUIDUtil;
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
+import com.gitee.freakchicken.dbapi.common.Alarm;
 import com.gitee.freakchicken.dbapi.common.ApiSql;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
 import com.gitee.freakchicken.dbapi.plugin.CachePlugin;
@@ -42,7 +44,8 @@ public class ApiConfigService {
     DataSourceMapper dataSourceMapper;
     @Autowired
     ApiSqlMapper apiSqlMapper;
-
+    @Autowired
+    AlarmMapper alarmMapper;
     @Autowired
     CacheManager cacheManager;
 
@@ -57,7 +60,8 @@ public class ApiConfigService {
             return ResponseDto.fail("Path has been used!");
         } else {
             apiConfig.setStatus(0);
-            apiConfig.setId(UUIDUtil.id());
+            String id = UUIDUtil.id();
+            apiConfig.setId(id);
 
             if (Constants.APP_JSON.equals(apiConfig.getContentType())) {
                 apiConfig.setParams("[]"); //不能设置null 前端使用会报错
@@ -68,12 +72,20 @@ public class ApiConfigService {
             String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
             apiConfig.setCreateTime(now);
             apiConfig.setUpdateTime(now);
+
             apiConfigMapper.insert(apiConfig);
+
             apiConfig.getSqlList().stream().forEach(t -> {
                 t.setApiId(apiConfig.getId());
                 apiSqlMapper.insert(t);
             });
 
+            if(StringUtils.isNoneBlank(apiConfig.getMail())){            
+                Alarm alarm = new Alarm();
+                alarm.setMail(apiConfig.getMail());
+                alarm.setApiId(id);
+                alarmMapper.insert(alarm);
+            }
             return ResponseDto.successWithMsg("create API success");
         }
 
@@ -98,11 +110,20 @@ public class ApiConfigService {
             }
 
             apiConfigMapper.updateById(apiConfig);
+
             apiSqlMapper.deleteByApiID(apiConfig.getId());
             apiConfig.getSqlList().stream().forEach(t -> {
                 t.setApiId(apiConfig.getId());
                 apiSqlMapper.insert(t);
             });
+
+            alarmMapper.deleteByApiID(apiConfig.getId())
+            if(StringUtils.isNoneBlank(apiConfig.getMail())){            
+                Alarm alarm = new Alarm();
+                alarm.setMail(apiConfig.getMail());
+                alarm.setApiId(id);
+                alarmMapper.insert(alarm);
+            }
 
             //清除缓存插件对应的所有缓存
             if (StringUtils.isNoneBlank(oldConfig.getCachePlugin())) {
@@ -130,6 +151,7 @@ public class ApiConfigService {
         ApiConfig oldConfig = apiConfigMapper.selectById(id);
         apiConfigMapper.deleteById(id);
         apiSqlMapper.deleteByApiID(id);
+        alarmMapper.deleteByApiID(id);
 
         //清除所有缓存
         if (StringUtils.isNoneBlank(oldConfig.getCachePlugin())) {
@@ -150,6 +172,8 @@ public class ApiConfigService {
         ApiConfig apiConfig = apiConfigMapper.selectById(id);
         List<ApiSql> list = apiSqlMapper.selectByApiId(apiConfig.getId());
         apiConfig.setSqlList(list);
+        String mail = alarmMapper.selectMailByApiId(apiConfig.getId());
+        apiConfig.setMail(mail);
         return apiConfig;
     }
 
@@ -183,12 +207,17 @@ public class ApiConfigService {
         return apiConfigMapper.selectByKeyword(keyword, field, groupId);
     }
 
+    /**
+        servlet 从这获取API元数据
+    */
     @Cacheable(value = "api", key = "#path", unless = "#result == null")
     public ApiConfig getConfig(String path) {
         log.info("get api config from db");
         ApiConfig apiConfig = apiConfigMapper.selectByPathOnline(path);
-        List<ApiSql> apiSqls = apiSqlMapper.selectByApiId(apiConfig.getId());
+        List<ApiSql> apiSqls = apiSqlMapper.selectByApiId(apiConfig.getId());       
         apiConfig.setSqlList(apiSqls);
+        String mail = alarmMapper.selectMailByApiId(apiConfig.getId());
+        apiConfig.setMail(mail);
         return apiConfig;
     }
 

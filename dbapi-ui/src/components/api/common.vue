@@ -157,7 +157,13 @@
             </div>
           </el-form-item>
           <el-form-item label="失败邮件告警">
-            <el-input v-model="email" placeholder="填写收件人邮箱，多个用英文分号隔开"></el-input>
+            <el-input v-model="mail" placeholder="填写收件人邮箱，多个用英文分号隔开"></el-input>
+            <el-tooltip placement="top-start" effect="dark">
+              <div slot="content">
+                不填写表示不需要失败邮件告警
+              </div>
+              <i class="el-icon-info tip"></i>
+            </el-tooltip>
 
           </el-form-item>
         </el-form>
@@ -194,7 +200,7 @@ export default {
         sqlList: [{sqlText: '', transformPlugin: null, transformPluginParams: null}], //默认空字符串，当创建API的时候，默认打开一个标签
         contentType: 'application/x-www-form-urlencoded',
         openTrans: 0,
-        email:null
+        mail:null
       },
       options: [
         {label: 'string', value: 'string'},
@@ -260,7 +266,7 @@ export default {
         this.detail.openTrans = response.data.openTrans
         this.detail.contentType = response.data.contentType
         this.detail.jsonParam = response.data.jsonParam
-
+        this.detail.mail = response.data.mail
 
         this.$refs.sqlCode.datasourceId = response.data.datasourceId
 

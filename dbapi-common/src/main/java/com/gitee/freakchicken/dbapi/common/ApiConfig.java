@@ -77,4 +77,7 @@ public class ApiConfig {
      */
     @TableField(value = "json_param",updateStrategy = FieldStrategy.IGNORED)
     String jsonParam;
+
+    @TableField(exist = false)
+    String mail;
 }

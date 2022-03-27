@@ -38,6 +38,7 @@ export default {
         contentType: detail.contentType,
         jsonParam: detail.jsonParam,
         openTrans: detail.openTrans,
+        mail: detail.mail,
         id: this.$route.query.id
       }
 

@@ -150,7 +150,10 @@ public class APIServlet extends HttpServlet {
             }
             return dto;
         } catch (Exception e) {
-//            sendSimpleMail("".split(";"), "API ERROR　" + e.getMessage(), e.toString());
+            //如果API配置了邮件告警
+            if(StringUtils.isNotBlank(config.getMail())){
+                sendSimpleMail(config.getMail().split(";"), "API ERROR　" + e.getMessage(), e.toString());
+            }
             throw new RuntimeException(e.getMessage());
         }
     }
