@@ -1,6 +1,6 @@
 # 安装教程
 
-- 安装包下载地址： [天翼云盘](https://cloud.189.cn/t/Jza2MzeEZVNv) ，或者在Gitee/GitHub的发行版页面下载
+> 安装包下载地址： [天翼云盘](https://cloud.189.cn/t/Jza2MzeEZVNv) ，或者在Gitee/GitHub的发行版页面下载
 
 ## 本地部署单机版
 

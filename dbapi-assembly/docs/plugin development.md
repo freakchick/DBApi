@@ -28,6 +28,15 @@
 </dependency>
 ```
 
+> 注意不同版本的DBApi使用的插件必须依赖相应版本的dbapi-plugin.jar，版本对应关系如下
+
+| DBApi版本 | dbapi-plugin版本 |
+| -------- | ----- |
+| 2.3.1 | 2.3.1 |
+| 2.3.2 | 2.3.2 |
+| 3.0.0 - 3.1.0 | 3.0.0 |
+
+
 ### 2.2 缓存插件开发
 - 新建java类实现`com.gitee.freakchicken.dbapi.plugin.CachePlugin`
 ```java
