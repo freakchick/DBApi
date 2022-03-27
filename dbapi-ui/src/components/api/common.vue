@@ -72,8 +72,8 @@
               </el-table>
               <el-button @click="addRow" icon="el-icon-plus" type="primary" circle size="mini"></el-button>
             </div>
-            <div v-show="detail.contentType == 'application/json'">
-              <el-input v-model="detail.jsonParam" placeholder="填写json参数示例，用于生成接口文档" type="textarea" rows="10"></el-input>
+            <div v-show="detail.contentType == 'application/json'" class="textarea">
+              <el-input v-model="detail.jsonParam" placeholder="填写json参数示例，用于生成接口文档" type="textarea" rows="6"></el-input>
               <el-tooltip placement="top-start" effect="dark">
                 <div slot="content">
                   对于application/json类型的API，这个参数示例仅用来生成接口文档，方便调用API的用户查看接口的json参数格式
@@ -157,7 +157,7 @@
             </div>
           </el-form-item>
           <el-form-item label="失败邮件告警">
-            <el-input v-model="mail" placeholder="填写收件人邮箱，多个用英文分号隔开"></el-input>
+            <el-input v-model="detail.mail" placeholder="填写收件人邮箱，多个用英文分号隔开" style="width: 500px"></el-input>
             <el-tooltip placement="top-start" effect="dark">
               <div slot="content">
                 不填写表示不需要失败邮件告警
@@ -348,4 +348,11 @@ a {
   }
 }
 
+.textarea{
+  /deep/ .el-textarea__inner {
+    font-family: 'Consolas', Helvetica, Arial, sans-serif !important;
+    font-size: 16px !important;
+    line-height: 20px;
+  }
+}
 </style>

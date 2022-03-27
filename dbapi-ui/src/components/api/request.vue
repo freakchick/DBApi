@@ -9,22 +9,25 @@
     <el-alert type="warning" show-icon v-show="this.$store.state.mode == 'cluster'"
               title="如果是外网访问请将网关地址设置为外网IP端口" style="margin-top: 10px;">
     </el-alert>
-    <h4 >Header：</h4>
+    <h4>Header：</h4>
 
     <el-form label-width="150px" style="width: 600px" size="medium">
       <el-form-item label="Content-Type">
         <el-input v-model="contentType" disabled></el-input>
       </el-form-item>
-      <el-form-item label="token"  v-show="previlege == 0">
+      <el-form-item label="token" v-show="previlege == 0">
         <el-input v-model="token"></el-input>
       </el-form-item>
     </el-form>
 
 
     <h4>{{ $t('m.parameters') }}：</h4>
-    <el-input v-model="jsonParam" placeholder="填写json参数示例，用于生成接口文档" type="textarea" rows="10" v-show="contentType ==='application/json' "></el-input>
-
-    <el-form label-width="150px" style="width: 600px" size="medium" v-show="contentType ==='application/x-www-form-urlencoded' ">
+    <div class="textarea">
+      <el-input v-model="jsonParam" placeholder="填写json参数示例，用于生成接口文档" type="textarea" rows="10"
+                v-show="contentType ==='application/json' "></el-input>
+    </div>
+    <el-form label-width="150px" style="width: 600px" size="medium"
+             v-show="contentType ==='application/x-www-form-urlencoded' ">
       <el-form-item v-for="(item,index) in params" :key="index" style="margin-bottom: 5px">
         <template slot="label">
           <data-tag :name="item.name" :type="item.type"></data-tag>
@@ -78,8 +81,8 @@ export default {
       showTable: false,
       token: null,
       url: '',
-      contentType:null,
-      jsonParam:null
+      contentType: null,
+      jsonParam: null
     }
   },
   methods: {
@@ -114,7 +117,7 @@ export default {
     request() {
       this.response = null
       let p = {}
-      if (this.contentType === 'application/x-www-form-urlencoded'){
+      if (this.contentType === 'application/x-www-form-urlencoded') {
         this.params.forEach(t => {
           //构造数组类型的请求参数
           if (t.type.startsWith('Array')) {
@@ -123,7 +126,7 @@ export default {
           } else
             p[t.name] = t.value
         })
-      }else if(this.contentType === 'application/json'){
+      } else if (this.contentType === 'application/json') {
         p = this.jsonParam
       }
 
@@ -216,6 +219,7 @@ h4 {
 .url {
   padding: 5px;
   border: 1px solid #ccc;
+
   .input {
     background-color: rgba(1, 87, 36, 0.06);
     font-size: 16px;
@@ -229,5 +233,13 @@ h4 {
 
 .button {
   margin: 10px 10px 10px 0;
+}
+
+.textarea {
+  /deep/ .el-textarea__inner {
+    font-family: 'Consolas', Helvetica, Arial, sans-serif !important;
+    font-size: 16px !important;
+    line-height: 20px;
+  }
 }
 </style>

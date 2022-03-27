@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 @Data
-@TableName(value = "api_config")
-public class ApiConfig {
+@TableName(value = "api_alarm")
+public class Alarm {
 
     @TableField(value = "api_id")
     String apiId;

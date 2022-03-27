@@ -117,11 +117,11 @@ public class ApiConfigService {
                 apiSqlMapper.insert(t);
             });
 
-            alarmMapper.deleteByApiID(apiConfig.getId())
+            alarmMapper.deleteByApiID(apiConfig.getId());
             if(StringUtils.isNoneBlank(apiConfig.getMail())){            
                 Alarm alarm = new Alarm();
                 alarm.setMail(apiConfig.getMail());
-                alarm.setApiId(id);
+                alarm.setApiId(apiConfig.getId());
                 alarmMapper.insert(alarm);
             }
 

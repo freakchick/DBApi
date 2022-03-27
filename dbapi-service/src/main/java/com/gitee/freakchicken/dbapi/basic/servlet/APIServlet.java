@@ -37,6 +37,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Slf4j
@@ -53,12 +55,9 @@ public class APIServlet extends HttpServlet {
     TokenService tokenService;
     @Autowired
     IPService ipService;
-
-    @Value("${spring.mail.username}")
-    private String username;
-
     @Autowired
-    JavaMailSender javaMailSender;
+    MailService mailService;
+
 
     @Value("${dbapi.api.context}")
     String apiContext;
@@ -151,8 +150,12 @@ public class APIServlet extends HttpServlet {
             return dto;
         } catch (Exception e) {
             //如果API配置了邮件告警
-            if(StringUtils.isNotBlank(config.getMail())){
-                sendSimpleMail(config.getMail().split(";"), "API ERROR　" + e.getMessage(), e.toString());
+            if (StringUtils.isNotBlank(config.getMail())) {
+                String title = MessageFormat.format("API ERROR: {0}", config.getName());
+                String content = MessageFormat.format("TIME:  {0}\n NAME:  {1}\n URL:  {2}\n REMOTE ADDRESS:  {3}\n\n{4}",
+                        new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS").format(new Date()),
+                        config.getName(), request.getRequestURI(), request.getRemoteAddr(), e.toString());
+                mailService.sendSimpleMail(config.getMail().split(";"), title, content);
             }
             throw new RuntimeException(e.getMessage());
         }
@@ -192,17 +195,6 @@ public class APIServlet extends HttpServlet {
     }
 
 
-    public void sendSimpleMail(String[] to, String subject, String content) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setSubject(subject);
-        message.setFrom(username);
-        message.setTo(to);
-        message.setSentDate(new Date());
-        message.setText(content);
-        javaMailSender.send(message);
-
-    }
-
     private Map<String, Object> getParams(HttpServletRequest request, ApiConfig apiConfig) {
         String contentType = request.getContentType();
         Map<String, Object> params = null;
@@ -214,12 +206,12 @@ public class APIServlet extends HttpServlet {
         }
         //如果是application/x-www-form-urlencoded请求，先判断接口规定的content-type是不是确实是application/x-www-form-urlencoded
         else if (contentType.equalsIgnoreCase(Constants.APP_FORM_URLENCODED)) {
-            if (Constants.APP_FORM_URLENCODED.equalsIgnoreCase(apiConfig.getContentType())){
+            if (Constants.APP_FORM_URLENCODED.equalsIgnoreCase(apiConfig.getContentType())) {
                 params = apiService.getSqlParam(request, apiConfig);
-            }else{
+            } else {
                 throw new RuntimeException("this API only support content-type: " + apiConfig.getContentType() + ", but you use: " + contentType);
             }
-        }else{
+        } else {
             throw new RuntimeException("content-type not supported: " + contentType);
         }
 

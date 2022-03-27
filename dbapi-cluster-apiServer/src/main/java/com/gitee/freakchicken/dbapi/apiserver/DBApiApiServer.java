@@ -13,10 +13,12 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
 @MapperScan("com.gitee.freakchicken.dbapi.basic.dao")
 @EnableCaching
+@EnableAsync
 @ComponentScan(value = {"com.gitee.freakchicken.dbapi.basic", "com.gitee.freakchicken.dbapi.apiserver"},
         excludeFilters = {
                 @ComponentScan.Filter(type = FilterType.REGEX, pattern = {

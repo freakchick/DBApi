@@ -13,12 +13,14 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 
 @SpringBootApplication
 @MapperScan("com.gitee.freakchicken.dbapi.basic.dao")
 @EnableCaching
 @ComponentScan(value = "com.gitee.freakchicken.dbapi.basic")
+@EnableAsync
 //@PropertySource("application-standalone.properties")
 public class DBApiStandalone {
     public static void main(String[] args) {
