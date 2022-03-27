@@ -3,14 +3,15 @@ package com.gitee.freakchicken.dbapi.basic.servlet;
 import com.alibaba.druid.pool.DruidPooledConnection;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.gitee.freakchicken.dbapi.basic.service.*;
 
+import com.gitee.freakchicken.dbapi.basic.util.Constants;
 import com.gitee.freakchicken.dbapi.basic.util.PoolManager;
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.common.ApiSql;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
 import com.gitee.freakchicken.dbapi.basic.domain.DataSource;
-import com.gitee.freakchicken.dbapi.basic.domain.Token;
 import com.gitee.freakchicken.dbapi.plugin.CachePlugin;
 import com.gitee.freakchicken.dbapi.plugin.PluginManager;
 import com.gitee.freakchicken.dbapi.plugin.TransformPlugin;
@@ -22,6 +23,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
@@ -34,9 +37,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Component
@@ -52,6 +53,12 @@ public class APIServlet extends HttpServlet {
     TokenService tokenService;
     @Autowired
     IPService ipService;
+
+    @Value("${spring.mail.username}")
+    private String username;
+
+    @Autowired
+    JavaMailSender javaMailSender;
 
     @Value("${dbapi.api.context}")
     String apiContext;
@@ -84,7 +91,7 @@ public class APIServlet extends HttpServlet {
         doGet(req, resp);
     }
 
-    public ResponseDto process(String path, HttpServletRequest request, HttpServletResponse response) throws SQLException {
+    public ResponseDto process(String path, HttpServletRequest request, HttpServletResponse response) {
 
 //            // 校验接口是否存在
         ApiConfig config = apiConfigService.getConfig(path);
@@ -93,69 +100,79 @@ public class APIServlet extends HttpServlet {
             return ResponseDto.fail("Api not exists");
         }
 
-        DataSource datasource = dataSourceService.detail(config.getDatasourceId());
-        if (datasource == null) {
-            response.setStatus(500);
-            return ResponseDto.fail("Datasource not exists!");
-        }
-
-        Map<String, Object> sqlParam = apiService.getSqlParam(request, config);
-
-        //从缓存获取数据
-        if (StringUtils.isNoneBlank(config.getCachePlugin())) {
-            CachePlugin cachePlugin = PluginManager.getCachePlugin(config.getCachePlugin());
-            Object o = cachePlugin.get(config, sqlParam);
-            if (o != null) {
-                return ResponseDto.apiSuccess(o); //如果缓存有数据直接返回
+        try {
+            DataSource datasource = dataSourceService.detail(config.getDatasourceId());
+            if (datasource == null) {
+                response.setStatus(500);
+                return ResponseDto.fail("Datasource not exists!");
             }
-        }
 
-        List<ApiSql> sqlList = config.getSqlList();
-        DruidPooledConnection connection = PoolManager.getPooledConnection(datasource);
-        //执行sql
-        List<Object> dataList = executeSql(connection, sqlList, sqlParam);
+            Map<String, Object> sqlParam = getParams(request, config);
 
-        //执行数据转换
-        for (int i = 0; i < sqlList.size(); i++) {
-            ApiSql apiSql = sqlList.get(i);
-            Object data = dataList.get(i);
-            //如果此单条sql是查询类sql，并且配置了数据转换插件
-            if (data instanceof Iterable && StringUtils.isNotBlank(apiSql.getTransformPlugin())) {
-                log.info("transform plugin execute");
-                List<JSONObject> sourceData = (List<JSONObject>) (data); //查询类sql的返回结果才可以这样强制转换，只有查询类sql才可以配置转换插件
-                TransformPlugin transformPlugin = PluginManager.getTransformPlugin(apiSql.getTransformPlugin());
-                data = transformPlugin.transform(sourceData, apiSql.getTransformPluginParams());
+            //从缓存获取数据
+            if (StringUtils.isNoneBlank(config.getCachePlugin())) {
+                CachePlugin cachePlugin = PluginManager.getCachePlugin(config.getCachePlugin());
+                Object o = cachePlugin.get(config, sqlParam);
+                if (o != null) {
+                    return ResponseDto.apiSuccess(o); //如果缓存有数据直接返回
+                }
             }
+
+            List<ApiSql> sqlList = config.getSqlList();
+            DruidPooledConnection connection = PoolManager.getPooledConnection(datasource);
+            //是否开启事务
+            boolean flag = config.getOpenTrans() == 1 ? true : false;
+            //执行sql
+            List<Object> dataList = executeSql(connection, sqlList, sqlParam, flag);
+
+            //执行数据转换
+            for (int i = 0; i < sqlList.size(); i++) {
+                ApiSql apiSql = sqlList.get(i);
+                Object data = dataList.get(i);
+                //如果此单条sql是查询类sql，并且配置了数据转换插件
+                if (data instanceof Iterable && StringUtils.isNotBlank(apiSql.getTransformPlugin())) {
+                    log.info("transform plugin execute");
+                    List<JSONObject> sourceData = (List<JSONObject>) (data); //查询类sql的返回结果才可以这样强制转换，只有查询类sql才可以配置转换插件
+                    TransformPlugin transformPlugin = PluginManager.getTransformPlugin(apiSql.getTransformPlugin());
+                    data = transformPlugin.transform(sourceData, apiSql.getTransformPluginParams());
+                }
+            }
+            Object res = dataList;
+            //如果只有单条sql,返回结果不是数组格式
+            if (dataList.size() == 1) {
+                res = dataList.get(0);
+            }
+            ResponseDto dto = ResponseDto.apiSuccess(res);
+            //设置缓存
+            if (StringUtils.isNoneBlank(config.getCachePlugin())) {
+                CachePlugin cachePlugin = PluginManager.getCachePlugin(config.getCachePlugin());
+                cachePlugin.set(config, sqlParam, dto.getData());
+            }
+            return dto;
+        } catch (Exception e) {
+//            sendSimpleMail("".split(";"), "API ERROR　" + e.getMessage(), e.toString());
+            throw new RuntimeException(e.getMessage());
         }
-        Object res = dataList;
-        //如果只有单条sql,返回结果不是数组格式
-        if (dataList.size() == 1) {
-            res = dataList.get(0);
-        }
-        ResponseDto dto = ResponseDto.apiSuccess(res);
-        //设置缓存
-        if (StringUtils.isNoneBlank(config.getCachePlugin())) {
-            CachePlugin cachePlugin = PluginManager.getCachePlugin(config.getCachePlugin());
-            cachePlugin.set(config, sqlParam, dto.getData());
-        }
-        return dto;
     }
 
-    public List<Object> executeSql(Connection connection, List<ApiSql> sqlList, Map<String, Object> sqlParam) {
+    public List<Object> executeSql(Connection connection, List<ApiSql> sqlList, Map<String, Object> sqlParam, boolean flag) {
         List<Object> dataList = new ArrayList<>();
         try {
-            connection.setAutoCommit(false);
+            if (flag)
+                connection.setAutoCommit(false);
 
             for (ApiSql apiSql : sqlList) {
                 SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(apiSql.getSqlText(), sqlParam);
                 Object data = JdbcUtil.executeSql(connection, sqlMeta.getSql(), sqlMeta.getJdbcParamValues());
                 dataList.add(data);
             }
-            connection.commit();
+            if (flag)
+                connection.commit();
             return dataList;
         } catch (Exception e) {
             try {
-                connection.rollback();
+                if (flag)
+                    connection.rollback();
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
@@ -171,7 +188,42 @@ public class APIServlet extends HttpServlet {
         }
     }
 
-/*    private JSONObject getJsonInfo(HttpServletRequest request) {
+
+    public void sendSimpleMail(String[] to, String subject, String content) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject(subject);
+        message.setFrom(username);
+        message.setTo(to);
+        message.setSentDate(new Date());
+        message.setText(content);
+        javaMailSender.send(message);
+
+    }
+
+    private Map<String, Object> getParams(HttpServletRequest request, ApiConfig apiConfig) {
+        String contentType = request.getContentType();
+        Map<String, Object> params = null;
+        //如果是application/json请求，不管接口规定的content-type是什么，接口都可以访问，且请求参数都以json body 为准
+        if (contentType.equalsIgnoreCase(Constants.APP_JSON)) {
+            JSONObject jo = getHttpJsonBody(request);
+            params = JSONObject.parseObject(jo.toJSONString(), new TypeReference<Map<String, Object>>() {
+            });
+        }
+        //如果是application/x-www-form-urlencoded请求，先判断接口规定的content-type是不是确实是application/x-www-form-urlencoded
+        else if (contentType.equalsIgnoreCase(Constants.APP_FORM_URLENCODED)) {
+            if (Constants.APP_FORM_URLENCODED.equalsIgnoreCase(apiConfig.getContentType())){
+                params = apiService.getSqlParam(request, apiConfig);
+            }else{
+                throw new RuntimeException("this API only support content-type: " + apiConfig.getContentType() + ", but you use: " + contentType);
+            }
+        }else{
+            throw new RuntimeException("content-type not supported: " + contentType);
+        }
+
+        return params;
+    }
+
+    private JSONObject getHttpJsonBody(HttpServletRequest request) {
         try {
             InputStreamReader in = new InputStreamReader(request.getInputStream(), "utf-8");
             BufferedReader br = new BufferedReader(in);
@@ -189,6 +241,6 @@ public class APIServlet extends HttpServlet {
 
         }
         return null;
-    }*/
+    }
 
 }

@@ -19,32 +19,72 @@
             </div>
           </el-form-item>
 
-<!--          <el-form-item label="Content-Type">
-            <el-select v-model="contentType" style="width:300px"disabled>
+          <el-form-item label="Content-Type">
+            <el-select v-model="detail.contentType" style="width:300px">
               <el-option v-for="item in types" :label="item" :value="item"></el-option>
             </el-select>
-          </el-form-item>-->
-
-          <el-form-item :label="$t('m.parameters')">
-            <div v-for="(item,index) in detail.params" style="margin-bottom:5px;display: flex;align-items:center">
-              <el-autocomplete v-model="item.name" :fetch-suggestions="parseParams" style="width:200px;margin-right:5px"
-                               placeholder="*参数名称"></el-autocomplete>
-              <el-select v-model="item.type" :options="options" placeholder="*数据类型" style="margin-right:5px">
-                <el-option v-for="item in options" :key="item.value" :label="item.label"
-                           :value="item.value"></el-option>
-              </el-select>
-              <el-input v-model="item.note" placeholder="参数说明" style="width:400px;margin-right:5px"></el-input>
-              <!--          <el-cascader  v-model="item.type" separator=" > " :options="options"></el-cascader>-->
-
-              <el-button @click="deleteRow(index)" circle type="danger" icon="el-icon-delete" size="mini"
-                         v-if="$route.path != '/api/detail'"></el-button>
-            </div>
-            <el-button @click="addRow" icon="el-icon-plus" type="primary" circle size="mini"
-                       v-if="$route.path != '/api/detail'"></el-button>
+            <el-tooltip placement="top-start" effect="dark">
+              <div slot="content">
+                <p>对于application/x-www-form-urlencoded类型的API，用户在请求该API的时候既可以使用application/x-www-form-urlencoded，也可以使用application/json</p>
+                <p>对于application/json类型的API，用户在请求该API的时候只能使用application/json</p>
+              </div>
+              <i class="el-icon-info tip"></i>
+            </el-tooltip>
 
           </el-form-item>
 
-          <el-form-item :label="$t('m.access')">
+          <el-form-item label="参数">
+            <div slot="label">
+              <span v-show="detail.contentType == 'application/x-www-form-urlencoded'">请求参数</span>
+              <span v-show="detail.contentType == 'application/json'">请求参数示例</span>
+            </div>
+            <div v-show="detail.contentType == 'application/x-www-form-urlencoded'">
+
+              <el-table :data="detail.params" border stripe max-height="700" size="mini">
+                <el-table-column prop="name" label="参数名称" width="220px">
+                  <template slot-scope="scope">
+                    <el-autocomplete v-model="scope.row.name" :fetch-suggestions="parseParams"></el-autocomplete>
+                  </template>
+                </el-table-column>
+                <el-table-column label="参数类型" width="220px">
+                  <template slot-scope="scope">
+                    <el-select v-model="scope.row.type" :options="options">
+                      <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                    </el-select>
+                  </template>
+                </el-table-column>
+                <el-table-column label="参数说明" width="300px">
+                  <template slot-scope="scope">
+                    <el-input v-model="scope.row.note"></el-input>
+                  </template>
+                </el-table-column>
+                <!--                <el-table-column label="默认值" width="300px">
+                                  <template slot-scope="scope">
+                                    <el-input v-model="scope.row.defaultValue"></el-input>
+                                  </template>
+                                </el-table-column>-->
+                <el-table-column label="操作" width="100px">
+                  <template slot-scope="scope">
+                    <el-button @click="deleteRow(scope.$index)" circle type="danger" icon="el-icon-delete"
+                               size="mini"></el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+              <el-button @click="addRow" icon="el-icon-plus" type="primary" circle size="mini"></el-button>
+            </div>
+            <div v-show="detail.contentType == 'application/json'">
+              <el-input v-model="detail.jsonParam" placeholder="填写json参数示例，用于生成接口文档" type="textarea" rows="10"></el-input>
+              <el-tooltip placement="top-start" effect="dark">
+                <div slot="content">
+                  对于application/json类型的API，这个参数示例仅用来生成接口文档，方便调用API的用户查看接口的json参数格式
+                </div>
+                <i class="el-icon-info tip"></i>
+              </el-tooltip>
+            </div>
+
+          </el-form-item>
+
+          <el-form-item label="权限">
             <el-radio-group v-model="detail.previlege">
               <el-radio :label="0">{{ $t('m.private') }}</el-radio>
               <el-radio :label="1">{{ $t('m.public') }}</el-radio>
@@ -62,7 +102,23 @@
         </el-form>
       </el-tab-pane>
       <el-tab-pane label="高级配置">
-        <el-form label-width="100px">
+        <el-form label-width="100px" label-position="left">
+          <el-form-item label="事务">
+            <el-radio-group v-model="detail.openTrans">
+              <el-radio :label="1">开启</el-radio>
+              <el-radio :label="0">关闭</el-radio>
+            </el-radio-group>
+            <el-tooltip placement="top-start" effect="dark">
+              <div slot="content">
+                开启事务后，如果有多条SQL，多条SQL将在同一个事务内执行
+              </div>
+              <i class="el-icon-info tip"></i>
+            </el-tooltip>
+            <el-alert type="warning" show-icon v-show="detail.openTrans == 1">
+
+              <p>注意如果是hive等不支持事务的数据库，不要开启事务</p>
+            </el-alert>
+          </el-form-item>
           <el-form-item :label="$t('m.data_convert')">
             <div v-for="(item,index) in this.$store.state.sqls">
               <span>sql-{{ item.label }} : </span>
@@ -100,6 +156,10 @@
                 }}</a>
             </div>
           </el-form-item>
+          <el-form-item label="失败邮件告警">
+            <el-input v-model="email" placeholder="填写收件人邮箱，多个用英文分号隔开"></el-input>
+
+          </el-form-item>
         </el-form>
       </el-tab-pane>
 
@@ -130,7 +190,11 @@ export default {
         previlege: 0,//访问权限
         cachePlugin: null,
         cachePluginParams: null,
-        sqlList: [{sqlText: '', transformPlugin: null, transformPluginParams: null}] //默认空字符串，当创建API的时候，默认打开一个标签
+        jsonParam: null,
+        sqlList: [{sqlText: '', transformPlugin: null, transformPluginParams: null}], //默认空字符串，当创建API的时候，默认打开一个标签
+        contentType: 'application/x-www-form-urlencoded',
+        openTrans: 0,
+        email:null
       },
       options: [
         {label: 'string', value: 'string'},
@@ -147,8 +211,7 @@ export default {
       table: null, tables: [], columns: [], column: null,
       isFullScreen: false,
       mode: 'mini',
-      contentType:'application/x-www-form-urlencoded',
-      types:['application/x-www-form-urlencoded','application/json']
+      types: ['application/x-www-form-urlencoded', 'application/json'],
     }
   },
   props: ["id"],
@@ -194,6 +257,9 @@ export default {
         this.detail.params = JSON.parse(response.data.params)
         this.detail.cachePlugin = response.data.cachePlugin
         this.detail.cachePluginParams = response.data.cachePluginParams
+        this.detail.openTrans = response.data.openTrans
+        this.detail.contentType = response.data.contentType
+        this.detail.jsonParam = response.data.jsonParam
 
 
         this.$refs.sqlCode.datasourceId = response.data.datasourceId
@@ -223,13 +289,14 @@ export default {
     }
     // 新增页面
     else {
-      this.$store.commit('initSqls', [{sqlText: '-- 请输入sql，一个标签只能输入一条sql', transformPlugin: null, transformPluginParams: null}])
+      this.$store.commit('initSqls', [{
+        sqlText: '-- 请输入sql，一个标签只能输入一条sql',
+        transformPlugin: null,
+        transformPluginParams: null
+      }])
     }
     this.getAllGroups()
   },
-  // mounted() {
-    // console.log('mount----+++')
-  // },
   components: {MySelect, sqlCode}
 }
 </script>

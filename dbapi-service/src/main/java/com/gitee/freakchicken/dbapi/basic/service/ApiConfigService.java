@@ -7,6 +7,7 @@ import com.gitee.freakchicken.dbapi.basic.dao.ApiConfigMapper;
 import com.gitee.freakchicken.dbapi.basic.dao.ApiSqlMapper;
 import com.gitee.freakchicken.dbapi.basic.dao.DataSourceMapper;
 import com.gitee.freakchicken.dbapi.basic.domain.ApiDto;
+import com.gitee.freakchicken.dbapi.basic.util.Constants;
 import com.gitee.freakchicken.dbapi.basic.util.UUIDUtil;
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.common.ApiSql;
@@ -16,18 +17,13 @@ import com.gitee.freakchicken.dbapi.plugin.PluginManager;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -63,6 +59,12 @@ public class ApiConfigService {
             apiConfig.setStatus(0);
             apiConfig.setId(UUIDUtil.id());
 
+            if (Constants.APP_JSON.equals(apiConfig.getContentType())) {
+                apiConfig.setParams("[]"); //不能设置null 前端使用会报错
+            } else if (Constants.APP_FORM_URLENCODED.equals(apiConfig.getContentType())) {
+                apiConfig.setJsonParam(null);
+            }
+
             String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
             apiConfig.setCreateTime(now);
             apiConfig.setUpdateTime(now);
@@ -72,7 +74,7 @@ public class ApiConfigService {
                 apiSqlMapper.insert(t);
             });
 
-            return ResponseDto.successWithMsg("create success");
+            return ResponseDto.successWithMsg("create API success");
         }
 
     }
@@ -88,6 +90,13 @@ public class ApiConfigService {
             ApiConfig oldConfig = apiConfigMapper.selectById(apiConfig.getId());
             apiConfig.setStatus(0);
             apiConfig.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+
+            if (Constants.APP_JSON.equals(apiConfig.getContentType())) {
+                apiConfig.setParams("[]"); //不能设置null 前端使用会报错
+            } else if (Constants.APP_FORM_URLENCODED.equals(apiConfig.getContentType())) {
+                apiConfig.setJsonParam(null);
+            }
+
             apiConfigMapper.updateById(apiConfig);
             apiSqlMapper.deleteByApiID(apiConfig.getId());
             apiConfig.getSqlList().stream().forEach(t -> {
@@ -96,11 +105,11 @@ public class ApiConfigService {
             });
 
             //清除缓存插件对应的所有缓存
-            if (StringUtils.isNoneBlank(apiConfig.getCachePlugin())) {
+            if (StringUtils.isNoneBlank(oldConfig.getCachePlugin())) {
                 try {
                     CachePlugin cachePlugin = PluginManager.getCachePlugin(oldConfig.getCachePlugin());
                     cachePlugin.clean(oldConfig);
-                    log.debug("update api config, then clean cache");
+                    log.debug("clean cache from old config when update api");
                 } catch (Exception e) {
                     log.error("clean cache failed when update api", e);
                 }
@@ -110,36 +119,36 @@ public class ApiConfigService {
             //如果是集群模式，清除每个apiServer节点内的元数据ehcache缓存
             metaDataCacheManager.cleanApiMetaCacheIfCluster(apiConfig.getPath());
 
-            return ResponseDto.successWithMsg("update success");
+            return ResponseDto.successWithMsg("update API success");
         }
 
     }
 
-    @CacheEvict(value = "api", key = "#path")
+//    @CacheEvict(value = "api", key = "#path")
     @Transactional
-    public void delete(String id, String path) {
-        ApiConfig apiConfig = apiConfigMapper.selectById(id);
+    public void delete(String id) {
+        ApiConfig oldConfig = apiConfigMapper.selectById(id);
         apiConfigMapper.deleteById(id);
         apiSqlMapper.deleteByApiID(id);
 
         //清除所有缓存
-        if (StringUtils.isNoneBlank(apiConfig.getCachePlugin())) {
+        if (StringUtils.isNoneBlank(oldConfig.getCachePlugin())) {
             try {
-                CachePlugin cachePlugin = PluginManager.getCachePlugin(apiConfig.getCachePlugin());
-                cachePlugin.clean(apiConfig);
+                CachePlugin cachePlugin = PluginManager.getCachePlugin(oldConfig.getCachePlugin());
+                cachePlugin.clean(oldConfig);
                 log.debug("delete api then clean cache");
             } catch (Exception e) {
                 log.error("clean cache failed when delete api", e);
             }
         }
-        //如果是集群模式，清楚每个apiServer节点内的元数据ehcache缓存
-        metaDataCacheManager.cleanApiMetaCacheIfCluster(path);
+        cacheManager.getCache("api").evictIfPresent(oldConfig.getPath());
+        //如果是集群模式，清除每个apiServer节点内的元数据ehcache缓存
+        metaDataCacheManager.cleanApiMetaCacheIfCluster(oldConfig.getPath());
     }
 
     public ApiConfig detail(String id) {
         ApiConfig apiConfig = apiConfigMapper.selectById(id);
         List<ApiSql> list = apiSqlMapper.selectByApiId(apiConfig.getId());
-//        List<String> collect = list.stream().map(t -> t.getSql()).collect(Collectors.toList());
         apiConfig.setSqlList(list);
         return apiConfig;
     }

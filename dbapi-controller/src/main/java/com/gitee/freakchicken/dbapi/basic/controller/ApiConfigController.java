@@ -114,8 +114,7 @@ public class ApiConfigController {
 
     @RequestMapping("/delete/{id}")
     public ApiConfig delete(@PathVariable String id) {
-        String path = apiConfigService.getPath(id);
-        apiConfigService.delete(id, path);
+        apiConfigService.delete(id);
         return null;
     }
 

@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS `api_auth`;
 CREATE TABLE `api_auth`
 (
     `id`       int(11) NOT NULL AUTO_INCREMENT,
-    `token_id` int(11)      DEFAULT NULL,
+    `token_id` int(11) DEFAULT NULL,
     `group_id` varchar(255) DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
@@ -14,35 +14,44 @@ DROP TABLE IF EXISTS `api_config`;
 
 CREATE TABLE `api_config`
 (
-    `id`                      varchar(255) NOT NULL,
-    `path`                    varchar(255) DEFAULT NULL,
-    `name`                    varchar(255) DEFAULT NULL,
-    `note`                    varchar(255) DEFAULT NULL,
-    `params`                  text,
-    `status`                  int(11)      DEFAULT NULL,
-    `datasource_id`           varchar(255) DEFAULT NULL,
-    `previlege`               int(11)      DEFAULT NULL,
-    `group_id`                varchar(255) DEFAULT NULL,
-    `cache_plugin`            varchar(255) DEFAULT NULL,
-    `cache_plugin_params`     varchar(255) DEFAULT NULL,
-    `create_time`             varchar(20)  DEFAULT NULL,
-    `update_time`             varchar(20)  DEFAULT NULL,
+    `id`                  varchar(255) NOT NULL,
+    `path`                varchar(255) DEFAULT NULL,
+    `name`                varchar(255) DEFAULT NULL,
+    `note`                varchar(255) DEFAULT NULL,
+    `params`              text,
+    `status`              int(11) DEFAULT NULL,
+    `datasource_id`       varchar(255) DEFAULT NULL,
+    `previlege`           int(11) DEFAULT NULL,
+    `group_id`            varchar(255) DEFAULT NULL,
+    `cache_plugin`        varchar(255) DEFAULT NULL,
+    `cache_plugin_params` varchar(255) DEFAULT NULL,
+    `create_time`         varchar(20)  DEFAULT NULL,
+    `update_time`         varchar(20)  DEFAULT NULL,
+    `content_type`        varchar(50)  DEFAULT NULL,
+    `open_trans`          int(11) DEFAULT NULL,
+    `json_param`          text,
     PRIMARY KEY (`id`),
     UNIQUE KEY `path` (`path`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `api_sql`;
 CREATE TABLE `api_sql`
 (
-    `id`                     int(11)     NOT NULL AUTO_INCREMENT,
-    `api_id`                 varchar(11) NOT NULL,
-    `sql_text`               text        NOT NULL,
-    `transform_plugin`       varchar(255) DEFAULT NULL,
+    `id`                      int(11) NOT NULL AUTO_INCREMENT,
+    `api_id`                  varchar(11) NOT NULL,
+    `sql_text`                text        NOT NULL,
+    `transform_plugin`        varchar(255) DEFAULT NULL,
     `transform_plugin_params` varchar(255) DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
+
+DROP TABLE IF EXISTS `api_alarm`;
+CREATE TABLE `api_alarm`
+(
+    `api_id` varchar(20) NOT NULL,
+    `mail`   varchar(1024) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `api_group`;
 
@@ -103,8 +112,8 @@ CREATE TABLE `token`
     `id`          int(11) NOT NULL AUTO_INCREMENT,
     `token`       varchar(255) DEFAULT NULL,
     `note`        varchar(255) DEFAULT NULL,
-    `expire`      bigint(20)   DEFAULT NULL,
-    `create_time` bigint(20)   DEFAULT NULL,
+    `expire`      bigint(20) DEFAULT NULL,
+    `create_time` bigint(20) DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1

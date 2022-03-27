@@ -72,9 +72,21 @@
             <span>/{{context}}/{{ scope.row.path }}</span>
           </template>
         </el-table-column>
+        <el-table-column label="事务" width="60">
+          <template slot-scope="scope">
+            <span v-if="scope.row.openTrans == 1">开启</span>
+            <span v-if="scope.row.openTrans == 0">关闭</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="Content-Type" prop="contentType" ></el-table-column>
         <el-table-column :label="$t('m.parameters')">
           <template slot-scope="scope">
+            <div v-show="scope.row.contentType === 'application/x-www-form-urlencoded' ">
             <data-tag v-for="item in scope.row.p" :name="item.name" :type="item.type"></data-tag>
+            </div>
+            <div v-show="scope.row.contentType === 'application/json' ">
+              {{scope.row.jsonParam}}
+            </div>
           </template>
         </el-table-column>
         <el-table-column prop="updateTime" :label="$t('m.update_time')" width="170px"></el-table-column>
@@ -236,7 +248,7 @@ export default {
     },
     online(id) {
       this.axios.post("/apiConfig/online/" + id).then((response) => {
-        this.$message.success("Publish Success, Already Online")
+        this.$message.success("Publish Success")
         this.getAllApis()
       }).catch((error) => {
         this.$message.error("Publish Failed")

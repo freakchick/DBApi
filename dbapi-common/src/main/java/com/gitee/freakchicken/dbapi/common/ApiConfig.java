@@ -1,10 +1,6 @@
 package com.gitee.freakchicken.dbapi.common;
 
-import com.alibaba.fastjson.JSONArray;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 import java.util.List;
@@ -37,7 +33,10 @@ public class ApiConfig {
     @TableField(exist = false)
     List<ApiSql> sqlList;
 
-    @TableField
+    /**
+     * application/x-www-form-urlencoded 类API对应的参数
+     */
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     String params;
 
     @TableField
@@ -49,7 +48,7 @@ public class ApiConfig {
     @TableField("group_id")
     String groupId;
 
-    @TableField(value = "cache_plugin")
+    @TableField(value = "cache_plugin",insertStrategy = FieldStrategy.NOT_EMPTY)
     String cachePlugin;
 
     /**
@@ -64,4 +63,18 @@ public class ApiConfig {
     @TableField(value = "update_time")
     String updateTime;
 
+    @TableField(value = "content_type")
+    String contentType;
+
+    /**
+     * 是否打开事务，1-是；0-否
+     */
+    @TableField("open_trans")
+    Integer openTrans;
+
+    /**
+     * application/json 类API对应的json参数示例
+     */
+    @TableField(value = "json_param",updateStrategy = FieldStrategy.IGNORED)
+    String jsonParam;
 }

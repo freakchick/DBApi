@@ -9,17 +9,22 @@
     <el-alert type="warning" show-icon v-show="this.$store.state.mode == 'cluster'"
               title="如果是外网访问请将网关地址设置为外网IP端口" style="margin-top: 10px;">
     </el-alert>
-    <h4 v-show="previlege == 0">{{ $t('m.header') }}：</h4>
+    <h4 >Header：</h4>
 
-    <el-form label-width="150px" style="width: 600px" size="medium" v-show="previlege == 0">
-      <el-form-item label="token:">
+    <el-form label-width="150px" style="width: 600px" size="medium">
+      <el-form-item label="Content-Type">
+        <el-input v-model="contentType" disabled></el-input>
+      </el-form-item>
+      <el-form-item label="token"  v-show="previlege == 0">
         <el-input v-model="token"></el-input>
       </el-form-item>
     </el-form>
 
 
     <h4>{{ $t('m.parameters') }}：</h4>
-    <el-form label-width="150px" style="width: 600px" size="medium">
+    <el-input v-model="jsonParam" placeholder="填写json参数示例，用于生成接口文档" type="textarea" rows="10" v-show="contentType ==='application/json' "></el-input>
+
+    <el-form label-width="150px" style="width: 600px" size="medium" v-show="contentType ==='application/x-www-form-urlencoded' ">
       <el-form-item v-for="(item,index) in params" :key="index" style="margin-bottom: 5px">
         <template slot="label">
           <data-tag :name="item.name" :type="item.type"></data-tag>
@@ -51,14 +56,11 @@
               v-show="!showTable"></el-input>
 
     <el-button size="small" @click="format" class="button">{{ $t('m.json_format') }}</el-button>
-    <!--    <el-button size="small" @click="tableShow" class="button">{{$t('m.view_in_table')}}</el-button>-->
-    <!--    <el-button size="small" @click="tableHide" class="button">{{$t('m.raw_data')}}</el-button>-->
 
   </div>
 </template>
 
 <script>
-// import dataTag from "@/components/common/dataTag";
 
 export default {
   name: "request",
@@ -75,7 +77,9 @@ export default {
       tableData: [],
       showTable: false,
       token: null,
-      url: ''
+      url: '',
+      contentType:null,
+      jsonParam:null
     }
   },
   methods: {
@@ -93,8 +97,10 @@ export default {
         this.isSelect = response.data.isSelect
 
         this.url = `http://${this.address}/${this.path}`
+        this.contentType = response.data.contentType
+        this.jsonParam = response.data.jsonParam
       }).catch((error) => {
-        this.$message.error("失败")
+        this.$message.error("get detail failed")
       })
     },
     async getAddress() {
@@ -102,25 +108,30 @@ export default {
         this.address = response.data
         this.url = `http://${this.address}/${this.path}`
       }).catch((error) => {
-        this.$message.error("失败")
+        this.$message.error("get address failed")
       })
     },
     request() {
       this.response = null
       let p = {}
-      this.params.forEach(t => {
-        //构造数组类型的请求参数
-        if (t.type.startsWith('Array')) {
-          const values = t.values.map(item => item.va)
-          p[t.name] = values
-        } else
-          p[t.name] = t.value
-      })
+      if (this.contentType === 'application/x-www-form-urlencoded'){
+        this.params.forEach(t => {
+          //构造数组类型的请求参数
+          if (t.type.startsWith('Array')) {
+            const values = t.values.map(item => item.va)
+            p[t.name] = values
+          } else
+            p[t.name] = t.value
+        })
+      }else if(this.contentType === 'application/json'){
+        p = this.jsonParam
+      }
+
       // let url = `http://${this.address}/api/${this.path}`
 
       this.axios.post(this.url, p, {
         headers: {
-          "Content-type": "application/x-www-form-urlencoded",
+          "Content-Type": this.contentType,
           "Authorization": this.token == null ? '' : this.token
         }
       }).then((response) => {

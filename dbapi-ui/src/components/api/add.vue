@@ -38,7 +38,10 @@ export default {
         transformPluginParams: detail.transformPluginParams,
         datasourceId: this.$refs.apiAdd.$refs.sqlCode.datasourceId,
         sqlList: sqlList,
-        params: JSON.stringify(detail.params)
+        params: JSON.stringify(detail.params),
+        contentType: detail.contentType,
+        jsonParam: detail.jsonParam,
+        openTrans: detail.openTrans
       }
 
       console.log(p)

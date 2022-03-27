@@ -35,6 +35,9 @@ export default {
         datasourceId: this.$refs.apiEditCommon.$refs.sqlCode.datasourceId,
         sqlList: sqlList,
         params: JSON.stringify(detail.params),
+        contentType: detail.contentType,
+        jsonParam: detail.jsonParam,
+        openTrans: detail.openTrans,
         id: this.$route.query.id
       }
 
