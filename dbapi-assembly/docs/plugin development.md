@@ -16,14 +16,14 @@
 
 ## 2.插件的开发流程
 
-### 2.1 准备工作
-- 插件使用java语言编写，准备java(8+)开发环境
-- 新建maven项目，pom里引入`dbapi-plugin`
+- 2.1 准备工作
+> 插件使用java语言编写，准备java(8+)开发环境
+新建maven项目，pom里引入`dbapi-plugin`
 ```xml
 <dependency>
     <groupId>com.gitee.freakchicken.dbapi</groupId>
     <artifactId>dbapi-plugin</artifactId>
-    <version>3.0.0</version>
+    <version>3.1.0</version>
     <scope>provided</scope>
 </dependency>
 ```
@@ -34,11 +34,11 @@
 | -------- | ----- |
 | 2.3.1 | 2.3.1 |
 | 2.3.2 | 2.3.2 |
-| 3.0.0 - 3.1.0 | 3.0.0 |
+| 3.0.0 | 3.0.0 |
+| 3.1.0 | 3.1.0 |
 
-
-### 2.2 缓存插件开发
-- 新建java类实现`com.gitee.freakchicken.dbapi.plugin.CachePlugin`
+- 2.2 缓存插件开发
+> 新建java类实现`com.gitee.freakchicken.dbapi.plugin.CachePlugin`
 ```java
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.plugin.CachePlugin;
@@ -93,14 +93,16 @@ public class Cdemo extends CachePlugin {
 
 ```
 
-- `init`方法是插件初始化方法，只会执行一次，一般用来初始化连接池，比如初始化redis连接池
-- `get`方法是获取缓存中的数据的方法，第一个参数是api配置，第二个参数是请求的参数
-- `set`方法是设置缓存的方法，当执行sql查询结果后，会调用set方法。第一个参数是api配置，
-  第二个参数是请求的参数，第三个参数是sql查询结果，如果api配置了数据转换插件的话，就是转换后的结果
-- `clean`是清空缓存的方法，当API的修改、下线、删除的时候，会执行这个`clean`方法
+> `init`方法是插件初始化方法，只会执行一次，一般用来初始化连接池，比如初始化redis连接池
+> 
+> `get`方法是获取缓存中的数据的方法，第一个参数是api配置，第二个参数是请求的参数
+> 
+> `set`方法是设置缓存的方法，当执行sql查询结果后，会调用set方法。第一个参数是api配置，第二个参数是请求的参数，第三个参数是sql查询结果，如果api配置了数据转换插件的话，就是转换后的结果
+>
+> `clean`是清空缓存的方法，当API的修改、下线、删除的时候，会执行这个`clean`方法
 
-### 2.3 数据转换插件开发
-- 新建java类，实现`com.gitee.freakchicken.dbapi.plugin.TransformPlugin`
+- 2.3 数据转换插件开发
+> 新建java类，实现`com.gitee.freakchicken.dbapi.plugin.TransformPlugin`
 
 ```java
 import com.alibaba.fastjson.JSONObject;
@@ -127,10 +129,19 @@ public class Tdemo extends TransformPlugin {
     }
 }
 ```
-- 数据转换逻辑写在`transform`方法里，第一个参数就是sql查询结果，第二个参数是插件局部参数
+> 数据转换逻辑写在`transform`方法里，第一个参数就是sql查询结果，第二个参数是插件局部参数
 
-### 2.4 插件日志打印
-- 如果想在插件内打印日志，推荐直接调用父类的`logger`
+- 2.4 插件注册
+> dbapi插件使用java的spi机制注册，需要执行以下操作：
+
+> 在`resources`目录下新建文件夹`META-INF`,再在`META-INF`文件夹下新建`services`文件夹
+> 
+> 在`META-INF/services`目录下新建文件`com.gitee.freakchicken.dbapi.plugin.CachePlugin`，并在此文件中填写刚才编写的缓存插件的java类名
+> 
+> 在`META-INF/services`目录下新建文件`com.gitee.freakchicken.dbapi.plugin.TransformPlugin`，并在此文件中填写刚才编写的数据转换插件的java类名
+> 
+- 2.5 插件日志打印
+> 如果想在插件内打印日志，推荐直接调用父类的`logger`
 ```java
 super.logger.debug("set data to cache");
 ```
