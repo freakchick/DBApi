@@ -94,11 +94,8 @@ public class Cdemo extends CachePlugin {
 ```
 
 > `init`方法是插件初始化方法，只会执行一次，一般用来初始化连接池，比如初始化redis连接池
-> 
 > `get`方法是获取缓存中的数据的方法，第一个参数是api配置，第二个参数是请求的参数
-> 
 > `set`方法是设置缓存的方法，当执行sql查询结果后，会调用set方法。第一个参数是api配置，第二个参数是请求的参数，第三个参数是sql查询结果，如果api配置了数据转换插件的话，就是转换后的结果
->
 > `clean`是清空缓存的方法，当API的修改、下线、删除的时候，会执行这个`clean`方法
 
 - 2.3 数据转换插件开发
@@ -135,11 +132,9 @@ public class Tdemo extends TransformPlugin {
 > dbapi插件使用java的spi机制注册，需要执行以下操作：
 
 > 在`resources`目录下新建文件夹`META-INF`,再在`META-INF`文件夹下新建`services`文件夹
-> 
 > 在`META-INF/services`目录下新建文件`com.gitee.freakchicken.dbapi.plugin.CachePlugin`，并在此文件中填写刚才编写的缓存插件的java类名
-> 
 > 在`META-INF/services`目录下新建文件`com.gitee.freakchicken.dbapi.plugin.TransformPlugin`，并在此文件中填写刚才编写的数据转换插件的java类名
-> 
+
 - 2.5 插件日志打印
 > 如果想在插件内打印日志，推荐直接调用父类的`logger`
 ```java
