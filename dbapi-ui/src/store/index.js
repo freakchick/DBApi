@@ -12,6 +12,9 @@ export default new Vuex.Store({
         mode: null
     },
     mutations: {
+        clearTransformPluginParam(state,index){
+            state.sqls[index].transformPluginParams = null
+        },
         addSql(state) {
             state.seq += 1
             state.labelSeq += 1

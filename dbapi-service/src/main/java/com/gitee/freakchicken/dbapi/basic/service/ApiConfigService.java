@@ -11,7 +11,7 @@ import com.gitee.freakchicken.dbapi.basic.domain.ApiDto;
 import com.gitee.freakchicken.dbapi.basic.util.Constants;
 import com.gitee.freakchicken.dbapi.basic.util.UUIDUtil;
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
-import com.gitee.freakchicken.dbapi.common.Alarm;
+import com.gitee.freakchicken.dbapi.basic.domain.Alarm;
 import com.gitee.freakchicken.dbapi.common.ApiSql;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
 import com.gitee.freakchicken.dbapi.plugin.CachePlugin;

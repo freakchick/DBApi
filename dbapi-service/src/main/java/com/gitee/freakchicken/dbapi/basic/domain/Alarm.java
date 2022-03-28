@@ -1,4 +1,4 @@
-package com.gitee.freakchicken.dbapi.common;
+package com.gitee.freakchicken.dbapi.basic.domain;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;

@@ -40,7 +40,7 @@
             </div>
             <div v-show="detail.contentType == 'application/x-www-form-urlencoded'">
 
-              <el-table :data="detail.params" border stripe max-height="700" size="mini">
+              <el-table :data="detail.params" border stripe max-height="700" size="mini" empty-text="暂无参数">
                 <el-table-column prop="name" label="参数名称" width="220px">
                   <template slot-scope="scope">
                     <el-autocomplete v-model="scope.row.name" :fetch-suggestions="parseParams"></el-autocomplete>
@@ -49,7 +49,8 @@
                 <el-table-column label="参数类型" width="220px">
                   <template slot-scope="scope">
                     <el-select v-model="scope.row.type" :options="options">
-                      <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                      <el-option v-for="item in options" :key="item.value" :label="item.label"
+                                 :value="item.value"></el-option>
                     </el-select>
                   </template>
                 </el-table-column>
@@ -73,7 +74,8 @@
               <el-button @click="addRow" icon="el-icon-plus" type="primary" circle size="mini"></el-button>
             </div>
             <div v-show="detail.contentType == 'application/json'" class="textarea">
-              <el-input v-model="detail.jsonParam" placeholder="填写json参数示例，用于生成接口文档" type="textarea" rows="6"></el-input>
+              <el-input v-model="detail.jsonParam" placeholder="填写json参数示例，用于生成接口文档" type="textarea"
+                        rows="6"></el-input>
               <el-tooltip placement="top-start" effect="dark">
                 <div slot="content">
                   对于application/json类型的API，这个参数示例仅用来生成接口文档，方便调用API的用户查看接口的json参数格式
@@ -122,9 +124,13 @@
           <el-form-item :label="$t('m.data_convert')">
             <div v-for="(item,index) in this.$store.state.sqls">
               <span>sql-{{ item.label }} : </span>
-              <my-input :label="$t('m.plugin_class')" v-model="item.transformPlugin" placeholder="填写数据转换插件java类名"
-                        width="400px"></my-input>
-              <my-input :label="$t('m.plugin_parameter')" v-model="item.transformPluginParams" width="300px"></my-input>
+              <span class="label">插件类名</span>
+              <el-select v-model="item.transformPlugin" style="width:400px" placeholder="请选择数据转换插件java类名" clearable
+                         @clear="clearTransPluginParam(index)" no-data-text="暂无插件" >
+                <el-option v-for="op in transformPlugins" :value="op"></el-option>
+              </el-select>
+              <span class="label">插件参数</span>
+              <el-input placeholder="请输入数据转换插件参数" v-model="item.transformPluginParams" style="width:400px"></el-input>
             </div>
 
 
@@ -135,13 +141,13 @@
 
           </el-form-item>
           <el-form-item :label="$t('m.cache')">
-            <el-tooltip placement="top-start" effect="dark">
-              <!--              <div slot="content"></div>
-                            <i class="el-icon-info tip"></i>-->
-            </el-tooltip>
-            <my-input :label="$t('m.plugin_class')" v-model="detail.cachePlugin" placeholder="填写缓存插件java类名"
-                      width="400px"></my-input>
-            <my-input :label="$t('m.plugin_parameter')" v-model="detail.cachePluginParams" width="300px"></my-input>
+            <span class="label">插件类名</span>
+            <el-select v-model="detail.cachePlugin" style="width:400px" placeholder="请选择缓存插件java类名" clearable
+                       @clear="clearCachePluginParam()" no-data-text="暂无插件" >
+              <el-option v-for="item in cachePlugins" :value="item"></el-option>
+            </el-select>
+            <span class="label">插件参数</span>
+            <el-input placeholder="请输入缓存插件参数" v-model="detail.cachePluginParams" style="width:400px"></el-input>
             <el-alert type="warning" show-icon>
               填写“插件类名”表示对结果数据开启缓存，不填写表示不开启缓存
             </el-alert>
@@ -200,7 +206,7 @@ export default {
         sqlList: [{sqlText: '', transformPlugin: null, transformPluginParams: null}], //默认空字符串，当创建API的时候，默认打开一个标签
         contentType: 'application/x-www-form-urlencoded',
         openTrans: 0,
-        mail:null
+        mail: null
       },
       options: [
         {label: 'string', value: 'string'},
@@ -218,10 +224,18 @@ export default {
       isFullScreen: false,
       mode: 'mini',
       types: ['application/x-www-form-urlencoded', 'application/json'],
+      cachePlugins: [],
+      transformPlugins: []
     }
   },
   props: ["id"],
   methods: {
+    clearTransPluginParam(index) {
+      this.$store.commit('clearTransformPluginParam', index)
+    },
+    clearCachePluginParam() {
+      this.detail.cachePluginParams = null
+    },
 
     addRow() {
       this.detail.params.push({name: null, type: null})
@@ -285,6 +299,13 @@ export default {
         this.groups = response.data
       }).catch((error) => {
       })
+    },
+    getAllPlugin() {
+      this.axios.post("/plugin/all").then((response) => {
+        this.cachePlugins = response.data.cache
+        this.transformPlugins = response.data.transform
+      }).catch((error) => {
+      })
     }
   },
   mounted() {
@@ -302,6 +323,7 @@ export default {
       }])
     }
     this.getAllGroups()
+    this.getAllPlugin()
   },
   components: {MySelect, sqlCode}
 }
@@ -348,11 +370,15 @@ a {
   }
 }
 
-.textarea{
+.textarea {
   /deep/ .el-textarea__inner {
     font-family: 'Consolas', Helvetica, Arial, sans-serif !important;
     font-size: 16px !important;
     line-height: 20px;
   }
+}
+.label{
+  margin: 0 5px 0 15px;
+
 }
 </style>
