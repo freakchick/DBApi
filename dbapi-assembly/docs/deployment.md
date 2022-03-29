@@ -113,7 +113,7 @@ sh bin/dbapi-daemon.sh stop apiServer
 
 - 一键启动（使用dbapi自带的元数据库sqlite）
 ```shell
-docker run -it -e ROLE=standalone -p 8520:8520 freakchicken/db-api:3.0.0
+docker run -it -e ROLE=standalone -p 8520:8520 freakchicken/db-api:3.1.0
 ```
 
 - 使用自己的mysql作为元数据库（启动前需要在mysql执行初始化脚本）
@@ -125,7 +125,7 @@ docker run -it \
 -e DB_USERNAME="root" \
 -e DB_PASSWORD="root" \
 -e DB_DRIVER="com.mysql.cj.jdbc.Driver" \
-freakchicken/db-api:3.0.0
+freakchicken/db-api:3.1.0
 ```
 - 浏览器访问`http://192.168.xx.xx:8520`进入UI
 
@@ -147,7 +147,7 @@ docker run -it \
 -e NACOS_USERNAME="nacos" \
 -e NACOS_PASSWORD="nacos" \
 -e NACOS_NAMESPACE="public" \
-freakchicken/db-api:3.0.0
+freakchicken/db-api:3.1.0
 ```
 
 - 启动网关服务 gateway
@@ -163,7 +163,7 @@ docker run -it \
 -e NACOS_USERNAME="nacos" \
 -e NACOS_PASSWORD="nacos" \
 -e NACOS_NAMESPACE="public" \
-freakchicken/db-api:3.0.0
+freakchicken/db-api:3.1.0
 ```
 
 - 启动API服务apiServer（此服务可启动多个，构建api集群）
@@ -178,7 +178,7 @@ docker run -it \
 -e NACOS_USERNAME="nacos" \
 -e NACOS_PASSWORD="nacos" \
 -e NACOS_NAMESPACE="public" \
-freakchicken/db-api:3.0.0
+freakchicken/db-api:3.1.0
 ```
 
 - 浏览器访问`http://192.168.xx.xx:8523`进入UI; API通过gateway来访问`http://192.168.xx.xx:8525/api/xx`
