@@ -113,7 +113,7 @@ sh bin/dbapi-daemon.sh stop apiServer
 
 - 一键启动（使用dbapi自带的元数据库sqlite）
 ```shell
-docker run -it -e ROLE=standalone -p 8520:8520 freakchicken/db-api:3.1.0
+docker run -it -e ROLE=standalone -p 8520:8520 --name dbapi freakchicken/db-api:3.1.0
 ```
 
 - 使用自己的mysql作为元数据库（启动前需要在mysql执行初始化脚本）
