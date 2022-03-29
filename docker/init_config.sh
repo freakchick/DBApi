@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # 将docker启动时命令行中指定的-e参数设置到spring认识的环境变量
 

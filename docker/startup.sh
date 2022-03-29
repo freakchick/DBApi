@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # docker 容器内使用此脚本启动
 
 # 环境变量替换成spring认识的格式

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 usage="Usage: dbapi-daemon.sh (start|stop|status) <standalone|manager|apiServer|gateway> "
 

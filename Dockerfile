@@ -1,8 +1,16 @@
-FROM freakchicken/java8:1.0
+FROM openjdk:8-jre-slim-buster
+ARG DEBIAN_FRONTEND=noninteractive
 
 ARG VERSION
 ENV DOCKER true
 ENV ROLE standalone
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends tzdata dos2unix && \
+    echo "Asia/Shanghai" > /etc/timezone && \
+    rm -f /etc/localtime && \
+    dpkg-reconfigure tzdata && \
+    rm -rf /var/lib/apt/lists/* /tmp/*
 
 ADD dist/DBApi-${VERSION}-bin.tar.gz /opt/
 
