@@ -15,4 +15,4 @@ WORKDIR /opt/DBApi-${VERSION}
 
 EXPOSE 8520 8523 8525
 
-ENTRYPOINT sh /opt/startup.sh $ROLE
+ENTRYPOINT bash /opt/startup.sh $ROLE
