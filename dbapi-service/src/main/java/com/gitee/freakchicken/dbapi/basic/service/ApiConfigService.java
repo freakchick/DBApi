@@ -80,7 +80,7 @@ public class ApiConfigService {
                 apiSqlMapper.insert(t);
             });
 
-            if(StringUtils.isNoneBlank(apiConfig.getMail())){            
+            if (StringUtils.isNoneBlank(apiConfig.getMail())) {
                 Alarm alarm = new Alarm();
                 alarm.setMail(apiConfig.getMail());
                 alarm.setApiId(id);
@@ -118,7 +118,7 @@ public class ApiConfigService {
             });
 
             alarmMapper.deleteByApiID(apiConfig.getId());
-            if(StringUtils.isNoneBlank(apiConfig.getMail())){            
+            if (StringUtils.isNoneBlank(apiConfig.getMail())) {
                 Alarm alarm = new Alarm();
                 alarm.setMail(apiConfig.getMail());
                 alarm.setApiId(apiConfig.getId());
@@ -145,7 +145,7 @@ public class ApiConfigService {
 
     }
 
-//    @CacheEvict(value = "api", key = "#path")
+    //    @CacheEvict(value = "api", key = "#path")
     @Transactional
     public void delete(String id) {
         ApiConfig oldConfig = apiConfigMapper.selectById(id);
@@ -208,13 +208,13 @@ public class ApiConfigService {
     }
 
     /**
-        servlet 从这获取API元数据
-    */
+     * servlet 从这获取API元数据
+     */
     @Cacheable(value = "api", key = "#path", unless = "#result == null")
     public ApiConfig getConfig(String path) {
         log.info("get api config from db");
         ApiConfig apiConfig = apiConfigMapper.selectByPathOnline(path);
-        List<ApiSql> apiSqls = apiSqlMapper.selectByApiId(apiConfig.getId());       
+        List<ApiSql> apiSqls = apiSqlMapper.selectByApiId(apiConfig.getId());
         apiConfig.setSqlList(apiSqls);
         String mail = alarmMapper.selectMailByApiId(apiConfig.getId());
         apiConfig.setMail(mail);
@@ -259,30 +259,36 @@ public class ApiConfigService {
         List<ApiConfig> list = apiConfigMapper.selectBatchIds(ids);
         list.stream().forEach(t -> {
             temp.append("## ").append(t.getName()).append("\n- 接口地址： /api/").append(t.getPath())
-                    .append("\n- 接口备注：").append(t.getNote()).append("\n- 请求参数：");
+                    .append("\n- 接口备注：").append(t.getNote());
+            temp.append("\n- Content-Type：").append(t.getContentType());
 
-            String params = t.getParams();
-            JSONArray array = JSON.parseArray(params);
+            temp.append("\n- 请求参数：");
+            if (Constants.APP_FORM_URLENCODED.equalsIgnoreCase(t.getContentType())) {
+                String params = t.getParams();
+                JSONArray array = JSON.parseArray(params);
 
-            if (array.size() > 0) {
-                StringBuffer buffer = new StringBuffer();
-                buffer.append("\n\n| 参数名称 | 参数类型 | 参数说明 |\n");
-                buffer.append("| :----: | :----: | :----: |\n");
+                if (array.size() > 0) {
+                    StringBuffer buffer = new StringBuffer();
+                    buffer.append("\n\n| 参数名称 | 参数类型 | 参数说明 |\n");
+                    buffer.append("| :----: | :----: | :----: |\n");
 
-                for (int i = 0; i < array.size(); i++) {
-                    JSONObject jsonObject = array.getJSONObject(i);
-                    String name = jsonObject.getString("name");
-                    String type = jsonObject.getString("type");
-                    if (type.startsWith("Array")) {
-                        type = type.substring(6, type.length() - 1) + "数组";
+                    for (int i = 0; i < array.size(); i++) {
+                        JSONObject jsonObject = array.getJSONObject(i);
+                        String name = jsonObject.getString("name");
+                        String type = jsonObject.getString("type");
+                        if (type.startsWith("Array")) {
+                            type = type.substring(6, type.length() - 1) + "数组";
+                        }
+                        String note = jsonObject.getString("note");
+                        buffer.append("|").append(name).append("|").append(type).append("|").append(note).append("|\n");
                     }
-                    String note = jsonObject.getString("note");
-                    buffer.append("|").append(name).append("|").append(type).append("|").append(note).append("|\n");
-                }
 
-                temp.append(buffer);
-            } else {
-                temp.append("无参数\n");
+                    temp.append(buffer);
+                } else {
+                    temp.append("无参数\n");
+                }
+            } else if (Constants.APP_JSON.equalsIgnoreCase(t.getContentType())) {
+                temp.append("\n```json\n").append(t.getJsonParam()).append("\n```\n");
             }
             temp.append("\n---\n");
         });
