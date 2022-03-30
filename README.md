@@ -102,13 +102,3 @@
 <img src="https://freakchicken.gitee.io/images/kafkaui/wechatpay.jpg" width = "30%" />
 <img src="https://freakchicken.gitee.io/images/kafkaui/alipay.jpg" width = "29%" />
 </div>
-
-## TODO
-- 支持application/json
-- 支持API调用记录监控
-- 支持API报错邮件告警
-- api熔断支持
-- 请求路由参数支持
-- 流量监控支持，ip限流，分组限流
-- 功能性api支持（RPC调用）
-- 分库分表数据源支持（shardingSphere/mycat）
