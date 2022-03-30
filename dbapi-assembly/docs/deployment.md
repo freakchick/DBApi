@@ -4,16 +4,18 @@
 
 ## 本地部署单机版
 
-- 依赖java环境，先自行在服务器安装jdk8+，并配置环境变量
+- 依赖java环境，先自行在服务器安装`jdk8+`，并配置环境变量
 - 下载安装包解压到需要安装的目录
 - 修改`conf/application.properties`文件中的以下配置
 ```properties
-# email sender
+# 失败告警邮件的发件人
+# email sender 
 spring.mail.host=smtp.163.com
 spring.mail.username=xxx@163.com
 spring.mail.password=xxx
 spring.mail.default-encoding=UTF-8
 
+# 数据源密码加密存储的密钥，至少8位字符
 # key used to encrypt the password of DataSource, at least 8 char
 dbapi.secret.key=12345678
 
@@ -35,17 +37,15 @@ sh bin/dbapi-daemon.sh start standalone
 sh bin/dbapi-daemon.sh stop standalone
 ```
 
-- 如果是windows操作系统请右键点击`bin/dbapi.ps1`文件，选择使用powershell运行
+- 如果是windows操作系统请右键点击`bin/dbapi.ps1`文件，选择使用PowerShell运行
 > 注意windows系统只支持standalone模式运行，不支持集群模式
 
 - 浏览器访问`http://192.168.xx.xx:8520`进入UI
 
->  Set-ExecutionPolicy RemoteSigned
-
 ## 本地部署集群版
 
-- 集群部署依赖nacos和mysql，请先自行安装nacos（推荐1.4.2版本）和mysql
-- 准备多台机器，每台安装jdk8+并配置java环境变量
+- 集群部署依赖`nacos`和`mysql`，请先自行安装`nacos`（推荐1.4.2版本）和`mysql`
+- 准备多台机器，每台安装`jdk8+`并配置java环境变量
 - 选一台机器host1作为部署机，配置host1到其他每台机器的ssh免密登录
 ```shell
 ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
@@ -63,12 +63,14 @@ done
 
 - 修改`conf/application.properties`文件中的以下配置
 ```properties
-# email sender
+# 失败告警邮件的发件人
+# email sender 
 spring.mail.host=smtp.163.com
 spring.mail.username=xxx@163.com
 spring.mail.password=xxx
 spring.mail.default-encoding=UTF-8
 
+# 数据源密码加密存储的密钥，至少8位字符
 # key used to encrypt the password of DataSource, at least 8 char
 dbapi.secret.key=12345678
 
@@ -134,6 +136,8 @@ sh bin/dbapi-daemon.sh stop apiServer
 
 ## docker部署单机版
 
+> Docker 容器通过环境变量进行配置，附录-环境变量列出了 `DBApi` 的可配置环境变量及其默认值
+
 - 一键启动（使用dbapi自带的元数据库sqlite）
 ```shell
 docker run -it -e ROLE=standalone -p 8520:8520 --name dbapi freakchicken/db-api:3.1.0
@@ -153,8 +157,9 @@ freakchicken/db-api:3.1.0
 - 浏览器访问`http://192.168.xx.xx:8520`进入UI
 
 ## docker部署集群版
+> Docker 容器通过环境变量进行配置，附录-环境变量 列出了 `DBApi` 的可配置环境变量及其默认值
 
-- 集群部署依赖nacos和mysql，请先自行安装nacos（推荐1.4.2版本）和mysql
+- 集群部署依赖`nacos`和`mysql`，请先自行安装`nacos`（推荐1.4.2版本）和`mysql`
 - 在mysql创建新的数据库，执行数据库初始化脚本（下载安装包解压获取`sql/ddl_mysql.sql`脚本）
 
 - 启动UI服务manager
@@ -206,8 +211,28 @@ freakchicken/db-api:3.1.0
 
 - 浏览器访问`http://192.168.xx.xx:8523`进入UI; API通过gateway来访问`http://192.168.xx.xx:8525/api/xx`
 
-## 附：
-- docker快速安装nacos
+## 附录
+### 环境变量
+> Docker部署的时候通过以下环境变量来传递参数
+
+| 环境变量 | 默认值 | 说明 |
+| -------- | ----- |----- |
+| MAIL_HOST | smtp.163.com | 失败告警的邮件发件人 |
+| MAIL_USERNAME | dbapi_test@163.com | 失败告警的邮件发件人账户  |
+| MAIL_PASSWORD | WGJQBFRIPUENHMUP | 失败告警的邮件发件人密码 |
+| SECRET_KEY | 12345678 | 数据源密码加密存储的密钥，至少8位字符 |
+| API_CONTEXT | api| 所有API的统一根路径 |
+| DB_URL | jdbc:sqlite::resource:sqlite.db |元数据库地址 |
+| DB_USERNAME |  | 元数据库账户|
+| DB_PASSWORD |  | 元数据库密码|
+| DB_DRIVER | org.sqlite.JDBC | 元数据库地址jdbc驱动|
+| NACOS_ADDRESS | 127.0.0.1:8848 | 集群模式使用的nacos地址|
+| NACOS_USERNAME | nacos | 集群模式使用的nacos账户|
+| NACOS_PASSWORD | nacos |集群模式使用的nacos密码 |
+| NACOS_NAMESPACE | public | 集群模式使用的nacos namespace|
+
+
+### docker快速安装nacos
 ```
 docker run --env MODE=standalone --name nacos -d -p 8848:8848 nacos/nacos-server:1.4.2
 ```
