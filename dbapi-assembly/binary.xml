@@ -43,6 +43,7 @@
             <!--            <lineEnding>windows</lineEnding>-->
             <includes>
                 <include>*.bat</include>
+                <include>*.ps1</include>
             </includes>
         </fileSet>
         <fileSet>

@@ -8,6 +8,15 @@
 - 下载安装包解压到需要安装的目录
 - 修改`conf/application.properties`文件中的以下配置
 ```properties
+# email sender
+spring.mail.host=smtp.163.com
+spring.mail.username=xxx@163.com
+spring.mail.password=xxx
+spring.mail.default-encoding=UTF-8
+
+# key used to encrypt the password of DataSource, at least 8 char
+dbapi.secret.key=12345678
+
 # api访问路径的统一根路径，example: http://192.168.xx.xx:8520/api/xxx
 # api context
 dbapi.api.context=api
@@ -20,13 +29,18 @@ spring.datasource.username=
 spring.datasource.password=
 ```
 - 如果配置了mysql作为元数据库，请先在mysql执行初始化脚本`sql/ddl_mysql.sql`
-- 一键启停
+- Linux一键启停
 ```shell
 sh bin/dbapi-daemon.sh start standalone
 sh bin/dbapi-daemon.sh stop standalone
 ```
 
+- 如果是windows操作系统请右键点击`bin/dbapi.ps1`文件，选择使用powershell运行
+> 注意windows系统只支持standalone模式运行，不支持集群模式
+
 - 浏览器访问`http://192.168.xx.xx:8520`进入UI
+
+>  Set-ExecutionPolicy RemoteSigned
 
 ## 本地部署集群版
 
@@ -49,6 +63,15 @@ done
 
 - 修改`conf/application.properties`文件中的以下配置
 ```properties
+# email sender
+spring.mail.host=smtp.163.com
+spring.mail.username=xxx@163.com
+spring.mail.password=xxx
+spring.mail.default-encoding=UTF-8
+
+# key used to encrypt the password of DataSource, at least 8 char
+dbapi.secret.key=12345678
+
 # api访问路径的统一根路径，example: http://192.168.xx.xx:8520/api/xxx
 # api context
 dbapi.api.context=api
