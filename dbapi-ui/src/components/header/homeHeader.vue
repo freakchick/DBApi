@@ -1,6 +1,7 @@
 <template>
   <div class="head">
     <div class="logo">DBApi</div>
+    <span class="version">3.1.0</span>
     <div class="menus">
       <div class="menu iconfont icon-database" @click="clickMenu('/datasource')">
         {{ $t('m.datasource') }}
@@ -78,11 +79,20 @@ export default {
     text-align: center;
     color: #045008;
     display: block;
-    min-width: 150px;
-    width: 200px;
+    //min-width: 150px;
+    //width: 200px;
+    padding: 0 20px 0 20px;
     text-shadow: 2px 2px 1px #a5d4b7;
 
     //width: auto;
+  }
+
+  .version {
+    //line-height: 60px;
+    padding: 30px 20px 0px 0px;
+    font-size: 14px;
+    //color: #fff;
+    //text-shadow: 2px 2px 1px #a5d4b7;
   }
 
   .menus {

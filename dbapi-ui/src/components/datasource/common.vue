@@ -57,7 +57,7 @@ export default {
       flag: false,
       options: [{label: 'mysql', value: 'mysql'}, {label: 'postgresql',value: 'postgresql'}, {label: 'hive',value: 'hive'},
         {label: 'sqlserver',value: 'sqlserver'}, {label: 'clickhouse',value: 'clickhouse'}, {label: 'kylin',value: 'kylin'},
-         {label: 'oracle',value: 'oracle'}, {label: '其他',value:'others'}],
+         {label: 'oracle',value: 'oracle'}, {label: 'TDengine',value: 'TDengine'},{label: '其他',value:'others'}],
       detail: {
         url: null,
         name: null,
@@ -102,6 +102,11 @@ export default {
           url: 'jdbc:oracle:thin:@localhost:1521:<db>',
           driver: 'oracle.jdbc.OracleDriver',
           sql: "SELECT OWNER || '.' || TABLE_NAME FROM ALL_TABLES"
+        },
+        TDengine:{
+          url: 'jdbc:TAOS-RS://localhost:6041/?user=root&password=taosdata',
+          driver: 'com.taosdata.jdbc.rs.RestfulDriver',
+          sql: ""
         }
       }
     }

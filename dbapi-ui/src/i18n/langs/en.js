@@ -24,6 +24,7 @@ const en = {
         update_ds: 'Modify Datasource',
         export_ds: 'Export Datasource',
         import_ds: 'Import Datasource',
+        ds_detail: 'Datasource Detail',
         update_time: 'Update Time',
         operation: 'Operation',
         back: 'Back',

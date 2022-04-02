@@ -25,6 +25,7 @@ const cn = {
         update_ds: '修改数据源',
         export_ds: '导出数据源',
         import_ds: '导入数据源',
+        ds_detail: '数据源详情',
         update_time: '修改时间',
         operation: '操作',
         back: '返回',
