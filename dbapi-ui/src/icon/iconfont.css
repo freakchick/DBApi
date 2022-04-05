@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 2343121 */
-  src: url('iconfont.woff2?t=1634305429065') format('woff2'),
-       url('iconfont.woff?t=1634305429065') format('woff'),
-       url('iconfont.ttf?t=1634305429065') format('truetype');
+  src: url('iconfont.woff2?t=1649033158881') format('woff2'),
+       url('iconfont.woff?t=1649033158881') format('woff'),
+       url('iconfont.ttf?t=1649033158881') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,34 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-GreenPlum:before {
+  content: "\e608";
+}
+
+.icon-influxDB:before {
+  content: "\e811";
+}
+
+.icon-prometheus:before {
+  content: "\e607";
+}
+
+.icon-dameng:before {
+  content: "\ea35";
+}
+
+.icon-oceanbase:before {
+  content: "\e6d6";
+}
+
+.icon-TDengine:before {
+  content: "\e724";
+}
+
+.icon-doris:before {
+  content: "\e62d";
 }
 
 .icon-OTHER:before {

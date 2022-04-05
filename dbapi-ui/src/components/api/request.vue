@@ -23,12 +23,12 @@
 
     <h4>{{ $t('m.parameters') }}：</h4>
     <div class="textarea">
-      <el-input v-model="jsonParam" placeholder="填写json参数示例，用于生成接口文档" type="textarea" rows="10"
+      <el-input v-model="jsonParam" placeholder="填写json参数" type="textarea" rows="10"
                 v-show="contentType ==='application/json' "></el-input>
     </div>
     <el-form label-width="150px" style="width: 600px" size="medium"
              v-show="contentType ==='application/x-www-form-urlencoded' ">
-      <el-form-item v-for="(item,index) in params" :key="index" style="margin-bottom: 5px">
+      <el-form-item v-for="(item,index) in params" :key="item.id" style="margin-bottom: 5px">
         <template slot="label">
           <data-tag :name="item.name" :type="item.type"></data-tag>
         </template>

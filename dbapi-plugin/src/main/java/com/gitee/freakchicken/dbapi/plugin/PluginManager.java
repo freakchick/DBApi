@@ -21,7 +21,7 @@ public class PluginManager {
         while (CachePlugins.hasNext()) {
             CachePlugin plugin = CachePlugins.next();
             plugin.init();
-            log.info(plugin.getClass().getName());
+            log.info("{} registered", plugin.getClass().getName());
             cachePlugins.put(plugin.getClass().getName(), plugin);
         }
         log.info("scan cache plugin finish");
@@ -31,7 +31,7 @@ public class PluginManager {
         while (TransformPlugins.hasNext()) {
             TransformPlugin plugin = TransformPlugins.next();
             plugin.init();
-            log.info(plugin.getClass().getName());
+            log.info("{} registered", plugin.getClass().getName());
             transformPlugins.put(plugin.getClass().getName(), plugin);
         }
         log.info("scan transform plugin finish");
@@ -45,11 +45,11 @@ public class PluginManager {
         return transformPlugins.get(className);
     }
 
-    public static Set<String> getAllCachePlugin(){
+    public static Set<String> getAllCachePlugin() {
         return cachePlugins.keySet();
     }
 
-    public static Set<String> getAllTransformPlugin(){
+    public static Set<String> getAllTransformPlugin() {
         return transformPlugins.keySet();
     }
 }

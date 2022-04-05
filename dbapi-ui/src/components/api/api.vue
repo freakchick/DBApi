@@ -67,7 +67,7 @@
             <span :title="scope.row.note">{{ scope.row.name }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('m.path')">
+        <el-table-column :label="$t('m.path')" >
           <template slot-scope="scope">
             <span>/{{context}}/{{ scope.row.path }}</span>
           </template>
@@ -78,7 +78,7 @@
             <span v-if="scope.row.openTrans == 0">关闭</span>
           </template>
         </el-table-column>
-        <el-table-column label="Content-Type" prop="contentType" ></el-table-column>
+        <el-table-column label="Content-Type" prop="contentType" sortable></el-table-column>
         <el-table-column :label="$t('m.parameters')">
           <template slot-scope="scope">
             <div v-show="scope.row.contentType === 'application/x-www-form-urlencoded' ">
@@ -89,7 +89,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="updateTime" :label="$t('m.update_time')" width="170px"></el-table-column>
+        <el-table-column prop="updateTime" :label="$t('m.update_time')" width="170px" sortable></el-table-column>
         <el-table-column :label="$t('m.operation')" width="220px">
           <template slot-scope="scope">
             <el-button plain size="mini" type="info" @click="detail(scope.row.id)" circle><i

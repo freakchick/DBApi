@@ -6,6 +6,55 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "8152419",
+      "name": "GreenPlum",
+      "font_class": "GreenPlum",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "11834377",
+      "name": "influxDB",
+      "font_class": "influxDB",
+      "unicode": "e811",
+      "unicode_decimal": 59409
+    },
+    {
+      "icon_id": "19929934",
+      "name": "prometheus",
+      "font_class": "prometheus",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "24458650",
+      "name": "达梦",
+      "font_class": "dameng",
+      "unicode": "ea35",
+      "unicode_decimal": 59957
+    },
+    {
+      "icon_id": "1379106",
+      "name": "oceanbase",
+      "font_class": "oceanbase",
+      "unicode": "e6d6",
+      "unicode_decimal": 59094
+    },
+    {
+      "icon_id": "25286621",
+      "name": "TDengine",
+      "font_class": "TDengine",
+      "unicode": "e724",
+      "unicode_decimal": 59172
+    },
+    {
+      "icon_id": "26311350",
+      "name": "doris",
+      "font_class": "doris",
+      "unicode": "e62d",
+      "unicode_decimal": 58925
+    },
+    {
       "icon_id": "23366751",
       "name": "OTHER",
       "font_class": "OTHER",
