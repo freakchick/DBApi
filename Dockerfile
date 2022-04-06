@@ -4,7 +4,6 @@ ARG DEBIAN_FRONTEND=noninteractive
 ARG VERSION
 
 ENV DOCKER true
-ENV ROLE standalone
 
 ADD dist/DBApi-${VERSION}-bin.tar.gz /opt/
 
@@ -15,4 +14,4 @@ WORKDIR /opt/DBApi-${VERSION}
 
 EXPOSE 8520 8523 8525
 
-ENTRYPOINT bash /opt/startup.sh $ROLE
+ENTRYPOINT bash /opt/startup.sh $0
