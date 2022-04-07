@@ -167,7 +167,8 @@ public class APIServlet extends HttpServlet {
         try {
             if (flag)
                 connection.setAutoCommit(false);
-
+            else
+                connection.setAutoCommit(true);
             for (ApiSql apiSql : sqlList) {
                 SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(apiSql.getSqlText(), sqlParam);
                 Object data = JdbcUtil.executeSql(connection, sqlMeta.getSql(), sqlMeta.getJdbcParamValues());
@@ -198,6 +199,10 @@ public class APIServlet extends HttpServlet {
 
     private Map<String, Object> getParams(HttpServletRequest request, ApiConfig apiConfig) {
         String contentType = request.getContentType();
+        //如果是浏览器get请求过来，取出来的contentType是null
+        if (contentType == null) {
+            contentType = Constants.APP_FORM_URLENCODED;
+        }
         Map<String, Object> params = null;
         //如果是application/json请求，不管接口规定的content-type是什么，接口都可以访问，且请求参数都以json body 为准
         if (contentType.equalsIgnoreCase(Constants.APP_JSON)) {
