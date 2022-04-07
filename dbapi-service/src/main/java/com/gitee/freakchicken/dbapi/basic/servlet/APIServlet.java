@@ -133,7 +133,8 @@ public class APIServlet extends HttpServlet {
                     log.info("transform plugin execute");
                     List<JSONObject> sourceData = (List<JSONObject>) (data); //查询类sql的返回结果才可以这样强制转换，只有查询类sql才可以配置转换插件
                     TransformPlugin transformPlugin = PluginManager.getTransformPlugin(apiSql.getTransformPlugin());
-                    data = transformPlugin.transform(sourceData, apiSql.getTransformPluginParams());
+                    Object resData = transformPlugin.transform(sourceData, apiSql.getTransformPluginParams());
+                    dataList.set(i, resData);//重新设置值
                 }
             }
             Object res = dataList;
