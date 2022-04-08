@@ -1,6 +1,6 @@
 #!/bin/bash
 
-usage="Usage: dbapi-daemon.sh (start|stop|status) <standalone|manager|apiServer|gateway> "
+usage="Usage: dbapi.sh start <standalone|manager|apiServer|gateway> "
 
 # if no args specified, show usage
 if [ $# -le 1 ]; then

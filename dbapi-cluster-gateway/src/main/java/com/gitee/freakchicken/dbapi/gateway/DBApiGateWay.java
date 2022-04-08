@@ -22,7 +22,7 @@ import org.springframework.context.annotation.FilterType;
 public class DBApiGateWay {
     public static void main(String[] args) {
         System.setProperty("spring.profiles.active", "gateway");
-
+        System.setProperty("reactor.netty.http.server.accessLogEnabled","true");
         SpringApplication.run(DBApiGateWay.class, args);
     }
 

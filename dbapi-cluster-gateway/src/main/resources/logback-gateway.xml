@@ -42,11 +42,23 @@
             <charset>UTF-8</charset>
         </encoder>
     </appender>
-    <appender name="async" class="ch.qos.logback.classic.AsyncAppender">
-        <appender-ref ref="accessLog" />
+
+    <!--gateway网关 access log 写入文件-->
+    <appender name="accessFileAppender" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="accessLog"/>
     </appender>
+
+    <!--gateway网关 access log 写入DB，推荐使用clickhouse-->
+    <!--    <appender name="DBAppender" class="com.gitee.freakchicken.dbapi.basic.log.AccessLogDBAppender">-->
+    <!--    <driver>ru.yandex.clickhouse.ClickHouseDriver</driver>-->
+    <!--    <url>jdbc:clickhouse://localhost:8123/db</url>-->
+    <!--        <username>root</username>-->
+    <!--        <password>root</password>-->
+    <!--    </appender>-->
+
     <logger name="reactor.netty.http.server.AccessLog" level="INFO" additivity="false">
-        <appender-ref ref="async"/>
+        <appender-ref ref="accessFileAppender"/>
+        <!--        <appender-ref ref="DBAppender"/>-->
     </logger>
 
     <logger name="org.apache.zookeeper" level="WARN"/>
