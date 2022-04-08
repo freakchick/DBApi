@@ -8,7 +8,6 @@ import com.gitee.freakchicken.dbapi.basic.dao.ApiSqlMapper;
 import com.gitee.freakchicken.dbapi.basic.dao.DataSourceMapper;
 import com.gitee.freakchicken.dbapi.basic.dao.AlarmMapper;
 import com.gitee.freakchicken.dbapi.basic.domain.ApiDto;
-import com.gitee.freakchicken.dbapi.basic.util.Constants;
 import com.gitee.freakchicken.dbapi.basic.util.UUIDUtil;
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.basic.domain.Alarm;
@@ -21,6 +20,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,9 +63,9 @@ public class ApiConfigService {
             String id = UUIDUtil.id();
             apiConfig.setId(id);
 
-            if (Constants.APP_JSON.equals(apiConfig.getContentType())) {
+            if (MediaType.APPLICATION_JSON_VALUE.equals(apiConfig.getContentType())) {
                 apiConfig.setParams("[]"); //不能设置null 前端使用会报错
-            } else if (Constants.APP_FORM_URLENCODED.equals(apiConfig.getContentType())) {
+            } else if (MediaType.APPLICATION_FORM_URLENCODED_VALUE.equals(apiConfig.getContentType())) {
                 apiConfig.setJsonParam(null);
             }
 
@@ -103,9 +103,9 @@ public class ApiConfigService {
             apiConfig.setStatus(0);
             apiConfig.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 
-            if (Constants.APP_JSON.equals(apiConfig.getContentType())) {
+            if (MediaType.APPLICATION_JSON_VALUE.equals(apiConfig.getContentType())) {
                 apiConfig.setParams("[]"); //不能设置null 前端使用会报错
-            } else if (Constants.APP_FORM_URLENCODED.equals(apiConfig.getContentType())) {
+            } else if (MediaType.APPLICATION_FORM_URLENCODED_VALUE.equals(apiConfig.getContentType())) {
                 apiConfig.setJsonParam(null);
             }
 
@@ -263,7 +263,7 @@ public class ApiConfigService {
             temp.append("\n- Content-Type：").append(t.getContentType());
 
             temp.append("\n- 请求参数：");
-            if (Constants.APP_FORM_URLENCODED.equalsIgnoreCase(t.getContentType())) {
+            if (MediaType.APPLICATION_FORM_URLENCODED_VALUE.equalsIgnoreCase(t.getContentType())) {
                 String params = t.getParams();
                 JSONArray array = JSON.parseArray(params);
 
@@ -287,7 +287,7 @@ public class ApiConfigService {
                 } else {
                     temp.append("无参数\n");
                 }
-            } else if (Constants.APP_JSON.equalsIgnoreCase(t.getContentType())) {
+            } else if (MediaType.APPLICATION_JSON_VALUE.equalsIgnoreCase(t.getContentType())) {
                 temp.append("\n```json\n").append(t.getJsonParam()).append("\n```\n");
             }
             temp.append("\n---\n");

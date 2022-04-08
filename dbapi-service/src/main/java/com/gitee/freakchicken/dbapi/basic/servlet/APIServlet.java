@@ -6,7 +6,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.gitee.freakchicken.dbapi.basic.service.*;
 
-import com.gitee.freakchicken.dbapi.basic.util.Constants;
 import com.gitee.freakchicken.dbapi.basic.util.PoolManager;
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.common.ApiSql;
@@ -23,8 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
@@ -201,18 +199,19 @@ public class APIServlet extends HttpServlet {
         String contentType = request.getContentType();
         //如果是浏览器get请求过来，取出来的contentType是null
         if (contentType == null) {
-            contentType = Constants.APP_FORM_URLENCODED;
+            contentType = MediaType.APPLICATION_FORM_URLENCODED_VALUE;
+
         }
         Map<String, Object> params = null;
         //如果是application/json请求，不管接口规定的content-type是什么，接口都可以访问，且请求参数都以json body 为准
-        if (contentType.equalsIgnoreCase(Constants.APP_JSON)) {
+        if (contentType.equalsIgnoreCase(MediaType.APPLICATION_JSON_VALUE)) {
             JSONObject jo = getHttpJsonBody(request);
             params = JSONObject.parseObject(jo.toJSONString(), new TypeReference<Map<String, Object>>() {
             });
         }
         //如果是application/x-www-form-urlencoded请求，先判断接口规定的content-type是不是确实是application/x-www-form-urlencoded
-        else if (contentType.equalsIgnoreCase(Constants.APP_FORM_URLENCODED)) {
-            if (Constants.APP_FORM_URLENCODED.equalsIgnoreCase(apiConfig.getContentType())) {
+        else if (contentType.equalsIgnoreCase( MediaType.APPLICATION_FORM_URLENCODED_VALUE)) {
+            if ( MediaType.APPLICATION_FORM_URLENCODED_VALUE.equalsIgnoreCase(apiConfig.getContentType())) {
                 params = apiService.getSqlParam(request, apiConfig);
             } else {
                 throw new RuntimeException("this API only support content-type: " + apiConfig.getContentType() + ", but you use: " + contentType);
