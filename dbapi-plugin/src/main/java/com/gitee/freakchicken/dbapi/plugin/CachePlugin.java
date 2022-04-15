@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
-public abstract class CachePlugin {
+public abstract class CachePlugin implements BasePlugin {
 
     public Logger logger = LoggerFactory.getLogger(CachePlugin.class);
 

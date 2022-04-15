@@ -25,4 +25,19 @@ public class DemoCachePlugin extends CachePlugin {
     public Object get(ApiConfig config, Map<String, Object> requestParams) {
         return null;
     }
+
+    @Override
+    public String getName() {
+        return "demo缓存插件";
+    }
+
+    @Override
+    public String getDescription() {
+        return "demo缓存插件描述";
+    }
+
+    @Override
+    public String getParamDescription() {
+        return "demo缓存插件参数";
+    }
 }

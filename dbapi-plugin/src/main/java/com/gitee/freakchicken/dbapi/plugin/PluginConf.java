@@ -14,7 +14,7 @@ public class PluginConf {
         try {
             p.load(in);
         } catch (IOException e) {
-
+            e.printStackTrace();
         }
 
     }

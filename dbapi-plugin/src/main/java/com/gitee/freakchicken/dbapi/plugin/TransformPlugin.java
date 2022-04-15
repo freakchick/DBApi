@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-public abstract class TransformPlugin {
+public abstract class TransformPlugin implements BasePlugin  {
 
     public Logger logger = LoggerFactory.getLogger(CachePlugin.class);
 

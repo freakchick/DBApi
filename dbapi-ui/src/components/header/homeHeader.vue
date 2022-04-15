@@ -1,7 +1,7 @@
 <template>
   <div class="head">
     <div class="logo">DBApi</div>
-    <span class="version">3.1.0</span>
+    <span class="version">{{ version }}</span>
     <div class="menus">
       <div class="menu iconfont icon-database" @click="clickMenu('/datasource')">
         {{ $t('m.datasource') }}
@@ -39,7 +39,8 @@ export default {
   data() {
     return {
       langs: [{name: 'english', value: 'en'}, {name: '中文', value: 'cn'}],
-      currentLang: this.$i18n.locale
+      currentLang: this.$i18n.locale,
+      version: null
     }
   },
   methods: {
@@ -50,8 +51,18 @@ export default {
       this.$i18n.locale = data.value
       localStorage.setItem('locale', data.value)
       this.currentLang = data.value
+    },
+    getVersion() {
+      this.axios.post("/system/version").then((response) => {
+        this.version = response.data
+      }).catch((error) => {
+
+      })
     }
 
+  },
+  created() {
+    this.getVersion()
   },
   computed: {
     languageName() {

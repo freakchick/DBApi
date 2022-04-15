@@ -5,19 +5,18 @@ import com.gitee.freakchicken.dbapi.plugin.PluginManager;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Set;
 
 @RestController
 @RequestMapping("/plugin")
 public class PluginController {
 
     @RequestMapping("/all")
-    public JSONObject getAllCachePlugin(){
-        Set<String> allCachePlugin = PluginManager.getAllCachePlugin();
-        Set<String> allTransformPlugin = PluginManager.getAllTransformPlugin();
+    public JSONObject getAllCachePlugin() {
+
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("cache",allCachePlugin);
-        jsonObject.put("transform",allTransformPlugin);
+        jsonObject.put("cache", PluginManager.getAllCachePlugin());
+        jsonObject.put("transform", PluginManager.getAllTransformPlugin());
+        jsonObject.put("alarm", PluginManager.getAllAlarmPlugin());
         return jsonObject;
     }
 

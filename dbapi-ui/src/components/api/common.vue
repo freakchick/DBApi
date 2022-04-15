@@ -25,7 +25,8 @@
             </el-select>
             <el-tooltip placement="top-start" effect="dark">
               <div slot="content">
-                <p>对于application/x-www-form-urlencoded类型的API，用户在请求该API的时候既可以使用application/x-www-form-urlencoded，也可以使用application/json</p>
+                <p>
+                  对于application/x-www-form-urlencoded类型的API，用户在请求该API的时候既可以使用application/x-www-form-urlencoded，也可以使用application/json</p>
                 <p>对于application/json类型的API，用户在请求该API的时候只能使用application/json</p>
               </div>
               <i class="el-icon-info tip"></i>
@@ -126,8 +127,13 @@
               <span>sql-{{ item.label }} : </span>
               <span class="label">插件类名</span>
               <el-select v-model="item.transformPlugin" style="width:400px" placeholder="请选择数据转换插件java类名" clearable
-                         @clear="clearTransPluginParam(index)" no-data-text="暂无插件" >
-                <el-option v-for="op in transformPlugins" :value="op"></el-option>
+                         @clear="clearTransPluginParam(index)" no-data-text="暂无插件">
+                <el-option v-for="op in transformPlugins" :value="op.className">
+                  <div>
+                    <span>{{ op.className }}</span>
+                    <span style="color: #cccccc;margin-left:10px;">{{ op.name }} </span>
+                  </div>
+                </el-option>
               </el-select>
               <span class="label">插件参数</span>
               <el-input placeholder="请输入数据转换插件参数" v-model="item.transformPluginParams" style="width:400px"></el-input>
@@ -143,35 +149,65 @@
           <el-form-item :label="$t('m.cache')">
             <span class="label">插件类名</span>
             <el-select v-model="detail.cachePlugin" style="width:400px" placeholder="请选择缓存插件java类名" clearable
-                       @clear="clearCachePluginParam()" no-data-text="暂无插件" >
-              <el-option v-for="item in cachePlugins" :value="item"></el-option>
+                       @clear="clearCachePluginParam()" no-data-text="暂无插件">
+              <el-option v-for="item in cachePlugins" :value="item" :label="item.className">
+                <div>
+                  <span>{{ item.className }}</span>
+                  <span style="color: #cccccc;margin-left:10px;">{{ item.name }} </span>
+                </div>
+              </el-option>
             </el-select>
             <span class="label">插件参数</span>
-            <el-input placeholder="请输入缓存插件参数" v-model="detail.cachePluginParams" style="width:400px"></el-input>
-            <el-alert type="warning" show-icon>
-              填写“插件类名”表示对结果数据开启缓存，不填写表示不开启缓存
-            </el-alert>
-            <div>
-              <a class="el-icon-question" target="_blank"
-                 href="https://gitee.com/freakchicken/db-api/blob/master/dbapi-assembly/docs/instruction.md#%E6%8F%92%E4%BB%B6">{{
-                  $t('m.what_is_plugin')
-                }}</a>
-              <a class="el-icon-question" target="_blank"
-                 href="https://gitee.com/freakchicken/db-api/blob/master/dbapi-assembly/docs/plugin%20development.md#252-%E5%B1%80%E9%83%A8%E5%8F%82%E6%95%B0">{{
-                  $t('m.what_is_plugin_param')
-                }}</a>
-            </div>
-          </el-form-item>
-          <el-form-item label="失败邮件告警">
-            <el-input v-model="detail.mail" placeholder="填写收件人邮箱，多个用英文分号隔开" style="width: 500px"></el-input>
+            <el-input :placeholder="detail.cachePlugin.paramDescription" v-model="detail.cachePluginParams" style="width:400px"></el-input>
             <el-tooltip placement="top-start" effect="dark">
               <div slot="content">
-                不填写表示不需要失败邮件告警
+                <div>插件描述：{{ detail.cachePlugin.description }}</div>
+                <div>插件参数描述：{{ detail.cachePlugin.paramDescription }}</div>
               </div>
               <i class="el-icon-info tip"></i>
             </el-tooltip>
 
+            <el-alert type="info" show-icon>
+              填写“插件类名”表示对结果数据开启缓存，不填写表示不开启缓存
+            </el-alert>
+
           </el-form-item>
+          <el-form-item label="失败告警">
+            <span class="label">插件类名</span>
+            <el-select v-model="detail.alarmPlugin" style="width:400px" placeholder="请选择告警插件java类名" clearable
+                       @clear="clearAlarmPluginParam()" no-data-text="暂无插件">
+              <el-option v-for="item in alarmPlugins" :value="item" :label="item.className">
+                <div>
+                  <span>{{ item.className }}</span>
+                  <span style="color: #cccccc;margin-left:10px;">{{ item.name }} </span>
+                </div>
+              </el-option>
+            </el-select>
+            <span class="label">插件参数</span>
+
+            <el-input :placeholder="detail.alarmPlugin.paramDescription" v-model="detail.alarmPluginParams"
+                      style="width:400px"></el-input>
+            <el-tooltip placement="top-start" effect="dark">
+              <div slot="content">
+                <div>插件描述：{{ detail.alarmPlugin.description }}</div>
+                <div>插件参数描述：{{ detail.alarmPlugin.paramDescription }}</div>
+              </div>
+              <i class="el-icon-info tip"></i>
+            </el-tooltip>
+            <el-alert type="info" show-icon>
+              填写“插件类名”表示对API失败告警，不填写表示失败不告警
+            </el-alert>
+          </el-form-item>
+          <div>
+            <a class="el-icon-question" target="_blank"
+               href="https://gitee.com/freakchicken/db-api/blob/master/dbapi-assembly/docs/instruction.md#%E6%8F%92%E4%BB%B6">{{
+                $t('m.what_is_plugin')
+              }}</a>
+            <a class="el-icon-question" target="_blank"
+               href="https://gitee.com/freakchicken/db-api/blob/master/dbapi-assembly/docs/plugin%20development.md#252-%E5%B1%80%E9%83%A8%E5%8F%82%E6%95%B0">{{
+                $t('m.what_is_plugin_param')
+              }}</a>
+          </div>
         </el-form>
       </el-tab-pane>
 
@@ -200,8 +236,10 @@ export default {
         params: [],
         groupId: null,
         previlege: 0,//访问权限
-        cachePlugin: null,
+        cachePlugin: {className: null, paramDescription: null, name: null, description: null},
         cachePluginParams: null,
+        alarmPlugin: {className: null, paramDescription: null, name: null, description: null},
+        alarmPluginParams: null,
         jsonParam: null,
         sqlList: [{sqlText: '', transformPlugin: null, transformPluginParams: null}], //默认空字符串，当创建API的时候，默认打开一个标签
         contentType: 'application/x-www-form-urlencoded',
@@ -225,18 +263,24 @@ export default {
       mode: 'mini',
       types: ['application/x-www-form-urlencoded', 'application/json'],
       cachePlugins: [],
-      transformPlugins: []
+      transformPlugins: [],
+      alarmPlugins: []
     }
   },
   props: ["id"],
   methods: {
+    alarmChange($event) {
+      // this.
+    },
     clearTransPluginParam(index) {
       this.$store.commit('clearTransformPluginParam', index)
     },
     clearCachePluginParam() {
       this.detail.cachePluginParams = null
     },
-
+    clearAlarmPluginParam() {
+      this.detail.alarmPluginParams = null
+    },
     addRow() {
       this.detail.params.push({name: null, type: null})
     },
@@ -304,6 +348,7 @@ export default {
       this.axios.post("/plugin/all").then((response) => {
         this.cachePlugins = response.data.cache
         this.transformPlugins = response.data.transform
+        this.alarmPlugins = response.data.alarm
       }).catch((error) => {
       })
     }
@@ -377,7 +422,8 @@ a {
     line-height: 20px;
   }
 }
-.label{
+
+.label {
   margin: 0 5px 0 15px;
 
 }

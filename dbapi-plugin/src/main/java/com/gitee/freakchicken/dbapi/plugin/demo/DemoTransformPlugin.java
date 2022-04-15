@@ -15,4 +15,19 @@ public class DemoTransformPlugin extends TransformPlugin {
     public Object transform(List<JSONObject> data, String params) {
         return null;
     }
+
+    @Override
+    public String getName() {
+        return "demo数据转换插件";
+    }
+
+    @Override
+    public String getDescription() {
+        return "demo数据转换插件描述";
+    }
+
+    @Override
+    public String getParamDescription() {
+        return "demo数据转换参数插件";
+    }
 }
