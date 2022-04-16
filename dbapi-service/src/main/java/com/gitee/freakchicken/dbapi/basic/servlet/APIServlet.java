@@ -11,6 +11,7 @@ import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.common.ApiSql;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
 import com.gitee.freakchicken.dbapi.basic.domain.DataSource;
+import com.gitee.freakchicken.dbapi.plugin.AlarmPlugin;
 import com.gitee.freakchicken.dbapi.plugin.CachePlugin;
 import com.gitee.freakchicken.dbapi.plugin.PluginManager;
 import com.gitee.freakchicken.dbapi.plugin.TransformPlugin;
@@ -53,8 +54,8 @@ public class APIServlet extends HttpServlet {
     TokenService tokenService;
     @Autowired
     IPService ipService;
-    @Autowired
-    MailService mailService;
+//    @Autowired
+//    MailService mailService;
 
 
     @Value("${dbapi.api.context}")
@@ -148,13 +149,16 @@ public class APIServlet extends HttpServlet {
             }
             return dto;
         } catch (Exception e) {
-            //如果API配置了邮件告警
-            if (StringUtils.isNotBlank(config.getMail())) {
-                String title = MessageFormat.format("API ERROR: {0}", config.getName());
-                String content = MessageFormat.format("TIME:  {0}\n NAME:  {1}\n URL:  {2}\n REMOTE ADDRESS:  {3}\n\n{4}",
-                        new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS").format(new Date()),
-                        config.getName(), request.getRequestURI(), request.getRemoteAddr(), e.toString());
-                mailService.sendSimpleMail(config.getMail().split(";"), title, content);
+            //如果API配置了告警
+            if (StringUtils.isNotBlank(config.getAlarmPlugin())) {
+                AlarmPlugin alarmPlugin = PluginManager.getAlarmPlugin(config.getAlarmPlugin());
+                alarmPlugin.alarm(e, config, request, config.getAlarmPluginParam());
+
+//                String title = MessageFormat.format("API ERROR: {0}", config.getName());
+//                String content = MessageFormat.format("TIME:  {0}\n NAME:  {1}\n URL:  {2}\n REMOTE ADDRESS:  {3}\n\n{4}",
+//                        new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS").format(new Date()),
+//                        config.getName(), request.getRequestURI(), request.getRemoteAddr(), e.toString());
+//                mailService.sendSimpleMail(config.getMail().split(";"), title, content);
             }
             throw new RuntimeException(e.getMessage());
         }
@@ -210,8 +214,8 @@ public class APIServlet extends HttpServlet {
             });
         }
         //如果是application/x-www-form-urlencoded请求，先判断接口规定的content-type是不是确实是application/x-www-form-urlencoded
-        else if (contentType.equalsIgnoreCase( MediaType.APPLICATION_FORM_URLENCODED_VALUE)) {
-            if ( MediaType.APPLICATION_FORM_URLENCODED_VALUE.equalsIgnoreCase(apiConfig.getContentType())) {
+        else if (contentType.equalsIgnoreCase(MediaType.APPLICATION_FORM_URLENCODED_VALUE)) {
+            if (MediaType.APPLICATION_FORM_URLENCODED_VALUE.equalsIgnoreCase(apiConfig.getContentType())) {
                 params = apiService.getSqlParam(request, apiConfig);
             } else {
                 throw new RuntimeException("this API only support content-type: " + apiConfig.getContentType() + ", but you use: " + contentType);

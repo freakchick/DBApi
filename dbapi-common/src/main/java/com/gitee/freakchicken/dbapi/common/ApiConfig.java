@@ -79,5 +79,8 @@ public class ApiConfig {
     String jsonParam;
 
     @TableField(exist = false)
-    String mail;
+    String alarmPlugin;
+
+    @TableField(exist = false)
+    String alarmPluginParam;
 }

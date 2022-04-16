@@ -18,9 +18,9 @@ public class AlarmService {
     @Autowired
     AlarmMapper alarmMapper;
 
-    public String getMail(String apiId){
-        String mail = alarmMapper.selectMailByApiId(apiId);
-        return mail;
-    }
+//    public String getMail(String apiId){
+//        String mail = alarmMapper.selectMailByApiId(apiId);
+//        return mail;
+//    }
 
 }

@@ -80,10 +80,11 @@ public class ApiConfigService {
                 apiSqlMapper.insert(t);
             });
 
-            if (StringUtils.isNoneBlank(apiConfig.getMail())) {
+            if (StringUtils.isNoneBlank(apiConfig.getAlarmPlugin())) {
                 Alarm alarm = new Alarm();
-                alarm.setMail(apiConfig.getMail());
                 alarm.setApiId(id);
+                alarm.setAlarmPlugin(apiConfig.getAlarmPlugin());
+                alarm.setAlarmPluginParam(apiConfig.getAlarmPluginParam());
                 alarmMapper.insert(alarm);
             }
             return ResponseDto.successWithMsg("create API success");
@@ -118,10 +119,11 @@ public class ApiConfigService {
             });
 
             alarmMapper.deleteByApiID(apiConfig.getId());
-            if (StringUtils.isNoneBlank(apiConfig.getMail())) {
+            if (StringUtils.isNoneBlank(apiConfig.getAlarmPlugin())) {
                 Alarm alarm = new Alarm();
-                alarm.setMail(apiConfig.getMail());
                 alarm.setApiId(apiConfig.getId());
+                alarm.setAlarmPlugin(apiConfig.getAlarmPlugin());
+                alarm.setAlarmPluginParam(apiConfig.getAlarmPluginParam());
                 alarmMapper.insert(alarm);
             }
 
@@ -172,8 +174,11 @@ public class ApiConfigService {
         ApiConfig apiConfig = apiConfigMapper.selectById(id);
         List<ApiSql> list = apiSqlMapper.selectByApiId(apiConfig.getId());
         apiConfig.setSqlList(list);
-        String mail = alarmMapper.selectMailByApiId(apiConfig.getId());
-        apiConfig.setMail(mail);
+        List<Alarm> alarms = alarmMapper.selectByApiId(apiConfig.getId());
+        if (alarms.size() > 0) {
+            apiConfig.setAlarmPlugin(alarms.get(0).getAlarmPlugin());
+            apiConfig.setAlarmPluginParam(alarms.get(0).getAlarmPluginParam());
+        }
         return apiConfig;
     }
 
@@ -216,8 +221,11 @@ public class ApiConfigService {
         ApiConfig apiConfig = apiConfigMapper.selectByPathOnline(path);
         List<ApiSql> apiSqls = apiSqlMapper.selectByApiId(apiConfig.getId());
         apiConfig.setSqlList(apiSqls);
-        String mail = alarmMapper.selectMailByApiId(apiConfig.getId());
-        apiConfig.setMail(mail);
+        List<Alarm> alarms = alarmMapper.selectByApiId(apiConfig.getId());
+        if (alarms.size() > 0) {
+            apiConfig.setAlarmPlugin(alarms.get(0).getAlarmPlugin());
+            apiConfig.setAlarmPluginParam(alarms.get(0).getAlarmPluginParam());
+        }
         return apiConfig;
     }
 

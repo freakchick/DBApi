@@ -10,6 +10,9 @@ public class Alarm {
     @TableField(value = "api_id")
     String apiId;
     
-    @TableField
-    String mail;
+    @TableField("alarm_plugin")
+    String alarmPlugin;
+
+    @TableField("alarm_plugin_param")
+    String alarmPluginParam;
 }

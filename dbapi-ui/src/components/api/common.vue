@@ -25,8 +25,7 @@
             </el-select>
             <el-tooltip placement="top-start" effect="dark">
               <div slot="content">
-                <p>
-                  对于application/x-www-form-urlencoded类型的API，用户在请求该API的时候既可以使用application/x-www-form-urlencoded，也可以使用application/json</p>
+                <p>对于application/x-www-form-urlencoded类型的API，用户在请求该API的时候既可以使用application/x-www-form-urlencoded，也可以使用application/json</p>
                 <p>对于application/json类型的API，用户在请求该API的时候只能使用application/json</p>
               </div>
               <i class="el-icon-info tip"></i>
@@ -128,10 +127,19 @@
               <span class="label">插件类名</span>
               <el-select v-model="item.transformPlugin" style="width:400px" placeholder="请选择数据转换插件java类名" clearable
                          @clear="clearTransPluginParam(index)" no-data-text="暂无插件">
-                <el-option v-for="op in transformPlugins" :value="op.className">
+
+                <el-option v-for="op in transformPlugins" :value="op.className" :label="op.className">
                   <div>
-                    <span>{{ op.className }}</span>
-                    <span style="color: #cccccc;margin-left:10px;">{{ op.name }} </span>
+                    <el-tooltip placement="top-start" effect="dark">
+                      <div slot="content">
+                        <div>插件描述：{{ op.description }}</div>
+                        <div>插件参数描述：{{ op.paramDescription }}</div>
+                      </div>
+                      <div>
+                        <span>{{ op.className }}</span>
+                        <span style="color: #cccccc;margin-left:10px;">{{ op.name }} </span>
+                      </div>
+                    </el-tooltip>
                   </div>
                 </el-option>
               </el-select>
@@ -149,25 +157,26 @@
           <el-form-item :label="$t('m.cache')">
             <span class="label">插件类名</span>
             <el-select v-model="detail.cachePlugin" style="width:400px" placeholder="请选择缓存插件java类名" clearable
-                       @clear="clearCachePluginParam()" no-data-text="暂无插件">
-              <el-option v-for="item in cachePlugins" :value="item" :label="item.className">
+                       @clear="clearCachePluginParam()" no-data-text="暂无插件" >
+              <el-option v-for="item in cachePlugins" :value="item.className">
                 <div>
-                  <span>{{ item.className }}</span>
-                  <span style="color: #cccccc;margin-left:10px;">{{ item.name }} </span>
+                  <el-tooltip placement="top-start" effect="dark">
+                    <div slot="content">
+                      <div>插件描述：{{ item.description }}</div>
+                      <div>插件参数描述：{{ item.paramDescription }}</div>
+                    </div>
+                    <div>
+                      <span>{{ item.className }}</span>
+                      <span style="color: #cccccc;margin-left:10px;">{{ item.name }} </span>
+                    </div>
+                  </el-tooltip>
                 </div>
+
               </el-option>
             </el-select>
             <span class="label">插件参数</span>
-            <el-input :placeholder="detail.cachePlugin.paramDescription" v-model="detail.cachePluginParams" style="width:400px"></el-input>
-            <el-tooltip placement="top-start" effect="dark">
-              <div slot="content">
-                <div>插件描述：{{ detail.cachePlugin.description }}</div>
-                <div>插件参数描述：{{ detail.cachePlugin.paramDescription }}</div>
-              </div>
-              <i class="el-icon-info tip"></i>
-            </el-tooltip>
-
-            <el-alert type="info" show-icon>
+            <el-input placeholder="请输入缓存插件参数" v-model="detail.cachePluginParams" style="width:400px"></el-input>
+            <el-alert type="warning" show-icon>
               填写“插件类名”表示对结果数据开启缓存，不填写表示不开启缓存
             </el-alert>
 
@@ -176,24 +185,24 @@
             <span class="label">插件类名</span>
             <el-select v-model="detail.alarmPlugin" style="width:400px" placeholder="请选择告警插件java类名" clearable
                        @clear="clearAlarmPluginParam()" no-data-text="暂无插件">
-              <el-option v-for="item in alarmPlugins" :value="item" :label="item.className">
+              <el-option v-for="item in alarmPlugins" :value="item.className" :label="item.className">
                 <div>
-                  <span>{{ item.className }}</span>
-                  <span style="color: #cccccc;margin-left:10px;">{{ item.name }} </span>
+                  <el-tooltip placement="top-start" effect="dark">
+                    <div slot="content">
+                      <div>插件描述：{{ item.description }}</div>
+                      <div>插件参数描述：{{ item.paramDescription }}</div>
+                    </div>
+                    <div>
+                      <span>{{ item.className }}</span>
+                      <span style="color: #cccccc;margin-left:10px;">{{ item.name }} </span>
+                    </div>
+                  </el-tooltip>
                 </div>
               </el-option>
             </el-select>
             <span class="label">插件参数</span>
 
-            <el-input :placeholder="detail.alarmPlugin.paramDescription" v-model="detail.alarmPluginParams"
-                      style="width:400px"></el-input>
-            <el-tooltip placement="top-start" effect="dark">
-              <div slot="content">
-                <div>插件描述：{{ detail.alarmPlugin.description }}</div>
-                <div>插件参数描述：{{ detail.alarmPlugin.paramDescription }}</div>
-              </div>
-              <i class="el-icon-info tip"></i>
-            </el-tooltip>
+            <el-input v-model="detail.alarmPluginParams" style="width:400px"></el-input>
             <el-alert type="info" show-icon>
               填写“插件类名”表示对API失败告警，不填写表示失败不告警
             </el-alert>
@@ -236,15 +245,14 @@ export default {
         params: [],
         groupId: null,
         previlege: 0,//访问权限
-        cachePlugin: {className: null, paramDescription: null, name: null, description: null},
+        cachePlugin: null,
         cachePluginParams: null,
-        alarmPlugin: {className: null, paramDescription: null, name: null, description: null},
+        alarmPlugin: null,
         alarmPluginParams: null,
         jsonParam: null,
         sqlList: [{sqlText: '', transformPlugin: null, transformPluginParams: null}], //默认空字符串，当创建API的时候，默认打开一个标签
         contentType: 'application/x-www-form-urlencoded',
         openTrans: 0,
-        mail: null
       },
       options: [
         {label: 'string', value: 'string'},
@@ -269,9 +277,6 @@ export default {
   },
   props: ["id"],
   methods: {
-    alarmChange($event) {
-      // this.
-    },
     clearTransPluginParam(index) {
       this.$store.commit('clearTransformPluginParam', index)
     },
