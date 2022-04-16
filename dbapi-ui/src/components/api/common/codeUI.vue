@@ -1,6 +1,6 @@
 <template>
   <div>
-    <codemirror class="myMirror" :options="cmOptions" @ready="onCmReady" @focus="onCmFocus"
+    <codemirror ref="codemirror" class="myMirror" :options="cmOptions" @ready="onCmReady" @focus="onCmFocus"
                 @inputRead="onCmCodeChange">
     </codemirror>
   </div>
