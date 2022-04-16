@@ -57,7 +57,7 @@
           <div class="tabs">
             <div v-for="(item,index) in this.$store.state.sqls"
                  :class="{'tab':true,'tab-active':currentIndex === index}">
-              <div @click="focusCM(index)" class="text">
+              <div @click="focusCM(index, item.sqlText)" class="text">
                 SQL-{{ item.label }}
               </div>
               <span @click="removeTab(index)" class="el-icon-circle-close close" v-if="index > 0"></span>
@@ -281,8 +281,12 @@ export default {
       }
 
     },
-    focusCM(index) {
+    focusCM(index, sql) {
       this.currentIndex = index
+      const _this = this
+      this.$nextTick(() => {
+        _this.$refs['codeui-'+index][0].$refs['codemirror'].codemirror.refresh()
+      })
     },
     tag(item) {
       let val = ''
