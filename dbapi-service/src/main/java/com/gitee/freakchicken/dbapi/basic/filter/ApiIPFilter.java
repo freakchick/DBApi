@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.gitee.freakchicken.dbapi.basic.service.IPService;
 import com.gitee.freakchicken.dbapi.basic.util.IPUtil;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,7 +21,7 @@ import java.io.PrintWriter;
 public class ApiIPFilter implements Filter {
 
     @Autowired
-    IPService ipService;
+    private IPService ipService;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -35,15 +37,6 @@ public class ApiIPFilter implements Filter {
         String originIp = IPUtil.getOriginIp(request);
 
         String method = request.getMethod();
-
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("application/json; charset=utf-8");
-        // 跨域设置
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Credentials", "true");
-        response.setHeader("Access-Control-Allow-Headers", "*");//这里很重要，要不然js header不能跨域携带  Authorization属性
-        response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE");
-
         PrintWriter out = null;
         try {
 
@@ -68,8 +61,9 @@ public class ApiIPFilter implements Filter {
             log.error(e.toString());
 
         } finally {
-            if (out != null)
+            if (out != null) {
                 out.close();
+            }
         }
 
     }
