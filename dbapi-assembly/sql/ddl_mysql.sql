@@ -50,7 +50,8 @@ DROP TABLE IF EXISTS `api_alarm`;
 CREATE TABLE `api_alarm`
 (
     `api_id` varchar(20) NOT NULL,
-    `mail`   varchar(1024) DEFAULT NULL
+    `alarm_plugin`   varchar(255) DEFAULT NULL,
+    `alarm_plugin_param`   varchar(1024) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `api_group`;
