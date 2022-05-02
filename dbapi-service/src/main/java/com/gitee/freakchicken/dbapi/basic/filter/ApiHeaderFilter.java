@@ -1,14 +1,13 @@
 package com.gitee.freakchicken.dbapi.basic.filter;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Slf4j
-@Component
+//@Component 不能加注解，否则会自动注册，只有standalone需要
 public class ApiHeaderFilter implements Filter {
 
     @Override

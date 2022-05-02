@@ -27,8 +27,7 @@ public class FilterConfig {
 
     @Autowired
     private ApiAuthFilter apiAuthFilter;
-    @Autowired
-    private ApiHeaderFilter ApiHeaderFilter;
+
 
     @Bean
     public FilterRegistrationBean apiHeaderFilter() {
@@ -36,7 +35,7 @@ public class FilterConfig {
         int apiHeaderFilterOrder = 1;
         String format = String.format("/%s/*", apiContext);
         FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-        registrationBean.setFilter(ApiHeaderFilter);
+        registrationBean.setFilter(new ApiHeaderFilter());
         registrationBean.addUrlPatterns(format);
         registrationBean.setOrder(apiHeaderFilterOrder);
         registrationBean.setEnabled(true);
