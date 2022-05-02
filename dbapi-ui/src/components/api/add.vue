@@ -34,8 +34,8 @@ export default {
         previlege: detail.previlege,
         cachePlugin: detail.cachePlugin,
         cachePluginParams: detail.cachePluginParams,
-        transformPlugin: detail.transformPlugin,
-        transformPluginParams: detail.transformPluginParams,
+        // transformPlugin: detail.transformPlugin,
+        // transformPluginParams: detail.transformPluginParams,
         datasourceId: this.$refs.apiAdd.$refs.sqlCode.datasourceId,
         sqlList: sqlList,
         params: JSON.stringify(detail.params),
@@ -43,7 +43,7 @@ export default {
         jsonParam: detail.jsonParam,
         openTrans: detail.openTrans,
         alarmPlugin: detail.alarmPlugin,
-        alarmPluginParam: detail.alarmPluginParams
+        alarmPluginParam: detail.alarmPluginParam
       }
 
       console.log(p)

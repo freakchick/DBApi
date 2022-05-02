@@ -38,7 +38,8 @@ export default {
         contentType: detail.contentType,
         jsonParam: detail.jsonParam,
         openTrans: detail.openTrans,
-        mail: detail.mail,
+        alarmPlugin: detail.alarmPlugin,
+        alarmPluginParam: detail.alarmPluginParam,
         id: this.$route.query.id
       }
 

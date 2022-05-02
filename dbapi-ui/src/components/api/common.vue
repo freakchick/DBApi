@@ -25,7 +25,8 @@
             </el-select>
             <el-tooltip placement="top-start" effect="dark">
               <div slot="content">
-                <p>对于application/x-www-form-urlencoded类型的API，用户在请求该API的时候既可以使用application/x-www-form-urlencoded，也可以使用application/json</p>
+                <p>
+                  对于application/x-www-form-urlencoded类型的API，用户在请求该API的时候既可以使用application/x-www-form-urlencoded，也可以使用application/json</p>
                 <p>对于application/json类型的API，用户在请求该API的时候只能使用application/json</p>
               </div>
               <i class="el-icon-info tip"></i>
@@ -157,7 +158,7 @@
           <el-form-item :label="$t('m.cache')">
             <span class="label">插件类名</span>
             <el-select v-model="detail.cachePlugin" style="width:400px" placeholder="请选择缓存插件java类名" clearable
-                       @clear="clearCachePluginParam()" no-data-text="暂无插件" >
+                       @clear="clearCachePluginParam()" no-data-text="暂无插件">
               <el-option v-for="item in cachePlugins" :value="item.className">
                 <div>
                   <el-tooltip placement="top-start" effect="dark">
@@ -202,7 +203,7 @@
             </el-select>
             <span class="label">插件参数</span>
 
-            <el-input v-model="detail.alarmPluginParams" style="width:400px"></el-input>
+            <el-input v-model="detail.alarmPluginParam" style="width:400px"></el-input>
             <el-alert type="info" show-icon>
               填写“插件类名”表示对API失败告警，不填写表示失败不告警
             </el-alert>
@@ -248,7 +249,7 @@ export default {
         cachePlugin: null,
         cachePluginParams: null,
         alarmPlugin: null,
-        alarmPluginParams: null,
+        alarmPluginParam: null,
         jsonParam: null,
         sqlList: [{sqlText: '', transformPlugin: null, transformPluginParams: null}], //默认空字符串，当创建API的时候，默认打开一个标签
         contentType: 'application/x-www-form-urlencoded',
@@ -284,7 +285,7 @@ export default {
       this.detail.cachePluginParams = null
     },
     clearAlarmPluginParam() {
-      this.detail.alarmPluginParams = null
+      this.detail.alarmPluginParam = null
     },
     addRow() {
       this.detail.params.push({name: null, type: null})
@@ -329,10 +330,11 @@ export default {
         this.detail.openTrans = response.data.openTrans
         this.detail.contentType = response.data.contentType
         this.detail.jsonParam = response.data.jsonParam
-        this.detail.mail = response.data.mail
+        this.detail.alarmPlugin = response.data.alarmPlugin
+        this.detail.alarmPluginParam = response.data.alarmPluginParam
 
         this.$refs.sqlCode.datasourceId = response.data.datasourceId
-
+        debugger
         this.detail.sqlList = response.data.sqlList.map(t => {
           return {
             sqlText: t.sqlText,
