@@ -48,13 +48,13 @@ public class ApiConfig {
     @TableField("group_id")
     String groupId;
 
-    @TableField(value = "cache_plugin",insertStrategy = FieldStrategy.NOT_EMPTY)
+    @TableField(value = "cache_plugin", insertStrategy = FieldStrategy.NOT_EMPTY)
     String cachePlugin;
 
     /**
      * 缓存插件参数
      */
-    @TableField(value = "cache_plugin_params")
+    @TableField(value = "cache_plugin_params", updateStrategy = FieldStrategy.IGNORED)
     String cachePluginParams;
 
     @TableField(value = "create_time")
@@ -75,7 +75,7 @@ public class ApiConfig {
     /**
      * application/json 类API对应的json参数示例
      */
-    @TableField(value = "json_param",updateStrategy = FieldStrategy.IGNORED)
+    @TableField(value = "json_param", updateStrategy = FieldStrategy.IGNORED)
     String jsonParam;
 
     @TableField(exist = false)
