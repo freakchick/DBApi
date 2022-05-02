@@ -57,7 +57,6 @@ public class APIServlet extends HttpServlet {
 //    @Autowired
 //    MailService mailService;
 
-
     @Value("${dbapi.api.context}")
     String apiContext;
 

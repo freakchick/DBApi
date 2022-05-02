@@ -1,6 +1,7 @@
 package com.gitee.freakchicken.dbapi.apiserver;
 
 import com.gitee.freakchicken.dbapi.basic.filter.ApiAuthFilter;
+import com.gitee.freakchicken.dbapi.basic.filter.ApiHeaderFilter;
 import com.gitee.freakchicken.dbapi.basic.servlet.APIServlet;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,30 +34,4 @@ public class DBApiApiServer {
         System.setProperty("spring.profiles.active", "apiServer");
         SpringApplication.run(DBApiApiServer.class, args);
     }
-
-    @Autowired
-    APIServlet APIServlet;
-    @Autowired
-    ApiAuthFilter apiAuthFilter;
-
-    @Value("${dbapi.api.context}")
-    String apiContext;
-
-    @Bean
-    public ServletRegistrationBean clusterApiServlet() {
-        ServletRegistrationBean bean = new ServletRegistrationBean(APIServlet);
-        bean.addUrlMappings(String.format("/%s/*", apiContext));
-        return bean;
-    }
-
-    @Bean
-    public FilterRegistrationBean authFilter() {
-        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-        registrationBean.setFilter(apiAuthFilter);
-        registrationBean.addUrlPatterns(String.format("/%s/*", apiContext));
-        registrationBean.setOrder(2);
-        registrationBean.setEnabled(true);
-        return registrationBean;
-    }
-
 }

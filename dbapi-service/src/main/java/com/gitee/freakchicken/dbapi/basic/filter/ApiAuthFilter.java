@@ -24,14 +24,13 @@ import java.util.List;
 public class ApiAuthFilter implements Filter {
 
     @Autowired
-    ApiConfigService apiConfigService;
+    private ApiConfigService apiConfigService;
 
     @Autowired
-    TokenService tokenService;
-
+    private TokenService tokenService;
 
     @Value("${dbapi.api.context}")
-    String apiContext;
+    private String apiContext;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -47,14 +46,13 @@ public class ApiAuthFilter implements Filter {
         String servletPath = request.getRequestURI();
         servletPath = servletPath.substring(apiContext.length() + 2);
 
-        PrintWriter out = null;
+        // 不使用writer的时候不要提前获取response的writer,否则无法在后续filter中设置编码
         try {
-            out = response.getWriter();
             // 校验接口是否存在
             ApiConfig config = apiConfigService.getConfig(servletPath);
             if (config == null) {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                out.append(JSON.toJSONString(ResponseDto.fail("Api not exists")));
+                response.getWriter().append(JSON.toJSONString(ResponseDto.fail("Api not exists")));
                 return;
             }
             // 如果是私有接口，校验权限
@@ -63,18 +61,18 @@ public class ApiAuthFilter implements Filter {
 //                log.debug(tokenStr);
                 if (StringUtils.isBlank(tokenStr)) {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    out.append(JSON.toJSONString(ResponseDto.fail("No Token!")));
+                    response.getWriter().append(JSON.toJSONString(ResponseDto.fail("No Token!")));
                     return;
                 } else {
                     Token token = tokenService.getToken(tokenStr);
                     if (token == null) {
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                        out.append(JSON.toJSONString(ResponseDto.fail("Invalid Token!")));
+                        response.getWriter().append(JSON.toJSONString(ResponseDto.fail("Invalid Token!")));
                         return;
                     } else {
                         if (token.getExpire() != null && token.getExpire() < System.currentTimeMillis()) {
                             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                            out.append(JSON.toJSONString(ResponseDto.fail("Token Expired!")));
+                            response.getWriter().append(JSON.toJSONString(ResponseDto.fail("Token Expired!")));
                             return;
                         } else {
                             // log.info("token存在且有效");
@@ -83,7 +81,7 @@ public class ApiAuthFilter implements Filter {
 
                             } else {
                                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                                out.append(JSON.toJSONString(ResponseDto.fail("Invalid Token!")));
+                                response.getWriter().append(JSON.toJSONString(ResponseDto.fail("Invalid Token!")));
                                 return;
                             }
                         }
@@ -96,12 +94,13 @@ public class ApiAuthFilter implements Filter {
 
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            out.append(JSON.toJSONString(ResponseDto.fail(e.toString())));
+            response.getWriter().append(JSON.toJSONString(ResponseDto.fail(e.toString())));
             log.error(e.toString());
 
         } finally {
-            if (out != null)
-                out.close();
+            if (response.getWriter() != null) {
+                response.getWriter().close();
+            }
         }
 
     }
