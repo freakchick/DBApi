@@ -2,7 +2,6 @@ package com.gitee.freakchicken.dbapi.plugin.demo;
 
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.plugin.AlarmPlugin;
-import com.gitee.freakchicken.dbapi.plugin.BasePlugin;
 import com.gitee.freakchicken.dbapi.plugin.PluginConf;
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
