@@ -1,8 +1,6 @@
 package com.gitee.freakchicken.dbapi.apiserver.conf;
 
 import com.gitee.freakchicken.dbapi.basic.filter.ApiAuthFilter;
-import com.gitee.freakchicken.dbapi.basic.filter.ApiHeaderFilter;
-import com.gitee.freakchicken.dbapi.basic.filter.ApiIPFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
