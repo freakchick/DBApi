@@ -26,20 +26,6 @@ public class FilterConfig {
     private ApiAuthFilter apiAuthFilter;
 
     @Bean
-    public FilterRegistrationBean apiHeaderFilter() {
-        // issues/I51LOI
-        int apiHeaderFilterOrder = 1;
-        String format = String.format("/%s/*", apiContext);
-        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-        registrationBean.setFilter(new ApiHeaderFilter());
-        registrationBean.addUrlPatterns(format);
-        registrationBean.setOrder(apiHeaderFilterOrder);
-        registrationBean.setEnabled(true);
-        log.info("regist apiHeaderFilter for {} UrlPatterns, and order is {}",format,apiHeaderFilterOrder);
-        return registrationBean;
-    }
-
-    @Bean
     public FilterRegistrationBean authFilter() {
         int authFilterOrder = 2;
         String format = String.format("/%s/*", apiContext);

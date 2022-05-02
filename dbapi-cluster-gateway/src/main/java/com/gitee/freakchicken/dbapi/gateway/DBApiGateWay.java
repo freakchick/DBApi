@@ -13,7 +13,8 @@ import org.springframework.context.annotation.FilterType;
                 @ComponentScan.Filter(type = FilterType.REGEX, pattern = {
                         "com.gitee.freakchicken.dbapi.basic.filter.*", //filter会自动注册，要排除
                         "com.gitee.freakchicken.dbapi.basic.controller.*", //安装包启动的时候排除 controller.jar
-                        "com.gitee.freakchicken.dbapi.basic.conf.*" //安装包启动的时候排除 controller.jar
+                        "com.gitee.freakchicken.dbapi.basic.conf.*", //安装包启动的时候排除 controller.jar
+                        "com.gitee.freakchicken.dbapi.basic.service.LoadPluginOnSpringReady"
                 })
         })
 @MapperScan("com.gitee.freakchicken.dbapi.basic.dao")
