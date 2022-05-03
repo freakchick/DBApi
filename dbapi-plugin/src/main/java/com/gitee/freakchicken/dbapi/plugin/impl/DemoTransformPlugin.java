@@ -1,4 +1,4 @@
-package com.gitee.freakchicken.dbapi.plugin.demo;
+package com.gitee.freakchicken.dbapi.plugin.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.gitee.freakchicken.dbapi.plugin.TransformPlugin;

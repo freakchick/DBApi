@@ -8,13 +8,6 @@
 - 下载安装包解压到需要安装的目录
 - 修改`conf/application.properties`文件中的以下配置
 ```properties
-# 失败告警邮件的发件人
-# email sender 
-spring.mail.host=smtp.163.com
-spring.mail.username=xxx@163.com
-spring.mail.password=xxx
-spring.mail.default-encoding=UTF-8
-
 # 数据源密码加密存储的密钥，至少8位字符
 # key used to encrypt the password of DataSource, at least 8 char
 dbapi.secret.key=12345678
@@ -63,12 +56,6 @@ done
 
 - 修改`conf/application.properties`文件中的以下配置
 ```properties
-# 失败告警邮件的发件人
-# email sender 
-spring.mail.host=smtp.163.com
-spring.mail.username=xxx@163.com
-spring.mail.password=xxx
-spring.mail.default-encoding=UTF-8
 
 # 数据源密码加密存储的密钥，至少8位字符
 # key used to encrypt the password of DataSource, at least 8 char
@@ -213,9 +200,6 @@ freakchicken/db-api:3.1.0 apiServer
 
 | 环境变量 | 默认值 | 说明 |
 | -------- | ----- |----- |
-| MAIL_HOST | smtp.163.com | 失败告警的邮件发件人 |
-| MAIL_USERNAME | dbapi_test@163.com | 失败告警的邮件发件人账户  |
-| MAIL_PASSWORD | WGJQBFRIPUENHMUP | 失败告警的邮件发件人密码 |
 | SECRET_KEY | 12345678 | 数据源密码加密存储的密钥，至少8位字符 |
 | API_CONTEXT | api| 所有API的统一根路径 |
 | DB_URL | jdbc:sqlite::resource:sqlite.db |元数据库地址 |

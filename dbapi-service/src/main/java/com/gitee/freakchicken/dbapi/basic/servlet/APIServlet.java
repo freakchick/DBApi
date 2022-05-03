@@ -150,11 +150,13 @@ public class APIServlet extends HttpServlet {
         } catch (Exception e) {
             //如果API配置了告警
             if (StringUtils.isNotBlank(config.getAlarmPlugin())) {
-                AlarmPlugin alarmPlugin = PluginManager.getAlarmPlugin(config.getAlarmPlugin());
                 try {
+                    log.info(config.getAlarmPlugin());
+                    AlarmPlugin alarmPlugin = PluginManager.getAlarmPlugin(config.getAlarmPlugin());
+                    log.info(alarmPlugin.getName());
                     alarmPlugin.alarm(e, config, request, config.getAlarmPluginParam());
                 } catch (Exception error) {
-                    log.error(alarmPlugin.getName() + " error");
+                    log.error(config.getAlarmPlugin() + " error!", error);
                 }
             }
             throw new RuntimeException(e.getMessage());

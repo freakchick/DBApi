@@ -1,4 +1,4 @@
-package com.gitee.freakchicken.dbapi.plugin.demo;
+package com.gitee.freakchicken.dbapi.plugin.impl;
 
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.plugin.AlarmPlugin;
@@ -13,6 +13,9 @@ import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * 邮件告警插件
+ */
 public class EmailAlarmPlugin extends AlarmPlugin {
 
     private String username;
@@ -30,9 +33,9 @@ public class EmailAlarmPlugin extends AlarmPlugin {
     public void alarm(Exception e, ApiConfig config, HttpServletRequest request, String pluginParam) {
 
         String title = MessageFormat.format("API ERROR: {0}", config.getName());
-        String content = MessageFormat.format("TIME:  {0}\n NAME:  {1}\n URL:  {2}\n REMOTE ADDRESS:  {3}\n\n{4}",
+        String content = MessageFormat.format("TIME:  {0}\n API_ID:  {5}\nNAME:  {1}\n URL:  {2}\n REMOTE ADDRESS:  {3}\n\n{4}",
                 new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS").format(new Date()),
-                config.getName(), request.getRequestURI(), request.getRemoteAddr(), e.toString());
+                config.getName(), request.getRequestURI(), request.getRemoteAddr(), e.toString(), config.getId());
         sendSimpleTextEmail(pluginParam, title, content);
     }
 
@@ -53,7 +56,7 @@ public class EmailAlarmPlugin extends AlarmPlugin {
             email.setMsg(content);
             email.send();
         } catch (EmailException e) {
-            e.printStackTrace();
+            super.logger.info(e.getMessage(), e);
         }
 
     }
