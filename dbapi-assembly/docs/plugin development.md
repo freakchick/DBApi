@@ -21,7 +21,13 @@
 
 - 当API内部报错的时候，告警插件可以将报错信息发送告警提醒，比如发邮件、发短信
 - 告警逻辑由用户自己编写
-
+> 注意系统已经自带邮件告警插件，如果要使用注意修改`plugin.properties`中发件人参数信息
+```
+# 邮件告警插件全局参数
+EMAIL_USERNAME=dbapi_test@163.com
+EMAIL_PASSWORD=WGJQBFRIPUENHMUP
+EMAIL_HOST=smtp.163.com
+```
 ## 2.插件的开发流程
 
 ### 2.1 准备工作
@@ -327,7 +333,7 @@ String params=ApiConfig.getCachePluginParams();
 // 数据转换插件获取局部参数，直接就是transform方法的params参数
 public abstract Object transform(List<JSONObject> data,String params){
 
-// 数据转换插件获取局部参数，直接就是alarm方法的pluginParam参数
+// 告警插件获取局部参数，直接就是alarm方法的pluginParam参数
 public void alarm(Exception e, ApiConfig config, HttpServletRequest request, String pluginParam)
 ```
 
