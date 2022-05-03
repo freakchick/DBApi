@@ -151,13 +151,11 @@ public class APIServlet extends HttpServlet {
             //如果API配置了告警
             if (StringUtils.isNotBlank(config.getAlarmPlugin())) {
                 AlarmPlugin alarmPlugin = PluginManager.getAlarmPlugin(config.getAlarmPlugin());
-                alarmPlugin.alarm(e, config, request, config.getAlarmPluginParam());
-
-//                String title = MessageFormat.format("API ERROR: {0}", config.getName());
-//                String content = MessageFormat.format("TIME:  {0}\n NAME:  {1}\n URL:  {2}\n REMOTE ADDRESS:  {3}\n\n{4}",
-//                        new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS").format(new Date()),
-//                        config.getName(), request.getRequestURI(), request.getRemoteAddr(), e.toString());
-//                mailService.sendSimpleMail(config.getMail().split(";"), title, content);
+                try {
+                    alarmPlugin.alarm(e, config, request, config.getAlarmPluginParam());
+                } catch (Exception error) {
+                    log.error(alarmPlugin.getName() + " error");
+                }
             }
             throw new RuntimeException(e.getMessage());
         }
@@ -196,7 +194,6 @@ public class APIServlet extends HttpServlet {
             }
         }
     }
-
 
     private Map<String, Object> getParams(HttpServletRequest request, ApiConfig apiConfig) {
         String contentType = request.getContentType();

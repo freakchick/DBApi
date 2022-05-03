@@ -21,15 +21,13 @@ public class EmailAlarmPlugin extends AlarmPlugin {
 
     @Override
     public void init() {
-
+        this.username = PluginConf.getKey("EMAIL_USERNAME");
+        this.password = PluginConf.getKey("EMAIL_PASSWORD");
+        this.host = PluginConf.getKey("EMAIL_HOST");
     }
 
     @Override
     public void alarm(Exception e, ApiConfig config, HttpServletRequest request, String pluginParam) {
-
-        this.username = PluginConf.getKey("EMAIL_USERNAME");
-        this.password = PluginConf.getKey("EMAIL_PASSWORD");
-        this.host = PluginConf.getKey("EMAIL_HOST");
 
         String title = MessageFormat.format("API ERROR: {0}", config.getName());
         String content = MessageFormat.format("TIME:  {0}\n NAME:  {1}\n URL:  {2}\n REMOTE ADDRESS:  {3}\n\n{4}",
