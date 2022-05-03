@@ -210,7 +210,7 @@
           </el-form-item>
           <div>
             <a class="el-icon-question" target="_blank"
-               href="https://gitee.com/freakchicken/db-api/blob/master/dbapi-assembly/docs/instruction.md#%E6%8F%92%E4%BB%B6">{{
+               href="https://gitee.com/freakchicken/db-api/blob/dev/dbapi-assembly/docs/instruction.md#%E6%8F%92%E4%BB%B6">{{
                 $t('m.what_is_plugin')
               }}</a>
             <a class="el-icon-question" target="_blank"
