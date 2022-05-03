@@ -214,7 +214,7 @@
                 $t('m.what_is_plugin')
               }}</a>
             <a class="el-icon-question" target="_blank"
-               href="https://gitee.com/freakchicken/db-api/blob/master/dbapi-assembly/docs/plugin%20development.md#252-%E5%B1%80%E9%83%A8%E5%8F%82%E6%95%B0">{{
+               href="https://gitee.com/freakchicken/db-api/blob/dev/dbapi-assembly/docs/plugin%20development.md#242-%E5%B1%80%E9%83%A8%E5%8F%82%E6%95%B0">{{
                 $t('m.what_is_plugin_param')
               }}</a>
           </div>
