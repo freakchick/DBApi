@@ -13,7 +13,7 @@
 ![](https://freakchicken.gitee.io/images/dbApi/20220313/api_add.png)
 
 ## 插件
-- DBApi的插件分两类，一类是数据转换插件，一类是缓存插件
+- DBApi的插件分3类，分别是数据转换插件、缓存插件、告警插件
 - 插件需要用户自己编写java代码开发。开发完成后打成jar包，并放入DBApi的`lib`目录下即可以使用
 - [插件开发指南](./plugin%20development.md)
 
@@ -51,12 +51,12 @@
 - 选择Content-Type，如果是`application/x-www-form-urlencoded`类型的API, 需要配置参数，如果是`application/json`类型的API，需要填写json参数实例
 > 对于`application/x-www-form-urlencoded`类型的API，用户在请求该API的时候既可以使用`application/x-www-form-urlencoded`，也可以使用`application/json`
 
-> 对于`application/json`类型的API，用户在请求该API的时候只能使用`application/json`
+> 对于`application/json`类型的API，用户在请求该API的时候只能使用`application/json`方式
 - 添加参数，参数名称就是sql中的参数名，sql中涉及到的每个参数都要填写
 - 访问权限，开放接口可以直接访问，私有接口需要申请token才能访问
 #### 高级配置
 - 事务
-> 默认关闭事务，如果是insert/update/delete语句，建议开启事务，开启事务后如果sql执行失败事务会回滚。如果API内有多条sql，开启事务后多条sql是放在一个事务内执行
+> 默认关闭事务，如果是insert/update/delete语句，建议开启事务，开启事务后如果sql执行失败事务会回滚。如果API内有多条sql，开启事务后多条sql是放在一个事务内执行的
 
 > **如果是HIVE等不支持事务的数据库，请不要开启事务，否则会报错**
 
@@ -64,6 +64,7 @@
 > **如果一个API内包含多条sql，那么每条sql会对应一个数据转换插件配置，数据转换插件永远是针对单条sql查询结果进行转换**
 
 - 缓存，如果需要数据缓存，就填写缓存插件的java类名，不填写表示不开启缓存。插件如果需要传参数就填写参数。
+- 告警，如果API执行失败需要告警的话，就填写告警插件的java类名，不填写表示不开启失败告警。插件如果需要传参数就填写参数。
 
 ### API分组管理
 - 可以添加、删除分组
