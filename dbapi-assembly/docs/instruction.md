@@ -36,11 +36,10 @@
 ![](https://freakchicken.gitee.io/images/dbApi/20220313/datasource_add.png)
 
 ### 创建/修改API
+#### 基础配置
 
 ![](https://freakchicken.gitee.io/images/dbApi/20220313/api_add.png)
-![](https://freakchicken.gitee.io/images/dbApi/20220313/api_add_high.png)
 
-#### 基础配置
 - API分组，选择API所属的分组，这个分组可以将来授权使用
 - 请求路径，这就是将来http请求的路径 
 - 选择数据源，就是接口执行sql逻辑的数据库地址
@@ -55,6 +54,9 @@
 - 添加参数，参数名称就是sql中的参数名，sql中涉及到的每个参数都要填写
 - 访问权限，开放接口可以直接访问，私有接口需要申请token才能访问
 #### 高级配置
+
+![](https://freakchicken.gitee.io/images/dbApi/20220503/api_edit2.png)
+
 - 事务
 > 默认关闭事务，如果是insert/update/delete语句，建议开启事务，开启事务后如果sql执行失败事务会回滚。如果API内有多条sql，开启事务后多条sql是放在一个事务内执行的
 
@@ -72,7 +74,7 @@
 
 ### API请求测试
 - 在页面快速访问API，查看结果，**注意如果是内网部署，您需要手动修改访问的IP、端口为外网IP、端口**
-  ![](https://freakchicken.gitee.io/images/dbApi/20210502/request.png)
+  ![](https://freakchicken.gitee.io/images/dbApi/20220503/request.png)
 
 ### sql调试
 - 点击sql填写框右上角的最大化按钮，可以开启sql调试功能

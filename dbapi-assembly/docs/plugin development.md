@@ -337,7 +337,7 @@ public abstract Object transform(List<JSONObject> data,String params){
 public void alarm(Exception e, ApiConfig config, HttpServletRequest request, String pluginParam)
 ```
 
-![](https://freakchicken.gitee.io/images/dbApi/20220313/api_add_high.png)
+![](https://freakchicken.gitee.io/images/dbApi/20220503/api_edit2.png)
 
 #### 2.4.3 插件日志打印
 
@@ -346,6 +346,12 @@ public void alarm(Exception e, ApiConfig config, HttpServletRequest request, Str
 ```java
 super.logger.debug("set data to cache");
 ```
+
+#### 2.4.4 插件描述说明
+- 所有的插件都要实现`getName` `getDescription` `getParamDescription`3个方法，
+其作用是为了在页面上提示用户插件的作用和插件参数的格式
+
+![](https://freakchicken.gitee.io/images/dbApi/20220503/plugin_desc.png)
 
 ### 2.5 插件使用
 
