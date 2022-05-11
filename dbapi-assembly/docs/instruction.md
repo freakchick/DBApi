@@ -8,9 +8,7 @@
 - DBApi已经自带mysql/sqlserver/postgreSql/hive/kylin/clickhouse/的驱动包，**如果版本不匹配请手动替换`lib`目录下的相应驱动jar包**
 - `查询所有表sql`的作用：创建、编辑API的时候，点击选择数据源，会自动展示该数据源下的所有表名称，方便辅助用户编写业务逻辑sql。
 由于不同数据库查询所有表名称的方式都不一样，所以需要用户手动去填写这个sql
-
-
-![](https://freakchicken.gitee.io/images/dbApi/20220313/api_add.png)
+![](https://freakchicken.gitee.io/images/dbApi/20220503/tables.png)
 
 ## 插件
 - DBApi的插件分3类，分别是数据转换插件、缓存插件、告警插件
@@ -38,7 +36,7 @@
 ### 创建/修改API
 #### 基础配置
 
-![](https://freakchicken.gitee.io/images/dbApi/20220313/api_add.png)
+![](https://freakchicken.gitee.io/images/dbApi/20220503/api_edit.png)
 
 - API分组，选择API所属的分组，这个分组可以将来授权使用
 - 请求路径，这就是将来http请求的路径 

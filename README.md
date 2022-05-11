@@ -41,14 +41,14 @@
 - 请阅读 [安装教程](./dbapi-assembly/docs/deployment.md)
 
 ## 软件截图
-![](https://freakchicken.gitee.io/images/dbApi/20210904/api.png)
+![](https://freakchicken.gitee.io/images/dbApi/20220503/api_list.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20220313/datasource_add.png)
-![](https://freakchicken.gitee.io/images/dbApi/20220313/api_add.png)
-![](https://freakchicken.gitee.io/images/dbApi/20220313/api_add_high.png)
+![](https://freakchicken.gitee.io/images/dbApi/20220503/api_edit.png)
+![](https://freakchicken.gitee.io/images/dbApi/20220503/api_edit2.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20210803/sql_run.png)
-![](https://freakchicken.gitee.io/images/dbApi/20210803/api_list.png)
+
 ![](https://freakchicken.gitee.io/images/dbApi/20210502/group.png)
-![](https://freakchicken.gitee.io/images/dbApi/20210502/request.png)
+![](https://freakchicken.gitee.io/images/dbApi/20210503/request.png)
 
 ![](https://freakchicken.gitee.io/images/dbApi/20210502/token_add.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20210502/token.png)
