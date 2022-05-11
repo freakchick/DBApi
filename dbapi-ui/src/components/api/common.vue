@@ -204,7 +204,7 @@
             <span class="label">插件参数</span>
 
             <el-input v-model="detail.alarmPluginParam" style="width:400px"></el-input>
-            <el-alert type="info" show-icon>
+            <el-alert type="warning" show-icon>
               填写“插件类名”表示对API失败告警，不填写表示失败不告警
             </el-alert>
           </el-form-item>

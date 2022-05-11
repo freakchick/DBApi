@@ -48,14 +48,23 @@ public class PluginManager {
     }
 
     public static CachePlugin getCachePlugin(String className) {
+        if (!cachePlugins.containsKey(className)) {
+            throw new RuntimeException("Plugin not found: " + className);
+        }
         return cachePlugins.get(className);
     }
 
     public static TransformPlugin getTransformPlugin(String className) {
+        if (!transformPlugins.containsKey(className)) {
+            throw new RuntimeException("Plugin not found: " + className);
+        }
         return transformPlugins.get(className);
     }
 
     public static AlarmPlugin getAlarmPlugin(String className) {
+        if (!alarmPlugins.containsKey(className)) {
+            throw new RuntimeException("Plugin not found: " + className);
+        }
         return alarmPlugins.get(className);
     }
 

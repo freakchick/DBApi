@@ -7,6 +7,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.gitee.freakchicken.dbapi.basic.service.*;
 
 import com.gitee.freakchicken.dbapi.basic.util.PoolManager;
+import com.gitee.freakchicken.dbapi.basic.util.ThreadUtils;
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.common.ApiSql;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
@@ -39,6 +40,7 @@ import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
 
 @Slf4j
 @Component
@@ -153,8 +155,12 @@ public class APIServlet extends HttpServlet {
                 try {
                     log.info(config.getAlarmPlugin());
                     AlarmPlugin alarmPlugin = PluginManager.getAlarmPlugin(config.getAlarmPlugin());
-                    log.info(alarmPlugin.getName());
-                    alarmPlugin.alarm(e, config, request, config.getAlarmPluginParam());
+                    ThreadUtils.submitAlarmTask(new Runnable() {
+                        @Override
+                        public void run() {
+                            alarmPlugin.alarm(e, config, request, config.getAlarmPluginParam());
+                        }
+                    });
                 } catch (Exception error) {
                     log.error(config.getAlarmPlugin() + " error!", error);
                 }
