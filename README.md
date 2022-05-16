@@ -25,13 +25,14 @@
 - 开箱即用，不需要编程，不需要依赖其他软件（只需要java运行环境）
 - 支持单机模式、集群模式；支持云原生容器化部署
 - 支持API级别的访问权限控制，支持IP白名单、黑名单控制
-- 支持所有类型数据库（JDBC连接方式），包括mysql/sqlserver/postgreSql/hive/oracle等等
+- 支持所有类型数据库（JDBC协议），包括mysql/sqlserver/postgreSql/hive/oracle等等
 - 支持动态sql，类似mybatis的动态sql，支持sql编辑、运行、调试
 - 支持API结果缓存，支持缓存开启/关闭（通过插件实现）
 - 支持自定义代码逻辑的数据转换，比如数据脱敏（通过插件实现）
+- 支持失败告警（通过插件实现）
 - 支持API配置导入导出，方便测试环境到生产环境的API迁移
-- 支持一个接口内多条SQL执行（例如分页功能）
-- 支持页面上的API请求测试
+- 支持一个接口内多条SQL执行（例如分页功能），支持事务开启关闭
+- 支持`application/json`和`application/wwww-x-form-urlencoded`
 
 ## 视频教程
 [查看视频教程](https://www.bilibili.com/video/BV1zL411G7Qh)
@@ -58,15 +59,15 @@
 
 ## 使用说明
 
-请阅读 [详细使用说明](./dbapi-assembly/docs/instruction.md)
+请阅读 [《详细使用说明》](./dbapi-assembly/docs/instruction.md)
 
 
 ## 插件开发
-- 请阅读 [插件开发指南](./dbapi-assembly/docs/plugin%20development.md)
+- 请阅读 [《插件开发指南》](./dbapi-assembly/docs/plugin%20development.md)
 - 作者已经开发了字段加密插件和redis缓存插件，请阅读[案例demo](https://gitee.com/freakchicken/dbapi-plugin-demo)
 
 ## 二次开发
-- 请阅读 [开发指南](./dbapi-assembly/docs/development.md)
+- 请阅读 [《开发指南》](./dbapi-assembly/docs/development.md)
 
 ## springboot集成
 
