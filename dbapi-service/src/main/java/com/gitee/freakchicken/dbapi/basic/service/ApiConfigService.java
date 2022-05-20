@@ -217,8 +217,12 @@ public class ApiConfigService {
      */
     @Cacheable(value = "api", key = "#path", unless = "#result == null")
     public ApiConfig getConfig(String path) {
-        log.info("get api config from db");
+        log.info("get [{}] api config from db",path);
         ApiConfig apiConfig = apiConfigMapper.selectByPathOnline(path);
+        if(Objects.isNull(apiConfig)){
+            log.info("can't get [{}] api config from db",path);
+            return null;
+        }
         List<ApiSql> apiSqls = apiSqlMapper.selectByApiId(apiConfig.getId());
         apiConfig.setSqlList(apiSqls);
         List<Alarm> alarms = alarmMapper.selectByApiId(apiConfig.getId());
