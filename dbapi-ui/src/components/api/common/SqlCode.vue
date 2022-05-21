@@ -44,7 +44,6 @@
           <div class="tag" @click="tag('trim')">trim</div>
           <i class="iconfont icon-full" @click="fullWindow" v-if="mode == 'mini'"></i>
           <i class="iconfont icon-mini2" @click="miniWindow" v-if="mode == 'large'"></i>
-
         </div>
       </div>
       <div class="code">
@@ -455,7 +454,9 @@ export default {
 
   .right {
     display: block;
-    width: 100%;
+    // width: 100%;
+    width: calc(100vw - 250px) !important;
+    overflow: auto;
     border: 1px solid #999999;
     border-left: 0px;
     background-color: #fff;
