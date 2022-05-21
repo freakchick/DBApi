@@ -206,7 +206,11 @@ public class APIServlet extends HttpServlet {
     }
 
     private Map<String, Object> getParams(HttpServletRequest request, ApiConfig apiConfig) {
-        // type/subtype(;parameter)? type
+        /**
+         * Content-Type格式说明:
+         * {@see <a href="https://www.w3.org/Protocols/rfc1341/4_Content-Type.html">Content-Type</a>}
+         * type/subtype(;parameter)? type
+         */
         String unParseContentType = request.getContentType();
 
         //如果是浏览器get请求过来，取出来的contentType是null
@@ -214,7 +218,7 @@ public class APIServlet extends HttpServlet {
             unParseContentType = MediaType.APPLICATION_FORM_URLENCODED_VALUE;
         }
         // issues/I57ZG2
-        // 解析contentType
+        // 解析contentType 格式: appliation/json;charset=utf-8
         String[] contentTypeArr = unParseContentType.split(";");
         String contentType = contentTypeArr[0];
 

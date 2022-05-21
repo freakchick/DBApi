@@ -220,7 +220,7 @@ public class ApiConfigService {
         log.info("get [{}] api config from db",path);
         ApiConfig apiConfig = apiConfigMapper.selectByPathOnline(path);
         if(Objects.isNull(apiConfig)){
-            log.info("can't get [{}] api config from db",path);
+            log.warn("can't get [{}] api config from db",path);
             return null;
         }
         List<ApiSql> apiSqls = apiSqlMapper.selectByApiId(apiConfig.getId());
