@@ -539,7 +539,7 @@ export default {
       overflow: auto;
       //background-color: #f13838;
       .multi-sql {
-        width: 100%;
+        width: calc(100% - 300px);
         background-color: rgba(199, 48, 48, 0.23);
         position: relative;
 
