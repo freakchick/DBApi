@@ -547,11 +547,12 @@ export default {
         .tabs {
           //height: 18px;
           //z-index: 1000;
-          //background-color: #b96666;
+          background-color: #fff;
           position: absolute;
           bottom: 1px;
           left: 30px;
           display: flex;
+          z-index:999;
 
           .tab-active {
             font-weight: 700;
