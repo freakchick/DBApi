@@ -22,6 +22,8 @@ import com.gitee.freakchicken.dbapi.basic.util.SqlEngineUtil;
 import com.github.freakchick.orange.SqlMeta;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.entity.ContentType;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -204,12 +206,22 @@ public class APIServlet extends HttpServlet {
     }
 
     private Map<String, Object> getParams(HttpServletRequest request, ApiConfig apiConfig) {
-        String contentType = request.getContentType();
-        //如果是浏览器get请求过来，取出来的contentType是null
-        if (contentType == null) {
-            contentType = MediaType.APPLICATION_FORM_URLENCODED_VALUE;
+        /**
+         * Content-Type格式说明:
+         * {@see <a href="https://www.w3.org/Protocols/rfc1341/4_Content-Type.html">Content-Type</a>}
+         * type/subtype(;parameter)? type
+         */
+        String unParseContentType = request.getContentType();
 
+        //如果是浏览器get请求过来，取出来的contentType是null
+        if (unParseContentType == null) {
+            unParseContentType = MediaType.APPLICATION_FORM_URLENCODED_VALUE;
         }
+        // issues/I57ZG2
+        // 解析contentType 格式: appliation/json;charset=utf-8
+        String[] contentTypeArr = unParseContentType.split(";");
+        String contentType = contentTypeArr[0];
+
         Map<String, Object> params = null;
         //如果是application/json请求，不管接口规定的content-type是什么，接口都可以访问，且请求参数都以json body 为准
         if (contentType.equalsIgnoreCase(MediaType.APPLICATION_JSON_VALUE)) {

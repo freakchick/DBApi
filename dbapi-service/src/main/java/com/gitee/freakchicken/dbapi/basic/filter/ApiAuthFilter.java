@@ -58,7 +58,6 @@ public class ApiAuthFilter implements Filter {
             // 如果是私有接口，校验权限
             if (config.getPrevilege() == 0) {
                 String tokenStr = request.getHeader("Authorization");
-//                log.debug(tokenStr);
                 if (StringUtils.isBlank(tokenStr)) {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     response.getWriter().append(JSON.toJSONString(ResponseDto.fail("No Token!")));
@@ -95,7 +94,7 @@ public class ApiAuthFilter implements Filter {
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().append(JSON.toJSONString(ResponseDto.fail(e.toString())));
-            log.error(e.toString());
+            log.error(e.getMessage(),e);
 
         } finally {
             if (response.getWriter() != null) {
