@@ -107,6 +107,10 @@ export default {
 .myMirror {
   width: 100%;
   //max-width: 100%;
+
+  /deep/ .CodeMirror-code {
+    line-height: 20px;
+  }
   /deep/ .CodeMirror-line {
     font-family: 'Consolas', Helvetica, Arial, sans-serif !important;
     font-size: 18px !important;
