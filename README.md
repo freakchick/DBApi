@@ -77,6 +77,7 @@
 ## 联系作者：
 
 ### 微信：
+- [登记](https://gitee.com/freakchicken/db-api/issues/I4XLLW) 过的同学可以私聊作者获取一对一技术指导
 - 提问请先star支持一下，提问前请先把文档读一遍，并阅读[常见问题汇总](https://gitee.com/freakchicken/db-api/issues/I4XLLJ)
 - 加微信群请备注`dbapi加群`
 <div style="text-align: center"> 
