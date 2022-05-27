@@ -2,9 +2,17 @@
   <div :class="['root', isFullScreen?'full':'']">
     <div class="left">
       <div>
-        <my-select v-model="datasourceId" :options="datasources" :nullable="false" :label="$t('m.datasource')"
-                   size="mini" width="176px"
-                   option_label="name" option_value="id" @onchange="getTables"></my-select>
+        <my-select
+          v-model="datasourceId"
+          :options="datasources"
+          :nullable="false"
+          :label="$t('m.datasource')"
+          size="mini"
+          width="176px"
+          option_label="name"
+          option_value="id"
+          @onchange="getTables"
+        ></my-select>
       </div>
       <div class="bottom">
         <!--        <div class="menus" :style="`top:${y}px;left:${x}px`" v-show="showMenuFlag" @onblur="showMenuFlag=false">
@@ -12,11 +20,18 @@
                 </div>-->
         <div v-for="(item,index) in tables">
           <div>
-            <div class="table" @click.prevent="getColumns(item.label,index)" @contextmenu.prevent="showMenu()">
+            <div
+              class="table"
+              @click.prevent="getColumns(item.label,index)"
+              @contextmenu.prevent="showMenu()"
+            >
               <i class="iconfont icon-table"></i>{{ item.label }}
             </div>
             <div v-show="item.showColumns">
-              <div v-for="(it) in item.columns" class="column">
+              <div
+                v-for="(it) in item.columns"
+                class="column"
+              >
                 <!--              <i class="iconfont icon-ziyuan"></i>-->
                 <span class="columnName">{{ it.label }}</span>
                 <span class="columnType">{{ it.TypeName }}</span>
@@ -31,37 +46,88 @@
       <div class="top">
         <div class="tool">
           <div v-show="isFullScreen">
-            <div class="item" @click="run(false)"><i class="iconfont icon-play"></i><span>运行SQL</span></div>
-            <div class="item" @click="run(true)"><i class="iconfont icon-play"></i><span>运行选中SQL</span></div>
-            <div class="item" @click="parseSql"><i class="iconfont icon-play"></i><span>解析动态SQL</span></div>
-            <div class="item" @click="formatSql"><i class="iconfont icon-play"></i><span>格式化SQL</span></div>
+            <div
+              class="item"
+              @click="run(false)"
+            ><i class="iconfont icon-play"></i><span>运行SQL</span></div>
+            <div
+              class="item"
+              @click="run(true)"
+            ><i class="iconfont icon-play"></i><span>运行选中SQL</span></div>
+            <div
+              class="item"
+              @click="parseSql"
+            ><i class="iconfont icon-play"></i><span>解析动态SQL</span></div>
+            <div
+              class="item"
+              @click="formatSql"
+            ><i class="iconfont icon-play"></i><span>格式化SQL</span></div>
           </div>
         </div>
         <div class="quick">
-          <div class="tag" @click="tag('foreach')">foreach</div>
-          <div class="tag" @click="tag('if')">if</div>
-          <div class="tag" @click="tag('where')">where</div>
-          <div class="tag" @click="tag('trim')">trim</div>
-          <i class="iconfont icon-full" @click="fullWindow" v-if="mode == 'mini'"></i>
-          <i class="iconfont icon-mini2" @click="miniWindow" v-if="mode == 'large'"></i>
+          <div
+            class="tag"
+            @click="tag('foreach')"
+          >foreach</div>
+          <div
+            class="tag"
+            @click="tag('if')"
+          >if</div>
+          <div
+            class="tag"
+            @click="tag('where')"
+          >where</div>
+          <div
+            class="tag"
+            @click="tag('trim')"
+          >trim</div>
+          <i
+            class="iconfont icon-full"
+            @click="fullWindow"
+            v-if="mode == 'mini'"
+          ></i>
+          <i
+            class="iconfont icon-mini2"
+            @click="miniWindow"
+            v-if="mode == 'large'"
+          ></i>
         </div>
       </div>
       <div class="code">
         <div class="multi-sql">
 
-          <code-ui :sql="item.sqlText" :mode="mode" v-for="(item,index) in this.$store.state.sqls" :key="item.id"
-                   :ref="'codeui-'+index"
-                   :tableHints="tableHints" @appendCm="appendCm" v-show="currentIndex===index"></code-ui>
+          <code-ui
+            :sql="item.sqlText"
+            :mode="mode"
+            v-for="(item,index) in this.$store.state.sqls"
+            :key="item.id"
+            :ref="'codeui-'+index"
+            :tableHints="tableHints"
+            @appendCm="appendCm"
+            v-show="currentIndex===index"
+          ></code-ui>
 
           <div class="tabs">
-            <div v-for="(item,index) in this.$store.state.sqls"
-                 :class="{'tab':true,'tab-active':currentIndex === index}">
-              <div @click="focusCM(index, item.sqlText)" class="text">
+            <div
+              v-for="(item,index) in this.$store.state.sqls"
+              :class="{'tab':true,'tab-active':currentIndex === index}"
+            >
+              <div
+                @click="focusCM(index, item.sqlText)"
+                class="text"
+              >
                 SQL-{{ item.label }}
               </div>
-              <span @click="removeTab(index)" class="el-icon-circle-close close" v-if="index > 0"></span>
+              <span
+                @click="removeTab(index)"
+                class="el-icon-circle-close close"
+                v-if="index > 0"
+              ></span>
             </div>
-            <div class="tab" @click="addTab">
+            <div
+              class="tab"
+              @click="addTab"
+            >
               <div class="text">
                 <i class="el-icon-circle-plus"></i>
                 添加
@@ -71,34 +137,67 @@
         </div>
         <div class="params">
           <div style="display: inline-block">参数设置：</div>
-          <el-tooltip placement="top-start" effect="dark">
+          <el-tooltip
+            placement="top-start"
+            effect="dark"
+          >
             <div slot="content">
               填写sql运行需要的参数值，拼接成json格式
             </div>
-            <i class="el-icon-info tip" style="color:#ccc"></i>
+            <i
+              class="el-icon-info tip"
+              style="color:#ccc"
+            ></i>
           </el-tooltip>
 
-          <el-input type="textarea" rows="24" v-model="params" @input="input($event)"></el-input>
-          <el-button @click="formatJson" size="mini">json格式化</el-button>
+          <el-input
+            type="textarea"
+            rows="24"
+            v-model="params"
+            @input="input($event)"
+          ></el-input>
+          <el-button
+            @click="formatJson"
+            size="mini"
+          >json格式化</el-button>
         </div>
       </div>
       <div class="result">
-        <div v-if="error != null" class="error">
+        <div
+          v-if="error != null"
+          class="error"
+        >
           <i class="el-icon-error"></i>
           {{ error }}
         </div>
-        <div v-if="updateMsg != null" class="updateMsg">
+        <div
+          v-if="updateMsg != null"
+          class="updateMsg"
+        >
           <i class="el-icon-success"></i>
           {{ updateMsg }}
         </div>
-        <div v-if="sqlMeta != null" class="sqlMeta">
+        <div
+          v-if="sqlMeta != null"
+          class="sqlMeta"
+        >
           <div class="sql">{{ sqlMeta.sql }}</div>
           <div class="sql">{{ sqlMeta.jdbcParamValues }}</div>
         </div>
         <div class="table">
-          <el-table :data="resultList" border stripe style="width: 100%"
-                    v-if="resultList != null && resultList.length > 0" size="mini">
-            <el-table-column :prop="item" :label="item" v-for="item in Object.keys(resultList[0])"></el-table-column>
+          <el-table
+            :data="resultList"
+            border
+            stripe
+            style="width: 100%"
+            v-if="resultList != null && resultList.length > 0"
+            size="mini"
+          >
+            <el-table-column
+              :prop="item"
+              :label="item"
+              v-for="item in Object.keys(resultList[0])"
+            ></el-table-column>
           </el-table>
           <div v-if="resultList != null && resultList.length == 0">查询结果为空</div>
         </div>
@@ -110,15 +209,13 @@
 
 <script>
 import codeUi from "@/components/api/common/codeUI";
-
-
 import {format} from 'sql-formatter';
-
 export default {
   data() {
     return {
       resultList: null,
-      error: null, updateMsg: null,
+      error: null,
+      updateMsg: null,
       isFullScreen: false,
       mode: 'mini',
       params: "{}",
@@ -309,7 +406,6 @@ export default {
   watch: {
     // props:apiSql是异步加载过来的，所以要监听
     apiSql(newV, oldV) {
-      debugger
       this.$store.commit('initSqls',this.apiSql)
     }
   }
@@ -366,7 +462,6 @@ export default {
       display: block !important;
     }
   }
-
 }
 
 .root {
@@ -405,7 +500,6 @@ export default {
             background-color: #dedede;
           }
         }
-
       }
 
       .table {
@@ -487,10 +581,8 @@ export default {
 
           &:hover {
             background-color: #d77f00;
-
           }
         }
-
       }
 
       .quick {
@@ -501,7 +593,7 @@ export default {
           //display: inline-block;
           //height: 30px;
           //border: 1px solid #FF9933;
-          background-color: #FF9900;
+          background-color: #ff9900;
           color: #fff;
           border-radius: 3px;
           margin: 2px;
@@ -513,7 +605,6 @@ export default {
             font-weight: 700;
             background-color: #d77f00;
           }
-
         }
 
         .iconfont {
@@ -529,7 +620,6 @@ export default {
       }
     }
 
-
     .code {
       display: flex;
       //width: 100%;
@@ -542,7 +632,6 @@ export default {
         width: 100%;
         background-color: rgba(199, 48, 48, 0.23);
         position: relative;
-
 
         .tabs {
           //height: 18px;
@@ -580,7 +669,7 @@ export default {
             }
 
             .close {
-              position: absolute;;
+              position: absolute;
               right: -10px;
               top: -10px;
               width: 20px;
@@ -592,7 +681,6 @@ export default {
               &:hover {
                 font-weight: 900;
               }
-
             }
 
             &:hover {
@@ -603,11 +691,9 @@ export default {
                 display: block;
               }
             }
-
           }
         }
       }
-
 
       .params {
         padding: 5px;
@@ -618,15 +704,12 @@ export default {
         overflow: auto;
 
         /deep/ .el-textarea__inner {
-          font-family: 'Consolas', Helvetica, Arial, sans-serif !important;
+          font-family: "Consolas", Helvetica, Arial, sans-serif !important;
           font-size: 18px !important;
           line-height: 20px;
         }
       }
-
-
     }
-
 
     .result {
       height: 300px;
@@ -645,7 +728,6 @@ export default {
 
       .error {
         color: #f60303;
-
       }
 
       .sqlMeta {
@@ -654,11 +736,10 @@ export default {
           background-color: #f3f3f3;
           padding: 5px;
           margin: 3px;
-          white-space: pre-wrap
+          white-space: pre-wrap;
         }
       }
     }
   }
 }
-
 </style>

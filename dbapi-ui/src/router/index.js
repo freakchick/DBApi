@@ -26,7 +26,9 @@ Vue.use(VueRouter)
 const routes = [
   {path: '/login', name: 'login', component: Login},
   {
-    path: '/', name: 'Home', component: Home,
+    path: '/',
+name: 'Home',
+component: Home,
     children: [
       // {path: '/about/donate', name: 'donate', component: donate},
       // {path: '/tool/json', name: 'json', component: json},

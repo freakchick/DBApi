@@ -6,13 +6,13 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         sqls: [{sqlText: 'test', id: 0, transformPlugin: null, transformPluginParams: null}],
-        seq: 0, //用来做for循环key
-        labelSeq: 0, //用来显示
+        seq: 0, // 用来做for循环key
+        labelSeq: 0, // 用来显示
         cmList: [],
         mode: null
     },
     mutations: {
-        clearTransformPluginParam(state,index){
+        clearTransformPluginParam(state, index) {
             state.sqls[index].transformPluginParams = null
         },
         addSql(state) {
@@ -36,7 +36,7 @@ export default new Vuex.Store({
         emptyCmList(state, payload) {
             state.cmList = []
         },
-        //编辑或新增页面初始化sql
+        // 编辑或新增页面初始化sql
         initSqls(state, payload) {
             state.cmList = []
             state.labelSeq = 0
@@ -52,7 +52,6 @@ export default new Vuex.Store({
                     label: state.labelSeq
                 }
             })
-            // debugger
             console.log('--------------' + state.sqls)
         },
         setMode(state, payload) {
@@ -65,8 +64,7 @@ export default new Vuex.Store({
 
             const p = []
             for (let i = 0; i < state.sqls.length; i++) {
-                let obj = {}
-                // debugger
+                const obj = {}
                 obj.transformPlugin = state.sqls[i].transformPlugin
                 obj.transformPluginParams = state.sqls[i].transformPluginParams
                 obj.sqlText = state.cmList[i].getValue()

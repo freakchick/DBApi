@@ -23,8 +23,6 @@ export default {
 
     save() {
       const detail = this.$refs.apiAdd.detail
-
-      debugger
       const sqlList = this.$store.getters.getSql
       let p = {
         name: detail.name,
@@ -59,7 +57,6 @@ export default {
       ).then((response) => {
         if (response.data.success) {
           this.$message.success(response.data.msg)
-          debugger
           this.$router.push("/api")
         } else {
           this.$message.error(response.data.msg)
