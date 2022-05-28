@@ -24,29 +24,29 @@ import firewall from '../components/setting/firewall'
 Vue.use(VueRouter)
 
 const routes = [
-  {path: '/login', name: 'login', component: Login},
+  { path: '/login', name: 'login', component: Login },
   {
     path: '/',
-name: 'Home',
-component: Home,
+    name: 'Home',
+    component: Home,
     children: [
       // {path: '/about/donate', name: 'donate', component: donate},
       // {path: '/tool/json', name: 'json', component: json},
       // {path: '/tool/time', name: 'time', component: time},
 
-      {path: '/datasource', name: 'datasource', component: datasource},
-      {path: '/datasource/edit', component: datasourceEdit},
-      {path: '/datasource/detail', component: datasourceDetail},
-      {path: '/datasource/add', component: datasourceAdd},
-      {path: '/api', name: 'api', component: api},
-      {path: '/api/add', name: 'apiAdd', component: apiAdd},
-      {path: '/api/edit', name: 'apiEdit', component: apiEdit},
-      {path: '/api/detail', name: 'detail', component: detail},
-      {path: '/api/request', name: 'request', component: request},
-      {path: '/token', component: token},
-      {path: '/token/add', component: tokenAdd},
-      {path: '/setting/password', component: user},
-      {path: '/setting/firewall', component: firewall}
+      { path: '/datasource', name: 'datasource', component: datasource },
+      { path: '/datasource/edit', component: datasourceEdit },
+      { path: '/datasource/detail', component: datasourceDetail },
+      { path: '/datasource/add', component: datasourceAdd },
+      { path: '/api', name: 'api', component: api },
+      { path: '/api/add', name: 'apiAdd', component: apiAdd },
+      { path: '/api/edit', name: 'apiEdit', component: apiEdit },
+      { path: '/api/detail', name: 'detail', component: detail },
+      { path: '/api/request', name: 'request', component: request },
+      { path: '/token', component: token },
+      { path: '/token/add', component: tokenAdd },
+      { path: '/setting/password', component: user },
+      { path: '/setting/firewall', component: firewall }
     ]
   }
 ]

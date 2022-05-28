@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        sqls: [{sqlText: 'test', id: 0, transformPlugin: null, transformPluginParams: null}],
+        sqls: [{ sqlText: 'test', id: 0, transformPlugin: null, transformPluginParams: null }],
         seq: 0, // 用来做for循环key
         labelSeq: 0, // 用来显示
         cmList: [],
@@ -52,7 +52,6 @@ export default new Vuex.Store({
                     label: state.labelSeq
                 }
             })
-            console.log('--------------' + state.sqls)
         },
         setMode(state, payload) {
             state.mode = payload

@@ -1,27 +1,35 @@
 <template>
   <div class="code-view-container">
-    <h1 :class="{'display-name-unfirst':!isFirst,'display-name-first':isFirst}">{{langDisplayName}}</h1>
-    <codemirror
-      class="code-block"
-      ref="codemirror"
-      :options="cmOptions"
-      @ready="onCmReady"
-      @mouseenter.native="onMouseEnterCodemirror"
-      @mouseleave.native="onMouseLeaveCodemirror"
+    <h1
+      ref="displayName"
+      :class="{'display-name-unfirst':!isFirst,'display-name-first':isFirst}"
+    >{{langDisplayName}}</h1>
+    <el-card
+      @mouseover.native="onMouseOverCard"
+      @mouseleave.native="onMouseLeaveCard"
     >
-    </codemirror>
+      <codemirror
+        class="code-block"
+        ref="codemirror"
+        :value="code"
+        :options="cmOptions"
+        @ready="onCmReady"
+        @mouseenter.native="onMouseEnterCodemirror"
+      >
+      </codemirror>
+    </el-card>
     <el-button
       ref="btn"
-      v-show="showBtn"
+      v-show="btnVisiable"
       class="code-btn"
       plain
       size="mini"
       :icon="iconName"
       @click="copyCode"
       @mouseover.native="onMouseOverBtn"
-      @mouseleave.native="onMouseLeaveBtn"
     />
   </div>
+
 </template>
 
 <script>
@@ -53,7 +61,7 @@ export default {
       // el-icon-check el-icon-document-copy
       iconName: ICON.COPY,
       cmInstance: null,
-      showBtn: false,
+      btnVisiable: false,
     };
   },
   props: {
@@ -83,26 +91,33 @@ export default {
     },
   },
   created() {
-    this.code = this.value;
     this.cmOptions.mode = this.mode;
   },
   methods: {
     onMouseEnterCodemirror() {
-      this.showBtn = true;
+      this.showBtn();
       this.$nextTick(() => {
-        const { width: widthV } = this.$el.getBoundingClientRect();
-        this.$refs.btn.$el.style.top = `${25}px`;
-        this.$refs.btn.$el.style.left = `${widthV - 25}px`;
+        const { width: containerWidthV } = this.$el.getBoundingClientRect();
+        const { height: displayNameheightV } =
+          this.$refs.displayName.getBoundingClientRect();
+        this.$refs.btn.$el.style.top = `${displayNameheightV + 15}px`;
+        this.$refs.btn.$el.style.left = `${containerWidthV - 30}px`;
       });
     },
     onMouseOverBtn() {
-      this.showBtn = true;
+      this.showBtn();
     },
-    onMouseLeaveBtn() {
-      this.showBtn = false;
+    onMouseOverCard() {
+      this.showBtn();
     },
-    onMouseLeaveCodemirror() {
-      this.showBtn = false;
+    onMouseLeaveCard() {
+      this.hideBtn();
+    },
+    showBtn() {
+      this.btnVisiable = true;
+    },
+    hideBtn() {
+      this.btnVisiable = false;
     },
     onCmReady(cm) {
       this.cmInstance = cm;
@@ -120,6 +135,15 @@ export default {
       setTimeout(() => {
         this.iconName = ICON.COPY;
       }, 300);
+    },
+  },
+  watch: {
+    value: {
+      immediate: true,
+      handler(val) {
+        this.code = val;
+        this.refresh();
+      },
     },
   },
 };

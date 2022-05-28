@@ -152,7 +152,7 @@
             ></i>
             <i
               class="el-icon-lock circle lock"
-              v-if="scope.row.previlege == 0"
+              v-if="scope.row.previlege == PREVILEGE.PRIVATE"
             ></i>
             <i
               class="el-icon-unlock circle "
@@ -358,12 +358,13 @@
 <script>
 // import dataTag from "@/components/common/dataTag";
 import group from "@/components/api/group";
-import { CONTENT_TYPE } from "@/constant";
+import { CONTENT_TYPE, PREVILEGE } from "@/constant";
 export default {
   name: "api",
   data() {
     return {
       CONTENT_TYPE: Object.freeze(CONTENT_TYPE),
+      PREVILEGE: Object.freeze(PREVILEGE),
       dialogVisible: false,
       dialogVisible2: false,
       dialogVisible3: false,

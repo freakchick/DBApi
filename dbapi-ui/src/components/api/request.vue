@@ -35,7 +35,7 @@
       </el-form-item>
       <el-form-item
         label="token"
-        v-show="previlege == 0"
+        v-show="previlege == PREVILEGE.PRIVATE"
       >
         <el-input v-model="token"></el-input>
       </el-form-item>
@@ -143,16 +143,17 @@
 </template>
 
 <script>
-import { CONTENT_TYPE } from "@/constant";
+import { CONTENT_TYPE, PREVILEGE } from "@/constant";
 export default {
   name: "request",
   data() {
     return {
       CONTENT_TYPE: Object.freeze(CONTENT_TYPE),
+      PREVILEGE: Object.freeze(PREVILEGE),
       api: {},
       params: [],
       path: null,
-      previlege: 0,
+      previlege: PREVILEGE.PRIVATE,
       address: null,
       response: null,
       isSelect: null,
@@ -214,9 +215,7 @@ export default {
       } else if (this.contentType === CONTENT_TYPE.JSON) {
         p = this.jsonParam;
       }
-
       // let url = `http://${this.address}/api/${this.path}`
-
       this.axios
         .post(this.url, p, {
           headers: {

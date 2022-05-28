@@ -14,7 +14,13 @@ const CONTENT_TYPE = {
   JSON: "application/json"
 }
 
+const PREVILEGE = {
+  PRIVATE: 0,
+  PUBLIC: 1
+}
+
 export {
   DATA_TYPE,
-  CONTENT_TYPE
+  CONTENT_TYPE,
+  PREVILEGE
 }

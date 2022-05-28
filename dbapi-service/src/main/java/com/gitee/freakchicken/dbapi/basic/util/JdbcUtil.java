@@ -85,7 +85,6 @@ public class JdbcUtil {
                 default:
                     sql = "select * from " + table + " where 1=2";
             }
-            log.info(sql);
             pst = conn.prepareStatement(sql);
             ResultSetMetaData rsd = pst.executeQuery().getMetaData();
 
@@ -129,13 +128,13 @@ public class JdbcUtil {
     public static Object executeSql(Connection connection, String sql, List<Object> jdbcParamValues) throws SQLException {
         log.debug(sql);
         log.debug(JSON.toJSONString(jdbcParamValues));
-
         PreparedStatement statement = connection.prepareStatement(sql);
         //参数注入
         for (int i = 1; i <= jdbcParamValues.size(); i++) {
             statement.setObject(i, jdbcParamValues.get(i - 1));
         }
         boolean hasResultSet = statement.execute();
+
         if (hasResultSet) {
             ResultSet rs = statement.getResultSet();
             int columnCount = rs.getMetaData().getColumnCount();

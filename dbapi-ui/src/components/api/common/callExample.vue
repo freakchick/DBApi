@@ -36,6 +36,8 @@
 
 <script>
 import codeView from "@/components/api/common/codeView";
+import { generateCallExampleCode } from "@/utils";
+import { LANGUAGE } from "@/constant";
 export default {
   name: "CallExample",
   components: {
@@ -83,65 +85,40 @@ export default {
   },
   data() {
     return {
-      shellCode: `curl -H "Content-Type: application/json" -H "Authorization: 5ad0dcb4eb03d3b0b7e4b82ae0ba433f" -X POST  --data '{"key":"value"}' http://127.0.0.1:8520/api/xxx`,
-      javaScriptCode: `refresh() {
-      if (this.$refs.codeView?.refresh) {
-        this.$refs.codeView.refresh();
-      }
-      if (this.$refs.codeView2?.refresh) {
-        this.$refs.codeView2.refresh();
-      }
-    },`,
-      pythonCode: `# Some Example code
-import os
-from package import ParentClass
-`,
-      goCode: `// Prime Sieve in Go.
-// Taken from the Go specification.
-// Copyright © The Go Authors.
-
-package main
-
-import "fmt"
-
-// Send the sequence 2, 3, 4, ... to channel 'ch'.
-func generate(ch chan<- int) {
-	for i := 2; ; i++ {
-		ch <- i  // Send 'i' to channel 'ch'
-	}
-}`,
-      javaCode: `import com.demo.util.MyType;
-import com.demo.util.MyInterface;
-
-public enum Enum {
-  VAL1, VAL2, VAL3
-}
-
-public class Class<T, V> implements MyInterface {
-  public static final MyType<T, V> member;
-  
-  private class InnerClass {
-    public int zero() {
-      return 0;
-    }
-  }
-
-  @Override
-  public MyType method() {
-    return member;
-  }
-
-  public void method2(MyType<T, V> value) {
-    method();
-    value.method3();
-    member = value;
-  }
-}
-`,
+      shellCode: ``,
+      javaScriptCode: "",
+      pythonCode: "",
+      goCode: "",
+      javaCode: "",
     };
   },
   methods: {
+    initCallExampleCode() {
+      this.shellCode = generateCallExampleCode(
+        this.generateOtherParam(LANGUAGE.SHELL)
+      );
+      this.javaScriptCode = generateCallExampleCode(
+        this.generateOtherParam(LANGUAGE.JAVASCRIPT)
+      );
+      this.pythonCode = generateCallExampleCode(
+        this.generateOtherParam(LANGUAGE.PYTHON)
+      );
+      this.goCode = generateCallExampleCode(
+        this.generateOtherParam(LANGUAGE.GO)
+      );
+      this.javaCode = generateCallExampleCode(
+        this.generateOtherParam(LANGUAGE.JAVA)
+      );
+    },
+    generateOtherParam(lang) {
+      return {
+        address: this.address,
+        detail: this.detail,
+        lang,
+      };
+    },
     refresh() {
+      this.initCallExampleCode();
       Object.keys(this.$refs).forEach((refName) => {
         if (this.$refs[refName]?.refresh) {
           this.$refs[refName].refresh();

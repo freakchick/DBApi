@@ -175,8 +175,8 @@
 
           <el-form-item label="权限">
             <el-radio-group v-model="detail.previlege">
-              <el-radio :label="0">{{ $t('m.private') }}</el-radio>
-              <el-radio :label="1">{{ $t('m.public') }}</el-radio>
+              <el-radio :label="PREVILEGE.PRIVATE">{{ $t('m.private') }}</el-radio>
+              <el-radio :label="PREVILEGE.PUBLIC">{{ $t('m.public') }}</el-radio>
             </el-radio-group>
 
             <el-tooltip
@@ -382,7 +382,11 @@
         </el-form>
       </el-tab-pane>
       <el-tab-pane :label="CALL_EXAMPLE_TAB_NAME">
-        <call-example ref="callExample" />
+        <call-example
+          ref="callExample"
+          :address="address"
+          :detail="detail"
+        />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -392,7 +396,7 @@
 import sqlCode from "@/components/api/common/SqlCode";
 import MySelect from "../common/MySelect";
 import callExample from "@/components/api/common/callExample";
-import { DATA_TYPE, CONTENT_TYPE } from "@/constant";
+import { DATA_TYPE, CONTENT_TYPE, PREVILEGE } from "@/constant";
 export default {
   components: {
     MySelect,
@@ -402,6 +406,7 @@ export default {
   data() {
     return {
       CONTENT_TYPE: Object.freeze(CONTENT_TYPE),
+      PREVILEGE: Object.freeze(PREVILEGE),
       datasources: [],
       address: null,
       show: false,
@@ -413,7 +418,7 @@ export default {
         path: null,
         params: [],
         groupId: null,
-        previlege: 0, //访问权限
+        previlege: PREVILEGE.PRIVATE, //访问权限
         cachePlugin: null,
         cachePluginParams: null,
         alarmPlugin: null,
