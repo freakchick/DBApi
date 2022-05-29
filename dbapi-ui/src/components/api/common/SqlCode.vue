@@ -47,7 +47,7 @@
         </div>
       </div>
       <div class="code">
-        <div class="multi-sql">
+        <div class="multi-sql" :style="{'width':  !isFullScreen ? '100%' : ''}">
 
           <code-ui :sql="item.sqlText" :mode="mode" v-for="(item,index) in this.$store.state.sqls" :key="item.id"
                    :ref="'codeui-'+index"
