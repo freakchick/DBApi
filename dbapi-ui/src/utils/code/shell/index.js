@@ -19,11 +19,12 @@ export function generateShellCallExampleCode({
   isContentTypeJson, isContentTypeFormUrlEncoded, contentType,
   isPrevilegePrivate, isPrevilegePublic, token,
   params,
-  detail
+  detail,
+  getEffectValue
 }) {
   let realRequestStr = ''
   if (isContentTypeFormUrlEncoded) {
-    const param = getParam(params)
+    const param = getParam(params, getEffectValue)
     realRequestStr = `${param.join(' ')}`
   } else if (isContentTypeJson) {
     const requestStr = detail.jsonParam.replace(/\n|\r|\t/g, '').replace(/"/g, '\\"')
@@ -37,39 +38,73 @@ export function generateShellCallExampleCode({
   return `curl ${previlegeStr} -H 'Content-Type: ${contentType}' -X POST ${realRequestStr} '${requestUrl}'`
 }
 
-function getParam(params) {
+function getParam(params, getEffectValue) {
   const param = []
   params.forEach(item => {
     const itemType = item.type
     const itemName = item.name
+    // {"name":"id","type":"string","value":"1"}
+    // {"name":"ids","type":"Array<string>","values":[{"va":"2"},{"va":"3"}]}
+    // {"name":"date","type":"date","value":"1970-01-01 00:00:00"}
+    // {"name":"dates","type":"Array<date>","values":[{"va":"1970-01-01 00:00:00"},{"va":"1970-01-01 00:00:00"}]}
+    const value = getEffectValue(itemType, item.value)
+    const values = Array.isArray(item.values) ? item.values : []
     switch (itemType) {
       case DATA_TYPE.STRING:
-        param.push(`--data-urlencode ${itemName}=""`)
+        param.push(`--data-urlencode ${itemName}="${value}"`)
         break
       case DATA_TYPE.BIGINT:
-        param.push(`--data-urlencode ${itemName}=0`)
+        param.push(`--data-urlencode ${itemName}=${value}`)
         break
       case DATA_TYPE.DOUBLE:
-        param.push(`--data-urlencode ${itemName}=1.0`)
+        param.push(`--data-urlencode ${itemName}=${value}`)
         break
       case DATA_TYPE.DATE:
-        param.push(`--data-urlencode ${itemName}="1970-01-01 00:00:00"`)
+        param.push(`--data-urlencode ${itemName}="${value}"`)
         break
       case DATA_TYPE.ARRAY_STRING:
-        param.push(`--data-urlencode ${itemName}=""`)
-        param.push(`--data-urlencode ${itemName}=""`)
+        if (values.length > 0) {
+          values.forEach(el => {
+            const effectValue = getEffectValue(itemType, el.va)
+            param.push(`--data-urlencode ${itemName}="${effectValue}"`)
+          })
+        } else {
+          param.push(`--data-urlencode ${itemName}=""`)
+          param.push(`--data-urlencode ${itemName}=""`)
+        }
         break
       case DATA_TYPE.ARRAY_BIGINT:
-        param.push(`--data-urlencode ${itemName}=1`)
-        param.push(`--data-urlencode ${itemName}=2`)
+        if (values.length > 0) {
+          values.forEach(el => {
+            const effectValue = getEffectValue(itemType, el.va)
+            param.push(`--data-urlencode ${itemName}=${effectValue}`)
+          })
+        } else {
+          param.push(`--data-urlencode ${itemName}=1`)
+          param.push(`--data-urlencode ${itemName}=2`)
+        }
         break
       case DATA_TYPE.ARRAY_DOUBLE:
-        param.push(`--data-urlencode ${itemName}=1.0`)
-        param.push(`--data-urlencode ${itemName}=1.0`)
+        if (values.length > 0) {
+          values.forEach(el => {
+            const effectValue = getEffectValue(itemType, el.va)
+            param.push(`--data-urlencode ${itemName}=${effectValue}`)
+          })
+        } else {
+          param.push(`--data-urlencode ${itemName}=1.0`)
+          param.push(`--data-urlencode ${itemName}=1.0`)
+        }
         break
       case DATA_TYPE.ARRAY_DATE:
-        param.push(`--data-urlencode ${itemName}="1970-01-01 00:00:00"`)
-        param.push(`--data-urlencode ${itemName}="1970-01-02 00:00:00"`)
+        if (values.length > 0) {
+          values.forEach(el => {
+            const effectValue = getEffectValue(itemType, el.va)
+            param.push(`--data-urlencode ${itemName}="${effectValue}"`)
+          })
+        } else {
+          param.push(`--data-urlencode ${itemName}="1970-01-01 00:00:00"`)
+          param.push(`--data-urlencode ${itemName}="1970-01-02 00:00:00"`)
+        }
         break
       default:
         break

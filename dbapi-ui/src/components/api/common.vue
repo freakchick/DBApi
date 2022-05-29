@@ -3,7 +3,6 @@
     <el-tabs
       tab-position="top"
       type="border-card"
-      @tab-click="handleClick"
     >
       <el-tab-pane label="基础配置">
         <el-form label-width="120px">
@@ -381,13 +380,6 @@
           </div>
         </el-form>
       </el-tab-pane>
-      <el-tab-pane :label="CALL_EXAMPLE_TAB_NAME">
-        <call-example
-          ref="callExample"
-          :address="address"
-          :detail="detail"
-        />
-      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -395,13 +387,11 @@
 <script>
 import sqlCode from "@/components/api/common/SqlCode";
 import MySelect from "../common/MySelect";
-import callExample from "@/components/api/common/callExample";
 import { DATA_TYPE, CONTENT_TYPE, PREVILEGE } from "@/constant";
 export default {
   components: {
     MySelect,
     sqlCode,
-    callExample,
   },
   data() {
     return {
@@ -450,7 +440,6 @@ export default {
       cachePlugins: [],
       transformPlugins: [],
       alarmPlugins: [],
-      CALL_EXAMPLE_TAB_NAME: Object.freeze("调用示例"),
     };
   },
   props: ["id"],
@@ -543,12 +532,6 @@ export default {
           this.alarmPlugins = response.data.alarm;
         })
         .catch((error) => {});
-    },
-    handleClick(tab) {
-      const label = tab.label;
-      if (label === this.CALL_EXAMPLE_TAB_NAME) {
-        this.$refs.callExample.refresh();
-      }
     },
   },
   mounted() {

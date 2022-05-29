@@ -51,21 +51,22 @@ export default {
     },
     /**
       {
-        "name": "dbapi",
-        "note": null,
         "path": "test",
         "params": [
           {
             "name": "id",
-            "type": "string"
+            "type": "string",
+            "values": [
+              {
+                "va":"a"
+              },
+              {
+                "va":"b"
+              }
+            ]
           }
         ],
-        "groupId": "djwUzW2E",
         "previlege": 1,
-        "cachePlugin": null,
-        "cachePluginParams": null,
-        "alarmPlugin": null,
-        "alarmPluginParam": null,
         "jsonParam": null,
         "sqlList": [
           {
@@ -75,7 +76,7 @@ export default {
           }
         ],
         "contentType": "application/x-www-form-urlencoded",
-        "openTrans": 0
+        "token": null,
       }
      */
     detail: {

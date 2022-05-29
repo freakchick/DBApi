@@ -3,8 +3,6 @@
  * address 请求地址 "127.0.0.1:8520/api"
  * detail 完整示例
  * {
- *   "name": "dbapi",
- *   "note": null,
  *   "path": "test",
  *   "params": [
  *     // "contentType": "application/x-www-form-urlencoded"时才有值
@@ -13,56 +11,63 @@
  *       "type": "string"
  *     }
  *   ],
- *   "groupId": "djwUzW2E",
  *   "previlege": 1,
- *   "cachePlugin": null,
- *   "cachePluginParams": null,
- *   "alarmPlugin": null,
- *   "alarmPluginParam": null,
  *   // "contentType": "application/json"时才有值
  *   "jsonParam": "{\"id\":\"\"}",
- *   "sqlList": [
- *     {
- *       "sqlText": "-- 请输入sql，一个标签只能输入一条sql\\nselect * from user\\n\\n<where>\\nid = #{id}\\n</where>",
- *       "transformPlugin": null,
- *       "transformPluginParams": null
- *     }
  *   ],
  *   "contentType": "application/x-www-form-urlencoded",
- *   "openTrans": 0
  * }
  */
 
-import { LANGUAGE, CONTENT_TYPE, PREVILEGE } from '@/constant'
+import { LANGUAGE, CONTENT_TYPE, PREVILEGE, DATA_TYPE } from '@/constant'
 import { generateShellCallExampleCode } from './shell'
 import { generatePythonCallExampleCode } from './python'
 import { generateGoCallExampleCode } from './go'
 import { generateJavaScriptCallExampleCode } from './javascript'
 import { generateJavaCallExampleCode } from './java'
 
-function getRequestUrl(address, detail) {
-  // 暂时认为都是http
-  return `http://${address}/${detail.path}`
+function getEffectValue(type, value, expectValue) {
+  switch (type) {
+    case DATA_TYPE.STRING:
+      return typeof value === 'string' ? value : expectValue || ""
+    case DATA_TYPE.BIGINT:
+      return !isNaN(value) ? value : expectValue || 0
+    case DATA_TYPE.DOUBLE:
+      return !isNaN(value) ? value : expectValue || 1.0
+    case DATA_TYPE.DATE:
+      return typeof value === 'string' ? value : expectValue || "1970-01-01 00:00:00"
+    case DATA_TYPE.ARRAY_STRING:
+      return typeof value === 'string' ? value : expectValue || ""
+    case DATA_TYPE.ARRAY_BIGINT:
+      return !isNaN(value) ? value : expectValue || 0
+    case DATA_TYPE.ARRAY_DOUBLE:
+      return !isNaN(value) ? value : expectValue || 1.0
+    case DATA_TYPE.ARRAY_DATE:
+      return typeof value === 'string' && value.length > 0 ? value : expectValue || "1970-01-01 00:00:00"
+    default:
+      return ""
+  }
 }
 
 function generateParam({ lang, address, detail }) {
   const contentType = detail.contentType
   const params = detail.params
-  const requestUrl = getRequestUrl(address, detail)
+  const requestUrl = address
   const previlege = detail.previlege
   const isPrevilegePrivate = previlege === PREVILEGE.PRIVATE
   const isPrevilegePublic = previlege === PREVILEGE.PUBLIC
   const isContentTypeJson = contentType === CONTENT_TYPE.JSON
   const isContentTypeFormUrlEncoded = contentType === CONTENT_TYPE.FORM_URLENCODED
   // 暂时不知道token,仅作占位用
-  const token = ''
+  const token = detail.token || ''
   return {
     lang,
     address, requestUrl,
     isContentTypeJson, isContentTypeFormUrlEncoded, contentType,
     isPrevilegePrivate, isPrevilegePublic, token,
     params,
-    detail
+    detail,
+    getEffectValue
   }
 }
 

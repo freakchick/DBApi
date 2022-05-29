@@ -40,7 +40,8 @@ export function generateJavaScriptCallExampleCode({
   isContentTypeJson, isContentTypeFormUrlEncoded, contentType,
   isPrevilegePrivate, isPrevilegePublic, token,
   params,
-  detail
+  detail,
+  getEffectValue
 }) {
   const authorizationHeader = `'Authorization': '${token}'`
 
@@ -48,7 +49,7 @@ export function generateJavaScriptCallExampleCode({
   if (isContentTypeJson) {
     dataDesStr = detail.jsonParam
   } else if (isContentTypeFormUrlEncoded) {
-    const param = getParam(params)
+    const param = getParam(params, getEffectValue)
     dataDesStr = `qs.stringify({
   ${param.join(',\n  ')}
 }, { indices: false })`
@@ -74,35 +75,57 @@ ${isPrevilegePrivate ? "    " + authorizationHeader + "\n" : ''}  },
 });`
 }
 
-function getParam(params) {
+function getParam(params, getEffectValue) {
   const param = []
   params.forEach(item => {
     const itemType = item.type
     const itemName = item.name
+    // {"name":"id","type":"string","value":"1"}
+    // {"name":"ids","type":"Array<string>","values":[{"va":"2"},{"va":"3"}]}
+    // {"name":"date","type":"date","value":"1970-01-01 00:00:00"}
+    // {"name":"dates","type":"Array<date>","values":[{"va":"1970-01-01 00:00:00"},{"va":"1970-01-01 00:00:00"}]}
+    const value = getEffectValue(itemType, item.value)
+    const values = Array.isArray(item.values) ? item.values : []
+    let elements = ''
     switch (itemType) {
       case DATA_TYPE.STRING:
-        param.push(`${itemName}: ""`)
+        param.push(`${itemName}: "${value}"`)
         break
       case DATA_TYPE.BIGINT:
-        param.push(`${itemName}: 0`)
+        param.push(`${itemName}: ${value}`)
         break
       case DATA_TYPE.DOUBLE:
-        param.push(`${itemName}: 1.0`)
+        param.push(`${itemName}: ${value}`)
         break
       case DATA_TYPE.DATE:
-        param.push(`${itemName}: "1970-01-01 00:00:00"`)
+        param.push(`${itemName}: "${value}"`)
         break
       case DATA_TYPE.ARRAY_STRING:
-        param.push(`${itemName}: [""]`)
+        if (values.length > 0) {
+          elements = values.map(el => getEffectValue(itemType, el.va)).join("\", \"")
+        }
+        param.push(`${itemName}: ["${elements}"]`)
         break
       case DATA_TYPE.ARRAY_BIGINT:
-        param.push(`${itemName}: [1]`)
+        elements = '1'
+        if (values.length > 0) {
+          elements = values.map(el => getEffectValue(itemType, el.va)).join(",")
+        }
+        param.push(`${itemName}: [${elements}]`)
         break
       case DATA_TYPE.ARRAY_DOUBLE:
-        param.push(`${itemName}: [1.0]`)
+        elements = '1.0'
+        if (values.length > 0) {
+          elements = values.map(el => getEffectValue(itemType, el.va)).join(",")
+        }
+        param.push(`${itemName}: [${elements}]`)
         break
       case DATA_TYPE.ARRAY_DATE:
-        param.push(`${itemName}: ["1970-01-01 00:00:00"]`)
+        elements = '1970-01-01 00:00:00'
+        if (values.length > 0) {
+          elements = values.map(el => getEffectValue(itemType, el.va)).join("\", \"")
+        }
+        param.push(`${itemName}: ["${elements}"]`)
         break
       default:
         break

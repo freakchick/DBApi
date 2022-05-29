@@ -8,7 +8,8 @@ export function generateJavaCallExampleCode(param) {
     isContentTypeJson, isContentTypeFormUrlEncoded, contentType,
     isPrevilegePrivate, isPrevilegePublic, token,
     params,
-    detail
+    detail,
+    getEffectValue
   } = param
 
   let dataDesStr = ''
@@ -17,6 +18,8 @@ export function generateJavaCallExampleCode(param) {
   } else if (isContentTypeFormUrlEncoded) {
     dataDesStr = generateUrlEncodedDataDesStr(param)
   }
+
+  const authDesStr = `connection.setRequestProperty("Authorization", "${token}");`
 
   return `import java.io.*;
 import java.net.*;${isContentTypeFormUrlEncoded ? '\nimport java.util.*;\nimport java.util.stream.Collectors;' : ''}
@@ -32,7 +35,7 @@ public class Main {
         connection.setUseCaches(false);
         connection.setDoInput(true);
         connection.setDoOutput(true);
-        connection.setRequestProperty("Content-Type", "${contentType}");${isPrevilegePrivate ? '        connection.setRequestProperty("Authorization", "");\n' : ''}
+        connection.setRequestProperty("Content-Type", "${contentType}");${isPrevilegePrivate ? '\n        ' + authDesStr : ''}
         
         connection.connect();
 
@@ -58,42 +61,78 @@ public class Main {
 }`
 }
 
-function generatePrarmCode(params) {
+function generatePrarmCode(params, getEffectValue) {
   const codes = []
   params.forEach(item => {
     const itemType = item.type
     const itemName = item.name
+    // {"name":"id","type":"string","value":"1"}
+    // {"name":"ids","type":"Array<string>","values":[{"va":"2"},{"va":"3"}]}
+    // {"name":"date","type":"date","value":"1970-01-01 00:00:00"}
+    // {"name":"dates","type":"Array<date>","values":[{"va":"1970-01-01 00:00:00"},{"va":"1970-01-01 00:00:00"}]}
+    let value = getEffectValue(itemType, item.value)
+    const values = Array.isArray(item.values) ? item.values : []
     switch (itemType) {
       case DATA_TYPE.STRING:
-        codes.push(`params.put("${itemName}", "");`)
+        codes.push(`params.put("${itemName}", "${value}");`)
         break
       case DATA_TYPE.BIGINT:
-        codes.push(`params.put("${itemName}", 0L);`)
+        value = getEffectValue(itemType, item.value, '0L')
+        codes.push(`params.put("${itemName}", ${value});`)
         break
       case DATA_TYPE.DOUBLE:
-        codes.push(`params.put("${itemName}", 1D);`)
+        value = getEffectValue(itemType, item.value, '1D')
+        codes.push(`params.put("${itemName}", ${value});`)
         break
       case DATA_TYPE.DATE:
-        codes.push(`params.put("${itemName}", "1970-01-01 00:00:00");`)
+        codes.push(`params.put("${itemName}", "${value}");`)
         break
       case DATA_TYPE.ARRAY_STRING:
         codes.push(`List<String> ${itemName}Array = new ArrayList<String>();`)
-        codes.push(`${itemName}Array.add("");`)
+        if (values.length > 0) {
+          values.forEach(el => {
+            const effectValue = getEffectValue(itemType, el.va)
+            codes.push(`${itemName}Array.add("${effectValue}");`)
+          })
+        } else {
+          codes.push(`${itemName}Array.add("");`)
+        }
         codes.push(`params.put("${itemName}", ${itemName}Array);`)
         break
       case DATA_TYPE.ARRAY_BIGINT:
         codes.push(`List<Long> ${itemName}Array = new ArrayList<Long>();`)
-        codes.push(`${itemName}Array.add(1L);`)
+        if (values.length > 0) {
+          values.forEach(el => {
+            const effectValue = getEffectValue(itemType, el.va, "1L")
+            codes.push(`${itemName}Array.add("${effectValue}");`)
+          })
+        } else {
+          codes.push(`${itemName}Array.add(1L);`)
+        }
         codes.push(`params.put("${itemName}", ${itemName}Array);`)
         break
       case DATA_TYPE.ARRAY_DOUBLE:
         codes.push(`List<Double> ${itemName}Array = new ArrayList<Double>();`)
-        codes.push(`${itemName}Array.add(1D);`)
+        if (values.length > 0) {
+          values.forEach(el => {
+            const effectValue = getEffectValue(itemType, el.va, "1D")
+            codes.push(`${itemName}Array.add("${effectValue}");`)
+          })
+        } else {
+          codes.push(`${itemName}Array.add(1D);`)
+        }
         codes.push(`params.put("${itemName}", ${itemName}Array);`)
         break
       case DATA_TYPE.ARRAY_DATE:
         codes.push(`List<String> ${itemName}Array = new ArrayList<String>();`)
-        codes.push(`${itemName}Array.add("1970-01-01 00:00:00");`)
+        if (values.length > 0) {
+          values.forEach(el => {
+            const effectValue = getEffectValue(itemType, el.va)
+            codes.push(`${itemName}Array.add("${effectValue}");`)
+          })
+        } else {
+          codes.push(`${itemName}Array.add("1970-01-01 00:00:00");`)
+        }
         codes.push(`params.put("${itemName}", ${itemName}Array);`)
         break
       default:
@@ -109,9 +148,10 @@ function generateUrlEncodedDataDesStr({
   isContentTypeJson, isContentTypeFormUrlEncoded, contentType,
   isPrevilegePrivate, isPrevilegePublic, token,
   params,
-  detail
+  detail,
+  getEffectValue
 }) {
-  const codes = generatePrarmCode(params)
+  const codes = generatePrarmCode(params, getEffectValue)
   return `HashMap<String, Object> params = new HashMap<>();
         ${codes.join('\n        ')}
 
