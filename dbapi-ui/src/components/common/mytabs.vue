@@ -31,7 +31,6 @@ export default {
       this.$emit('addTab')
     },
     clickTab(name, index) {
-      // debugger;
       //标签名显示选中
       this.currentName = name;
     },
@@ -55,7 +54,6 @@ export default {
           this.panes = panes;
         }
       } else if (this.panes.length !== 0) {
-        debugger;
         this.panes = [];
       }
     },
