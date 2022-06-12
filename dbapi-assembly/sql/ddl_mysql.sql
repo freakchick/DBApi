@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS `api_auth`;
 CREATE TABLE `api_auth`
 (
     `id`       int(11) NOT NULL AUTO_INCREMENT,
-    `token_id` int(11) DEFAULT NULL,
+    `app_id` varchar(64) DEFAULT NULL,
     `group_id` varchar(255) DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
@@ -132,6 +132,21 @@ CREATE TABLE `user`
     UNIQUE KEY `username` (`username`)
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
+  DEFAULT CHARSET = utf8;
+
+DROP TABLE IF EXISTS `app_info`;
+
+CREATE TABLE `app_info`
+(
+    `id`       varchar(255) DEFAULT NULL,
+    `name` varchar(255) DEFAULT NULL,
+    `note` varchar(1024) DEFAULT NULL,
+    `secret` varchar(255) DEFAULT NULL,
+    `expire_desc` varchar(255) DEFAULT NULL,
+    `expire_time` varchar(255) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `id` (`id`)
+) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
 insert into `firewall`(`status`, `mode`)

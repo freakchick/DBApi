@@ -1,33 +1,19 @@
 <template>
   <div>
     <div class="gap">
-      <router-link to="/token/add">
-        <el-button type="primary" plain>{{ $t('m.create_token') }}</el-button>
-      </router-link>
+      <!--      <router-link to="/token/add">-->
+      <el-button type="primary" plain @click="dialogCreateApp = true">创建应用</el-button>
+      <!--      </router-link>-->
     </div>
 
     <el-table :data="tableData" border stripe max-height="700" class="gap">
-      <el-table-column prop="token" label="token" width="330px">
-        <template slot-scope="scope">
-          <span>{{ scope.row.token }}</span>
-          <el-tag v-if="scope.row.expire != null && scope.row.expire < new Date().getTime()" type="danger" effect="dark"
-                  size="mini">{{ $t('m.expired') }}
-          </el-tag>
-        </template>
-      </el-table-column>
+      <el-table-column prop="id" label="appid"></el-table-column>
+      <el-table-column prop="name" label="应用名称"></el-table-column>
+      <el-table-column prop="note" label="描述"></el-table-column>
+      <el-table-column prop="secret" label="secret"></el-table-column>
+      <el-table-column prop="expireDesc" label="token失效时间"></el-table-column>
       <el-table-column prop="note" :label="$t('m.note')"></el-table-column>
-      <el-table-column prop="expire" :label="$t('m.expire')">
-        <template slot-scope="scope">
-          <span v-if="scope.row.expire == null">{{ $t('m.forever') }}</span>
-          <span v-else>{{ scope.row.expire | dateFormat }}</span>
-        </template>
-      </el-table-column>
 
-      <el-table-column prop="createTime" :label="$t('m.create_time')">
-        <template slot-scope="scope">
-          <span>{{ scope.row.createTime | dateFormat }}</span>
-        </template>
-      </el-table-column>
 
       <el-table-column :label="$t('m.operation')" width="100px">
         <template slot-scope="scope">
@@ -41,7 +27,7 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog :title="$t('m.grant')" :visible.sync="dialogVisible" @open="getAllGroups">
+    <el-dialog title="授权该app访问以下分组的API" :visible.sync="dialogVisible" @open="getAllGroups">
       <el-checkbox-group v-model="checkList">
         <el-checkbox :label="item.id" v-for="item in groups">{{ item.name }}</el-checkbox>
       </el-checkbox-group>
@@ -52,8 +38,9 @@
       </span>
     </el-dialog>
 
+
     <el-alert type="warning" show-icon>
-      <div class="tip">{{ $t('m.token_tip') }}</div>
+      <div class="tip"></div>
       <div><br/>
         import requests <br/>
         headers = {"Authorization": "5ad0dcb4eb03d3b0b7e4b82ae0ba433f"} <br/>
@@ -62,6 +49,37 @@
       </div>
 
     </el-alert>
+
+    <el-dialog title="创建应用" :visible.sync="dialogCreateApp" width="40%">
+      <el-form label-width="120px">
+        <el-form-item label="应用名称">
+          <el-input v-model="app.name"></el-input>
+        </el-form-item>
+        <el-form-item label="描述">
+          <el-input type="textarea" v-model="app.note"></el-input>
+        </el-form-item>
+        <el-form-item label="token过期时间">
+          <el-radio-group v-model="app.expireDesc">
+            <el-radio-button label="5min">5min</el-radio-button>
+            <el-radio-button label="1hour">1hour</el-radio-button>
+            <el-radio-button label="1day">1day</el-radio-button>
+            <el-radio-button label="30day">30day</el-radio-button>
+            <el-radio-button label="单次有效">单次有效</el-radio-button>
+            <el-radio-button label="永久有效">永久有效</el-radio-button>
+            <!--            <el-radio-button label="300">5min</el-radio-button>-->
+            <!--            <el-radio-button label="3600">1hour</el-radio-button>-->
+            <!--            <el-radio-button label="86400">1day</el-radio-button>-->
+            <!--            <el-radio-button label="2592000">30day</el-radio-button>-->
+            <!--            <el-radio-button label="0">单次有效</el-radio-button>-->
+            <!--            <el-radio-button label="-1">永久有效</el-radio-button>-->
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogCreateApp = false">取 消</el-button>
+        <el-button type="primary" @click="dialogCreateApp = false;createApp()">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -72,14 +90,32 @@ export default {
     return {
       tableData: [],
       dialogVisible: false,
+      dialogCreateApp: false,
       groups: [],
       checkList: [],
-      tokenId: null
+      tokenId: null,
+      app: {
+        name: null,
+        note: null,
+        expireDesc: null
+      }
     }
   },
   methods: {
+    createApp() {
+      this.axios.post("/app/create", this.app).then((response) => {
+        const msg = `创建应用成功！请妥善保存:<br/><br/>appid = ${response.data.id}<br/>secret = ${response.data.secret}`
+        this.$message.success({
+
+          dangerouslyUseHTMLString: true,
+          message: msg,
+          duration: 10000
+        })
+      }).catch((error) => {
+      })
+    },
     getAll() {
-      this.axios.post("/token/getAll").then((response) => {
+      this.axios.post("/app/getAll").then((response) => {
         this.tableData = response.data
       }).catch((error) => {
       })
@@ -92,14 +128,14 @@ export default {
     },
     auth() {
       console.log(this.checkList)
-      this.axios.post("/token/auth/", {tokenId: this.tokenId, groupIds: this.checkList.join(",")}).then((response) => {
+      this.axios.post("/app/auth/", {appId: this.tokenId, groupIds: this.checkList.join(",")}).then((response) => {
         this.$message.success("Authorization Success")
       }).catch((error) => {
         this.$message.error("Authorization Failed")
       })
     },
     handleDelete(id) {
-      this.axios.post("/token/delete/" + id).then((response) => {
+      this.axios.post("/app/delete/" + id).then((response) => {
         this.$message.success("Delete Success")
         this.getAll()
       }).catch((error) => {
@@ -109,7 +145,7 @@ export default {
     handleAuth(id) {
       this.dialogVisible = true
       this.tokenId = id
-      this.axios.post("/token/getAuthGroups/" + id).then((response) => {
+      this.axios.post("/app/getAuthGroups/" + id).then((response) => {
         this.checkList = response.data
       }).catch((error) => {
       })

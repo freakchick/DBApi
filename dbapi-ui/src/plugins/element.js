@@ -16,7 +16,7 @@ import {
     // InputNumber,
     Radio,
     RadioGroup,
-    // RadioButton,
+    RadioButton,
     Checkbox,
     // CheckboxButton,
     CheckboxGroup,
@@ -97,7 +97,7 @@ Vue.use(Input);
 // Vue.use(InputNumber);
 Vue.use(Radio);
 Vue.use(RadioGroup);
-// Vue.use(RadioButton);
+Vue.use(RadioButton);
 Vue.use(Checkbox);
 
 // Vue.use(CheckboxButton);

@@ -16,7 +16,7 @@
            memoryStoreEvictionPolicy="LRU"/>
 
     <!--token_AuthGroups缓存1小时-->
-    <cache name="token_AuthGroups" eternal="false" maxElementsInMemory="10000"
+    <cache name="app_AuthGroups" eternal="false" maxElementsInMemory="10000"
            overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="3600"
            memoryStoreEvictionPolicy="LRU"/>
 

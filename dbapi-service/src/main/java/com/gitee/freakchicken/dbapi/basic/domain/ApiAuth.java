@@ -13,8 +13,8 @@ public class ApiAuth {
     @TableId(value = "id", type = IdType.AUTO)
     Integer id;
 
-    @TableField("token_id")
-    Integer tokenId;
+    @TableField("app_id")
+    String appId;
 
     @TableField("group_id")
     String groupId;

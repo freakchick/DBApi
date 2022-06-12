@@ -54,8 +54,7 @@ public class APIServlet extends HttpServlet {
     DataSourceService dataSourceService;
     @Autowired
     ApiService apiService;
-    @Autowired
-    TokenService tokenService;
+
     @Autowired
     IPService ipService;
 //    @Autowired

@@ -27,7 +27,10 @@ public class ApiAuthFilter implements Filter {
     private ApiConfigService apiConfigService;
 
     @Autowired
-    private TokenService tokenService;
+    private AppTokenService tokenService;
+
+    @Autowired
+    AppService appService;
 
     @Value("${dbapi.api.context}")
     private String apiContext;
@@ -63,27 +66,12 @@ public class ApiAuthFilter implements Filter {
                     response.getWriter().append(JSON.toJSONString(ResponseDto.fail("No Token!")));
                     return;
                 } else {
-                    Token token = tokenService.getToken(tokenStr);
-                    if (token == null) {
+                    String appId = tokenService.verifyToken(tokenStr);
+                    List<String> authGroups = appService.getAuthGroups(appId);
+                    if (!authGroups.contains(config.getGroupId())){
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                        response.getWriter().append(JSON.toJSONString(ResponseDto.fail("Invalid Token!")));
+                        response.getWriter().append(JSON.toJSONString(ResponseDto.fail("Token Invalid!")));
                         return;
-                    } else {
-                        if (token.getExpire() != null && token.getExpire() < System.currentTimeMillis()) {
-                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                            response.getWriter().append(JSON.toJSONString(ResponseDto.fail("Token Expired!")));
-                            return;
-                        } else {
-                            // log.info("token存在且有效");
-                            List<String> authGroups = tokenService.getAuthGroups(token.getId());
-                            if (checkAuth(authGroups, config.getGroupId())) {
-
-                            } else {
-                                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                                response.getWriter().append(JSON.toJSONString(ResponseDto.fail("Invalid Token!")));
-                                return;
-                            }
-                        }
                     }
 
                 }

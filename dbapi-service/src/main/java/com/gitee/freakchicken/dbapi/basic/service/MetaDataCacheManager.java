@@ -66,14 +66,14 @@ public class MetaDataCacheManager {
         }
     }
 
-    public void cleanTokenAuthMetaCacheIfCluster(String tokenId) {
+    public void cleanTokenAuthMetaCacheIfCluster(String appId) {
         try {
             if (mode.equals("cluster")) {
                 RestTemplate restTemplate = new RestTemplate();
                 List<ServiceInstance> instances = discoveryClient.getInstances(apiName);
 
                 for (ServiceInstance instance : instances) {
-                    String url = String.format("http://%s:%s/metacache/clean/tokenAuth?id=%s", instance.getHost(), instance.getPort(), tokenId);
+                    String url = String.format("http://%s:%s/metacache/clean/tokenAuth?id=%s", instance.getHost(), instance.getPort(), appId);
                     restTemplate.getForEntity(url, ResponseDto.class);
                     log.info("token auth meta cache clean to node: {}", instance.getHost());
                 }
