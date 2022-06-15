@@ -1,30 +1,27 @@
 <template>
   <div>
-    <codemirror ref="codemirror" class="myMirror" :options="cmOptions" @ready="onCmReady" @focus="onCmFocus"
-                @inputRead="onCmCodeChange">
+    <codemirror
+      ref="codemirror"
+      class="myMirror"
+      :options="cmOptions"
+      @ready="onCmReady"
+      @focus="onCmFocus"
+      @inputRead="onCmCodeChange"
+    >
     </codemirror>
   </div>
 </template>
 
 <script>
-import {codemirror} from 'vue-codemirror'
-
-import 'codemirror/theme/solarized.css'
 import 'codemirror/theme/idea.css'
-import 'codemirror/theme/darcula.css'
 import "codemirror/addon/hint/show-hint.css";
+
 import 'codemirror/mode/sql/sql.js'
 
-require("codemirror/lib/codemirror");
-require("codemirror/mode/sql/sql");
-require("codemirror/addon/hint/show-hint");
-require("codemirror/addon/hint/sql-hint");
-
+import "codemirror/addon/hint/show-hint";
+import "codemirror/addon/hint/sql-hint";
 export default {
   name: "codeUI",
-  components: {
-    codemirror
-  },
   data() {
     return {
       cmInstance: null, // 当前codemirror实例
@@ -38,14 +35,12 @@ export default {
         theme: 'idea',
         lint: true,                     // 代码出错提醒
         matchBrackets: true,
-        extraKeys: {"Tab": "autocomplete"},  //Tab可以弹出选择项
+        extraKeys: { "Tab": "autocomplete" },  //Tab可以弹出选择项
         hintOptions: { // 自定义提示选项
           completeSingle: false, // 当匹配只有一项的时候是否自动补全
           tables: {}
         }
-      },
-
-
+      }
     }
   },
   props: {
@@ -57,16 +52,15 @@ export default {
       type: String,
       default: 'mini'
     },
-    tableHints:{
+    tableHints: {
       type: Object,
-
     }
   },
   methods: {
     onCmReady(cm) {
       cm.setValue(this.sql)
       this.cmInstance = cm
-      this.$emit('appendCm',cm)
+      this.$emit('appendCm', cm)
       // debugger
       // this.cmList.push(cm)
       if (this.mode === "mini")
@@ -93,7 +87,7 @@ export default {
         this.cmInstance.setSize('100%', 'calc(100vh - 350px)')
       }
     },
-    tableHints(val,OldVal){
+    tableHints(val, OldVal) {
       this.cmOptions.hintOptions.tables = val
     }
   },
@@ -112,12 +106,12 @@ export default {
     line-height: 20px;
   }
   /deep/ .CodeMirror-line {
-    font-family: 'Consolas', Helvetica, Arial, sans-serif !important;
+    font-family: "Consolas", Helvetica, Arial, sans-serif !important;
     font-size: 18px !important;
     line-height: 20px;
 
     .cm-comment {
-      font-family: 'Consolas', Helvetica, Arial, sans-serif !important;
+      font-family: "Consolas", Helvetica, Arial, sans-serif !important;
       font-size: 18px !important;
       line-height: 20px;
     }

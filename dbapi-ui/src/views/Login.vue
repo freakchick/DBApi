@@ -5,13 +5,23 @@
         DBAPI
       </div>
       <div class="item">
-        <el-input v-model="username" :placeholder="$t('m.username')"></el-input>
+        <el-input
+          v-model="username"
+          :placeholder="$t('m.username')"
+        ></el-input>
       </div>
       <div class="item">
-        <el-input v-model="password" :placeholder="$t('m.password')" type="password"></el-input>
+        <el-input
+          v-model="password"
+          :placeholder="$t('m.password')"
+          type="password"
+        ></el-input>
       </div>
       <div class="item">
-        <div class="buttton" @click="login">{{$t('m.login')}}</div>
+        <div
+          class="buttton"
+          @click="login"
+        >{{$t('m.login')}}</div>
       </div>
     </div>
   </div>
@@ -23,49 +33,52 @@ export default {
   data() {
     return {
       username: null,
-      password: null
-
-    }
+      password: null,
+    };
   },
   methods: {
     login() {
-      this.axios.post("/user/login", {username: this.username, password: this.password}).then((response) => {
-        if (response.data.success) {
-          localStorage.setItem("token", response.data.msg)
-          this.$router.push("/api")
-        } else {
-          this.$message.error(response.data.msg)
-        }
-      }).catch((error) => {
-        this.$message.error(error)
-      })
-    }
+      this.axios
+        .post("/user/login", {
+          username: this.username,
+          password: this.password,
+        })
+        .then((response) => {
+          if (response.data.success) {
+            localStorage.setItem("token", response.data.msg);
+            this.$router.push("/api");
+          } else {
+            this.$message.error(response.data.msg);
+          }
+        })
+        .catch((error) => {
+          this.$message.error(error);
+        });
+    },
   },
   created() {
     //bind login event to enter key
     document.onkeydown = (e) => {
       const key = window.event.keyCode;
       if (key == 13 || key == 100) {
-        this.login()
+        this.login();
       }
-    }
+    };
   },
   destroyed() {
     //unbind login event to enter key when go to other pages
-    document.onkeydown = null
-  }
-}
+    document.onkeydown = null;
+  },
+};
 </script>
 
 <style scoped>
-
 .box {
   display: flex;
   display: -webkit-flex;
   align-items: center;
   justify-content: center;
   /*margin-top: 200px;*/
-
 }
 
 .content {
@@ -90,7 +103,6 @@ export default {
   font-weight: 700;
   font-size: 20px;
 }
-
 
 .header {
   text-align: center;
