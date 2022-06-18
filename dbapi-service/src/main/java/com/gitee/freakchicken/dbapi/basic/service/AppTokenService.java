@@ -38,7 +38,7 @@ public class AppTokenService {
             }
             // 设置了有效的失效时间
             else if (appInfo.getExpireTime() > 0) {
-                appToken.setExpireTime(System.currentTimeMillis() + appInfo.getExpireTime());
+                appToken.setExpireTime(System.currentTimeMillis() + appInfo.getExpireTime() * 1000);
             }
             appToken.setToken(token);
             appToken.setAppId(appId);
@@ -80,12 +80,14 @@ public class AppTokenService {
             }
             // 设置了有效的失效时间
             else if (expireTime > 0) {
+//                System.out.println(expireTime);
+//                System.out.println(System.currentTimeMillis());
                 if (expireTime > System.currentTimeMillis()) {
                     return appToken.getAppId();
                 } else {
                     // token已经过期就清除
                     cacheManager.getCache("token_app").evict(token);
-                    return null;
+                    throw new RuntimeException("token expired!");
                 }
             } else {
                 return null;

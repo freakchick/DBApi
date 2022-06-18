@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface AppInfoMapper extends BaseMapper<AppInfo> {
 
-    @Select("select * from app_info where id = #{id} and secret = #{id} ")
+    @Select("select * from app_info where id = #{id} and secret = #{secret} ")
     AppInfo selectByIdSecret(@Param("id") String id, @Param("secret") String secret);
 
 }

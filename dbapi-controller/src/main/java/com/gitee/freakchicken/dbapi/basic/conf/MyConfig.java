@@ -28,6 +28,7 @@ public class MyConfig implements WebMvcConfigurer {
 
 		List<String > patterns = new ArrayList<>();
 		patterns.add("/user/login");
+		patterns.add("/token/generate");
 		patterns.add("/api/**");
 		patterns.add("/js/**");
 		patterns.add("/css/**");

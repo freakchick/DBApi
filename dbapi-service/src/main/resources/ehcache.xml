@@ -11,7 +11,12 @@
            memoryStoreEvictionPolicy="LRU"/>
 
     <!--token缓存1小时-->
-    <cache name="token" eternal="false" maxElementsInMemory="10000"
+    <cache name="token_app" eternal="false" maxElementsInMemory="10000"
+           overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="3600"
+           memoryStoreEvictionPolicy="LRU"/>
+
+    <!--token缓存1小时-->
+    <cache name="app_token" eternal="false" maxElementsInMemory="10000"
            overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="3600"
            memoryStoreEvictionPolicy="LRU"/>
 

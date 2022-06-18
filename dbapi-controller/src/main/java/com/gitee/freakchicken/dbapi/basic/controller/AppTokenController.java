@@ -17,13 +17,13 @@ public class AppTokenController {
     /**
      * 客户端获取token
      *
-     * @param appId
+     * @param appid
      * @param secret
      * @return
      */
-    @PostMapping("/generate")
-    public AppToken getToken(String appId, String secret) {
-        AppToken token = tokenService.generateToken(appId, secret);
+    @RequestMapping("/generate")
+    public AppToken getToken(String appid, String secret) {
+        AppToken token = tokenService.generateToken(appid, secret);
         return token;
     }
 

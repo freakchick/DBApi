@@ -149,6 +149,18 @@ public class ApiConfigController {
         }
     }
 
+    @RequestMapping("/getIP")
+    public String getIP(HttpServletRequest request) {
+
+        if ("standalone".equals(mode)) {
+            return request.getServerName() + ":" + request.getServerPort();
+        } else if ("cluster".equals(mode)) {
+            return nacosService.getGatewayAddress();
+        } else {
+            return null;
+        }
+    }
+
     @RequestMapping("/mode")
     public String mode() {
         String docker = System.getenv("DOCKER");

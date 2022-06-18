@@ -16,6 +16,13 @@
     >
       <el-tab-pane label="接口测试">
         <div class="mycontent">
+          <h2>申请token</h2>
+          <el-input v-model="tokenUrl">
+            <el-button slot="append" icon="el-icon-caret-right" @click="getToken"></el-button>
+          </el-input>
+
+          <h2>访问接口</h2>
+
           <h4>{{ $t('m.url') }}：</h4>
           <el-input v-model="url"></el-input>
 
@@ -186,9 +193,22 @@ export default {
       contentType: null,
       jsonParam: null,
       CALL_EXAMPLE_TAB_NAME: Object.freeze("调用示例"),
+      tokenUrl:`http://${this.address}/token`
     };
   },
   methods: {
+    getToken(){
+      this.axios
+          .get(this.tokenUrl)
+          .then((response) => {
+            console.log(response.data)
+            this.$message.success(response.data.token)
+            this.token = response.data.token
+          })
+          .catch((error) => {
+            this.$message.error("get token failed");
+          });
+    },
     async getDetail(id) {
       await this.axios
         .post("/apiConfig/detail/" + id)
@@ -218,10 +238,21 @@ export default {
         .then((response) => {
           this.address = response.data;
           this.url = `http://${this.address}/${this.path}`;
+          this.tokenUrl = `http://${this.address}/token/generate?appid=xxx&secret=xxx`;
         })
         .catch((error) => {
           this.$message.error("get address failed");
         });
+    },
+    async getIP() {
+      await this.axios
+          .post("/apiConfig/getIP")
+          .then((response) => {
+            this.tokenUrl = `http://${response.data}/token/generate?appid=xxx&secret=xxx`;
+          })
+          .catch((error) => {
+            this.$message.error("get ip failed");
+          });
     },
     request() {
       this.response = null;
@@ -296,6 +327,7 @@ export default {
   created() {
     this.getDetail(this.$route.query.id);
     this.getAddress();
+    this.getIP()
   },
   computed: {
     // url(){
