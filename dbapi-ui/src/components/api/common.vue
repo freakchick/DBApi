@@ -52,6 +52,7 @@
                 v-for="item in types"
                 :label="item"
                 :value="item"
+                :key="item"
               ></el-option>
             </el-select>
             <el-tooltip
@@ -220,7 +221,7 @@
             </el-alert>
           </el-form-item>
           <el-form-item :label="$t('m.data_convert')">
-            <div v-for="(item,index) in this.$store.state.sqls">
+            <div v-for="(item,index) in this.$store.state.sqls" :key="item.label">
               <span>sql-{{ item.label }} : </span>
               <span class="label">插件类名</span>
               <el-select
@@ -236,6 +237,7 @@
                   v-for="op in transformPlugins"
                   :value="op.className"
                   :label="op.className"
+                  :key="op.className"
                 >
                   <div>
                     <el-tooltip
@@ -284,6 +286,7 @@
               <el-option
                 v-for="item in cachePlugins"
                 :value="item.className"
+                :key="item.className"
               >
                 <div>
                   <el-tooltip
@@ -331,6 +334,7 @@
                 v-for="item in alarmPlugins"
                 :value="item.className"
                 :label="item.className"
+                :key="item.className"
               >
                 <div>
                   <el-tooltip

@@ -33,7 +33,7 @@ const routes = [
       // {path: '/about/donate', name: 'donate', component: donate},
       // {path: '/tool/json', name: 'json', component: json},
       // {path: '/tool/time', name: 'time', component: time},
-
+      { path: '/', name: 'api', component: api },
       { path: '/datasource', name: 'datasource', component: datasource },
       { path: '/datasource/edit', component: datasourceEdit },
       { path: '/datasource/detail', component: datasourceDetail },

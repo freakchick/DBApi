@@ -187,6 +187,7 @@
                 v-for="item in scope.row.p"
                 :name="item.name"
                 :type="item.type"
+                :key="item.name"
               ></data-tag>
             </div>
             <div v-show="scope.row.contentType === CONTENT_TYPE.JSON ">
@@ -334,6 +335,7 @@
           <el-checkbox
             v-for="item in groups"
             :label="item.id"
+            :key="item.id"
           >{{ item.name }}
             <span style="color: #ccc">{{ item.id }}</span>
           </el-checkbox>

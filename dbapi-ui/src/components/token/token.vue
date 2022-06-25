@@ -29,7 +29,7 @@
 
     <el-dialog title="授权该app访问以下分组的API" :visible.sync="dialogVisible" @open="getAllGroups">
       <el-checkbox-group v-model="checkList">
-        <el-checkbox :label="item.id" v-for="item in groups">{{ item.name }}</el-checkbox>
+        <el-checkbox :key="item.id" :label="item.id" v-for="item in groups">{{ item.name }}</el-checkbox>
       </el-checkbox-group>
 
       <span slot="footer" class="dialog-footer">

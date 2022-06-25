@@ -18,7 +18,7 @@
         <!--        <div class="menus" :style="`top:${y}px;left:${x}px`" v-show="showMenuFlag" @onblur="showMenuFlag=false">
                   <div class="menu" @click="copy">复制</div>
                 </div>-->
-        <div v-for="(item,index) in tables">
+        <div v-for="(item,index) in tables" :key="item.label">
           <div>
             <div
               class="table"
@@ -31,6 +31,7 @@
               <div
                 v-for="(it) in item.columns"
                 class="column"
+                :key="it.label"
               >
                 <!--              <i class="iconfont icon-ziyuan"></i>-->
                 <span class="columnName">{{ it.label }}</span>
@@ -111,6 +112,7 @@
             <div
               v-for="(item,index) in this.$store.state.sqls"
               :class="{'tab':true,'tab-active':currentIndex === index}"
+              :key="item.label"
             >
               <div
                 @click="focusCM(index, item.sqlText)"
@@ -197,6 +199,7 @@
               :prop="item"
               :label="item"
               v-for="item in Object.keys(resultList[0])"
+              :key="item"
             ></el-table-column>
           </el-table>
           <div v-if="resultList != null && resultList.length == 0">查询结果为空</div>
