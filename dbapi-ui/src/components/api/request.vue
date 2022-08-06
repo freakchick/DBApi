@@ -1,120 +1,93 @@
 <template>
   <div>
-    <el-button
-      icon="el-icon-d-arrow-left"
-      type="info"
-      plain
-      @click="$router.go(-1)"
-      size="small"
-    >{{ $t('m.back') }}
+    <el-button icon="el-icon-d-arrow-left" type="info" plain @click="$router.go(-1)" size="small">{{ $t('m.back') }}
     </el-button>
     <h2>{{ $t('m.request_test') }}</h2>
-    <el-tabs
-      tab-position="top"
-      type="border-card"
-      @tab-click="handleTabClick"
-    >
+    <el-tabs tab-position="top" type="border-card" @tab-click="handleTabClick">
       <el-tab-pane label="接口测试">
         <div class="mycontent">
-          <h2>申请token</h2>
-          <el-input v-model="tokenUrl">
-            <el-button slot="append" icon="el-icon-caret-right" @click="getToken"></el-button>
-          </el-input>
+          <div v-show="previlege == PREVILEGE.PRIVATE">
+            <h2>申请token</h2>
+            <el-input v-model="tokenUrl">
+              <el-button slot="append" icon="el-icon-caret-right" @click="getToken"></el-button>
+            </el-input>
+            <el-alert type="warning" show-icon>请使用您的应用id（appid）和密钥（secret）来申请token，访问私有接口需要使用token</el-alert>
+          </div>
 
           <h2>访问接口</h2>
 
           <h4>{{ $t('m.url') }}：</h4>
           <el-input v-model="url"></el-input>
 
-          <el-alert
-            type="warning"
-            show-icon
-            v-show="this.$store.state.mode == 'cluster'"
-            title="如果是外网访问请将网关地址设置为外网IP端口"
-            style="margin-top: 10px;"
-          >
+          <el-alert type="warning" show-icon v-show="this.$store.state.mode == 'cluster'" title="如果是外网访问请将网关地址设置为外网IP端口"
+                    style="margin-top: 10px;">
           </el-alert>
           <h4>Header：</h4>
 
-          <el-form
-            label-width="150px"
-            style="width: 600px"
-            size="medium"
-          >
+          <el-form label-width="150px" style="width: 600px" size="medium">
             <el-form-item label="Content-Type">
-              <el-input
-                v-model="contentType"
-                disabled
-              ></el-input>
+              <el-input v-model="contentType" disabled></el-input>
             </el-form-item>
-            <el-form-item
-              label="token"
-              v-show="previlege == PREVILEGE.PRIVATE"
-            >
-              <el-input v-model="token"></el-input>
+            <el-form-item label="Authorization" v-show="previlege == PREVILEGE.PRIVATE">
+              <el-input v-model="token" placeholder="请填入token"></el-input>
             </el-form-item>
           </el-form>
 
           <h4>{{ $t('m.parameters') }}：</h4>
           <div class="textarea">
-            <el-input
-              v-model="jsonParam"
-              placeholder="填写json参数"
-              type="textarea"
-              rows="10"
-              v-show="contentType === CONTENT_TYPE.JSON"
-            ></el-input>
+            <el-input v-model="jsonParam" placeholder="填写json参数" type="textarea" rows="10"
+                      v-show="contentType === CONTENT_TYPE.JSON"></el-input>
           </div>
           <el-form
-            label-width="150px"
-            style="width: 600px"
-            size="medium"
-            v-show="contentType === CONTENT_TYPE.FORM_URLENCODED"
+              label-width="150px"
+              style="width: 600px"
+              size="medium"
+              v-show="contentType === CONTENT_TYPE.FORM_URLENCODED"
           >
             <el-form-item
-              v-for="(item,index) in params"
-              :key="item.id"
-              style="margin-bottom: 5px"
+                v-for="(item,index) in params"
+                :key="item.id"
+                style="margin-bottom: 5px"
             >
               <template slot="label">
                 <data-tag
-                  :name="item.name"
-                  :type="item.type"
+                    :name="item.name"
+                    :type="item.type"
                 ></data-tag>
               </template>
               <el-input
-                v-model="item.value"
-                v-if="!item.type.startsWith('Array')"
+                  v-model="item.value"
+                  v-if="!item.type.startsWith('Array')"
               >
                 <!--          <template slot="append">{{ item.type }}</template>-->
               </el-input>
               <div v-show="item.type.startsWith('Array')">
                 <div
-                  v-for="(childItem,childIndex) in item.values"
-                  :key="childIndex"
+                    v-for="(childItem,childIndex) in item.values"
+                    :key="childIndex"
                 >
                   <el-input
-                    v-model="childItem.va"
-                    style="width: 400px"
+                      v-model="childItem.va"
+                      style="width: 400px"
                   >
                   </el-input>
                   <el-button
-                    slot="append"
-                    icon="el-icon-delete"
-                    type="danger"
-                    circle
-                    size="mini"
-                    @click="deleteRow(index,childIndex)"
-                    style="margin-left: 4px;"
+                      slot="append"
+                      icon="el-icon-delete"
+                      type="danger"
+                      circle
+                      size="mini"
+                      @click="deleteRow(index,childIndex)"
+                      style="margin-left: 4px;"
                   ></el-button>
                 </div>
 
                 <el-button
-                  icon="el-icon-plus"
-                  type="primary"
-                  circle
-                  size="mini"
-                  @click="addRow(index)"
+                    icon="el-icon-plus"
+                    type="primary"
+                    circle
+                    size="mini"
+                    @click="addRow(index)"
                 ></el-button>
               </div>
             </el-form-item>
@@ -125,41 +98,42 @@
           <h4>{{ $t('m.result') }}：</h4>
 
           <el-table
-            :data="tableData"
-            v-show="showTable"
-            size="mini"
-            border
-            stripe
-            max-height="700"
+              :data="tableData"
+              v-show="showTable"
+              size="mini"
+              border
+              stripe
+              max-height="700"
           >
             <el-table-column
-              :prop="item"
-              :label="item"
-              v-for="item in keys"
-              :key="item"
+                :prop="item"
+                :label="item"
+                v-for="item in keys"
+                :key="item"
             ></el-table-column>
           </el-table>
           <el-input
-            type="textarea"
-            v-model="response"
-            :autosize="{ minRows: 5, maxRows: 20 }"
-            class="my"
-            v-show="!showTable"
+              type="textarea"
+              v-model="response"
+              :autosize="{ minRows: 5, maxRows: 20 }"
+              class="my"
+              v-show="!showTable"
           ></el-input>
 
           <el-button
-            size="small"
-            @click="format"
-            class="button"
-          >{{ $t('m.json_format') }}</el-button>
+              size="small"
+              @click="format"
+              class="button"
+          >{{ $t('m.json_format') }}
+          </el-button>
 
         </div>
       </el-tab-pane>
       <el-tab-pane :label="CALL_EXAMPLE_TAB_NAME">
         <call-example
-          ref="callExample"
-          :address="url"
-          :detail="{path,params,previlege,jsonParam,contentType,token}"
+            ref="callExample"
+            :address="url"
+            :detail="{path,params,previlege,jsonParam,contentType,token}"
         />
       </el-tab-pane>
     </el-tabs>
@@ -169,11 +143,12 @@
 </template>
 
 <script>
-import { CONTENT_TYPE, PREVILEGE } from "@/constant";
+import {CONTENT_TYPE, PREVILEGE} from "@/constant";
 import callExample from "@/components/api/common/callExample";
+
 export default {
   name: "request",
-  components: { callExample },
+  components: {callExample},
   data() {
     return {
       CONTENT_TYPE: Object.freeze(CONTENT_TYPE),
@@ -193,11 +168,11 @@ export default {
       contentType: null,
       jsonParam: null,
       CALL_EXAMPLE_TAB_NAME: Object.freeze("调用示例"),
-      tokenUrl:`http://${this.address}/token`
+      tokenUrl: `http://${this.address}/token`
     };
   },
   methods: {
-    getToken(){
+    getToken() {
       this.axios
           .get(this.tokenUrl)
           .then((response) => {
@@ -211,38 +186,38 @@ export default {
     },
     async getDetail(id) {
       await this.axios
-        .post("/apiConfig/detail/" + id)
-        .then((response) => {
-          this.path = response.data.path;
-          this.previlege = response.data.previlege;
-          let params = JSON.parse(response.data.params);
-          params.forEach((t) => {
-            if (t.type.startsWith("Array")) {
-              t.values = [{ va: "" }];
-            }
-          });
-          this.params = params;
-          this.isSelect = response.data.isSelect;
+          .post("/apiConfig/detail/" + id)
+          .then((response) => {
+            this.path = response.data.path;
+            this.previlege = response.data.previlege;
+            let params = JSON.parse(response.data.params);
+            params.forEach((t) => {
+              if (t.type.startsWith("Array")) {
+                t.values = [{va: ""}];
+              }
+            });
+            this.params = params;
+            this.isSelect = response.data.isSelect;
 
-          this.url = `http://${this.address}/${this.path}`;
-          this.contentType = response.data.contentType;
-          this.jsonParam = response.data.jsonParam;
-        })
-        .catch((error) => {
-          this.$message.error("get detail failed");
-        });
+            this.url = `http://${this.address}/${this.path}`;
+            this.contentType = response.data.contentType;
+            this.jsonParam = response.data.jsonParam;
+          })
+          .catch((error) => {
+            this.$message.error("get detail failed");
+          });
     },
     async getAddress() {
       await this.axios
-        .post("/apiConfig/getIPPort")
-        .then((response) => {
-          this.address = response.data;
-          this.url = `http://${this.address}/${this.path}`;
-          this.tokenUrl = `http://${this.address}/token/generate?appid=xxx&secret=xxx`;
-        })
-        .catch((error) => {
-          this.$message.error("get address failed");
-        });
+          .post("/apiConfig/getIPPort")
+          .then((response) => {
+            this.address = response.data;
+            this.url = `http://${this.address}/${this.path}`;
+            this.tokenUrl = `http://${this.address}/token/generate?appid=xxx&secret=xxx`;
+          })
+          .catch((error) => {
+            this.$message.error("get address failed");
+          });
     },
     async getIP() {
       await this.axios
@@ -270,22 +245,22 @@ export default {
       }
       // let url = `http://${this.address}/api/${this.path}`
       this.axios
-        .post(this.url, p, {
-          headers: {
-            "Content-Type": this.contentType,
-            Authorization: this.token == null ? "" : this.token,
-          },
-        })
-        .then((response) => {
-          if (response.status == 200) {
-            this.showTable = false;
-            this.response = JSON.stringify(response.data);
-          }
-        })
-        .catch((error) => {
-          // 只要状态码不是200都会进入catch逻辑
-          this.$message.error(error.response.data.msg);
-        });
+          .post(this.url, p, {
+            headers: {
+              "Content-Type": this.contentType,
+              Authorization: this.token == null ? "" : this.token,
+            },
+          })
+          .then((response) => {
+            if (response.status == 200) {
+              this.showTable = false;
+              this.response = JSON.stringify(response.data);
+            }
+          })
+          .catch((error) => {
+            // 只要状态码不是200都会进入catch逻辑
+            this.$message.error(error.response.data.msg);
+          });
     },
     format() {
       const o = JSON.parse(this.response);
@@ -310,7 +285,7 @@ export default {
       this.showTable = false;
     },
     addRow(index) {
-      this.params[index].values.push({ va: null });
+      this.params[index].values.push({va: null});
     },
     deleteRow(index, childIndex) {
       this.params[index].values.splice(childIndex, 1);

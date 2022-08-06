@@ -9,10 +9,9 @@
     <el-table :data="tableData" border stripe max-height="700" class="gap">
       <el-table-column prop="id" label="appid"></el-table-column>
       <el-table-column prop="name" label="应用名称"></el-table-column>
-      <el-table-column prop="note" label="描述"></el-table-column>
+      <el-table-column prop="note" label="应用描述"></el-table-column>
       <el-table-column prop="secret" label="secret"></el-table-column>
       <el-table-column prop="expireDesc" label="token失效时间"></el-table-column>
-      <el-table-column prop="note" :label="$t('m.note')"></el-table-column>
 
 
       <el-table-column :label="$t('m.operation')" width="100px">
@@ -27,7 +26,7 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog title="授权该app访问以下分组的API" :visible.sync="dialogVisible" @open="getAllGroups">
+    <el-dialog title="授权该应用访问以下分组的API" :visible.sync="dialogVisible" @open="getAllGroups">
       <el-checkbox-group v-model="checkList">
         <el-checkbox :label="item.id" v-for="item in groups">{{ item.name }}</el-checkbox>
       </el-checkbox-group>
@@ -41,16 +40,26 @@
 
     <el-alert type="warning" show-icon>
       <div class="tip"></div>
-      <div><br/>
+      <div>
+        请求私有接口时，需要把token值放入header的Authorization字段中携带，才可以访问成功。（如果是开放接口，不需要设置header）
+        <br/>
+        <br/>以python为例，访问api的代码示例如下：
+        <br/>
         import requests <br/>
         headers = {"Authorization": "5ad0dcb4eb03d3b0b7e4b82ae0ba433f"} <br/>
         re = requests.post("http://127.0.0.1:8520/api/userById", {"idList": [1, 2]}, headers=headers) <br/>
         print(re.text) <br/>
       </div>
+      <br/>
+      <div>
+        <h3>*token如何获取？</h3>
+        使用appid和secret访问以下接口来获取token<br/>
+        http://{{ip}}/token/generate?appid=xxx&secret=xxx<br/>
+      </div>
 
     </el-alert>
 
-    <el-dialog title="创建应用" :visible.sync="dialogCreateApp" width="40%">
+    <el-dialog title="创建应用" :visible.sync="dialogCreateApp" width="60%">
       <el-form label-width="120px">
         <el-form-item label="应用名称">
           <el-input v-model="app.name"></el-input>
@@ -98,7 +107,8 @@ export default {
         name: null,
         note: null,
         expireDesc: null
-      }
+      },
+      ip:null
     }
   },
   methods: {
@@ -149,11 +159,22 @@ export default {
         this.checkList = response.data
       }).catch((error) => {
       })
-    }
+    },
+    async getIP() {
+      await this.axios
+          .post("/apiConfig/getIP")
+          .then((response) => {
+            this.ip = response.data
+          })
+          .catch((error) => {
+            this.$message.error("get ip failed");
+          });
+    },
 
   },
   created() {
     this.getAll()
+    this.getIP()
   }
 }
 </script>

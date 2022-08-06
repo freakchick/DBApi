@@ -80,8 +80,6 @@ public class AppTokenService {
             }
             // 设置了有效的失效时间
             else if (expireTime > 0) {
-//                System.out.println(expireTime);
-//                System.out.println(System.currentTimeMillis());
                 if (expireTime > System.currentTimeMillis()) {
                     return appToken.getAppId();
                 } else {
