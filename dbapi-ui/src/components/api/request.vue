@@ -39,8 +39,8 @@
                       v-show="contentType === CONTENT_TYPE.JSON"></el-input>
           </div>
           <el-form
-              label-width="150px"
-              style="width: 600px"
+              label-width="200px"
+              style="width: 650px"
               size="medium"
               v-show="contentType === CONTENT_TYPE.FORM_URLENCODED"
           >
@@ -57,7 +57,7 @@
               </template>
               <el-input
                   v-model="item.value"
-                  v-if="!item.type.startsWith('Array')"
+                  v-if="!item.type.startsWith('Array')"  :placeholder="item.note"
               >
                 <!--          <template slot="append">{{ item.type }}</template>-->
               </el-input>
@@ -67,7 +67,7 @@
                     :key="childIndex"
                 >
                   <el-input
-                      v-model="childItem.va"
+                      v-model="childItem.va"  :placeholder="item.note"
                       style="width: 400px"
                   >
                   </el-input>
