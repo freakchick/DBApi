@@ -68,12 +68,14 @@ public class ApiAuthFilter implements Filter {
                 } else {
                     String appId = tokenService.verifyToken(tokenStr);
                     if (appId == null) {
+                        log.error("token[{}] matched no appid", tokenStr);
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                         response.getWriter().append(JSON.toJSONString(ResponseDto.fail("Token Invalid!")));
                         return;
                     } else {
                         List<String> authGroups = appService.getAuthGroups(appId);
                         if (!authGroups.contains(config.getGroupId())) {
+                            log.error("token[{}] matched appid[{}], but appid not authorized", tokenStr, appId);
                             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                             response.getWriter().append(JSON.toJSONString(ResponseDto.fail("Token Invalid!")));
                             return;

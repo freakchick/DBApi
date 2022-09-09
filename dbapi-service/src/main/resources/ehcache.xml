@@ -10,17 +10,17 @@
            overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="3600"
            memoryStoreEvictionPolicy="LRU"/>
 
-    <!--token缓存1小时-->
-    <cache name="token_app" eternal="false" maxElementsInMemory="10000"
-           overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="3600"
+    <!--token_app永久缓存-->
+    <cache name="token_app" eternal="true" maxElementsInMemory="10000"
+           overflowToDisk="false" diskPersistent="false"
            memoryStoreEvictionPolicy="LRU"/>
 
-    <!--token缓存1小时-->
-    <cache name="app_token" eternal="false" maxElementsInMemory="10000"
-           overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="3600"
+    <!--app_token永久缓存-->
+    <cache name="app_token" eternal="true" maxElementsInMemory="10000"
+           overflowToDisk="false" diskPersistent="false"
            memoryStoreEvictionPolicy="LRU"/>
 
-    <!--token_AuthGroups缓存1小时-->
+    <!--app_AuthGroups缓存1小时-->
     <cache name="app_AuthGroups" eternal="false" maxElementsInMemory="10000"
            overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="3600"
            memoryStoreEvictionPolicy="LRU"/>

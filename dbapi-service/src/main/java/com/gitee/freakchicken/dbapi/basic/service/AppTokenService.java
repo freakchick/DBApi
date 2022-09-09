@@ -4,12 +4,15 @@ package com.gitee.freakchicken.dbapi.basic.service;
 import com.gitee.freakchicken.dbapi.basic.dao.AppInfoMapper;
 import com.gitee.freakchicken.dbapi.basic.domain.AppInfo;
 import com.gitee.freakchicken.dbapi.basic.domain.AppToken;
+import com.gitee.freakchicken.dbapi.basic.util.Constants;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class AppTokenService {
     @Autowired
     private AppInfoMapper appInfoMapper;
@@ -43,16 +46,17 @@ public class AppTokenService {
             appToken.setToken(token);
             appToken.setAppId(appId);
 
+
             //最新token存入缓存
-            cacheManager.getCache("token_app").putIfAbsent(token, appToken);
+            cacheManager.getCache(Constants.EHCACHE_TOKEN_APP).putIfAbsent(token, appToken);
 
             //clean old token
-            String oldToken = cacheManager.getCache("app_token").get(appId, String.class);
+            String oldToken = cacheManager.getCache(Constants.EHCACHE_APP_TOKEN).get(appId, String.class);
             if (oldToken != null)
-                cacheManager.getCache("token_app").evict(oldToken);
+                cacheManager.getCache(Constants.EHCACHE_TOKEN_APP).evict(oldToken);
 
             //appid和最新token关系记录下来
-            cacheManager.getCache("app_token").putIfAbsent(appId, token);
+            cacheManager.getCache(Constants.EHCACHE_APP_TOKEN).putIfAbsent(appId, token);
             return appToken;
         }
     }
@@ -64,14 +68,14 @@ public class AppTokenService {
      * @return
      */
     public String verifyToken(String token) {
-        AppToken appToken = cacheManager.getCache("token_app").get(token, AppToken.class);
+        AppToken appToken = cacheManager.getCache(Constants.EHCACHE_TOKEN_APP).get(token, AppToken.class);
         if (appToken == null) {
             return null;
         } else {
             Long expireTime = appToken.getExpireTime();
             // 单次失效
             if (expireTime == 0) {
-                cacheManager.getCache("token_app").evict(token);
+                cacheManager.getCache(Constants.EHCACHE_TOKEN_APP).evict(token);
                 return appToken.getAppId();
             }
             // 永久有效
@@ -84,7 +88,8 @@ public class AppTokenService {
                     return appToken.getAppId();
                 } else {
                     // token已经过期就清除
-                    cacheManager.getCache("token_app").evict(token);
+                    cacheManager.getCache(Constants.EHCACHE_TOKEN_APP).evict(token);
+                    log.error("token [{}] expired!", token);
                     throw new RuntimeException("token expired!");
                 }
             } else {

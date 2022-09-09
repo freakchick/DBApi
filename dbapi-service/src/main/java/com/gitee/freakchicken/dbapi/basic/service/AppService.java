@@ -4,9 +4,11 @@ import com.gitee.freakchicken.dbapi.basic.dao.ApiAuthMapper;
 import com.gitee.freakchicken.dbapi.basic.dao.AppInfoMapper;
 import com.gitee.freakchicken.dbapi.basic.domain.ApiAuth;
 import com.gitee.freakchicken.dbapi.basic.domain.AppInfo;
+import com.gitee.freakchicken.dbapi.basic.util.Constants;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,9 @@ public class AppService {
 
     @Autowired
     private MetaDataCacheManager metaDataCacheManager;
+
+    @Autowired
+    CacheManager cacheManager;
 
     @Transactional
     public AppInfo add(AppInfo app) {
@@ -55,11 +60,12 @@ public class AppService {
     @Transactional
     public void delete(String appid) {
         appInfoMapper.deleteById(appid);
+        cacheManager.getCache(Constants.EHCACHE_APP_AUTH_GROUPS).evict(appid);
     }
 
     @Transactional
-    @CacheEvict(value = "app_AuthGroups", key = "#appId")
     public void auth(String appId, String groupIds) {
+        cacheManager.getCache(Constants.EHCACHE_APP_AUTH_GROUPS).evictIfPresent(appId);
         apiAuthMapper.deleteByAppId(appId);
         if (StringUtils.isNoneBlank(groupIds)) {
             String[] split = groupIds.split(",");
@@ -73,9 +79,9 @@ public class AppService {
         metaDataCacheManager.cleanTokenAuthMetaCacheIfCluster(appId);
     }
 
-    @Cacheable(value = "app_AuthGroups", key = "#appId", unless = "#result == null")
     public List<String> getAuthGroups(String appId) {
         List<String> list = apiAuthMapper.selectByAppId(appId);
+        cacheManager.getCache(Constants.EHCACHE_APP_AUTH_GROUPS).putIfAbsent(appId, list);
         return list;
     }
 }
