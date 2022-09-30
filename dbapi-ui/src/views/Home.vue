@@ -26,7 +26,7 @@ export default {
       console.log(key, keyPath);
     },
     getMode() {
-      this.axios.post("/apiConfig/mode").then((response) => {
+      this.axios.post("/system/mode").then((response) => {
         this.$store.commit('setMode', response.data)
       }).catch((error) => {
 

@@ -161,15 +161,7 @@ public class ApiConfigController {
         }
     }
 
-    @RequestMapping("/mode")
-    public String mode() {
-        String docker = System.getenv("DOCKER");
-        if ("true".equals(docker)) {
-            return mode + " in docker";
-        } else {
-            return mode;
-        }
-    }
+
 
     @RequestMapping("/apiDocs")
     public void apiDocs(String ids, HttpServletResponse response) {

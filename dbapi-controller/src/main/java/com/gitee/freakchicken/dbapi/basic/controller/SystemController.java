@@ -12,8 +12,21 @@ public class SystemController {
     @Value("${version}")
     String version;
 
+    @Value("${dbapi.mode}")
+    String mode;
+
     @RequestMapping("/version")
     public String getVersion() {
         return version;
+    }
+
+    @RequestMapping("/mode")
+    public String mode() {
+        String docker = System.getenv("DOCKER");
+        if ("true".equals(docker)) {
+            return mode + " in docker";
+        } else {
+            return mode;
+        }
     }
 }
