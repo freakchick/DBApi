@@ -9,6 +9,8 @@ $command = "java -cp '" + $conf_dir;
 $exclude_jars = "spring-boot-starter-webflux", "spring-webflux", "spring-cloud-gateway-server", "spring-cloud-starter-gateway";
 
 # 判断是否包含在exclude jar中
+
+
 Function contain($jar)
 {
     $res = 0
