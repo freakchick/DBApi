@@ -48,11 +48,11 @@
 ![](https://freakchicken.gitee.io/images/dbApi/20210803/sql_run.png)
 
 ![](https://freakchicken.gitee.io/images/dbApi/20210502/group.png)
-![](https://freakchicken.gitee.io/images/dbApi/20220503/request.png)
+![](https://freakchicken.gitee.io/images/dbApi/20221001/request.png)
 
-![](https://freakchicken.gitee.io/images/dbApi/20210502/token_add.png)
-![](https://freakchicken.gitee.io/images/dbApi/20210502/token.png)
-![](https://freakchicken.gitee.io/images/dbApi/20210502/token_auth.png)
+![](https://freakchicken.gitee.io/images/dbApi/20221001/app_add.png)
+![](https://freakchicken.gitee.io/images/dbApi/20221001/apps.png)
+![](https://freakchicken.gitee.io/images/dbApi/20221001/token_auth.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20210502/docs.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20210803/ip.png)
 
