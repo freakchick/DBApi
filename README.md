@@ -52,7 +52,7 @@
 
 ![](https://freakchicken.gitee.io/images/dbApi/20221001/app_add.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20221001/apps.png)
-![](https://freakchicken.gitee.io/images/dbApi/20221001/token_auth.png)
+![](https://freakchicken.gitee.io/images/dbApi/20221001/auth.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20210502/docs.png)
 ![](https://freakchicken.gitee.io/images/dbApi/20210803/ip.png)
 
