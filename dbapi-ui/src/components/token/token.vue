@@ -121,6 +121,7 @@ export default {
           message: msg,
           duration: 10000
         })
+        this.getAll()
       }).catch((error) => {
       })
     },
