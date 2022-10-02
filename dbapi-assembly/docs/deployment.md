@@ -1,14 +1,14 @@
 # 安装教程
 
-> 安装包[下载地址](http://101.34.234.234/) ，或者在[天翼云盘](https://cloud.189.cn/t/Jza2MzeEZVNv) 下载
+> 安装包[下载地址](http://101.34.234.234/) ，或者在[天翼云盘](https://cloud.189.cn/t/Jza2MzeEZVNv) 下载。
 
+> 默认账户admin/admin
 ## 本地部署单机版
 
 - 依赖java环境，先自行在服务器安装`jdk8+`，并配置环境变量
 - 下载安装包解压到需要安装的目录
 - 修改`conf/application.properties`文件中的以下配置
 ```properties
-
 # api访问路径的统一根路径，example: http://192.168.xx.xx:8520/api/xxx
 # api context
 dbapi.api.context=api
