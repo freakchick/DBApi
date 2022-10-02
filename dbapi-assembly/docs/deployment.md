@@ -8,9 +8,6 @@
 - 下载安装包解压到需要安装的目录
 - 修改`conf/application.properties`文件中的以下配置
 ```properties
-# 数据源密码加密存储的密钥，至少8位字符
-# key used to encrypt the password of DataSource, at least 8 char
-dbapi.secret.key=12345678
 
 # api访问路径的统一根路径，example: http://192.168.xx.xx:8520/api/xxx
 # api context
@@ -56,11 +53,6 @@ done
 
 - 修改`conf/application.properties`文件中的以下配置
 ```properties
-
-# 数据源密码加密存储的密钥，至少8位字符
-# key used to encrypt the password of DataSource, at least 8 char
-dbapi.secret.key=12345678
-
 # api访问路径的统一根路径，example: http://192.168.xx.xx:8520/api/xxx
 # api context
 dbapi.api.context=api
@@ -127,7 +119,7 @@ sh bin/dbapi-daemon.sh stop apiServer
 
 - 一键启动（使用dbapi自带的元数据库sqlite）
 ```shell
-docker run -it -p 8520:8520 --name dbapi freakchicken/db-api:3.1.1 standalone
+docker run -it -p 8520:8520 --name dbapi freakchicken/db-api:3.1.2 standalone
 ```
 
 - 使用自己的mysql作为元数据库（启动前需要在mysql执行初始化脚本）
@@ -138,7 +130,7 @@ docker run -it \
 -e DB_USERNAME="root" \
 -e DB_PASSWORD="root" \
 -e DB_DRIVER="com.mysql.cj.jdbc.Driver" \
-freakchicken/db-api:3.1.1 standalone
+freakchicken/db-api:3.1.2 standalone
 ```
 - 浏览器访问`http://192.168.xx.xx:8520`进入UI
 
@@ -160,7 +152,7 @@ docker run -it \
 -e NACOS_USERNAME="nacos" \
 -e NACOS_PASSWORD="nacos" \
 -e NACOS_NAMESPACE="public" \
-freakchicken/db-api:3.1.1 manager
+freakchicken/db-api:3.1.2 manager
 ```
 
 - 启动网关服务 gateway
@@ -175,7 +167,7 @@ docker run -it \
 -e NACOS_USERNAME="nacos" \
 -e NACOS_PASSWORD="nacos" \
 -e NACOS_NAMESPACE="public" \
-freakchicken/db-api:3.1.1 gateway
+freakchicken/db-api:3.1.2 gateway
 ```
 
 - 启动API服务apiServer（此服务可启动多个，构建api集群）
@@ -189,7 +181,7 @@ docker run -it \
 -e NACOS_USERNAME="nacos" \
 -e NACOS_PASSWORD="nacos" \
 -e NACOS_NAMESPACE="public" \
-freakchicken/db-api:3.1.1 apiServer
+freakchicken/db-api:3.1.2 apiServer
 ```
 
 - 浏览器访问`http://192.168.xx.xx:8523`进入UI; API通过gateway来访问`http://192.168.xx.xx:8525/api/xx`
@@ -200,7 +192,6 @@ freakchicken/db-api:3.1.1 apiServer
 
 | 环境变量 | 默认值 | 说明 |
 | -------- | ----- |----- |
-| SECRET_KEY | 12345678 | 数据源密码加密存储的密钥，至少8位字符 |
 | API_CONTEXT | api| 所有API的统一根路径 |
 | DB_URL | jdbc:sqlite::resource:sqlite.db |元数据库地址 |
 | DB_USERNAME |  | 元数据库账户|

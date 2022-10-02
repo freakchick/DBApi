@@ -50,7 +50,7 @@
 
 > 对于`application/json`类型的API，用户在请求该API的时候只能使用`application/json`方式
 - 添加参数，参数名称就是sql中的参数名，sql中涉及到的每个参数都要填写
-- 访问权限，开放接口可以直接访问，私有接口需要申请token才能访问
+- 访问权限，开放接口可以直接访问，私有接口需要用户申请token才能访问
 #### 高级配置
 
 ![](https://freakchicken.gitee.io/images/dbApi/20220503/api_edit2.png)
@@ -71,30 +71,43 @@
   ![](https://freakchicken.gitee.io/images/dbApi/20210502/group.png)
 
 ### API请求测试
-- 在页面快速访问API，查看结果，**注意如果是内网部署，您需要手动修改访问的IP、端口为外网IP、端口**
-  ![](https://freakchicken.gitee.io/images/dbApi/20220503/request.png)
+- 在页面快速访问API，查看结果
+  ![](https://freakchicken.gitee.io/images/dbApi/20221001/request.png)
+> 如果是私有接口，必须用户必须先使用自己的appid和secret来申请token，然后再使用token去访问接口。
+> 如果是开放接口则可以直接访问
+
+> 注意如果是内网部署，您需要手动修改访问的IP、端口为外网IP、端口
 
 ### sql调试
 - 点击sql填写框右上角的最大化按钮，可以开启sql调试功能
 ![](https://freakchicken.gitee.io/images/dbApi/20210803/sql_run.png)
-- 如果sql中有参数，在调试的时候，请输入参数
+> 如果sql中有参数，在调试的时候，请输入参数
 
 ## 权限管理
-### 创建token
-![](https://freakchicken.gitee.io/images/dbApi/20210502/token_add.png)
-![](https://freakchicken.gitee.io/images/dbApi/20210502/token.png)
+![](https://freakchicken.gitee.io/images/dbApi/20221001/apps.png)
+> **什么是应用？**
+>
+> 应用由系统管理员创建，创建好后会自动生成appid和secret，系统管理员需要将appid和secret告知客户端（API调用方）。
+> 客户端使用自己的appid和secret访问 `http://192.168.xx.xx:8520/token/generate?appid=xxx&secret=xxx`
+> 接口可以动态的获取token，客户端使用这个token才能访问私有API（前提是系统管理员已经对该应用授权了访问此私有API）
+### 创建应用
+![](https://freakchicken.gitee.io/images/dbApi/20221001/app_add.png)
+> 创建应用必须设置token过期时间，以后客户端每次申请的token就会有相应的过期时间，在这个有效期内，
+> 使用上一次申请的token去访问API都是有效的。否则过了这个过期时间，就要重新申请token。
 
-### 授权token可以访问哪些API
-![](https://freakchicken.gitee.io/images/dbApi/20210502/token_auth.png)
+> 如果token过期时间设置单次有效，那么每次访问私有API都需要重新申请一次token
 
-### ip防火墙设置
-![](https://freakchicken.gitee.io/images/dbApi/20210803/ip.png)
-## 其他功能
-### 导出接口文档
-- 可以导出接口文档（markdown格式）
-  ![](https://freakchicken.gitee.io/images/dbApi/20210502/docs.png)
 
-## Token使用说明
+### 授权应用可以访问哪些API
+![](https://freakchicken.gitee.io/images/dbApi/20221001/auth.png)
+
+> 私有API权限控制粒度仅到API分组级别，可以对应用授权可以访问那些分组下的API。
+> 那么该应用对应的apid和secret申请到的token就可以访问到该应用授权的分组下的API
+
+### Token使用说明
+
+- token申请接口：
+`http://192.168.xx.xx:8520/token/generate?appid=xxx&secret=xxx`
 
 - 请求私有接口时，需要把token值放入header的`Authorization`字段中携带，才可以访问成功。（如果是开放接口，不需要设置header）
 - 以python为例，访问API的代码示例如下：
@@ -105,6 +118,14 @@ headers = {"Authorization": "5ad0dcb4eb03d3b0b7e4b82ae0ba433f"}
 re = requests.post("http://127.0.0.1:8520/API/userById", {"idList": [1, 2]}, headers=headers)
 print(re.text)
 ```
+### ip防火墙设置
+![](https://freakchicken.gitee.io/images/dbApi/20210803/ip.png)
+## 其他功能
+### 导出接口文档
+- 可以导出接口文档（markdown格式）
+  ![](https://freakchicken.gitee.io/images/dbApi/20210502/docs.png)
+
+
 
 ## 注意事项
 ### 数据源支持
