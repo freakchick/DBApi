@@ -1,6 +1,9 @@
 <template>
   <div class="head">
-    <div class="logo">DBApi</div>
+    <div style="padding: 5px 10px;">
+      <img src="@/img/logo.png" alt="" class="logo2">
+    </div>
+<!--    <div class="logo">DBApi</div>-->
     <span class="version">{{ version }}</span>
     <div class="menus">
       <div class="menu iconfont icon-database" @click="clickMenu('/datasource')">
@@ -79,23 +82,12 @@ export default {
   background-color: #06B176;
   width: 100%;
   //box-shadow: 1px 1px 5px #72767b;
-
-
-  .logo {
+  .logo2 {
     flex-shrink: 0;
-    font-family: Helvetica;
-    font-size: 34px;
-    font-weight: 900;
-    line-height: 60px;
-    text-align: center;
+    //width: 60px;
     color: #045008;
     display: block;
-    //min-width: 150px;
-    //width: 200px;
-    padding: 0 20px 0 20px;
-    text-shadow: 2px 2px 1px #a5d4b7;
-
-    //width: auto;
+    height: 50px;
   }
 
   .version {
