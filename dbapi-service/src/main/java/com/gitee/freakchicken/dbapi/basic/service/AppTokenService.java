@@ -10,6 +10,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -20,28 +21,32 @@ public class AppTokenService {
     @Autowired
     CacheManager cacheManager;
 
+    @Transactional
     public AppToken generateToken(String appId, String secret) {
 
         //判断APP是否存在
         AppInfo appInfo = appInfoMapper.selectByIdSecret(appId, secret);
-        if (appId == null) {
+        if (appInfo == null) {
             return null;
         } else {
             String token = RandomStringUtils.random(32, true, true);
+            appInfo.setToken(token);
 
             AppToken appToken = new AppToken();
 
             //单次失效
-            if (appInfo.getExpireTime() == 0) {
-                appToken.setExpireTime(0l);
+            if (appInfo.getExpireDuration() == 0) {
+                appToken.setExpireAt(0l);
             }
             // 永久有效
-            else if (appInfo.getExpireTime() == -1) {
-                appToken.setExpireTime(-1l);
+            else if (appInfo.getExpireDuration() == -1) {
+                appToken.setExpireAt(-1l);
             }
             // 设置了有效的失效时间
-            else if (appInfo.getExpireTime() > 0) {
-                appToken.setExpireTime(System.currentTimeMillis() + appInfo.getExpireTime() * 1000);
+            else if (appInfo.getExpireDuration() > 0) {
+                long expireAt = System.currentTimeMillis() + appInfo.getExpireDuration() * 1000;
+                appToken.setExpireAt(expireAt);
+                appInfo.setExpireAt(expireAt);
             }
             appToken.setToken(token);
             appToken.setAppId(appId);
@@ -57,6 +62,10 @@ public class AppTokenService {
 
             //appid和最新token关系记录下来
             cacheManager.getCache(Constants.EHCACHE_APP_TOKEN).putIfAbsent(appId, token);
+
+            // token和失效时间存入app表
+            appInfoMapper.updateById(appInfo);
+
             return appToken;
         }
     }
@@ -68,11 +77,11 @@ public class AppTokenService {
      * @return
      */
     public String verifyToken(String token) {
-        AppToken appToken = cacheManager.getCache(Constants.EHCACHE_TOKEN_APP).get(token, AppToken.class);
+        AppToken appToken = getAppToken(token);
         if (appToken == null) {
             return null;
         } else {
-            Long expireTime = appToken.getExpireTime();
+            Long expireTime = appToken.getExpireAt();
             // 单次失效
             if (expireTime == 0) {
                 cacheManager.getCache(Constants.EHCACHE_TOKEN_APP).evict(token);
@@ -97,5 +106,31 @@ public class AppTokenService {
             }
 
         }
+    }
+
+    /**
+     * 先查缓存，查不到再查数据库，如果数据库有存入缓存
+     *
+     * @param token
+     * @return
+     */
+    public AppToken getAppToken(String token) {
+        AppToken appToken = cacheManager.getCache(Constants.EHCACHE_TOKEN_APP).get(token, AppToken.class);
+        if (appToken == null) {
+            AppInfo appInfo = appInfoMapper.selectByToken(token);
+            if (appInfo != null) {
+                AppToken appToken1 = new AppToken();
+                appToken1.setAppId(appInfo.getId());
+                appToken1.setToken(appInfo.getToken());
+                appToken1.setExpireAt(appInfo.getExpireAt());
+                cacheManager.getCache(Constants.EHCACHE_TOKEN_APP).putIfAbsent(token, appToken1);
+                return appToken1;
+            } else {
+                return null;
+            }
+        } else {
+            return appToken;
+        }
+
     }
 }

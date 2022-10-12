@@ -1,10 +1,11 @@
 package com.gitee.freakchicken.dbapi.basic.domain;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * @program: dbApi
@@ -14,7 +15,7 @@ import lombok.Data;
  **/
 @Data
 @TableName(value = "datasource")
-public class DataSource {
+public class DataSource implements Serializable {
 
     @TableId(value = "id")
     String id;

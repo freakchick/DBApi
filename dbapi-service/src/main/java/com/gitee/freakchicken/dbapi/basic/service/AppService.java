@@ -9,8 +9,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,9 +24,6 @@ public class AppService {
     private ApiAuthMapper apiAuthMapper;
 
     @Autowired
-    private MetaDataCacheManager metaDataCacheManager;
-
-    @Autowired
     CacheManager cacheManager;
 
     @Transactional
@@ -36,17 +31,17 @@ public class AppService {
         app.setId(RandomStringUtils.random(16, true, true));
         app.setSecret(RandomStringUtils.random(32, true, true));
         if (app.getExpireDesc().equals("5min")) {
-            app.setExpireTime(5 * 60);
+            app.setExpireDuration(5 * 60);
         } else if (app.getExpireDesc().equals("1hour")) {
-            app.setExpireTime(60 * 60);
+            app.setExpireDuration(60 * 60);
         } else if (app.getExpireDesc().equals("1day")) {
-            app.setExpireTime(60 * 60 * 24);
+            app.setExpireDuration(60 * 60 * 24);
         } else if (app.getExpireDesc().equals("30day")) {
-            app.setExpireTime(60 * 60 * 24 * 30);
+            app.setExpireDuration(60 * 60 * 24 * 30);
         } else if (app.getExpireDesc().equals("单次有效")) {
-            app.setExpireTime(0);
+            app.setExpireDuration(0);
         } else if (app.getExpireDesc().equals("永久有效")) {
-            app.setExpireTime(-1);
+            app.setExpireDuration(-1);
         }
 
         appInfoMapper.insert(app);
@@ -76,7 +71,6 @@ public class AppService {
                 apiAuthMapper.insert(auth);
             });
         }
-        metaDataCacheManager.cleanTokenAuthMetaCacheIfCluster(appId);
     }
 
     public List<String> getAuthGroups(String appId) {

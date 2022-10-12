@@ -15,6 +15,8 @@ spring:
             allowed-origins: '*'
             allowed-methods: '*'
             allowed-headers: "*"
+  cache:
+    type: redis
 logging:
   config: classpath:logback-gateway.xml
 

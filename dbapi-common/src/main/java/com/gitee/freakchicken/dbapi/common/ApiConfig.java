@@ -3,6 +3,7 @@ package com.gitee.freakchicken.dbapi.common;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ import java.util.List;
  **/
 @Data
 @TableName(value = "api_config")
-public class ApiConfig {
+public class ApiConfig implements Serializable {
 
     @TableId(value = "id")
     String id;

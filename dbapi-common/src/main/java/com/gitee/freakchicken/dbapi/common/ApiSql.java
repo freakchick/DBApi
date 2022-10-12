@@ -3,9 +3,11 @@ package com.gitee.freakchicken.dbapi.common;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
 @TableName(value = "api_sql")
-public class ApiSql {
+public class ApiSql implements Serializable {
 
     @TableId(type= IdType.AUTO)
     Integer id;

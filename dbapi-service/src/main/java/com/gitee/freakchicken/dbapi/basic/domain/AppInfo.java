@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
+import java.io.Serializable;
+
 @TableName("app_info")
-public class AppInfo {
+public class AppInfo implements Serializable {
 
     @TableId()
     String id;
@@ -23,14 +25,20 @@ public class AppInfo {
     String expireDesc;
 
     @TableField()
-    long expireTime; // -1永久；0 单次失效；> 0 失效时间
+    long expireDuration; // -1永久；0 单次失效；> 0 失效时间
+
+    @TableField()
+    String token;
+
+    @TableField("expire_at")
+    long expireAt;
 
     public String getNote() {
         return note;
     }
 
-    public long getExpireTime() {
-        return expireTime;
+    public long getExpireDuration() {
+        return expireDuration;
     }
 
     public String getId() {
@@ -69,7 +77,23 @@ public class AppInfo {
         this.note = note;
     }
 
-    public void setExpireTime(long expireTime) {
-        this.expireTime = expireTime;
+    public void setExpireDuration(long expireDuration) {
+        this.expireDuration = expireDuration;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public long getExpireAt() {
+        return expireAt;
+    }
+
+    public void setExpireAt(long expireAt) {
+        this.expireAt = expireAt;
     }
 }

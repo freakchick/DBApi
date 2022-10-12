@@ -49,9 +49,6 @@ public class ApiConfigService {
     @Autowired
     CacheManager cacheManager;
 
-    @Autowired
-    MetaDataCacheManager metaDataCacheManager;
-
     @Transactional
     public ResponseDto add(ApiConfig apiConfig) {
 
@@ -138,9 +135,7 @@ public class ApiConfigService {
                 }
             }
 
-            cacheManager.getCache("api").evictIfPresent(apiConfig.getPath());
-            //如果是集群模式，清除每个apiServer节点内的元数据ehcache缓存
-            metaDataCacheManager.cleanApiMetaCacheIfCluster(apiConfig.getPath());
+            cacheManager.getCache("api").evictIfPresent(oldConfig.getPath());
 
             return ResponseDto.successWithMsg("update API success");
         }
@@ -166,8 +161,7 @@ public class ApiConfigService {
             }
         }
         cacheManager.getCache("api").evictIfPresent(oldConfig.getPath());
-        //如果是集群模式，清除每个apiServer节点内的元数据ehcache缓存
-        metaDataCacheManager.cleanApiMetaCacheIfCluster(oldConfig.getPath());
+
     }
 
     public ApiConfig detail(String id) {
@@ -258,8 +252,6 @@ public class ApiConfigService {
             }
         }
 
-        //如果是集群模式，清除每个apiServer节点内的元数据ehcache缓存
-        metaDataCacheManager.cleanApiMetaCacheIfCluster(path);
     }
 
     public String getPath(String id) {

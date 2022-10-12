@@ -19,8 +19,7 @@ public class IPService {
 
     @Autowired
     private IPMapper ipMapper;
-    @Autowired
-    private MetaDataCacheManager metaDataCacheManager;
+
 
     /**
      * @param mode
@@ -31,7 +30,6 @@ public class IPService {
 
         // 设置缓存
         init();
-        metaDataCacheManager.gatewayIPRuleCacheSyncIfCluster();
 
     }
 
@@ -45,7 +43,6 @@ public class IPService {
         _off();
         // 设置缓存
         init();
-        metaDataCacheManager.gatewayIPRuleCacheSyncIfCluster();
     }
 
     @Transactional

@@ -1,9 +1,11 @@
 package com.gitee.freakchicken.dbapi.basic.domain;
 
-public class AppToken {
+import java.io.Serializable;
+
+public class AppToken implements Serializable {
     String appId;
     String token;
-    Long expireTime;
+    Long expireAt;
 
     public String getAppId() {
         return appId;
@@ -21,11 +23,11 @@ public class AppToken {
         this.token = token;
     }
 
-    public Long getExpireTime() {
-        return expireTime;
+    public Long getExpireAt() {
+        return expireAt;
     }
 
-    public void setExpireTime(Long expireTime) {
-        this.expireTime = expireTime;
+    public void setExpireAt(Long expireAt) {
+        this.expireAt = expireAt;
     }
 }

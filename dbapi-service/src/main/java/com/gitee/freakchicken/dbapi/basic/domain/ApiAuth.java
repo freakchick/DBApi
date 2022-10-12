@@ -6,9 +6,11 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
 @TableName(value = "api_auth")
-public class ApiAuth {
+public class ApiAuth implements Serializable {
 
     @TableId(value = "id", type = IdType.AUTO)
     Integer id;

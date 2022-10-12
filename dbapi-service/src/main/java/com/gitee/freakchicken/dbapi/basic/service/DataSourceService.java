@@ -35,9 +35,6 @@ public class DataSourceService {
     CacheManager cacheManager;
 
     @Autowired
-    MetaDataCacheManager metaDataCacheManager;
-
-    @Autowired
     DataSourceMapper dataSourceMapper;
     @Autowired
     ApiConfigMapper apiConfigMapper;
@@ -73,8 +70,6 @@ public class DataSourceService {
         PoolManager.removeJdbcConnectionPool(dataSource.getId());
         cacheManager.getCache("datasource").evictIfPresent(dataSource.getId());
 
-        //如果是集群模式，清除每个apiServer节点内的元数据ehcache缓存
-        metaDataCacheManager.cleanDatasourceMetaCacheIfCluster(dataSource.getId());
     }
 
     //    @CacheEvict(value = "datasource", key = "#id")
@@ -87,9 +82,6 @@ public class DataSourceService {
             PoolManager.removeJdbcConnectionPool(id);
             cacheManager.getCache("datasource").evictIfPresent(id);
 
-            //如果是集群模式，清除每个apiServer节点内的元数据ehcache缓存
-
-            metaDataCacheManager.cleanDatasourceMetaCacheIfCluster(id);
             return ResponseDto.successWithMsg("delete success");
         } else {
             return ResponseDto.fail("datasource has been used, can not delete");
