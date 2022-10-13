@@ -34,7 +34,7 @@ sh bin/dbapi-daemon.sh stop standalone
 
 ## 本地部署集群版
 
-- 集群部署依赖`nacos`和`mysql`，请先自行安装`nacos`（推荐1.4.2版本）和`mysql`
+- 集群部署依赖`nacos`、`mysql`、`redis`，请先自行安装`nacos`（推荐1.4.2版本）、`mysql`、`redis`
 - 准备多台机器，每台安装`jdk8+`并配置java环境变量
 - 选一台机器host1作为部署机，配置host1到其他每台机器的ssh免密登录
 ```shell
@@ -53,21 +53,31 @@ done
 
 - 修改`conf/application.properties`文件中的以下配置
 ```properties
+#################################### please config properties below #####################################
 # api访问路径的统一根路径，example: http://192.168.xx.xx:8520/api/xxx
 # api context
 dbapi.api.context=api
-
-# nacos address
-spring.cloud.nacos.server-addr=127.0.0.1:8848
-spring.cloud.nacos.discovery.username=nacos
-spring.cloud.nacos.discovery.password=nacos
-spring.cloud.nacos.discovery.namespace=public
 
 # meta database address
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 spring.datasource.url=jdbc:mysql://127.0.0.1:3306/dbapi?useSSL=false&characterEncoding=UTF-8&serverTimezone=GMT%2B8
 spring.datasource.username=root
 spring.datasource.password=root
+
+############################## if cluster, please config properties below ##############################
+
+# nacos address, needed if cluster mode
+spring.cloud.nacos.server-addr=127.0.0.1:8848
+spring.cloud.nacos.discovery.username=nacos
+spring.cloud.nacos.discovery.password=nacos
+spring.cloud.nacos.discovery.namespace=public
+
+# redis address, needed if cluster mode
+spring.redis.host=localhost
+spring.redis.port=6379
+spring.redis.database=0
+spring.redis.password=
+
 ```
 
 - 修改`conf/install_config.conf`文件，配置要安装的机器节点
@@ -137,7 +147,7 @@ freakchicken/db-api:3.1.2 standalone
 ## docker部署集群版
 > Docker 容器通过环境变量进行配置，附录-环境变量 列出了 `DBApi` 的可配置环境变量及其默认值
 
-- 集群部署依赖`nacos`和`mysql`，请先自行安装`nacos`（推荐1.4.2版本）和`mysql`
+- 集群部署依赖`nacos`、`mysql`、`redis`，请先自行安装`nacos`（推荐1.4.2版本）、`mysql`、`redis`
 - 在mysql创建新的数据库，执行数据库初始化脚本（下载安装包解压获取`sql/ddl_mysql.sql`脚本）
 
 - 启动UI服务manager
@@ -152,6 +162,10 @@ docker run -it \
 -e NACOS_USERNAME="nacos" \
 -e NACOS_PASSWORD="nacos" \
 -e NACOS_NAMESPACE="public" \
+-e REDIS_HOST="127.0.0.1" \
+-e REDIS_PORT=6379 \
+-e REDIS_DATABASE=0 \
+-e REDIS_PASSWORD="" \
 freakchicken/db-api:3.1.2 manager
 ```
 
@@ -167,6 +181,10 @@ docker run -it \
 -e NACOS_USERNAME="nacos" \
 -e NACOS_PASSWORD="nacos" \
 -e NACOS_NAMESPACE="public" \
+-e REDIS_HOST="127.0.0.1" \
+-e REDIS_PORT=6379 \
+-e REDIS_DATABASE=0 \
+-e REDIS_PASSWORD="" \
 freakchicken/db-api:3.1.2 gateway
 ```
 
@@ -181,6 +199,10 @@ docker run -it \
 -e NACOS_USERNAME="nacos" \
 -e NACOS_PASSWORD="nacos" \
 -e NACOS_NAMESPACE="public" \
+-e REDIS_HOST="127.0.0.1" \
+-e REDIS_PORT=6379 \
+-e REDIS_DATABASE=0 \
+-e REDIS_PASSWORD="" \
 freakchicken/db-api:3.1.2 apiServer
 ```
 
@@ -201,6 +223,10 @@ freakchicken/db-api:3.1.2 apiServer
 | NACOS_USERNAME | nacos | 集群模式使用的nacos账户|
 | NACOS_PASSWORD | nacos |集群模式使用的nacos密码 |
 | NACOS_NAMESPACE | public | 集群模式使用的nacos namespace|
+| REDIS_HOST | 127.0.0.1 |集群模式使用的redis地址 |
+| REDIS_PORT | 6379 |集群模式使用的redis端口 |
+| REDIS_DATABASE | 0 |集群模式使用的redis数据库号 |
+| REDIS_PASSWORD |  |集群模式使用的redis密码 |
 
 
 ### docker快速安装nacos
