@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,16 +22,28 @@ public class AppTokenService {
     @Autowired
     CacheManager cacheManager;
 
+    @Cacheable(value = "app", key = "#appId", unless = "#result == null")
+    public AppInfo getAppinfo(String appId) {
+        AppInfo appInfo = appInfoMapper.selectById(appId);
+        return appInfo;
+    }
+
     @Transactional
     public AppToken generateToken(String appId, String secret) {
 
         //判断APP是否存在
-        AppInfo appInfo = appInfoMapper.selectByIdSecret(appId, secret);
+        AppInfo appInfo = getAppinfo(appId);
+
+
         if (appInfo == null) {
             return null;
         } else {
+            //密钥不对，返回
+            if (!secret.equals(appInfo.getSecret())) {
+                return null;
+            }
             String token = RandomStringUtils.random(32, true, true);
-            appInfo.setToken(token);
+//            appInfo.setToken(token);
 
             AppToken appToken = new AppToken();
 
@@ -46,7 +59,7 @@ public class AppTokenService {
             else if (appInfo.getExpireDuration() > 0) {
                 long expireAt = System.currentTimeMillis() + appInfo.getExpireDuration() * 1000;
                 appToken.setExpireAt(expireAt);
-                appInfo.setExpireAt(expireAt);
+//                appInfo.setExpireAt(expireAt);
             }
             appToken.setToken(token);
             appToken.setAppId(appId);
@@ -64,7 +77,7 @@ public class AppTokenService {
             cacheManager.getCache(Constants.EHCACHE_APP_TOKEN).putIfAbsent(appId, token);
 
             // token和失效时间存入app表
-            appInfoMapper.updateById(appInfo);
+//            appInfoMapper.updateById(appInfo);
 
             return appToken;
         }

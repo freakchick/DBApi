@@ -9,6 +9,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,6 +57,7 @@ public class AppService {
     public void delete(String appid) {
         appInfoMapper.deleteById(appid);
         cacheManager.getCache(Constants.EHCACHE_APP_AUTH_GROUPS).evict(appid);
+        cacheManager.getCache(Constants.EHCACHE_APP_TOKEN).evict(appid);
     }
 
     @Transactional
@@ -73,9 +75,9 @@ public class AppService {
         }
     }
 
+    @Cacheable(value = "app_AuthGroups", key = "#appId", unless = "#result == null")
     public List<String> getAuthGroups(String appId) {
         List<String> list = apiAuthMapper.selectByAppId(appId);
-        cacheManager.getCache(Constants.EHCACHE_APP_AUTH_GROUPS).putIfAbsent(appId, list);
         return list;
     }
 }
