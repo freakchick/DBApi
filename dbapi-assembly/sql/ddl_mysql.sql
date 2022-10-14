@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS `api_auth`;
 CREATE TABLE `api_auth`
 (
     `id`       int(11) NOT NULL AUTO_INCREMENT,
-    `app_id` varchar(64) DEFAULT NULL,
+    `app_id`   varchar(64)  DEFAULT NULL,
     `group_id` varchar(255) DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
@@ -43,15 +43,14 @@ CREATE TABLE `api_sql`
     `transform_plugin`        varchar(255) DEFAULT NULL,
     `transform_plugin_params` varchar(255) DEFAULT NULL,
     PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `api_alarm`;
 CREATE TABLE `api_alarm`
 (
-    `api_id` varchar(20) NOT NULL,
-    `alarm_plugin`   varchar(255) DEFAULT NULL,
-    `alarm_plugin_param`   varchar(1024) DEFAULT NULL
+    `api_id`             varchar(20) NOT NULL,
+    `alarm_plugin`       varchar(255)  DEFAULT NULL,
+    `alarm_plugin_param` varchar(1024) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `api_group`;
@@ -106,21 +105,6 @@ CREATE TABLE `ip_rules`
   DEFAULT CHARSET = utf8;
 
 
-DROP TABLE IF EXISTS `token`;
-
-CREATE TABLE `token`
-(
-    `id`          int(11) NOT NULL AUTO_INCREMENT,
-    `token`       varchar(255) DEFAULT NULL,
-    `note`        varchar(255) DEFAULT NULL,
-    `expire`      bigint(20) DEFAULT NULL,
-    `create_time` bigint(20) DEFAULT NULL,
-    PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  DEFAULT CHARSET = utf8;
-
-
 DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user`
@@ -138,15 +122,17 @@ DROP TABLE IF EXISTS `app_info`;
 
 CREATE TABLE `app_info`
 (
-    `id`       varchar(255) NOT NULL,
-    `name` varchar(255) DEFAULT NULL,
-    `note` varchar(1024) DEFAULT NULL,
-    `secret` varchar(255) DEFAULT NULL,
-    `expire_desc` varchar(255) DEFAULT NULL,
-    `expire_time` varchar(255) DEFAULT NULL,
-    PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
+    `id`              varchar(255) NOT NULL DEFAULT '',
+    `name`            varchar(255)          DEFAULT NULL,
+    `note`            varchar(1024)         DEFAULT NULL,
+    `secret`          varchar(255)          DEFAULT NULL,
+    `expire_desc`     varchar(255)          DEFAULT NULL,
+    `expire_duration` varchar(255)          DEFAULT NULL,
+    `token`           varchar(255)          DEFAULT NULL,
+    `expire_at`       bigint(32) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `id` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 insert into `firewall`(`status`, `mode`)
 values ('off', 'black');
