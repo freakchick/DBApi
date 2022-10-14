@@ -138,14 +138,13 @@ DROP TABLE IF EXISTS `app_info`;
 
 CREATE TABLE `app_info`
 (
-    `id`       varchar(255) DEFAULT NULL,
+    `id`       varchar(255) NOT NULL,
     `name` varchar(255) DEFAULT NULL,
     `note` varchar(1024) DEFAULT NULL,
     `secret` varchar(255) DEFAULT NULL,
     `expire_desc` varchar(255) DEFAULT NULL,
     `expire_time` varchar(255) DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `id` (`id`)
+    PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
