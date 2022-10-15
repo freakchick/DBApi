@@ -479,7 +479,7 @@ export default {
     },
     getAddress() {
       this.axios
-        .post("/apiConfig/getIPPort")
+        .post("/system/getIPPort")
         .then((response) => {
           this.address = response.data;
         })

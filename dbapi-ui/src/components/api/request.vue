@@ -173,7 +173,7 @@ export default {
       contentType: null,
       jsonParam: null,
       CALL_EXAMPLE_TAB_NAME: Object.freeze("调用示例"),
-      tokenUrl: `http://${this.address}/token`
+      tokenUrl: null
     };
   },
   methods: {
@@ -214,11 +214,10 @@ export default {
     },
     async getAddress() {
       await this.axios
-          .post("/apiConfig/getIPPort")
+          .post("/system/getIPPort")
           .then((response) => {
             this.address = response.data;
             this.url = `http://${this.address}/${this.path}`;
-            this.tokenUrl = `http://${this.address}/token/generate?appid=xxx&secret=xxx`;
           })
           .catch((error) => {
             this.$message.error("get address failed");
@@ -226,7 +225,7 @@ export default {
     },
     async getIP() {
       await this.axios
-          .post("/apiConfig/getIP")
+          .post("/system/getIP")
           .then((response) => {
             this.tokenUrl = `http://${response.data}/token/generate?appid=xxx&secret=xxx`;
           })

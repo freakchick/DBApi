@@ -10,14 +10,13 @@ import com.gitee.freakchicken.dbapi.basic.domain.Group;
 import com.gitee.freakchicken.dbapi.basic.service.ApiConfigService;
 import com.gitee.freakchicken.dbapi.basic.service.DataSourceService;
 import com.gitee.freakchicken.dbapi.basic.service.GroupService;
-import com.gitee.freakchicken.dbapi.basic.service.NacosService;
 import com.gitee.freakchicken.dbapi.basic.util.JdbcUtil;
 import com.gitee.freakchicken.dbapi.basic.util.PoolManager;
 import com.gitee.freakchicken.dbapi.basic.util.SqlEngineUtil;
-import com.gitee.freakchicken.dbapi.common.ApiSql;
-import com.github.freakchick.orange.SqlMeta;
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
+import com.gitee.freakchicken.dbapi.common.ApiSql;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
+import com.github.freakchick.orange.SqlMeta;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -58,9 +56,6 @@ public class ApiConfigController {
 
     @Autowired
     GroupService groupService;
-
-    @Autowired
-    NacosService nacosService;
 
     @Value("${dbapi.api.context}")
     String apiContext;
@@ -136,31 +131,6 @@ public class ApiConfigController {
         apiConfigService.offline(id, path);
         return null;
     }
-
-    @RequestMapping("/getIPPort")
-    public String getIPPort(HttpServletRequest request) {
-
-        if ("standalone".equals(mode)) {
-            return request.getServerName() + ":" + request.getServerPort() + "/" + apiContext;
-        } else if ("cluster".equals(mode)) {
-            return nacosService.getGatewayAddress() + "/" + apiContext;
-        } else {
-            return null;
-        }
-    }
-
-    @RequestMapping("/getIP")
-    public String getIP(HttpServletRequest request) {
-
-        if ("standalone".equals(mode)) {
-            return request.getServerName() + ":" + request.getServerPort();
-        } else if ("cluster".equals(mode)) {
-            return nacosService.getGatewayAddress();
-        } else {
-            return null;
-        }
-    }
-
 
 
     @RequestMapping("/apiDocs")

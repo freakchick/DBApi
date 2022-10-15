@@ -163,7 +163,7 @@ export default {
     },
     async getIP() {
       await this.axios
-          .post("/apiConfig/getIP")
+          .post("/system/getIP")
           .then((response) => {
             this.ip = response.data
           })
