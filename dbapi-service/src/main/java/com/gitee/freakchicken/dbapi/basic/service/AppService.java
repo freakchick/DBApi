@@ -56,8 +56,11 @@ public class AppService {
     @Transactional
     public void delete(String appid) {
         appInfoMapper.deleteById(appid);
-        cacheManager.getCache(Constants.EHCACHE_APP_AUTH_GROUPS).evict(appid);
+        String oldToken = cacheManager.getCache(Constants.EHCACHE_APP_TOKEN).get(appid, String.class);
+        if (oldToken != null)
+            cacheManager.getCache(Constants.EHCACHE_TOKEN_APP).evict(oldToken);
         cacheManager.getCache(Constants.EHCACHE_APP_TOKEN).evict(appid);
+        cacheManager.getCache(Constants.EHCACHE_APP_AUTH_GROUPS).evict(appid);
     }
 
     @Transactional

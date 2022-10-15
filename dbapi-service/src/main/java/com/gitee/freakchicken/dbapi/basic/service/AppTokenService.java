@@ -43,7 +43,6 @@ public class AppTokenService {
                 return null;
             }
             String token = RandomStringUtils.random(32, true, true);
-//            appInfo.setToken(token);
 
             AppToken appToken = new AppToken();
 
@@ -59,11 +58,9 @@ public class AppTokenService {
             else if (appInfo.getExpireDuration() > 0) {
                 long expireAt = System.currentTimeMillis() + appInfo.getExpireDuration() * 1000;
                 appToken.setExpireAt(expireAt);
-//                appInfo.setExpireAt(expireAt);
             }
             appToken.setToken(token);
             appToken.setAppId(appId);
-
 
             //最新token存入缓存
             cacheManager.getCache(Constants.EHCACHE_TOKEN_APP).putIfAbsent(token, appToken);
@@ -76,9 +73,6 @@ public class AppTokenService {
             //appid和最新token关系记录下来,便于下次可以找到旧token可以删除，否则缓存中token越来越多
             cacheManager.getCache(Constants.EHCACHE_APP_TOKEN).put(appId, token);
 
-            // token和失效时间存入app表
-//            appInfoMapper.updateById(appInfo);
-
             return appToken;
         }
     }
@@ -90,7 +84,7 @@ public class AppTokenService {
      * @return
      */
     public String verifyToken(String token) {
-        AppToken appToken = getAppToken(token);
+        AppToken appToken = cacheManager.getCache(Constants.EHCACHE_TOKEN_APP).get(token, AppToken.class);
         if (appToken == null) {
             return null;
         } else {
@@ -121,29 +115,4 @@ public class AppTokenService {
         }
     }
 
-    /**
-     * 先查缓存，查不到再查数据库，如果数据库有存入缓存
-     *
-     * @param token
-     * @return
-     */
-    public AppToken getAppToken(String token) {
-        AppToken appToken = cacheManager.getCache(Constants.EHCACHE_TOKEN_APP).get(token, AppToken.class);
-        if (appToken == null) {
-            AppInfo appInfo = appInfoMapper.selectByToken(token);
-            if (appInfo != null) {
-                AppToken appToken1 = new AppToken();
-                appToken1.setAppId(appInfo.getId());
-                appToken1.setToken(appInfo.getToken());
-                appToken1.setExpireAt(appInfo.getExpireAt());
-                cacheManager.getCache(Constants.EHCACHE_TOKEN_APP).putIfAbsent(token, appToken1);
-                return appToken1;
-            } else {
-                return null;
-            }
-        } else {
-            return appToken;
-        }
-
-    }
 }
