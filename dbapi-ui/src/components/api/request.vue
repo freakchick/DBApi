@@ -12,6 +12,10 @@
               <el-button slot="append" icon="el-icon-caret-right" @click="getToken"></el-button>
             </el-input>
             <el-alert type="warning" show-icon>请使用您的应用id（appid）和密钥（secret）来申请token，访问私有接口需要使用token</el-alert>
+            <el-alert type="warning" show-icon v-show="this.$store.state.mode == 'cluster' || this.$store.state.mode == 'cluster in docker' "
+                      title="如果是外网访问请将网关地址设置为外网IP端口"
+                      style="margin-top: 10px;">
+            </el-alert>
           </div>
 
           <h2>访问接口</h2>
@@ -19,7 +23,8 @@
           <h4>{{ $t('m.url') }}：</h4>
           <el-input v-model="url"></el-input>
 
-          <el-alert type="warning" show-icon v-show="this.$store.state.mode == 'cluster'" title="如果是外网访问请将网关地址设置为外网IP端口"
+          <el-alert type="warning" show-icon v-show="this.$store.state.mode == 'cluster' || this.$store.state.mode == 'cluster in docker' "
+                    title="如果是外网访问请将网关地址设置为外网IP端口"
                     style="margin-top: 10px;">
           </el-alert>
           <h4>Header：</h4>
