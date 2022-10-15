@@ -8,6 +8,10 @@ spring:
           uri: lb://${dbapi.cluster.api.name}
           predicates:
             - Path=/${dbapi.api.context}/**
+        - id: token_route
+          uri: lb://${dbapi.cluster.api.name}
+          predicates:
+            - Path=/token/generate
 
       globalcors:
         cors-configurations:
