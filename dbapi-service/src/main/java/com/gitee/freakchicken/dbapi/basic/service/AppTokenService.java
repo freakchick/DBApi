@@ -73,8 +73,8 @@ public class AppTokenService {
             if (oldToken != null)
                 cacheManager.getCache(Constants.EHCACHE_TOKEN_APP).evict(oldToken);
 
-            //appid和最新token关系记录下来
-            cacheManager.getCache(Constants.EHCACHE_APP_TOKEN).putIfAbsent(appId, token);
+            //appid和最新token关系记录下来,便于下次可以找到旧token可以删除，否则缓存中token越来越多
+            cacheManager.getCache(Constants.EHCACHE_APP_TOKEN).put(appId, token);
 
             // token和失效时间存入app表
 //            appInfoMapper.updateById(appInfo);
