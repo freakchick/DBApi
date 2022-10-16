@@ -73,7 +73,7 @@
 ### API请求测试
 - 在页面快速访问API，查看结果
   ![](https://freakchicken.gitee.io/images/dbApi/20221001/request.png)
-> 如果是私有接口，必须用户必须先使用自己的appid和secret来申请token，然后再使用token去访问接口。
+> 如果是私有接口，用户必须先使用自己的appid和secret来申请token，然后再使用token去访问接口。
 > 如果是开放接口则可以直接访问
 
 > 注意如果是内网部署，您需要手动修改访问的IP、端口为外网IP、端口
