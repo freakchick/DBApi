@@ -1,6 +1,6 @@
 # 安装教程
 
-> 安装包[下载地址](http://101.34.234.234/) ，或者在[天翼云盘](https://cloud.189.cn/t/Jza2MzeEZVNv) 下载。
+> 安装包[下载地址](http://www.51dbapi.com/) ，或者在[天翼云盘](https://cloud.189.cn/t/Jza2MzeEZVNv) 下载。
 
 > 默认账户admin/admin
 ## 本地部署单机版
