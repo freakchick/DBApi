@@ -1,5 +1,6 @@
 package com.gitee.freakchicken.dbapi.basic.service;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.gitee.freakchicken.dbapi.basic.dao.ApiAuthMapper;
 import com.gitee.freakchicken.dbapi.basic.dao.ApiConfigMapper;
 import com.gitee.freakchicken.dbapi.basic.dao.GroupMapper;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@DS("meta-db")
 public class GroupService {
     @Autowired
     GroupMapper groupMapper;

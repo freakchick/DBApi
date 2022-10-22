@@ -1,5 +1,6 @@
 package com.gitee.freakchicken.dbapi.basic.service;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.gitee.freakchicken.dbapi.basic.dao.ApiConfigMapper;
 import com.gitee.freakchicken.dbapi.basic.dao.DataSourceMapper;
 import com.gitee.freakchicken.dbapi.basic.domain.DataSource;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
  **/
 @Service
 @Slf4j
+@DS("meta-db")
 public class DataSourceService {
 
     @Autowired

@@ -1,5 +1,6 @@
 package com.gitee.freakchicken.dbapi.basic.service;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.gitee.freakchicken.dbapi.basic.dao.ApiAuthMapper;
 import com.gitee.freakchicken.dbapi.basic.dao.AppInfoMapper;
 import com.gitee.freakchicken.dbapi.basic.domain.ApiAuth;
@@ -17,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
+@DS("meta-db")
 public class AppService {
 
     @Autowired

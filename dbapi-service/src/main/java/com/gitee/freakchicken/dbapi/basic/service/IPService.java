@@ -1,5 +1,6 @@
 package com.gitee.freakchicken.dbapi.basic.service;
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.gitee.freakchicken.dbapi.basic.dao.IPMapper;
 import com.gitee.freakchicken.dbapi.basic.util.IPRuleCache;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@DS("meta-db")
 public class IPService {
 
 

@@ -27,6 +27,23 @@
         </encoder>
     </appender>
 
+    <appender name="accessLogAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.base}/dbapi-access.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${log.base}/dbapi-access.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxHistory>168</maxHistory>
+            <maxFileSize>200MB</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+    <logger name="accessLogger" additivity="false">
+        <appender-ref ref="accessLogAppender"/>
+    </logger>
+
+
     <logger name="org.apache.zookeeper" level="WARN"/>
     <logger name="org.apache.hbase" level="WARN"/>
     <logger name="org.apache.hadoop" level="WARN"/>

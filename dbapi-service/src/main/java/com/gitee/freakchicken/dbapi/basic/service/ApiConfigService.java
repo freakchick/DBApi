@@ -3,6 +3,7 @@ package com.gitee.freakchicken.dbapi.basic.service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.gitee.freakchicken.dbapi.basic.dao.ApiConfigMapper;
 import com.gitee.freakchicken.dbapi.basic.dao.ApiSqlMapper;
 import com.gitee.freakchicken.dbapi.basic.dao.DataSourceMapper;
@@ -36,6 +37,7 @@ import java.util.stream.Collectors;
  **/
 @Slf4j
 @Service
+@DS("meta-db")
 public class ApiConfigService {
 
     @Autowired
@@ -211,7 +213,6 @@ public class ApiConfigService {
      */
     @Cacheable(value = "api", key = "#path", unless = "#result == null")
     public ApiConfig getConfig(String path) {
-        log.info("get [{}] api config from db",path);
         ApiConfig apiConfig = apiConfigMapper.selectByPathOnline(path);
         if(Objects.isNull(apiConfig)){
             log.warn("can't get [{}] api config from db",path);

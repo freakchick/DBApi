@@ -1,6 +1,7 @@
 package com.gitee.freakchicken.dbapi.basic.service;
 
 
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.gitee.freakchicken.dbapi.basic.dao.AppInfoMapper;
 import com.gitee.freakchicken.dbapi.basic.domain.AppInfo;
 import com.gitee.freakchicken.dbapi.basic.domain.AppToken;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
+@DS("meta-db")
 public class AppTokenService {
     @Autowired
     private AppInfoMapper appInfoMapper;
