@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @DS("access-log-db")
@@ -21,11 +22,15 @@ public class AccessLogService {
         accessLogMapper.insert(log);
     }
 
-    public List<AccessLog> getAll(){
+    public List<AccessLog> getAll() {
         return accessLogMapper.selectList(null);
     }
 
     public List<AccessLog> search(String path, String apiId, String appId, long startTime, long endTime, int status) {
         return null;
+    }
+
+    public List<Map<String,Object>> countByDay(String start, String end) {
+        return accessLogMapper.countByDate(start, end);
     }
 }

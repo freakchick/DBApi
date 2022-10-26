@@ -22,6 +22,9 @@
           <div class="submenu" @click="clickMenu('/setting/firewall')">{{ $t('m.firewall') }}</div>
         </div>
       </div>
+      <div class="menu iconfont icon-api" @click="clickMenu('/monitor')">
+        监控
+      </div>
 
     </div>
     <div class="right">

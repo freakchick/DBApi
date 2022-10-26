@@ -12,6 +12,7 @@ import datasourceEdit from '../components/datasource/edit'
 import datasourceAdd from '../components/datasource/add'
 import datasourceDetail from '../components/datasource/detail'
 import api from '../components/api/api'
+import monitor from '../components/monitor/monitor'
 import apiAdd from '../components/api/add'
 import apiEdit from '../components/api/edit'
 import detail from '../components/api/detail'
@@ -39,6 +40,7 @@ const routes = [
       { path: '/datasource/detail', component: datasourceDetail },
       { path: '/datasource/add', component: datasourceAdd },
       { path: '/api', name: 'api', component: api },
+      { path: '/monitor', name: 'monitor', component: monitor },
       { path: '/api/add', name: 'apiAdd', component: apiAdd },
       { path: '/api/edit', name: 'apiEdit', component: apiEdit },
       { path: '/api/detail', name: 'detail', component: detail },

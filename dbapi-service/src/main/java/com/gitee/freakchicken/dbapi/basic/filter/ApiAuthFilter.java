@@ -54,7 +54,7 @@ public class ApiAuthFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException {
         AccessLog accessLog = new AccessLog();
-        accessLog.setTimestamp(System.currentTimeMillis());
+        accessLog.setTimestamp(System.currentTimeMillis()/1000);
 
         log.debug("auth filter execute");
         HttpServletRequest request = (HttpServletRequest) servletRequest;
