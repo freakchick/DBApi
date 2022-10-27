@@ -1,5 +1,6 @@
 package com.gitee.freakchicken.dbapi.basic.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.gitee.freakchicken.dbapi.basic.domain.AccessLog;
 import com.gitee.freakchicken.dbapi.basic.service.AccessLogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/access")
@@ -27,7 +27,9 @@ public class AccessLogController {
     }
 
     @RequestMapping("/countByDay")
-    public List<Map<String,Object>> countByDay(Date start, Date end) {
+    public JSONArray countByDay(Long start, Long end) {
         return accessLogService.countByDay(start, end);
     }
+
+
 }

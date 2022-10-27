@@ -13,7 +13,6 @@
 
 <script>
 import chart from "@/components/monitor/chart";
-import Chart from './chart.vue';
 export default {
   name: "monitor",
   data() {
@@ -21,7 +20,7 @@ export default {
      activeName :"first"
     };
   },
-  components: { chartChart },
+  components: { chart },
   methods: {
     
   },

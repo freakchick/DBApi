@@ -1,5 +1,6 @@
 package com.gitee.freakchicken.dbapi.basic.dao;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.gitee.freakchicken.dbapi.basic.domain.AccessLog;
 import org.apache.ibatis.annotations.Mapper;
@@ -13,8 +14,8 @@ import java.util.Map;
 public interface AccessLogMapper extends BaseMapper<AccessLog> {
 
 
-    @Select("select date,status,count(1) num from (SELECT FROM_UNIXTIME(timestamp,'%Y-%m-%d') date,case when status=200 then 'success' else 'fail' end as status from access_log where timestamp >= #{start} and timestamp < #{end}) group by date,status")
-    public List<Map<String,Object>> countByDate(@Param("start") long start, @Param("end") long end);
+    @Select("select date,sum(success) successNum, sum(fail) failNum from (SELECT FROM_UNIXTIME(timestamp,'%Y-%m-%d') date,case when status=200 then 1 else 0 end as success,case when status!=200 then 1 else 0 end as fail from access_log where timestamp >= #{start} and timestamp < #{end}) group by date")
+    public List<JSONObject> countByDate(@Param("start") long start, @Param("end") long end);
 
     @Select("select url,num from (select url,count(1) num from access_log where timestamp >= #{start} and timestamp < #{end} group by url) order by url limit 0,5")
     public List<Map<String,Object>> top5api(@Param("start") long start, @Param("end") long end);

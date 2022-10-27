@@ -1,22 +1,20 @@
 <template>
   <div>
     <el-date-picker
-      size="mini"
-      v-model="time"
-      type="datetimerange"
-      :picker-options="pickerOptions"
-      range-separator="至"
-      start-placeholder="开始日期"
-      end-placeholder="结束日期"
-      align="right"
+        size="mini"
+        v-model="time"
+        type="datetimerange"
+        :picker-options="pickerOptions"
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        align="right"
     >
     </el-date-picker>
-    <el-button size="mini">查询</el-button>
+    <el-button size="mini" @click="query">查询</el-button>
     <div>
       <el-row :gutter="20">
-        <el-col :span="12">
-          <v-chart :option="option_column" style="height: 300px"></v-chart>
-        </el-col>
+
         <el-col :span="12">
           <v-chart :option="lineData" style="height: 300px"></v-chart>
         </el-col>
@@ -71,21 +69,7 @@ export default {
         ],
       },
       time: [],
-      option_column: {
-        title: { text: "Column Chart" },
-        tooltip: {},
-        xAxis: {
-          data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"],
-        },
-        yAxis: {},
-        series: [
-          {
-            name: "销量",
-            type: "line",
-            data: [5, 20, 36, 10, 10, 20],
-          },
-        ],
-      },
+
       pieData: {
         title: {
           text: "Referer of a Website",
@@ -105,11 +89,11 @@ export default {
             type: "pie",
             radius: "50%",
             data: [
-              { value: 1048, name: "Search Engine" },
-              { value: 735, name: "Direct" },
-              { value: 580, name: "Email" },
-              { value: 484, name: "Union Ads" },
-              { value: 300, name: "Video Ads" },
+              {value: 1048, name: "Search Engine"},
+              {value: 735, name: "Direct"},
+              {value: 580, name: "Email"},
+              {value: 484, name: "Union Ads"},
+              {value: 300, name: "Video Ads"},
             ],
             emphasis: {
               itemStyle: {
@@ -123,9 +107,9 @@ export default {
       },
       lineData: {
         title: {
-          text: "成功失败走势t",
+          text: "API访问量走势",
         },
-        color: ["#5470c6", "#91ca75"],
+        color: ["#11D238", "#FF101F"],
         tooltip: {
           trigger: "axis",
           axisPointer: {
@@ -138,11 +122,7 @@ export default {
         legend: {
           data: ["Success", "Failed"],
         },
-        toolbox: {
-          feature: {
-            saveAsImage: {},
-          },
-        },
+  
         grid: {
           left: "3%",
           right: "4%",
@@ -153,7 +133,7 @@ export default {
           {
             type: "category",
             boundaryGap: false,
-            data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+            data: [],
           },
         ],
         yAxis: [
@@ -166,12 +146,15 @@ export default {
             name: "Success",
             type: "line",
             stack: "Total",
-
+            areaStyle: {
+              opacity: 0.8,
+              color: "rgb(5,148,99)",
+            },
             emphasis: {
               focus: "series",
             },
 
-            data: [220, 182, 191, 234, 290, 330, 310],
+            data: [],
           },
 
           {
@@ -185,7 +168,7 @@ export default {
             emphasis: {
               focus: "series",
             },
-            data: [320, 332, 301, 334, 390, 330, 320],
+            data: [],
           },
         ],
       },
@@ -225,24 +208,28 @@ export default {
     };
   },
   methods: {
-    countByDay() {
+    query() {
+
       this.axios
-        .post("/access/countByDay", {
-          start: "2022-10-20",
-          end: "2022-10-25",
-        })
-        .then((response) => {
-          this.$message.success("Success");
-        })
-        .catch((error) => {
-          this.$message.error("Failed");
-        });
+          .post("/access/countByDay", {
+            start: parseInt(this.$moment(this.time[0]).valueOf() / 1000),
+            end: parseInt(this.$moment(this.time[1]).valueOf() / 1000)
+          })
+          .then((response) => {
+            this.lineData.xAxis[0].data = response.data.map(t => t.date)
+            this.lineData.series[0].data = response.data.map(t => t.successNum)
+            this.lineData.series[1].data = response.data.map(t => t.failNum)
+          })
+          .catch((error) => {
+            this.$message.error("Failed");
+          });
     },
+
   },
   created() {
     const now = new Date();
-    this.time[0] = now;
-    this.time[1] = this.$moment(now).subtract(7, "days");
+    this.time[1] = now;
+    this.time[0] = this.$moment(now).subtract(7, "days");
 
     // this.countByDay();
   },
