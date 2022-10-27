@@ -2,10 +2,6 @@
 
 # 将docker启动时命令行中指定的-e参数设置到spring认识的环境变量
 
-export SPRING_MAIL_HOST=${MAIL_HOST:-"smtp.163.com"}
-export SPRING_MAIL_USERNAME=${MAIL_USERNAME:-"dbapi_test@163.com"}
-export SPRING_MAIL_PASSWORD=${MAIL_PASSWORD:-"WGJQBFRIPUENHMUP"}
-
 export DBAPI_API_CONTEXT=${API_CONTEXT:-"api"}
 
 export SPRING_DATASOURCE_URL=${DB_URL:-"jdbc:sqlite::resource:sqlite.db"}
