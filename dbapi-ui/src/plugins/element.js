@@ -45,8 +45,8 @@ import {
     Alert,
     // Slider,
     // Icon,
-    // Row,
-    // Col,
+    Row,
+    Col,
     Upload,
     // Progress,
     // Spinner,
@@ -134,8 +134,8 @@ Vue.use(Tag);
 Vue.use(Alert);
 // Vue.use(Slider);
 // Vue.use(Icon);
-// Vue.use(Row);
-// Vue.use(Col);
+Vue.use(Row);
+Vue.use(Col);
 Vue.use(Upload);
 // Vue.use(Progress);
 // Vue.use(Spinner);

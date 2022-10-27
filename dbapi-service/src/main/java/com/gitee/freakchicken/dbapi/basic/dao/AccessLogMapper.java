@@ -13,7 +13,16 @@ import java.util.Map;
 public interface AccessLogMapper extends BaseMapper<AccessLog> {
 
 
-    @Select("SELECT FROM_UNIXTIME(timestamp,'%Y-%m-%d') date,count(1) num from access_log where FROM_UNIXTIME(timestamp,'%Y-%m-%d') >= #{start} and FROM_UNIXTIME(timestamp,'%Y-%m-%d') < #{end} group by FROM_UNIXTIME(timestamp,'%Y-%m-%d')\n")
-    public List<Map<String,Object>> countByDate(@Param("start") String start, @Param("end") String end);
+    @Select("select date,status,count(1) num from (SELECT FROM_UNIXTIME(timestamp,'%Y-%m-%d') date,case when status=200 then 'success' else 'fail' end as status from access_log where timestamp >= #{start} and timestamp < #{end}) group by date,status")
+    public List<Map<String,Object>> countByDate(@Param("start") long start, @Param("end") long end);
 
+    @Select("select url,num from (select url,count(1) num from access_log where timestamp >= #{start} and timestamp < #{end} group by url) order by url limit 0,5")
+    public List<Map<String,Object>> top5api(@Param("start") long start, @Param("end") long end);
+
+
+    @Select("select app_id,num from (select app_id,count(1) num from access_log where timestamp >= #{start} and timestamp < #{end} group by app_id) order by app_id limit 0,5")
+    public List<Map<String,Object>> top5app(@Param("start") long start, @Param("end") long end);
+
+    @Select("select status,count(1) num from (select case when status=200 then 'success' else 'fail' end as status from access_log where timestamp >= #{start} and timestamp < #{end} ) group by status")
+    public List<Map<String,Object>> successRatio(@Param("start") long start, @Param("end") long end);
 }

@@ -1,34 +1,35 @@
 <template>
-  <div>monitor</div>
+  <div>
+    <el-tabs v-model="activeName">
+    <el-tab-pane label="汇总" name="first">
+      <chart></chart>
+    </el-tab-pane>
+    <el-tab-pane label="明细查询" name="second">配置管理</el-tab-pane>
+ 
+  </el-tabs>
+   
+  </div>
 </template>
 
 <script>
+import chart from "@/components/monitor/chart";
+import Chart from './chart.vue';
 export default {
   name: "monitor",
   data() {
     return {
-
-    }
+     activeName :"first"
+    };
   },
-  methods:{
-    countByDay(){
-      this.axios.post("/access/countByDay", {
-        "start": "2022-10-20",
-        "end": "2022-10-25"
-      }).then((response) => {
-        this.$message.success("Success")
-
-      }).catch((error) => {
-        this.$message.error("Failed")
-      })
-    }
+  components: { chartChart },
+  methods: {
+    
   },
-  created(){
-    this.countByDay()
-  }
-}
+  created() {
+    
+  },
+};
 </script>
 
 <style scoped>
-
 </style>

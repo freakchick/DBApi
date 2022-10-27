@@ -27,7 +27,7 @@ public class AccessLogController {
     }
 
     @RequestMapping("/countByDay")
-    public List<Map<String,Object>> countByDay(String start, String end) {
+    public List<Map<String,Object>> countByDay(Date start, Date end) {
         return accessLogService.countByDay(start, end);
     }
 }

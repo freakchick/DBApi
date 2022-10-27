@@ -19,6 +19,8 @@
         "vue-codemirror": "^4.0.6",
         "vue-i18n": "^8.26.7",
         "vue-router": "^3.2.0",
+        "echarts": "^5.4.0",
+        "vue-echarts": "^6.2.3",
         "vuex": "^3.4.0"
     },
     "devDependencies": {
@@ -26,6 +28,7 @@
         "@vue/cli-plugin-router": "~4.5.0",
         "@vue/cli-plugin-vuex": "^4.5.10",
         "@vue/cli-service": "~4.5.0",
+        "@vue/composition-api": "^1.7.1",
         "babel-plugin-component": "^1.1.1",
         "node-sass": "^5.0.0",
         "sass-loader": "^10.0.5",

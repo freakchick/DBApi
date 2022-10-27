@@ -22,6 +22,10 @@ import moment from 'moment';
 
 import { CONTENT_TYPE } from "@/constant";
 
+import 'echarts';
+import ECharts from 'vue-echarts';
+Vue.component('v-chart', ECharts);
+
 Vue.use(VueClipboard)
 Vue.use(VueCodeMirror)
 Vue.use(install) // 导入模块
