@@ -17,13 +17,18 @@ public interface AccessLogMapper extends BaseMapper<AccessLog> {
     @Select("select date,sum(success) successNum, sum(fail) failNum from (SELECT FROM_UNIXTIME(timestamp,'%Y-%m-%d') date,case when status=200 then 1 else 0 end as success,case when status!=200 then 1 else 0 end as fail from access_log where timestamp >= #{start} and timestamp < #{end}) group by date")
     public List<JSONObject> countByDate(@Param("start") long start, @Param("end") long end);
 
-    @Select("select url,num from (select url,count(1) num from access_log where timestamp >= #{start} and timestamp < #{end} group by url) order by url limit 0,5")
-    public List<Map<String,Object>> top5api(@Param("start") long start, @Param("end") long end);
+    @Select("select url,num from (select url,count(1) num from access_log where timestamp >= #{start} and timestamp < #{end} group by url) order by num desc limit 0,5")
+    public List<JSONObject> top5api(@Param("start") long start, @Param("end") long end);
 
 
-    @Select("select app_id,num from (select app_id,count(1) num from access_log where timestamp >= #{start} and timestamp < #{end} group by app_id) order by app_id limit 0,5")
-    public List<Map<String,Object>> top5app(@Param("start") long start, @Param("end") long end);
+    @Select("select app_id,num from (select app_id,count(1) num from access_log where timestamp >= #{start} and timestamp < #{end} and app_id is not null group by app_id) order by num desc limit 0,5")
+    public List<JSONObject> top5app(@Param("start") long start, @Param("end") long end);
 
-    @Select("select status,count(1) num from (select case when status=200 then 'success' else 'fail' end as status from access_log where timestamp >= #{start} and timestamp < #{end} ) group by status")
-    public List<Map<String,Object>> successRatio(@Param("start") long start, @Param("end") long end);
+    @Select("select url,duration from (select url,avg(duration) duration from access_log where timestamp >= #{start} and timestamp < #{end} group by url) order by duration desc limit 0,5")
+    public List<JSONObject> top5duration(@Param("start") long start, @Param("end") long end);
+
+    @Select("select sum(success) successNum,sum(fail) failNum from (select case when status=200 then 1 else 0 end as success,case when status!=200 then 1 else 0 end as fail from access_log where timestamp >= #{start} and timestamp < #{end} )")
+    public JSONObject successRatio(@Param("start") long start, @Param("end") long end);
+
+
 }

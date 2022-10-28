@@ -58,6 +58,20 @@ public class AccessLogService {
         return array;
     }
 
+    public List<JSONObject> top5api( long start,  long end){
+        return accessLogMapper.top5api(start, end);
+    }
+
+    public List<JSONObject> top5app(long start, long end){
+        return accessLogMapper.top5app(start, end);
+    }
+    public List<JSONObject> top5duration(long start, long end){
+        return accessLogMapper.top5duration(start, end);
+    }
+    public JSONObject successRatio(long start, long end){
+        return accessLogMapper.successRatio(start, end);
+    }
+
     public List<String> getDateList(Long start, Long end) {
         SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd");
         long oneDay = 24 * 60 * 60l;

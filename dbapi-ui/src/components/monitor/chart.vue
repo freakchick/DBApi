@@ -22,10 +22,13 @@
           <v-chart :option="pieData" style="height: 300px"></v-chart>
         </el-col>
         <el-col :span="12">
-          <v-chart :option="data4" style="height: 300px"></v-chart>
+          <v-chart :option="data3" style="height: 300px"></v-chart>
         </el-col>
         <el-col :span="12">
           <v-chart :option="data4" style="height: 300px"></v-chart>
+        </el-col>
+        <el-col :span="12">
+          <v-chart :option="data5" style="height: 300px"></v-chart>
         </el-col>
       </el-row>
     </div>
@@ -72,8 +75,7 @@ export default {
 
       pieData: {
         title: {
-          text: "Referer of a Website",
-          subtext: "Fake Data",
+          text: "API访问总量",
           left: "center",
         },
         tooltip: {
@@ -85,15 +87,12 @@ export default {
         },
         series: [
           {
-            name: "Access From",
+            name: "API访问总次数",
             type: "pie",
             radius: "50%",
             data: [
-              {value: 1048, name: "Search Engine"},
-              {value: 735, name: "Direct"},
-              {value: 580, name: "Email"},
-              {value: 484, name: "Union Ads"},
-              {value: 300, name: "Video Ads"},
+              {value: 1048, name: "Success"},
+              {value: 735, name: "Fail"}
             ],
             emphasis: {
               itemStyle: {
@@ -108,6 +107,7 @@ export default {
       lineData: {
         title: {
           text: "API访问量走势",
+          left: "center",
         },
         color: ["#11D238", "#FF101F"],
         tooltip: {
@@ -120,6 +120,7 @@ export default {
           },
         },
         legend: {
+          left: "left",
           data: ["Success", "Failed"],
         },
   
@@ -172,9 +173,10 @@ export default {
           },
         ],
       },
-      data4: {
+      data3: {
         title: {
-          text: "World Population",
+          text: "访问量最大的客户端",
+          left: "center",
         },
         tooltip: {
           trigger: "axis",
@@ -195,13 +197,81 @@ export default {
         },
         yAxis: {
           type: "category",
-          data: ["Brazil", "Indonesia", "USA", "India", "China", "World"],
+          data: [],
         },
         series: [
           {
-            name: "2011",
+            
             type: "bar",
-            data: [18203, 23489, 29034, 104970, 131744, 630230],
+            data: [],
+          },
+        ],
+      },
+      data4: {
+        title: {
+          text: "访问量最大的API",
+          left: "center",
+        },
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "shadow",
+          },
+        },
+        legend: {},
+        grid: {
+          left: "3%",
+          right: "4%",
+          bottom: "3%",
+          containLabel: true,
+        },
+        xAxis: {
+          type: "value",
+          boundaryGap: [0, 0.01],
+        },
+        yAxis: {
+          type: "category",
+          data: [],
+        },
+        series: [
+          {
+            
+            type: "bar",
+            data: [],
+          },
+        ],
+      },
+      data5: {
+        title: {
+          text: "平均访问时长最大的API",
+          left: "center",
+        },
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "shadow",
+          },
+        },
+        legend: {},
+        grid: {
+          left: "3%",
+          right: "4%",
+          bottom: "3%",
+          containLabel: true,
+        },
+        xAxis: {
+          type: "value",
+          boundaryGap: [0, 0.01],
+        },
+        yAxis: {
+          type: "category",
+          data: [],
+        },
+        series: [
+          {
+            
+            type: "bar",
+            data: [],
           },
         ],
       },
@@ -220,8 +290,50 @@ export default {
             this.lineData.series[0].data = response.data.map(t => t.successNum)
             this.lineData.series[1].data = response.data.map(t => t.failNum)
           })
-          .catch((error) => {
-            this.$message.error("Failed");
+
+      this.axios
+          .post("/access/successRatio", {
+            start: parseInt(this.$moment(this.time[0]).valueOf() / 1000),
+            end: parseInt(this.$moment(this.time[1]).valueOf() / 1000)
+          })
+          .then((response) => {
+            this.lineData.series[0].data = [{name:"Success",value:response.data.successNum},{name:"Fail",value:response.data.failNum}]
+          })
+      this.axios
+          .post("/access/top5api", {
+            start: parseInt(this.$moment(this.time[0]).valueOf() / 1000),
+            end: parseInt(this.$moment(this.time[1]).valueOf() / 1000)
+          })
+          .then((response) => {
+            this.data4.yAxis.data = response.data.map(t => t.url).reverse()
+            this.data4.series[0].data = response.data.map(t => t.num).reverse()
+          });
+          this.axios
+          .post("/access/top5app", {
+            start: parseInt(this.$moment(this.time[0]).valueOf() / 1000),
+            end: parseInt(this.$moment(this.time[1]).valueOf() / 1000)
+          })
+          .then((response) => {
+            this.data3.yAxis.data = response.data.map(t => t.app_id).reverse()
+            this.data3.series[0].data = response.data.map(t => t.num).reverse()
+          });
+          this.axios
+          .post("/access/top5api", {
+            start: parseInt(this.$moment(this.time[0]).valueOf() / 1000),
+            end: parseInt(this.$moment(this.time[1]).valueOf() / 1000)
+          })
+          .then((response) => {
+            this.data4.yAxis.data = response.data.map(t => t.url).reverse()
+            this.data4.series[0].data = response.data.map(t => t.num).reverse()
+          });
+          this.axios
+          .post("/access/top5duration", {
+            start: parseInt(this.$moment(this.time[0]).valueOf() / 1000),
+            end: parseInt(this.$moment(this.time[1]).valueOf() / 1000)
+          })
+          .then((response) => {
+            this.data5.yAxis.data = response.data.map(t => t.url).reverse()
+            this.data5.series[0].data = response.data.map(t => t.duration).reverse()
           });
     },
 
@@ -231,7 +343,7 @@ export default {
     this.time[1] = now;
     this.time[0] = this.$moment(now).subtract(7, "days");
 
-    // this.countByDay();
+    this.query();
   },
 };
 </script>
