@@ -21,13 +21,14 @@
           </div>
 
         </el-col>
-        <el-col :span="12">
+        <el-col :span="5">
           <div class="box">
             <v-chart :option="pieData" style="height: 300px"></v-chart>
           </div>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="7">
           <div class="box">
+             <!-- Top<el-input-number size="mini" v-model="num3"></el-input-number> -->
             <v-chart :option="data3" style="height: 300px"></v-chart>
           </div>
         </el-col>
@@ -96,6 +97,7 @@ export default {
           orient: "vertical",
           left: "left",
         },
+        color: ["#99CC33", "#FF6600"],
         series: [
           {
             name: "API访问总次数",
@@ -120,7 +122,7 @@ export default {
           text: "API访问量走势",
           left: "center",
         },
-        color: ["#11D238", "#FF101F"],
+        color: ["#99CC66", "#FF6666"],
         tooltip: {
           trigger: "axis",
           axisPointer: {
@@ -159,8 +161,8 @@ export default {
             type: "line",
             stack: "Total",
             areaStyle: {
-              opacity: 0.8,
-              color: "rgb(5,148,99)",
+              opacity: 0.3,
+              color: "#99CC66",
             },
             emphasis: {
               focus: "series",
@@ -174,8 +176,8 @@ export default {
             type: "line",
             stack: "Total",
             areaStyle: {
-              opacity: 0.8,
-              color: "rgb(255, 0, 135)",
+              opacity: 0.3,
+              color: "#FF6666",
             },
             emphasis: {
               focus: "series",
@@ -189,6 +191,7 @@ export default {
           text: "访问量最大的客户端",
           left: "center",
         },
+        color:['#33CC99'],
         tooltip: {
           trigger: "axis",
           axisPointer: {
@@ -223,6 +226,7 @@ export default {
           text: "访问量最大的API",
           left: "center",
         },
+        color:['#66CCCC'],
         tooltip: {
           trigger: "axis",
           axisPointer: {
@@ -257,6 +261,7 @@ export default {
           text: "平均访问时长最大的API",
           left: "center",
         },
+        color:['#FF9900'],
         tooltip: {
           trigger: "axis",
           axisPointer: {
@@ -297,9 +302,13 @@ export default {
             end: parseInt(this.$moment(this.time[1]).valueOf() / 1000)
           })
           .then((response) => {
+            debugger
             this.lineData.xAxis[0].data = response.data.map(t => t.date)
             this.lineData.series[0].data = response.data.map(t => t.successNum)
             this.lineData.series[1].data = response.data.map(t => t.failNum)
+
+            console.log(this.lineData.xAxis)
+            console.log(this.lineData.series)
           })
 
       this.axios
@@ -331,15 +340,7 @@ export default {
             this.data3.yAxis.data = response.data.map(t => t.app_id).reverse()
             this.data3.series[0].data = response.data.map(t => t.num).reverse()
           });
-      this.axios
-          .post("/access/top5api", {
-            start: parseInt(this.$moment(this.time[0]).valueOf() / 1000),
-            end: parseInt(this.$moment(this.time[1]).valueOf() / 1000)
-          })
-          .then((response) => {
-            this.data4.yAxis.data = response.data.map(t => t.url).reverse()
-            this.data4.series[0].data = response.data.map(t => t.num).reverse()
-          });
+      
       this.axios
           .post("/access/top5duration", {
             start: parseInt(this.$moment(this.time[0]).valueOf() / 1000),
@@ -364,8 +365,8 @@ export default {
 
 <style scoped lang="scss">
 .box {
-  span: 3px;
+  border-radius: 3px;
   box-shadow: 1px 3px 3px #cccccc;
-  margin: 3px;
+  padding: 5px 0;
 }
 </style>

@@ -13,7 +13,7 @@ import {
     MenuItem,
     MenuItemGroup,
     Input,
-    // InputNumber,
+    InputNumber,
     Radio,
     RadioGroup,
     RadioButton,
@@ -70,7 +70,7 @@ import {
     // Timeline,
     // TimelineItem,
     // Link,
-    // Divider,
+    Divider,
     // Image,
     // Calendar,
     // Backtop,
@@ -94,7 +94,7 @@ Vue.use(Submenu);
 Vue.use(MenuItem);
 Vue.use(MenuItemGroup);
 Vue.use(Input);
-// Vue.use(InputNumber);
+Vue.use(InputNumber);
 Vue.use(Radio);
 Vue.use(RadioGroup);
 Vue.use(RadioButton);
@@ -156,19 +156,19 @@ Vue.use(Cascader);
 // Vue.use(Aside);
 // Vue.use(Main);
 // Vue.use(Footer);
-/*
-Vue.use(Timeline);
-Vue.use(TimelineItem);
-Vue.use(Link);
-Vue.use(Divider);
-Vue.use(Image);
-Vue.use(Calendar);
-Vue.use(Backtop);
-Vue.use(PageHeader);
-Vue.use(CascaderPanel);
 
-Vue.use(Loading.directive);
-*/
+// Vue.use(Timeline);
+// Vue.use(TimelineItem);
+// Vue.use(Link);
+Vue.use(Divider);
+// Vue.use(Image);
+// Vue.use(Calendar);
+// Vue.use(Backtop);
+// Vue.use(PageHeader);
+// Vue.use(CascaderPanel);
+
+// Vue.use(Loading.directive);
+
 
 Vue.prototype.$message = Message
 // Vue.use(Button)

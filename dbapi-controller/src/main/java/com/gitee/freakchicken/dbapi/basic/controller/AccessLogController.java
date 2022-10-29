@@ -22,9 +22,9 @@ public class AccessLogController {
         List<AccessLog> all = accessLogService.getAll();
         return all;
     }
-
-    public List<AccessLog> search(String path, String apiId, String appId, long startTime, long endTime, int status) {
-        return accessLogService.search(path, apiId, appId, startTime, endTime, status);
+    @RequestMapping("/search")
+    public List<AccessLog> search(String url, String appId, Long start, Long end, Integer status, String ip) {
+        return accessLogService.search(url, appId, start, end, status, ip);
     }
 
     @RequestMapping("/countByDay")

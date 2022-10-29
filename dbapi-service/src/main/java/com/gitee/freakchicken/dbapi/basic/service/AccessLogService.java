@@ -30,8 +30,8 @@ public class AccessLogService {
         return accessLogMapper.selectList(null);
     }
 
-    public List<AccessLog> search(String path, String apiId, String appId, long startTime, long endTime, int status) {
-        return null;
+    public List<AccessLog> search(String url, String appId, Long start, Long end, Integer status, String ip) {
+        return accessLogMapper.search(url, appId, start, end, status, ip);
     }
 
     public JSONArray countByDay(long start, long end) {
