@@ -11,7 +11,7 @@
         align="right"
     >
     </el-date-picker>
-    <el-button size="mini" @click="query">查询</el-button>
+    <el-button size="mini" @click="query" type="primary">查询</el-button>
     <div>
       <el-row :gutter="20">
 
@@ -28,18 +28,22 @@
         </el-col>
         <el-col :span="7">
           <div class="box">
-             <!-- Top<el-input-number size="mini" v-model="num3"></el-input-number> -->
             <v-chart :option="data3" style="height: 300px"></v-chart>
           </div>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="8">
           <div class="box">
             <v-chart :option="data4" style="height: 300px"></v-chart>
           </div>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="8">
           <div class="box">
             <v-chart :option="data5" style="height: 300px"></v-chart>
+          </div>
+        </el-col>
+        <el-col :span="8">
+          <div class="box">
+            <v-chart :option="data6" style="height: 300px"></v-chart>
           </div>
         </el-col>
       </el-row>
@@ -191,7 +195,7 @@ export default {
           text: "访问量最大的客户端",
           left: "center",
         },
-        color:['#33CC99'],
+        color: ['#33CC99'],
         tooltip: {
           trigger: "axis",
           axisPointer: {
@@ -226,7 +230,7 @@ export default {
           text: "访问量最大的API",
           left: "center",
         },
-        color:['#66CCCC'],
+        color: ['#66CCCC'],
         tooltip: {
           trigger: "axis",
           axisPointer: {
@@ -261,7 +265,42 @@ export default {
           text: "平均访问时长最大的API",
           left: "center",
         },
-        color:['#FF9900'],
+        color: ['#FF9900'],
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "shadow",
+          },
+        },
+        legend: {},
+        grid: {
+          left: "3%",
+          right: "4%",
+          bottom: "3%",
+          containLabel: true,
+        },
+        xAxis: {
+          type: "value",
+          boundaryGap: [0, 0.01],
+        },
+        yAxis: {
+          type: "category",
+          data: [],
+        },
+        series: [
+          {
+
+            type: "bar",
+            data: [],
+          },
+        ],
+      },
+      data6: {
+        title: {
+          text: "访问量最大的IP",
+          left: "center",
+        },
+        color: ['#B39CD0'],
         tooltip: {
           trigger: "axis",
           axisPointer: {
@@ -302,13 +341,13 @@ export default {
             end: parseInt(this.$moment(this.time[1]).valueOf() / 1000)
           })
           .then((response) => {
-            debugger
             this.lineData.xAxis[0].data = response.data.map(t => t.date)
             this.lineData.series[0].data = response.data.map(t => t.successNum)
             this.lineData.series[1].data = response.data.map(t => t.failNum)
 
-            console.log(this.lineData.xAxis)
-            console.log(this.lineData.series)
+            console.log(this.lineData.xAxis[0].data)
+            console.log(this.lineData.series[0].data)
+            console.log(this.lineData.series[1].data)
           })
 
       this.axios
@@ -332,6 +371,15 @@ export default {
             this.data4.series[0].data = response.data.map(t => t.num).reverse()
           });
       this.axios
+          .post("/access/topNIP", {
+            start: parseInt(this.$moment(this.time[0]).valueOf() / 1000),
+            end: parseInt(this.$moment(this.time[1]).valueOf() / 1000)
+          })
+          .then((response) => {
+            this.data6.yAxis.data = response.data.map(t => t.ip).reverse()
+            this.data6.series[0].data = response.data.map(t => t.num).reverse()
+          });
+      this.axios
           .post("/access/top5app", {
             start: parseInt(this.$moment(this.time[0]).valueOf() / 1000),
             end: parseInt(this.$moment(this.time[1]).valueOf() / 1000)
@@ -340,7 +388,7 @@ export default {
             this.data3.yAxis.data = response.data.map(t => t.app_id).reverse()
             this.data3.series[0].data = response.data.map(t => t.num).reverse()
           });
-      
+
       this.axios
           .post("/access/top5duration", {
             start: parseInt(this.$moment(this.time[0]).valueOf() / 1000),
@@ -365,8 +413,9 @@ export default {
 
 <style scoped lang="scss">
 .box {
+  //height: 330px;
   border-radius: 3px;
   box-shadow: 1px 3px 3px #cccccc;
-  padding: 5px 0;
+  //padding: 5px 0;
 }
 </style>

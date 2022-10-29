@@ -8,7 +8,6 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface AccessLogMapper extends BaseMapper<AccessLog> {
@@ -24,7 +23,11 @@ public interface AccessLogMapper extends BaseMapper<AccessLog> {
     @Select("select app_id,num from (select app_id,count(1) num from access_log where timestamp >= #{start} and timestamp < #{end} and app_id is not null group by app_id) order by num desc limit 0,10")
     public List<JSONObject> top5app(@Param("start") long start, @Param("end") long end);
 
-    @Select("select url,duration from (select url,avg(duration) duration from access_log where timestamp >= #{start} and timestamp < #{end} group by url) order by duration desc limit 0,10")
+    @Select("select ip,num from (select ip,count(1) num from access_log where timestamp >= #{start} and timestamp < #{end} and app_id is not null group by ip) order by num desc limit 0,10")
+    public List<JSONObject> topNIP(@Param("start") long start, @Param("end") long end);
+
+
+    @Select("select url,duration from (select url,round(avg(duration)) duration from access_log where timestamp >= #{start} and timestamp < #{end} group by url) order by duration desc limit 0,10")
     public List<JSONObject> top5duration(@Param("start") long start, @Param("end") long end);
 
     @Select("select sum(success) successNum,sum(fail) failNum from (select case when status=200 then 1 else 0 end as success,case when status!=200 then 1 else 0 end as fail from access_log where timestamp >= #{start} and timestamp < #{end} )")
