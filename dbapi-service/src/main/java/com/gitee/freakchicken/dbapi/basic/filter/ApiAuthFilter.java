@@ -53,8 +53,10 @@ public class ApiAuthFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException {
+
+        long now = System.currentTimeMillis();
         AccessLog accessLog = new AccessLog();
-        accessLog.setTimestamp(System.currentTimeMillis()/1000);
+        accessLog.setTimestamp(now/1000);
 
         log.debug("auth filter execute");
         HttpServletRequest request = (HttpServletRequest) servletRequest;
@@ -113,7 +115,7 @@ public class ApiAuthFilter implements Filter {
                 response.getWriter().close();
             }
 
-            accessLog.setDuration(System.currentTimeMillis() - accessLog.getTimestamp());
+            accessLog.setDuration(System.currentTimeMillis() - now);
             accessLog.setIp(IPUtil.getOriginIp(request));
             accessLog.setStatus(response.getStatus());
             accessLog.setUrl(uri);
