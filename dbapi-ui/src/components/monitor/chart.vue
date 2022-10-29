@@ -16,19 +16,30 @@
       <el-row :gutter="20">
 
         <el-col :span="12">
-          <v-chart :option="lineData" style="height: 300px"></v-chart>
+          <div class="box">
+            <v-chart :option="lineData" style="height: 300px"></v-chart>
+          </div>
+
         </el-col>
         <el-col :span="12">
-          <v-chart :option="pieData" style="height: 300px"></v-chart>
+          <div class="box">
+            <v-chart :option="pieData" style="height: 300px"></v-chart>
+          </div>
         </el-col>
         <el-col :span="12">
-          <v-chart :option="data3" style="height: 300px"></v-chart>
+          <div class="box">
+            <v-chart :option="data3" style="height: 300px"></v-chart>
+          </div>
         </el-col>
         <el-col :span="12">
-          <v-chart :option="data4" style="height: 300px"></v-chart>
+          <div class="box">
+            <v-chart :option="data4" style="height: 300px"></v-chart>
+          </div>
         </el-col>
         <el-col :span="12">
-          <v-chart :option="data5" style="height: 300px"></v-chart>
+          <div class="box">
+            <v-chart :option="data5" style="height: 300px"></v-chart>
+          </div>
         </el-col>
       </el-row>
     </div>
@@ -123,7 +134,7 @@ export default {
           left: "left",
           data: ["Success", "Failed"],
         },
-  
+
         grid: {
           left: "3%",
           right: "4%",
@@ -201,7 +212,7 @@ export default {
         },
         series: [
           {
-            
+
             type: "bar",
             data: [],
           },
@@ -235,7 +246,7 @@ export default {
         },
         series: [
           {
-            
+
             type: "bar",
             data: [],
           },
@@ -269,7 +280,7 @@ export default {
         },
         series: [
           {
-            
+
             type: "bar",
             data: [],
           },
@@ -297,7 +308,10 @@ export default {
             end: parseInt(this.$moment(this.time[1]).valueOf() / 1000)
           })
           .then((response) => {
-            this.lineData.series[0].data = [{name:"Success",value:response.data.successNum},{name:"Fail",value:response.data.failNum}]
+            this.lineData.series[0].data = [{name: "Success", value: response.data.successNum}, {
+              name: "Fail",
+              value: response.data.failNum
+            }]
           })
       this.axios
           .post("/access/top5api", {
@@ -308,7 +322,7 @@ export default {
             this.data4.yAxis.data = response.data.map(t => t.url).reverse()
             this.data4.series[0].data = response.data.map(t => t.num).reverse()
           });
-          this.axios
+      this.axios
           .post("/access/top5app", {
             start: parseInt(this.$moment(this.time[0]).valueOf() / 1000),
             end: parseInt(this.$moment(this.time[1]).valueOf() / 1000)
@@ -317,7 +331,7 @@ export default {
             this.data3.yAxis.data = response.data.map(t => t.app_id).reverse()
             this.data3.series[0].data = response.data.map(t => t.num).reverse()
           });
-          this.axios
+      this.axios
           .post("/access/top5api", {
             start: parseInt(this.$moment(this.time[0]).valueOf() / 1000),
             end: parseInt(this.$moment(this.time[1]).valueOf() / 1000)
@@ -326,7 +340,7 @@ export default {
             this.data4.yAxis.data = response.data.map(t => t.url).reverse()
             this.data4.series[0].data = response.data.map(t => t.num).reverse()
           });
-          this.axios
+      this.axios
           .post("/access/top5duration", {
             start: parseInt(this.$moment(this.time[0]).valueOf() / 1000),
             end: parseInt(this.$moment(this.time[1]).valueOf() / 1000)
@@ -348,5 +362,10 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.box {
+  span: 3px;
+  box-shadow: 1px 3px 3px #cccccc;
+  margin: 3px;
+}
 </style>
