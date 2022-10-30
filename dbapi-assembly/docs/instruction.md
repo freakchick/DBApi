@@ -27,6 +27,23 @@
 ### 3 告警插件
 - 当API内部报错的时候，告警插件可以将报错信息发送告警提醒，比如发邮件、发短信
 - 告警逻辑由用户自己编写
+
+## 监控
+> DBAPI只依赖元数据库（mysql/sqlite）就可以使用，但是如果您还需要使用页面上的监控功能（监控API调用记录、访问量、成功率等等），
+就必须依赖于另一个日志数据库，来存储API访问日志，推荐使用clickhouse，当然您也可以使用其它的关系型数据库。
+> 
+> 目前提供了clickhouse/mysql的日志数据库初始化脚本，在`sql`目录下
+
+- API访问日志采集进入日志数据库有3种方式
+1. DBAPI默认会将API访问日志写入磁盘文件`logs/dbapi-access.log`，用户可以自行使用`datax` `flume`等工具采集日志到日志数据库
+2. 如果在`conf/application.properties`文件配置了`access.log.writer=db`，那么DBAPI会将API访问日志直接写入日志数据库，这种方式适用于日志量不太大的场景下。
+3. 如果在`conf/application.properties`文件配置了`access.log.writer=kafka`，那么DBAPI会将API访问日志写入kafka，
+用户需要自行从kafka采集日志到日志数据库，这种方式适用于日志量大的场景，可以由kafka去做数据缓冲。
+> 注意此种方式下需要在`conf/application.properties`文件填写kafka地址。
+> 
+> 同时DBAPI也自带了消费kafka日志并写入日志数据库的工具，请使用XXX脚本。
+
+
 ## 基本操作
 
 ### 创建/修改数据源
