@@ -14,13 +14,27 @@
 dbapi.api.context=api
 
 # 如果不修改数据库地址将默认使用自带的内嵌元数据库sqlite
-# meta database address
-spring.datasource.driver-class-name=org.sqlite.JDBC
-spring.datasource.url=jdbc:sqlite::resource:sqlite.db
-spring.datasource.username=
-spring.datasource.password=
+# 元数据库地址，可以使用mysql或者自带的sqlite
+spring.datasource.dynamic.datasource.meta-db.driver-class-name=org.sqlite.JDBC
+spring.datasource.dynamic.datasource.meta-db.url=jdbc:sqlite::resource:sqlite.db
+spring.datasource.dynamic.datasource.meta-db.username=
+spring.datasource.dynamic.datasource.meta-db.password=
+
+# 将API访问日志写入日志数据库（推荐clickhouse）的方式，值只能是db/kafka/null
+# db代表dbapi直连日志数据库，直接将API访问日志写入日志数据库
+# kafka代表dbapi将API访问日志写入kafka，用户需要自行从kafka收集日志写入日志数据库
+# null代表dbapi只会将API访问日志写入本地磁盘文件（logs/dbapi-access.log），用户需要自行从磁盘文件收集日志写入日志数据库
+access.log.writer=null
+
+# 日志数据库地址，推荐使用clickhouse，如果您不需要使用页面上的监控功能，可以不配置日志数据库地址
+spring.datasource.dynamic.datasource.access-log-db.driver-class-name=ru.yandex.clickhouse.ClickHouseDriver
+spring.datasource.dynamic.datasource.access-log-db.url=jdbc:clickhouse://127.0.0.1:8123/default
+spring.datasource.dynamic.datasource.access-log-db.username=default
+spring.datasource.dynamic.datasource.access-log-db.password=123456
+
 ```
-- 如果配置了mysql作为元数据库，请先在mysql执行初始化脚本`sql/ddl_mysql.sql`
+> 如果配置了mysql作为元数据库，请先在mysql执行初始化脚本`sql/ddl_mysql.sql`
+> 如果配置了日志数据库地址，请先在日志数据库执行初始化脚本`sql/access_log_clickhouse.sql`
 - Linux一键启停
 ```shell
 sh bin/dbapi-daemon.sh start standalone
@@ -58,11 +72,23 @@ done
 # api context
 dbapi.api.context=api
 
-# meta database address
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-spring.datasource.url=jdbc:mysql://127.0.0.1:3306/dbapi?useSSL=false&characterEncoding=UTF-8&serverTimezone=GMT%2B8
-spring.datasource.username=root
-spring.datasource.password=root
+# 元数据库地址，集群版只能使用mysql
+spring.datasource.dynamic.datasource.meta-db.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.dynamic.datasource.meta-db.url=jdbc:mysql://127.0.0.1:3306/dbapi?useSSL=false&characterEncoding=UTF-8&serverTimezone=GMT%2B8
+spring.datasource.dynamic.datasource.meta-db.username=root
+spring.datasource.dynamic.datasource.meta-db.password=root
+
+# 将API访问日志写入日志数据库（推荐clickhouse）的方式，值只能是db/kafka/null
+# db代表dbapi直连日志数据库，直接将API访问日志写入日志数据库
+# kafka代表dbapi将API访问日志写入kafka，用户需要自行从kafka收集日志写入日志数据库
+# null代表dbapi只会将API访问日志写入本地磁盘文件（logs/dbapi-access.log），用户需要自行从磁盘文件收集日志写入日志数据库
+access.log.writer=null
+
+# 日志数据库地址，推荐使用clickhouse，如果您不需要使用页面上的监控功能，可以不配置日志数据库地址
+spring.datasource.dynamic.datasource.access-log-db.driver-class-name=ru.yandex.clickhouse.ClickHouseDriver
+spring.datasource.dynamic.datasource.access-log-db.url=jdbc:clickhouse://127.0.0.1:8123/default
+spring.datasource.dynamic.datasource.access-log-db.username=default
+spring.datasource.dynamic.datasource.access-log-db.password=123456
 
 ############################## if cluster, please config properties below ##############################
 
@@ -79,6 +105,7 @@ spring.redis.database=0
 spring.redis.password=
 
 ```
+> 如果配置了日志数据库地址，请先在日志数据库执行初始化脚本`sql/access_log_clickhouse.sql`
 
 - 修改`conf/install_config.conf`文件，配置要安装的机器节点
 ```shell
@@ -129,7 +156,18 @@ sh bin/dbapi-daemon.sh stop apiServer
 
 - 一键启动（使用dbapi自带的元数据库sqlite）
 ```shell
-docker run -it -p 8520:8520 --name dbapi freakchicken/db-api:3.1.2 standalone
+docker run -it -p 8520:8520 --name dbapi freakchicken/db-api:3.2.0 standalone
+```
+
+```shell
+docker run -it -p 8520:8520 \
+-e LOG_DB_URL="jdbc:clickhouse://127.0.0.1:8123/default" \
+-e LOG_DB_USERNAME="default" \
+-e LOG_DB_PASSWORD="123456" \
+-e LOG_DB_DRIVER="ru.yandex.clickhouse.ClickHouseDriver" \
+-e ACCESS_LOG_WRITER="db" \
+--name dbapi \
+freakchicken/db-api:3.2.0 standalone
 ```
 
 - 使用自己的mysql作为元数据库（启动前需要在mysql执行初始化脚本）
@@ -140,7 +178,12 @@ docker run -it \
 -e DB_USERNAME="root" \
 -e DB_PASSWORD="root" \
 -e DB_DRIVER="com.mysql.cj.jdbc.Driver" \
-freakchicken/db-api:3.1.2 standalone
+-e ACCESS_LOG_WRITER="db" \
+-e LOG_DB_URL="jdbc:clickhouse://127.0.0.1:8123/default" \
+-e LOG_DB_USERNAME="default" \
+-e LOG_DB_PASSWORD="123456" \
+-e LOG_DB_DRIVER="ru.yandex.clickhouse.ClickHouseDriver" \
+freakchicken/db-api:3.2.0 standalone
 ```
 - 浏览器访问`http://192.168.xx.xx:8520`进入UI
 
@@ -166,7 +209,12 @@ docker run -it \
 -e REDIS_PORT=6379 \
 -e REDIS_DATABASE=0 \
 -e REDIS_PASSWORD="" \
-freakchicken/db-api:3.1.2 manager
+-e ACCESS_LOG_WRITER="db" \
+-e LOG_DB_URL="jdbc:clickhouse://127.0.0.1:8123/default" \
+-e LOG_DB_USERNAME="default" \
+-e LOG_DB_PASSWORD="123456" \
+-e LOG_DB_DRIVER="ru.yandex.clickhouse.ClickHouseDriver" \
+freakchicken/db-api:3.2.0 manager
 ```
 
 - 启动网关服务 gateway
@@ -185,7 +233,12 @@ docker run -it \
 -e REDIS_PORT=6379 \
 -e REDIS_DATABASE=0 \
 -e REDIS_PASSWORD="" \
-freakchicken/db-api:3.1.2 gateway
+-e ACCESS_LOG_WRITER="db" \
+-e LOG_DB_URL="jdbc:clickhouse://127.0.0.1:8123/default" \
+-e LOG_DB_USERNAME="default" \
+-e LOG_DB_PASSWORD="123456" \
+-e LOG_DB_DRIVER="ru.yandex.clickhouse.ClickHouseDriver" \
+freakchicken/db-api:3.2.0 gateway
 ```
 
 - 启动API服务apiServer（此服务可启动多个，构建api集群）
@@ -203,7 +256,12 @@ docker run -it \
 -e REDIS_PORT=6379 \
 -e REDIS_DATABASE=0 \
 -e REDIS_PASSWORD="" \
-freakchicken/db-api:3.1.2 apiServer
+-e ACCESS_LOG_WRITER="db" \
+-e LOG_DB_URL="jdbc:clickhouse://127.0.0.1:8123/default" \
+-e LOG_DB_USERNAME="default" \
+-e LOG_DB_PASSWORD="123456" \
+-e LOG_DB_DRIVER="ru.yandex.clickhouse.ClickHouseDriver" \
+freakchicken/db-api:3.2.0 apiServer
 ```
 
 - 浏览器访问`http://192.168.xx.xx:8523`进入UI; API通过gateway来访问`http://192.168.xx.xx:8525/api/xx`
@@ -227,6 +285,11 @@ freakchicken/db-api:3.1.2 apiServer
 | REDIS_PORT | 6379 |集群模式使用的redis端口 |
 | REDIS_DATABASE | 0 |集群模式使用的redis数据库号 |
 | REDIS_PASSWORD |  |集群模式使用的redis密码 |
+| LOG_DB_URL | jdbc:clickhouse://127.0.0.1:8123/default |日志数据库地址 |
+| LOG_DB_USERNAME | default | 日志数据库账户|
+| LOG_DB_PASSWORD | 123456 | 日志数据库密码|
+| LOG_DB_DRIVER | ru.yandex.clickhouse.ClickHouseDriver | 日志数据库地址jdbc驱动|
+| ACCESS_LOG_WRITER | null | API访问日志写入数据库的方式|
 
 
 ### docker快速安装nacos
