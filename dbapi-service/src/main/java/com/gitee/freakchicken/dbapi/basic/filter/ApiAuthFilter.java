@@ -46,6 +46,9 @@ public class ApiAuthFilter implements Filter {
     @Value("${dbapi.api.context}")
     private String apiContext;
 
+    @Value("${access.log.writer}")
+    private String logWriter;
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -56,7 +59,7 @@ public class ApiAuthFilter implements Filter {
 
         long now = System.currentTimeMillis();
         AccessLog accessLog = new AccessLog();
-        accessLog.setTimestamp(now/1000);
+        accessLog.setTimestamp(now / 1000);
 
         log.debug("auth filter execute");
         HttpServletRequest request = (HttpServletRequest) servletRequest;
@@ -121,12 +124,14 @@ public class ApiAuthFilter implements Filter {
             accessLog.setUrl(uri);
             accessLog.setId(UUID.randomUUID().toString());
             accessLogger.info(JSON.toJSONString(accessLog));
-            ThreadUtils.submitAlarmTask(new Runnable() {
-                @Override
-                public void run() {
-                    accessLogWriter.write(accessLog);
-                }
-            });
+            if (!logWriter.equals("null")) {
+                ThreadUtils.submitAlarmTask(new Runnable() {
+                    @Override
+                    public void run() {
+                        accessLogWriter.write(accessLog);
+                    }
+                });
+            }
 
         }
 
