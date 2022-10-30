@@ -26,7 +26,7 @@
       <template slot="prepend">IP:</template>
     </el-input>
 
-    <el-button size="mini" @click="query">查询</el-button>
+    <el-button size="mini" @click="query">{{$t('m.query')}}</el-button>
 
     <el-divider></el-divider>
 

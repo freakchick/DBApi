@@ -11,7 +11,7 @@
         align="right"
     >
     </el-date-picker>
-    <el-button size="mini" @click="query" type="primary">查询</el-button>
+    <el-button size="mini" @click="query" type="primary">{{$t('m.query')}}</el-button>
     <div>
       <el-row :gutter="20">
 

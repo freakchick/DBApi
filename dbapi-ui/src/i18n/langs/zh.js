@@ -92,7 +92,8 @@ const cn = {
 
     change_pass: '修改密码',
     monitor: '监控',
-    detail: '详情'
+    detail: '详情',
+    query:'查询'
 
   },
   ...zhLocale

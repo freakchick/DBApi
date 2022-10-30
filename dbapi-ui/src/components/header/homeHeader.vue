@@ -199,10 +199,6 @@ export default {
           background-color: #059463;
         }
       }
-
-      &:hover {
-
-      }
     }
 
     &:hover {
