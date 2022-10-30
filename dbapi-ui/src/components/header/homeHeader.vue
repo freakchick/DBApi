@@ -23,18 +23,18 @@
         </div>
       </div>
       <div class="menu iconfont icon-api" @click="clickMenu('/monitor')">
-        监控
+        {{ $t('m.monitor') }}
       </div>
 
     </div>
     <div class="right">
-      <div class="mode">{{ this.$store.state.mode }}</div>
-      <!--      <span>{{ languageName }}</span>
-            <span class="lang el-icon-arrow-down">
+      <span class="mode">{{ this.$store.state.mode }}</span>
+      <span>{{ languageName }}</span>
+      <span class="lang el-icon-arrow-down">
             </span>
-            <div class="options">
-              <div class="option" v-for="item in langs" @click="changeLanguage(item)">{{ item.name }}</div>
-            </div>-->
+      <div class="options">
+        <div class="option" v-for="item in langs" @click="changeLanguage(item)">{{ item.name }}</div>
+      </div>
     </div>
   </div>
 </template>
@@ -169,6 +169,7 @@ export default {
       font-family: Helvetica;
       font-weight: 900;
       font-size: 15px;
+      margin-right: 10px;
       //color: #045008;
       //text-shadow: 2px 2px 1px #a5d4b7;
       line-height: 60px;
