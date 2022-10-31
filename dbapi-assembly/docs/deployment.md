@@ -32,6 +32,10 @@ spring.datasource.dynamic.datasource.access-log-db.url=jdbc:clickhouse://127.0.0
 spring.datasource.dynamic.datasource.access-log-db.username=default
 spring.datasource.dynamic.datasource.access-log-db.password=123456
 
+# 如果配置了access.log.writer=kafka，那么还需要配置kafka地址和日志写入的topic
+access.log.kafka.topic=dbapi_access_log
+spring.kafka.bootstrap-servers=127.0.0.1:9092
+
 ```
 > 如果配置了mysql作为元数据库，请先在mysql执行初始化脚本`sql/ddl_mysql.sql`
 > 如果配置了日志数据库地址，请先在日志数据库执行初始化脚本`sql/access_log_clickhouse.sql`
@@ -89,6 +93,10 @@ spring.datasource.dynamic.datasource.access-log-db.driver-class-name=ru.yandex.c
 spring.datasource.dynamic.datasource.access-log-db.url=jdbc:clickhouse://127.0.0.1:8123/default
 spring.datasource.dynamic.datasource.access-log-db.username=default
 spring.datasource.dynamic.datasource.access-log-db.password=123456
+
+# 如果配置了access.log.writer=kafka，那么还需要配置kafka地址和日志写入的topic
+access.log.kafka.topic=dbapi_access_log
+spring.kafka.bootstrap-servers=127.0.0.1:9092
 
 ############################## if cluster, please config properties below ##############################
 
