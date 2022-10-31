@@ -152,25 +152,28 @@ sh bin/dbapi-daemon.sh stop apiServer
 
 ## docker部署单机版
 
+> 建议先阅读此文档前面本地安装部分，便于理解docker每个环境变量的含义，理解启动的时候是否需要配置相应的环境变量
+
 > Docker 容器通过环境变量进行配置，附录-环境变量列出了 `DBApi` 的可配置环境变量及其默认值
 
-- 一键启动（使用dbapi自带的元数据库sqlite）
+- 一键启动（使用dbapi自带的元数据库sqlite，且不能使用日志监控功能）
 ```shell
 docker run -it -p 8520:8520 --name dbapi freakchicken/db-api:3.2.0 standalone
 ```
-
+- 如果需要使用监控功能，还要配置日志数据库地址，以及将日志写入日志数据库
 ```shell
-docker run -it -p 8520:8520 \
+docker run -it \
+-p 8520:8520 \
+-e ACCESS_LOG_WRITER="db" \
 -e LOG_DB_URL="jdbc:clickhouse://127.0.0.1:8123/default" \
 -e LOG_DB_USERNAME="default" \
 -e LOG_DB_PASSWORD="123456" \
 -e LOG_DB_DRIVER="ru.yandex.clickhouse.ClickHouseDriver" \
--e ACCESS_LOG_WRITER="db" \
 --name dbapi \
 freakchicken/db-api:3.2.0 standalone
 ```
 
-- 使用自己的mysql作为元数据库（启动前需要在mysql执行初始化脚本）
+- 如果使用自己的mysql作为元数据库（启动前需要在mysql执行初始化脚本）
 ```shell
 docker run -it \
 -p 8520:8520 \
@@ -185,15 +188,37 @@ docker run -it \
 -e LOG_DB_DRIVER="ru.yandex.clickhouse.ClickHouseDriver" \
 freakchicken/db-api:3.2.0 standalone
 ```
+
+- 如果需要将API访问日志写入kafka，还需要配置kafka相关配置
+```shell
+docker run -it \
+-p 8520:8520 \
+-e DB_URL="jdbc:mysql://192.168.xx.xx:3306/dbapi?useSSL=false&characterEncoding=UTF-8&serverTimezone=GMT%2B8" \
+-e DB_USERNAME="root" \
+-e DB_PASSWORD="root" \
+-e DB_DRIVER="com.mysql.cj.jdbc.Driver" \
+-e ACCESS_LOG_WRITER="kafka" \
+-e ACCESS_LOG_KAFKA_TOPIC="dbapi_access_log" \
+-e ACCESS_LOG_KAFKA="127.0.0.1:9092" \
+-e LOG_DB_URL="jdbc:clickhouse://127.0.0.1:8123/default" \
+-e LOG_DB_USERNAME="default" \
+-e LOG_DB_PASSWORD="123456" \
+-e LOG_DB_DRIVER="ru.yandex.clickhouse.ClickHouseDriver" \
+freakchicken/db-api:3.2.0 standalone
+```
+
 - 浏览器访问`http://192.168.xx.xx:8520`进入UI
 
 ## docker部署集群版
+
+> 建议先阅读此文档前面本地安装部分，便于理解docker每个环境变量的含义，理解启动的时候是否需要配置相应的环境变量
+
 > Docker 容器通过环境变量进行配置，附录-环境变量 列出了 `DBApi` 的可配置环境变量及其默认值
 
 - 集群部署依赖`nacos`、`mysql`、`redis`，请先自行安装`nacos`（推荐1.4.2版本）、`mysql`、`redis`
 - 在mysql创建新的数据库，执行数据库初始化脚本（下载安装包解压获取`sql/ddl_mysql.sql`脚本）
 
-- 启动UI服务manager
+### 启动UI服务manager
 ```shell
 docker run -it \
 -p 8523:8523 \
@@ -209,7 +234,6 @@ docker run -it \
 -e REDIS_PORT=6379 \
 -e REDIS_DATABASE=0 \
 -e REDIS_PASSWORD="" \
--e ACCESS_LOG_WRITER="db" \
 -e LOG_DB_URL="jdbc:clickhouse://127.0.0.1:8123/default" \
 -e LOG_DB_USERNAME="default" \
 -e LOG_DB_PASSWORD="123456" \
@@ -217,7 +241,7 @@ docker run -it \
 freakchicken/db-api:3.2.0 manager
 ```
 
-- 启动网关服务 gateway
+### 启动网关服务 gateway
 ```shell
 docker run -it \
 -p 8525:8525 \
@@ -233,15 +257,12 @@ docker run -it \
 -e REDIS_PORT=6379 \
 -e REDIS_DATABASE=0 \
 -e REDIS_PASSWORD="" \
--e ACCESS_LOG_WRITER="db" \
--e LOG_DB_URL="jdbc:clickhouse://127.0.0.1:8123/default" \
--e LOG_DB_USERNAME="default" \
--e LOG_DB_PASSWORD="123456" \
--e LOG_DB_DRIVER="ru.yandex.clickhouse.ClickHouseDriver" \
 freakchicken/db-api:3.2.0 gateway
 ```
 
-- 启动API服务apiServer（此服务可启动多个，构建api集群）
+### 启动API服务apiServer（此服务可启动多个，构建api集群）
+
+- API访问日志直接写入日志数据库方式
 ```shell
 docker run -it \
 -e DB_URL="jdbc:mysql://192.168.xx.xx:3306/dbapi?useSSL=false&characterEncoding=UTF-8&serverTimezone=GMT%2B8" \
@@ -257,6 +278,31 @@ docker run -it \
 -e REDIS_DATABASE=0 \
 -e REDIS_PASSWORD="" \
 -e ACCESS_LOG_WRITER="db" \
+-e LOG_DB_URL="jdbc:clickhouse://127.0.0.1:8123/default" \
+-e LOG_DB_USERNAME="default" \
+-e LOG_DB_PASSWORD="123456" \
+-e LOG_DB_DRIVER="ru.yandex.clickhouse.ClickHouseDriver" \
+freakchicken/db-api:3.2.0 apiServer
+```
+
+- 如果需要将API访问日志写入kafka，还需要配置kafka相关配置
+```shell
+docker run -it \
+-e DB_URL="jdbc:mysql://192.168.xx.xx:3306/dbapi?useSSL=false&characterEncoding=UTF-8&serverTimezone=GMT%2B8" \
+-e DB_USERNAME="root" \
+-e DB_PASSWORD="root" \
+-e DB_DRIVER="com.mysql.cj.jdbc.Driver" \
+-e NACOS_ADDRESS="192.168.xx.xx:8848" \
+-e NACOS_USERNAME="nacos" \
+-e NACOS_PASSWORD="nacos" \
+-e NACOS_NAMESPACE="public" \
+-e REDIS_HOST="127.0.0.1" \
+-e REDIS_PORT=6379 \
+-e REDIS_DATABASE=0 \
+-e REDIS_PASSWORD="" \
+-e ACCESS_LOG_WRITER="kafka" \
+-e ACCESS_LOG_KAFKA_TOPIC="dbapi_access_log" \
+-e ACCESS_LOG_KAFKA="127.0.0.1:9092" \
 -e LOG_DB_URL="jdbc:clickhouse://127.0.0.1:8123/default" \
 -e LOG_DB_USERNAME="default" \
 -e LOG_DB_PASSWORD="123456" \
@@ -286,10 +332,12 @@ freakchicken/db-api:3.2.0 apiServer
 | REDIS_DATABASE | 0 |集群模式使用的redis数据库号 |
 | REDIS_PASSWORD |  |集群模式使用的redis密码 |
 | LOG_DB_URL | jdbc:clickhouse://127.0.0.1:8123/default |日志数据库地址 |
-| LOG_DB_USERNAME | default | 日志数据库账户|
-| LOG_DB_PASSWORD | 123456 | 日志数据库密码|
-| LOG_DB_DRIVER | ru.yandex.clickhouse.ClickHouseDriver | 日志数据库地址jdbc驱动|
+| LOG_DB_USERNAME | default | 日志数据库账户 |
+| LOG_DB_PASSWORD | 123456 | 日志数据库密码 |
+| LOG_DB_DRIVER | ru.yandex.clickhouse.ClickHouseDriver | 日志数据库地址jdbc驱动 |
 | ACCESS_LOG_WRITER | null | API访问日志写入数据库的方式|
+| ACCESS_LOG_KAFKA_TOPIC | dbapi_access_log | API访问日志写入的Kafka的topic |
+| ACCESS_LOG_KAFKA | 127.0.0.1:9092 | API访问日志写入的Kafka的地址 |
 
 
 ### docker快速安装nacos
