@@ -93,7 +93,18 @@ const cn = {
     change_pass: '修改密码',
     monitor: '监控',
     detail: '详情',
-    query:'查询'
+    query: '查询',
+    startDate: '开始日期',
+    endDate: '结束日期',
+    to: '至',
+    apiNum: 'API访问总量',
+    trend: 'API访问走势',
+    topNApi: 'Top 10 API',
+    topNApp: 'Top 10 APP',
+    topNDuration: 'Top 10 API ',
+    lastWeek: '最近一周',
+    lastMonth: '最近一个月',
+    last3Month: '最近三个月'
 
   },
   ...zhLocale

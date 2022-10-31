@@ -1,10 +1,10 @@
 <template>
   <div>
     <el-tabs v-model="activeName">
-    <el-tab-pane label="汇总" name="first">
+    <el-tab-pane :label="$t('m.summary')" name="first">
       <chart></chart>
     </el-tab-pane>
-    <el-tab-pane label="明细查询" name="second">
+    <el-tab-pane :label="$t('m.detail')" name="second">
       <record></record>
     </el-tab-pane>
  

@@ -90,10 +90,22 @@ const en = {
         ip_list_tip: 'Input one IP in one line, multi ip must in multi lines',
 
         change_pass: 'Change Password',
+
         monitor: 'Monitor',
         summary: 'Summary',
         detail: 'Detail',
-        query: 'Query'
+        query: 'Query',
+        startDate:'Start Date',
+        endDate:'End Date',
+        to:'TO',
+        apiNum:'Total quantity of API',
+        trend:'API Access Trend',
+        topNApi:'Top 10 API',
+        topNApp:'Top 10 APP',
+        topNDuration:'Top 10 API ',
+        lastWeek: 'Last Week',
+        lastMonth: 'Last Month',
+        last3Month: 'Last 3 Months'
 
 
     },

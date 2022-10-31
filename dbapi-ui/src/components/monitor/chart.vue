@@ -5,9 +5,9 @@
         v-model="time"
         type="datetimerange"
         :picker-options="pickerOptions"
-        range-separator="至"
-        start-placeholder="开始日期"
-        end-placeholder="结束日期"
+        :range-separator="$t('m.to')"
+        :start-placeholder="$t('m.startDate')"
+        :end-placeholder="$t('m.endDate')"
         align="right"
     >
     </el-date-picker>
@@ -59,7 +59,7 @@ export default {
       pickerOptions: {
         shortcuts: [
           {
-            text: "最近一周",
+            text: 'Last Week',
             onClick(picker) {
               const end = new Date();
               const start = new Date();
@@ -68,7 +68,7 @@ export default {
             },
           },
           {
-            text: "最近一个月",
+            text: "Last Month",
             onClick(picker) {
               const end = new Date();
               const start = new Date();
@@ -77,7 +77,7 @@ export default {
             },
           },
           {
-            text: "最近三个月",
+            text: "Last 3 Months",
             onClick(picker) {
               const end = new Date();
               const start = new Date();
@@ -104,7 +104,7 @@ export default {
         color: ["#99CC33", "#FF6600"],
         series: [
           {
-            name: "API访问总次数",
+            name: "API Access Quantity",
             type: "pie",
             radius: "50%",
             data: [
@@ -123,7 +123,7 @@ export default {
       },
       lineData: {
         title: {
-          text: "API访问量走势",
+          text: "API Access Trend",
           left: "center",
         },
         color: ["#99CC66", "#FF6666"],
@@ -192,7 +192,7 @@ export default {
       },
       data3: {
         title: {
-          text: "访问量最大的客户端",
+          text: "Top 10 App",
           left: "center",
         },
         color: ['#33CC99'],
@@ -227,7 +227,7 @@ export default {
       },
       data4: {
         title: {
-          text: "访问量最大的API",
+          text: "Top 10 API",
           left: "center",
         },
         color: ['#66CCCC'],
@@ -262,7 +262,7 @@ export default {
       },
       data5: {
         title: {
-          text: "平均访问时长最大的API",
+          text: "Top 10 API of longest duration",
           left: "center",
         },
         color: ['#FF9900'],
@@ -297,7 +297,7 @@ export default {
       },
       data6: {
         title: {
-          text: "访问量最大的IP",
+          text: "Top 10 IP",
           left: "center",
         },
         color: ['#B39CD0'],
