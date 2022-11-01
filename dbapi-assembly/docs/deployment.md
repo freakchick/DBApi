@@ -1,8 +1,24 @@
 # 安装教程
 
-> 安装包[下载地址](http://www.51dbapi.com/) ，或者在[天翼云盘](https://cloud.189.cn/t/Jza2MzeEZVNv) 下载。
+> 安装包[下载地址](http://www.51dbapi.com/) ，或者在[网盘](https://cloud.189.cn/t/Jza2MzeEZVNv) 下载。
 
 > 默认账户admin/admin
+
+## 前言
+> 为了便于您理解安装的时候需要配置的参数，请您先学习日志监控相关的功能设计
+
+- DBAPI只依赖元数据库（mysql/sqlite）就可以使用，但是如果您还需要使用页面上的监控功能（监控API调用记录、访问量、成功率等等），
+就必须依赖于另一个日志数据库（需用户自行搭建），来存储API访问日志，推荐使用clickhouse，当然您也可以使用其它的关系型数据库。
+
+- API访问日志采集进入日志数据库有3种方式
+1. 如果在`conf/application.properties`文件配置了`access.log.writer=db`，那么DBAPI会将API访问日志直接写入日志数据库，这种方式会直连日志数据库，适用于日志量不太大的场景下。
+2. 如果在`conf/application.properties`文件配置了`access.log.writer=kafka`，那么DBAPI会将API访问日志写入kafka，
+用户需要自行从kafka采集日志到日志数据库，这种方式适用于日志量大的场景，可以由kafka去做数据缓冲。
+> 同时DBAPI也自带了消费kafka日志并写入日志数据库的工具，请使用`bin/log-kafka2db.sh`脚本。
+3. DBAPI默认会将API访问日志写入磁盘文件`logs/dbapi-access.log`，用户可以自行使用`datax` `flume`等工具采集日志到日志数据库。此情况下需要配置`access.log.writer=null`
+
+- 如果您不需要使用监控功能，可以不用搭建日志数据库，并配置`access.log.writer=null`即可。
+
 ## 本地部署单机版
 
 - 依赖java环境，先自行在服务器安装`jdk8+`，并配置环境变量
