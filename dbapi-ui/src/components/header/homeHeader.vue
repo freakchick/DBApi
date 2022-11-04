@@ -27,14 +27,14 @@
           </div>
         </div>
       </div>
-      <div class="menu iconfont icon-api" @click="clickMenu('/monitor')">
+      <div class="menu iconfont icon-jiankong" @click="clickMenu('/monitor')">
         {{ $t("m.monitor") }}
       </div>
     </div>
     <div class="right">
       <span class="mode">{{ this.$store.state.mode }}</span>
       <div class="langs">
-        <span>{{ languageName }}</span>
+        <span style="font-size: 14px">{{ languageName }}</span>
         <span class="lang el-icon-arrow-down"></span>
         <div class="options">
           <div
