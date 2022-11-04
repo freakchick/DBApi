@@ -4,7 +4,7 @@
       tab-position="top"
       type="border-card"
     >
-      <el-tab-pane label="基础配置">
+      <el-tab-pane :label="$t('m.basic')">
         <el-form label-width="120px">
           <el-form-item :label="$t('m.basic_info')">
             <my-input
@@ -191,7 +191,7 @@
 
         </el-form>
       </el-tab-pane>
-      <el-tab-pane label="高级配置">
+      <el-tab-pane :label="$t('m.advanced')">
         <el-form
           label-width="100px"
           label-position="left"

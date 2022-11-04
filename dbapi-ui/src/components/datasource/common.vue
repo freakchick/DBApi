@@ -3,7 +3,7 @@
 
     <el-form label-width="200px">
       <el-form-item :label="$t('m.database')">
-        <el-select v-model="detail.type" placeholder="请选择" @change="selectDB">
+        <el-select v-model="detail.type" @change="selectDB">
           <el-option v-for="item in options" :key="item.label" :label="item.label" :value="item.value">
             <db-icon :type="item.value"></db-icon>
             <span>{{ item.label }}</span>
@@ -31,7 +31,7 @@
       </el-form-item>
 
       <el-form-item :label="$t('m.password')"  prop="password" style="display: inline-block">
-        <el-input prefix-icon="el-icon-lock" placeholder="请输入密码" style="min-width: 400px;" :type="[flag?'text':'password']"  v-model="detail.password" :disabled="!detail.edit_password">
+        <el-input prefix-icon="el-icon-lock"  style="min-width: 400px;" :type="[flag?'text':'password']"  v-model="detail.password" :disabled="!detail.edit_password">
           <i slot="suffix" :class="[flag?'el-icon-minus':'el-icon-view']" style="margin-top:8px;font-size:18px;" autocomplete="auto"  @click="flag=!flag" />
         </el-input>
       </el-form-item>

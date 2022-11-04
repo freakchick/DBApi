@@ -1,39 +1,50 @@
 <template>
   <div class="head">
-    <div style="padding: 5px 10px;">
-      <img src="@/img/logo.png" alt="" class="logo2">
+    <div style="padding: 5px 10px">
+      <img src="@/img/logo.png" alt="" class="logo2" />
     </div>
-<!--    <div class="logo">DBApi</div>-->
+    <!--    <div class="logo">DBApi</div>-->
     <span class="version">{{ version }}</span>
     <div class="menus">
-      <div class="menu iconfont icon-database" @click="clickMenu('/datasource')">
-        {{ $t('m.datasource') }}
+      <div
+        class="menu iconfont icon-database"
+        @click="clickMenu('/datasource')"
+      >
+        {{ $t("m.datasource") }}
       </div>
-      <div class="menu iconfont icon-api" @click="clickMenu('/api')">
-        API
-      </div>
+      <div class="menu iconfont icon-api" @click="clickMenu('/api')">API</div>
       <div class="menu iconfont icon-quanxian" @click="clickMenu('/token')">
-        {{ $t('m.authority') }}
+        {{ $t("m.authority") }}
       </div>
       <div class="menu iconfont icon-shezhi">
-        {{ $t('m.settings') }}
+        {{ $t("m.settings") }}
         <div class="submenus">
-          <div class="submenu" @click="clickMenu('/setting/password')">{{ $t('m.change_pass') }}</div>
-          <div class="submenu" @click="clickMenu('/setting/firewall')">{{ $t('m.firewall') }}</div>
+          <div class="submenu" @click="clickMenu('/setting/password')">
+            {{ $t("m.change_pass") }}
+          </div>
+          <div class="submenu" @click="clickMenu('/setting/firewall')">
+            {{ $t("m.firewall") }}
+          </div>
         </div>
       </div>
       <div class="menu iconfont icon-api" @click="clickMenu('/monitor')">
-        {{ $t('m.monitor') }}
+        {{ $t("m.monitor") }}
       </div>
-
     </div>
     <div class="right">
       <span class="mode">{{ this.$store.state.mode }}</span>
-      <span>{{ languageName }}</span>
-      <span class="lang el-icon-arrow-down">
-            </span>
-      <div class="options">
-        <div class="option" v-for="item in langs" @click="changeLanguage(item)">{{ item.name }}</div>
+      <div class="langs">
+        <span>{{ languageName }}</span>
+        <span class="lang el-icon-arrow-down"></span>
+        <div class="options">
+          <div
+            class="option"
+            v-for="item in langs"
+            @click="changeLanguage(item)"
+          >
+            {{ item.name }}
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -44,45 +55,49 @@ export default {
   name: "homeHeader",
   data() {
     return {
-      langs: [{name: 'english', value: 'en'}, {name: '中文', value: 'cn'}],
+      langs: [
+        { name: "english", value: "en" },
+        { name: "中文", value: "cn" },
+      ],
       currentLang: this.$i18n.locale,
-      version: null
-    }
+      version: null,
+    };
   },
   methods: {
     clickMenu(data) {
-      this.$router.push(data)
+      this.$router.push(data);
     },
     changeLanguage(data) {
-      this.$i18n.locale = data.value
-      localStorage.setItem('locale', data.value)
-      this.currentLang = data.value
+      this.$i18n.locale = data.value;
+      localStorage.setItem("locale", data.value);
+      this.currentLang = data.value;
     },
     getVersion() {
-      this.axios.post("/system/version").then((response) => {
-        this.version = response.data
-      }).catch((error) => {
-
-      })
-    }
-
+      this.axios
+        .post("/system/version")
+        .then((response) => {
+          this.version = response.data;
+        })
+        .catch((error) => {});
+    },
   },
   created() {
-    this.getVersion()
+    this.getVersion();
   },
   computed: {
     languageName() {
-      const p = this.langs.filter(item => item.value === this.currentLang)[0].name
-      return p
-    }
-  }
-}
+      const p = this.langs.filter((item) => item.value === this.currentLang)[0]
+        .name;
+      return p;
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
 .head {
   display: flex;
-  background-color: #06B176;
+  background-color: #06b176;
   width: 100%;
   //box-shadow: 1px 1px 5px #72767b;
   .logo2 {
@@ -102,7 +117,7 @@ export default {
   }
 
   .menus {
-    background-color: #06B176;
+    background-color: #06b176;
     flex-shrink: 0;
     flex-grow: 1;
     display: flex;
@@ -125,7 +140,7 @@ export default {
         position: absolute;
         top: 60px;
         left: 0px;
-        background-color: #06B176;
+        background-color: #06b176;
         //padding: 0 10px;
         width: 200px;
 
@@ -140,7 +155,6 @@ export default {
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
-
 
           &:hover {
             background-color: #059463;
@@ -161,9 +175,9 @@ export default {
   .right {
     margin: 0 20px;
     flex-shrink: 0;
-    position: relative;
+    display: flex;
 
-    background-color: #06B176;
+    background-color: #06b176;
 
     .mode {
       font-family: Helvetica;
@@ -174,36 +188,39 @@ export default {
       //text-shadow: 2px 2px 1px #a5d4b7;
       line-height: 60px;
     }
+    .langs {
+      position: relative;
 
-    span {
-      cursor: pointer;
-      line-height: 60px;
-      font-size: 18px;
-      color: #fff;
-    }
-
-    .options {
-      position: absolute;
-      right: 0;
-      display: none;
-      background-color: #06B176;
-      color: #fff;
-
-      line-height: 30px;
-
-      .option {
+      span {
         cursor: pointer;
-        padding: 0 10px;
+        line-height: 60px;
+        font-size: 18px;
+        color: #fff;
+      }
 
-        &:hover {
-          background-color: #059463;
+      .options {
+        position: absolute;
+        right: 0;
+        display: none;
+        background-color: #06b176;
+        color: #fff;
+
+        line-height: 30px;
+
+        .option {
+          cursor: pointer;
+          padding: 0 10px;
+
+          &:hover {
+            background-color: #059463;
+          }
         }
       }
-    }
 
-    &:hover {
-      .options {
-        display: block;
+      &:hover {
+        .options {
+          display: block;
+        }
       }
     }
   }

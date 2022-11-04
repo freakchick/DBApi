@@ -31,6 +31,8 @@ const en = {
         ds_sql_tip: 'When you create or edit API, you should click to choose datasource, then this sql will be executed to query names of all tables',
         ds_driver_tip: 'If you choose other db,please make sure the corresponding jdbc driver jar exists.If not, you need to copy the jar file to lib/ directory.',
 
+        basic:'Basic Config',
+        advanced:'Advanced Config',
         create_api: 'New API',
         update_api: 'Modify API',
         api_detail: 'API Detail',
