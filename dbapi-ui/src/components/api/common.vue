@@ -164,7 +164,7 @@
 
           </el-form-item>
 
-          <el-form-item label="权限">
+          <el-form-item :label="$t('m.authority')">
             <el-radio-group v-model="detail.previlege">
               <el-radio :label="PREVILEGE.PRIVATE">{{ $t('m.private') }}</el-radio>
               <el-radio :label="PREVILEGE.PUBLIC">{{ $t('m.public') }}</el-radio>
@@ -412,10 +412,10 @@ export default {
         { label: "bigint", value: DATA_TYPE.BIGINT },
         { label: "double", value: DATA_TYPE.DOUBLE },
         { label: "date", value: DATA_TYPE.DATE },
-        { label: "string 数组", value: DATA_TYPE.ARRAY_STRING },
-        { label: "bigint 数组", value: DATA_TYPE.ARRAY_BIGINT },
-        { label: "double 数组", value: DATA_TYPE.ARRAY_DOUBLE },
-        { label: "date 数组", value: DATA_TYPE.ARRAY_DATE },
+        { label: "string array", value: DATA_TYPE.ARRAY_STRING },
+        { label: "bigint array", value: DATA_TYPE.ARRAY_BIGINT },
+        { label: "double array", value: DATA_TYPE.ARRAY_DOUBLE },
+        { label: "date array", value: DATA_TYPE.ARRAY_DATE },
       ],
       table: null,
       tables: [],

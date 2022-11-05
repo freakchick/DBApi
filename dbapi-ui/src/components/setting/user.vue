@@ -1,14 +1,14 @@
 <template>
   <div>
-    <h2>修改管理员密码</h2>
+    <h2>{{$t('m.change_pass')}}</h2>
     <div class="box">
       <div class="input">
-        <el-input v-model="password" placeholder="输入密码" type="password"></el-input>
+        <el-input v-model="password" :placeholder="$t('m.input_pwd')" type="password"></el-input>
       </div>
       <div class="input">
-        <el-input v-model="repassword" placeholder="请再次输入密码" type="password"></el-input>
+        <el-input v-model="repassword" :placeholder="$t('m.input_pwd_again')" type="password"></el-input>
       </div>
-      <el-button @click="resetPassword()">修改</el-button>
+      <el-button @click="resetPassword()">{{$t('m.save')}}</el-button>
     </div>
   </div>
 </template>

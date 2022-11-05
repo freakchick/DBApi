@@ -4,6 +4,7 @@ const cn = {
   m: {
     login: '登 录',
     cancel: '取消',
+    ok: '确定',
     export: '导出',
     datasource: '数据源',
     authority: '权限',
@@ -87,23 +88,23 @@ const cn = {
     plugin_param_desc: '插件参数描述',
     plugin_param: '插件参数',
     plugin_name: '插件名称',
-    alarm_plugin_warning:'填写“插件类名”表示对API失败告警，不填写表示失败不告警',
-    transform_plugin_warning:'填写“插件类名”表示对sql执行结果开启数据转换功能，不填写表示不转换。如果有多条sql，每个sql对应一个数据转换插件',
-    cache_plugin_warning:'填写“插件类名”表示对结果数据开启缓存，不填写表示不开启缓存',
+    alarm_plugin_warning: '填写“插件类名”表示对API失败告警，不填写表示失败不告警',
+    transform_plugin_warning: '填写“插件类名”表示对sql执行结果开启数据转换功能，不填写表示不转换。如果有多条sql，每个sql对应一个数据转换插件',
+    cache_plugin_warning: '填写“插件类名”表示对结果数据开启缓存，不填写表示不开启缓存',
 
-    create_token: '创建Token',
+    create_app: '创建应用',
     create_time: '创建时间',
     forever: '永久',
-    expire: '过期时间',
+    once: '单次有效',
+    token_expire_time: '过期时间',
     expired: '已过期',
-    token_tip: "请求私有接口时，需要把token值放入header的Authorization字段中携带，才可以访问成功。（如果是开放接口，不需要设置header）\n以python为例，访问api的代码示例如下：\n",
     generate: '自动生成',
     expire_tip: '不设置表示永久有效',
     grant: '授权该token访问以下分组的API',
-
+    token_tip:'请求私有接口时，需要把token值放入header的Authorization字段中携带，才可以访问成功。（如果是开放接口，不需要设置header）\n以python为例，访问api的代码示例如下：\n\n',
+    token_tip2:'token如何获取？\n使用appid和secret访问以下接口来获取token\n\n',
     firewall: '防火墙',
-    on: '开启',
-    off: '关闭',
+    
     mode: '模式',
     black_list: '黑名单',
     white_list: '白名单',
@@ -114,7 +115,11 @@ const cn = {
     white_tip: '只有白名单列表中的IP才允许访问API，其他IP一律禁止访问',
     ip_list_tip: '每行填写一个ip，多个ip用换行符隔开',
 
-    change_pass: '修改密码',
+    change_pass: '修改管理员密码',
+    input_pwd:'请输入密码',
+    input_pwd_again:'请再次输入密码',
+
+
     monitor: '监控',
     detail: '详情',
     query: '查询',

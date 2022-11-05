@@ -3,6 +3,7 @@ const en = {
     m: {
         login: 'Login',
         cancel: 'Cancel',
+        ok: 'OK',
         export: 'Export',
         datasource: 'Datasource',
         authority: 'Authority',
@@ -86,24 +87,24 @@ const en = {
         plugin_param_desc: 'Plugin Param Description',
         plugin_param: 'Plugin Params',
         plugin_name: 'Plugin Name',
-        alarm_plugin_warning:'If choosed means alram when API failed, else means no alarm',
-        transform_plugin_warning:'If choosed means transform data,else means not transform.If multiple sqls, one sql corresponds to one transform plugin',
-        cache_plugin_warning:'If choosed means open cache,else means no cache used',
-        
+        alarm_plugin_warning: 'If choosed means alram when API failed, else means no alarm',
+        transform_plugin_warning: 'If choosed means transform data,else means not transform.If multiple sqls, one sql corresponds to one transform plugin',
+        cache_plugin_warning: 'If choosed means open cache,else means no cache used',
 
-        create_token: 'New Token',
+
+        create_app: 'New APP',
         create_time: 'Create Time',
         forever: 'Forever',
-        expire: 'Expiration Time',
+        once: 'Once',
+        token_expire_time: 'Token Expire Time',
         expired: 'Expired',
-        token_tip: "Private API can only be accessed with token in http request header('Authorization' field).\nPython code example is as follows:\n",
         generate: 'Generate Automatically',
         expire_tip: 'If set null, means forever',
         grant: 'Grant access rights to APIs of selected groups',
-
+        token_tip:'When access private API,token needed in http header with Authorization field(If public API,no need).\nFor example, python code:\n\n',
+        token_tip2:'How to get token?\nUse Api as follows with you appid and secret:\n\n',
         firewall: 'IP Firewall',
-        on: 'ON',
-        off: 'OFF',
+        
         mode: 'Mode',
         black_list: 'Black List',
         white_list: 'White List',
@@ -114,8 +115,9 @@ const en = {
         white_tip: 'Only IP in white list can access',
         ip_list_tip: 'Input one IP in one line, multi ip must in multi lines',
 
-        change_pass: 'Change Password',
-
+        change_pass: 'Change Admin Password',
+        input_pwd:'Please input password',
+        input_pwd_again:'Please input password again',
         monitor: 'Monitor',
         summary: 'Summary',
         detail: 'Detail',
