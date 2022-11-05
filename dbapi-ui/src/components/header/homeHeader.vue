@@ -34,12 +34,14 @@
     <div class="right">
       <span class="mode">{{ this.$store.state.mode }}</span>
       <div class="langs">
-        <span style="font-size: 14px">{{ languageName }}</span>
+        <span style="font-size: 14px" @click="showLangs">{{
+          languageName
+        }}</span>
         <span class="lang el-icon-arrow-down"></span>
-        <div class="options">
+        <div class="options" v-show="visiable">
           <div
-            class="option"
-            v-for="item in langs"
+            class="option" :key="index"
+            v-for="(item,index) in langs"
             @click="changeLanguage(item)"
           >
             {{ item.name }}
@@ -56,18 +58,26 @@ export default {
   data() {
     return {
       langs: [
-        { name: "english", value: "en" },
+        { name: "English", value: "en" },
         { name: "中文", value: "cn" },
       ],
       currentLang: this.$i18n.locale,
       version: null,
+      visiable: false,
     };
   },
   methods: {
+    showLangs() {
+      this.visiable = true;
+    },
+    hideLangs() {
+      this.visiable = false;
+    },
     clickMenu(data) {
       this.$router.push(data);
     },
     changeLanguage(data) {
+      this.visiable = false;
       this.$i18n.locale = data.value;
       localStorage.setItem("locale", data.value);
       this.currentLang = data.value;
@@ -199,9 +209,10 @@ export default {
       }
 
       .options {
+        z-index: 1000;
         position: absolute;
         right: 0;
-        display: none;
+        // display: none;
         background-color: #06b176;
         color: #fff;
 
@@ -214,12 +225,6 @@ export default {
           &:hover {
             background-color: #059463;
           }
-        }
-      }
-
-      &:hover {
-        .options {
-          display: block;
         }
       }
     }

@@ -33,10 +33,10 @@ export default {
         "driver": data.driver,
         "tableSql": data.tableSql
       }).then((response) => {
-        this.$message.success("修改成功")
+        this.$message.success("Success")
         this.$router.push("/datasource")
       }).catch((error) => {
-        this.$message.error("修改失败")
+        this.$message.error("Failed")
       })
     }
   },

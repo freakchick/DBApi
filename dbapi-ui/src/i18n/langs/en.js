@@ -91,6 +91,12 @@ const en = {
         transform_plugin_warning: 'If choosed means transform data,else means not transform.If multiple sqls, one sql corresponds to one transform plugin',
         cache_plugin_warning: 'If choosed means open cache,else means no cache used',
 
+        run_sql: 'Run SQL',
+        run_selected_sql: 'Run Selected SQL',
+        parse_sql: 'Parse SQL',
+        format: 'Format',
+        sql_param: 'SQL Params',
+        sql_param_tip: 'Please input params with json format',
 
         create_app: 'New APP',
         create_time: 'Create Time',
@@ -101,10 +107,15 @@ const en = {
         generate: 'Generate Automatically',
         expire_tip: 'If set null, means forever',
         grant: 'Grant access rights to APIs of selected groups',
-        token_tip:'When access private API,token needed in http header with Authorization field(If public API,no need).\nFor example, python code:\n\n',
-        token_tip2:'How to get token?\nUse Api as follows with you appid and secret:\n\n',
+        token_tip: 'When request private API,token needed in http header with Authorization field(If public API,no need).\nFor example, python code:\n\n',
+        token_tip2: 'How to get token?\nRequest Api as follows with you appid and secret:\n\n',
         firewall: 'IP Firewall',
-        
+
+        request_test: 'Request Test',
+        request_tip1: 'Please get token with your appid and secret, private API need token',
+        request_tip2: '',
+        no_data: 'No Data',
+
         mode: 'Mode',
         black_list: 'Black List',
         white_list: 'White List',
@@ -116,8 +127,8 @@ const en = {
         ip_list_tip: 'Input one IP in one line, multi ip must in multi lines',
 
         change_pass: 'Change Admin Password',
-        input_pwd:'Please input password',
-        input_pwd_again:'Please input password again',
+        input_pwd: 'Please input password',
+        input_pwd_again: 'Please input password again',
         monitor: 'Monitor',
         summary: 'Summary',
         detail: 'Detail',

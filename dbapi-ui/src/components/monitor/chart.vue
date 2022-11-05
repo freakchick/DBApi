@@ -59,7 +59,7 @@ export default {
       pickerOptions: {
         shortcuts: [
           {
-            text: 'Last Week',
+            text: this.$t('m.lastWeek'),
             onClick(picker) {
               const end = new Date();
               const start = new Date();
@@ -68,7 +68,7 @@ export default {
             },
           },
           {
-            text: "Last Month",
+            text: this.$t('m.lastMonth'),
             onClick(picker) {
               const end = new Date();
               const start = new Date();
@@ -77,7 +77,7 @@ export default {
             },
           },
           {
-            text: "Last 3 Months",
+            text: this.$t('m.last3Month'),
             onClick(picker) {
               const end = new Date();
               const start = new Date();

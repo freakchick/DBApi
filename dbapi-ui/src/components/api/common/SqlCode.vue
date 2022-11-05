@@ -49,19 +49,19 @@
             <div
               class="item"
               @click="run(false)"
-            ><i class="iconfont icon-play"></i><span>运行SQL</span></div>
+            ><i class="iconfont icon-play"></i><span>{{$t('m.run_sql')}}</span></div>
             <div
               class="item"
               @click="run(true)"
-            ><i class="iconfont icon-play"></i><span>运行选中SQL</span></div>
+            ><i class="iconfont icon-play"></i><span>{{$t('m.run_selected_sql')}}</span></div>
             <div
               class="item"
               @click="parseSql"
-            ><i class="iconfont icon-play"></i><span>解析动态SQL</span></div>
+            ><i class="iconfont icon-play"></i><span>{{$t('m.parse_sql')}}</span></div>
             <div
               class="item"
               @click="formatSql"
-            ><i class="iconfont icon-play"></i><span>格式化SQL</span></div>
+            ><i class="iconfont icon-play"></i><span>{{$t('m.format')}}</span></div>
           </div>
         </div>
         <div class="quick">
@@ -136,13 +136,13 @@
           </div>
         </div>
         <div class="params">
-          <div style="display: inline-block">参数设置：</div>
+          <div style="display: inline-block">{{$t('m.sql_param')}}：</div>
           <el-tooltip
             placement="top-start"
             effect="dark"
           >
             <div slot="content">
-              填写sql运行需要的参数值，拼接成json格式
+              {{$t('m.sql_param_tip')}}
             </div>
             <i
               class="el-icon-info tip"
@@ -159,7 +159,7 @@
           <el-button
             @click="formatJson"
             size="mini"
-          >json格式化</el-button>
+          >{{$t('m.format')}}</el-button>
         </div>
       </div>
       <div class="result">
@@ -199,7 +199,7 @@
               v-for="item in Object.keys(resultList[0])"
             ></el-table-column>
           </el-table>
-          <div v-if="resultList != null && resultList.length == 0">查询结果为空</div>
+          <div v-if="resultList != null && resultList.length == 0">No Result</div>
         </div>
       </div>
     </div>
@@ -288,7 +288,7 @@ export default {
     },
     run(selected) {
       if (this.datasourceId == null) {
-        this.$message.error("请先选择数据源")
+        this.$message.error("Please select datasource")
         return
       }
       let sql
@@ -298,7 +298,7 @@ export default {
         sql = this.$store.getters.currentCm(this.currentIndex).getValue()
       }
       if (sql == null || sql.trim() == '') {
-        this.$message.error("请先输入sql")
+        this.$message.error("Please Input sql")
         return
       }
       this.resultList = null
@@ -351,7 +351,7 @@ export default {
       this.axios.post("/datasource/getAll").then((response) => {
         this.datasources = response.data
       }).catch((error) => {
-        this.$message.error("查询所有数据源失败")
+        this.$message.error("Get all datasources Failed")
       })
     },
     getTables(datasourceId) {
@@ -366,7 +366,7 @@ export default {
         // this.cmOptions.hintOptions.tables = hints
 
       }).catch((error) => {
-        this.$message.error("查询所有表名称失败；但不影响使用！")
+        // this.$message.error("查询所有表名称失败；但不影响使用！")
       })
     },
     removeTab(index) {

@@ -5,9 +5,9 @@
       v-model="time"
       type="datetimerange"
       :picker-options="pickerOptions"
-      range-separator="至"
-      start-placeholder="开始日期"
-      end-placeholder="结束日期"
+      :range-separator="$t('m.to')"
+      :start-placeholder="$t('m.startDate')"
+      :end-placeholder="$t('m.endDate')"
       align="right"
     >
     </el-date-picker>
@@ -26,7 +26,7 @@
       <template slot="prepend">IP:</template>
     </el-input>
 
-    <el-button size="mini" @click="query">{{$t('m.query')}}</el-button>
+    <el-button size="mini" @click="query">{{ $t("m.query") }}</el-button>
 
     <el-divider></el-divider>
 
@@ -36,12 +36,12 @@
           <span>{{ scope.row.timestamp | dateFormat }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="url" label="url"></el-table-column>
-      <el-table-column prop="duration" label="duration(ms)"></el-table-column>
+      <el-table-column prop="url" label="URL"></el-table-column>
+      <el-table-column prop="duration" label="Duration(ms)"></el-table-column>
       <el-table-column prop="status" label="Response Code"></el-table-column>
       <el-table-column prop="appId" label="appId"></el-table-column>
-      <el-table-column prop="IP" label="ip"></el-table-column>
-      <el-table-column prop="error" label="error"></el-table-column>
+      <el-table-column prop="IP" label="IP"></el-table-column>
+      <el-table-column prop="error" label="Error"></el-table-column>
     </el-table>
   </div>
 </template>
@@ -54,7 +54,7 @@ export default {
       pickerOptions: {
         shortcuts: [
           {
-            text: "最近一周",
+            text: this.$t('m.lastWeek'),
             onClick(picker) {
               const end = new Date();
               const start = new Date();
@@ -63,7 +63,7 @@ export default {
             },
           },
           {
-            text: "最近一个月",
+            text: this.$t('m.lastMonth'),
             onClick(picker) {
               const end = new Date();
               const start = new Date();
@@ -72,7 +72,7 @@ export default {
             },
           },
           {
-            text: "最近三个月",
+            text: this.$t('m.last3Month'),
             onClick(picker) {
               const end = new Date();
               const start = new Date();

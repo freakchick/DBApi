@@ -58,7 +58,7 @@ export default {
       options: [{label: 'mysql', value: 'mysql'}, {label: 'postgresql',value: 'postgresql'}, {label: 'hive',value: 'hive'},
         {label: 'sqlserver',value: 'sqlserver'}, {label: 'clickhouse',value: 'clickhouse'}, {label: 'kylin',value: 'kylin'},
          {label: 'oracle',value: 'oracle'}, {label: 'TDengine',value: 'TDengine'},
-        {label: 'doris',value: 'doris'},{label: '其他',value:'others'}],
+        {label: 'doris',value: 'doris'},{label: 'others',value:'others'}],
       detail: {
         url: null,
         name: null,

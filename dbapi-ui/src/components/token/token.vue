@@ -112,7 +112,7 @@ export default {
   methods: {
     createApp() {
       this.axios.post("/app/create", this.app).then((response) => {
-        const msg = `创建应用成功！请妥善保存:<br/><br/>appid = ${response.data.id}<br/>secret = ${response.data.secret}`
+        const msg = `Created！Please save:<br/><br/>appid = ${response.data.id}<br/>secret = ${response.data.secret}`
         this.$message.success({
 
           dangerouslyUseHTMLString: true,

@@ -25,16 +25,16 @@ export default {
   methods:{
     resetPassword(){
       if (this.password !== this.repassword){
-        this.$message.error("两次输入的密码不一样！")
+        this.$message.error("The passwords entered twice are different！")
         return
       }
       if (this.password == '' || this.password == null){
-        this.$message.warning("请输入密码！")
+        this.$message.warning("Please input password！")
         return
       }
 
       this.axios.post("/user/resetPassword", {password: this.password}).then((response) => {
-        this.$message.success("修改成功")
+        this.$message.success("Success")
       }).catch((error) => {
         this.$message.error(error)
       })

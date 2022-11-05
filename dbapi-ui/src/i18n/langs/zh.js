@@ -92,6 +92,13 @@ const cn = {
     transform_plugin_warning: '填写“插件类名”表示对sql执行结果开启数据转换功能，不填写表示不转换。如果有多条sql，每个sql对应一个数据转换插件',
     cache_plugin_warning: '填写“插件类名”表示对结果数据开启缓存，不填写表示不开启缓存',
 
+    run_sql: '运行SQL',
+    run_selected_sql: '运行选中SQL',
+    parse_sql: '解析SQL',
+    format: '格式化',
+    sql_param:'SQL参数设置',
+    sql_param_tip: '填写sql运行需要的参数值，拼接成json格式',
+
     create_app: '创建应用',
     create_time: '创建时间',
     forever: '永久',
@@ -101,10 +108,12 @@ const cn = {
     generate: '自动生成',
     expire_tip: '不设置表示永久有效',
     grant: '授权该token访问以下分组的API',
-    token_tip:'请求私有接口时，需要把token值放入header的Authorization字段中携带，才可以访问成功。（如果是开放接口，不需要设置header）\n以python为例，访问api的代码示例如下：\n\n',
-    token_tip2:'token如何获取？\n使用appid和secret访问以下接口来获取token\n\n',
+    token_tip: '请求私有接口时，需要把token值放入header的Authorization字段中携带，才可以访问成功。（如果是开放接口，不需要设置header）\n以python为例，访问api的代码示例如下：\n\n',
+    token_tip2: 'token如何获取？\n使用appid和secret访问以下接口来获取token\n\n',
     firewall: '防火墙',
-    
+
+    no_data:'暂无数据',
+
     mode: '模式',
     black_list: '黑名单',
     white_list: '白名单',
@@ -116,8 +125,8 @@ const cn = {
     ip_list_tip: '每行填写一个ip，多个ip用换行符隔开',
 
     change_pass: '修改管理员密码',
-    input_pwd:'请输入密码',
-    input_pwd_again:'请再次输入密码',
+    input_pwd: '请输入密码',
+    input_pwd_again: '请再次输入密码',
 
 
     monitor: '监控',

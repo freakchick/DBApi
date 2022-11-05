@@ -387,7 +387,7 @@ export default {
       datasources: [],
       address: null,
       show: false,
-      groups: [{ label: "姓名", value: "name" }],
+      groups: [],
       dialogVisible: false,
       detail: {
         name: null,

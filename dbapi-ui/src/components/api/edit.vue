@@ -46,7 +46,7 @@ export default {
       // console.log(detail)
       if (p.sql == "" || p.datasourceId == null || p.name == null
           || p.path == null || p.groupId == null) {
-        this.$message.error("必填项未填")
+        this.$message.error("Something Required!")
         return
       }
 
@@ -61,7 +61,7 @@ export default {
         }
 
       }).catch((error) => {
-        this.$message.error("失败")
+        this.$message.error("Failed")
       })
     }
   },
