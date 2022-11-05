@@ -20,7 +20,7 @@ export default new Vuex.Store({
             state.labelSeq += 1
             state.sqls.push({
                 id: state.seq,
-                sqlText: '-- 请输入sql，一个标签只能输入一条sql',
+                sqlText: '-- only one sql in one tab',
                 transformPlugin: null,
                 transformPluginParams: null,
                 label: state.labelSeq

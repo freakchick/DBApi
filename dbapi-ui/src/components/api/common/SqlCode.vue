@@ -130,7 +130,7 @@
             >
               <div class="text">
                 <i class="el-icon-circle-plus"></i>
-                添加
+                Add
               </div>
             </div>
           </div>

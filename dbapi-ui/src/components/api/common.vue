@@ -59,19 +59,17 @@
               effect="dark"
             >
               <div slot="content">
-                <p>
-                  对于application/x-www-form-urlencoded类型的API，用户在请求该API的时候既可以使用application/x-www-form-urlencoded，也可以使用application/json</p>
-                <p>对于application/json类型的API，用户在请求该API的时候只能使用application/json</p>
+                <p>{{$t('m.content_type_info')}}</p>
               </div>
               <i class="el-icon-info tip"></i>
             </el-tooltip>
 
           </el-form-item>
 
-          <el-form-item label="参数">
+          <el-form-item :label="$t('m.parameters')">
             <div slot="label">
-              <span v-show="detail.contentType == CONTENT_TYPE.FORM_URLENCODED">请求参数</span>
-              <span v-show="detail.contentType == CONTENT_TYPE.JSON">请求参数示例</span>
+              <span v-show="detail.contentType == CONTENT_TYPE.FORM_URLENCODED">{{$t('m.request_params')}}</span>
+              <span v-show="detail.contentType == CONTENT_TYPE.JSON">{{$t('m.request_param_demo')}}</span>
             </div>
             <div v-show="detail.contentType == CONTENT_TYPE.FORM_URLENCODED">
 
@@ -81,11 +79,11 @@
                 stripe
                 max-height="700"
                 size="mini"
-                empty-text="暂无参数"
+                :empty-text="$t('m.no_param')"
               >
                 <el-table-column
                   prop="name"
-                  label="参数名称"
+                  :label="$t('m.name')"
                   width="220px"
                 >
                   <template slot-scope="scope">
@@ -96,7 +94,7 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  label="参数类型"
+                  :label="$t('m.type')"
                   width="220px"
                 >
                   <template slot-scope="scope">
@@ -114,20 +112,16 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  label="参数说明"
+                  :label="$t('m.description')"
                   width="300px"
                 >
                   <template slot-scope="scope">
                     <el-input v-model="scope.row.note"></el-input>
                   </template>
                 </el-table-column>
-                <!--                <el-table-column label="默认值" width="300px">
-                                  <template slot-scope="scope">
-                                    <el-input v-model="scope.row.defaultValue"></el-input>
-                                  </template>
-                                </el-table-column>-->
+           
                 <el-table-column
-                  label="操作"
+                  :label="$t('m.operation')"
                   width="100px"
                 >
                   <template slot-scope="scope">
@@ -155,7 +149,7 @@
             >
               <el-input
                 v-model="detail.jsonParam"
-                placeholder="填写json参数示例，用于生成接口文档"
+                :placeholder="$t('m.param_demo_placeholder')"
                 type="textarea"
                 rows="6"
               ></el-input>
@@ -163,9 +157,7 @@
                 placement="top-start"
                 effect="dark"
               >
-                <div slot="content">
-                  对于application/json类型的API，这个参数示例仅用来生成接口文档，方便调用API的用户查看接口的json参数格式
-                </div>
+                <div slot="content">{{$t('m.app_json_tip')}}</div>
                 <i class="el-icon-info tip"></i>
               </el-tooltip>
             </div>
@@ -196,17 +188,17 @@
           label-width="100px"
           label-position="left"
         >
-          <el-form-item label="事务">
+          <el-form-item :label="$t('m.transaction')">
             <el-radio-group v-model="detail.openTrans">
-              <el-radio :label="1">开启</el-radio>
-              <el-radio :label="0">关闭</el-radio>
+              <el-radio :label="1">{{$t('m.on')}}</el-radio>
+              <el-radio :label="0">{{$t('m.off')}}</el-radio>
             </el-radio-group>
             <el-tooltip
               placement="top-start"
               effect="dark"
             >
               <div slot="content">
-                开启事务后，如果有多条SQL，多条SQL将在同一个事务内执行
+                {{$t('m.transaction_tip')}}
               </div>
               <i class="el-icon-info tip"></i>
             </el-tooltip>
@@ -216,20 +208,19 @@
               v-show="detail.openTrans == 1"
             >
 
-              <p>注意如果是hive等不支持事务的数据库，不要开启事务</p>
+              <p>{{$t('m.transaction_warning')}}</p>
             </el-alert>
           </el-form-item>
-          <el-form-item :label="$t('m.data_convert')">
+          <el-form-item :label="$t('m.transform')">
             <div v-for="(item,index) in this.$store.state.sqls">
               <span>sql-{{ item.label }} : </span>
-              <span class="label">插件类名</span>
+              <span class="label">{{$t('m.plugin_name')}}</span>
               <el-select
                 v-model="item.transformPlugin"
                 style="width:400px"
-                placeholder="请选择数据转换插件java类名"
                 clearable
                 @clear="clearTransPluginParam(index)"
-                no-data-text="暂无插件"
+                :no-data-text="$t('m.no_plugin')"
               >
 
                 <el-option
@@ -243,8 +234,8 @@
                       effect="dark"
                     >
                       <div slot="content">
-                        <div>插件描述：{{ op.description }}</div>
-                        <div>插件参数描述：{{ op.paramDescription }}</div>
+                        <div>{{$t('m.plugin_desc')}}：{{ op.description }}</div>
+                        <div>{{$t('m.plugin_param_desc')}}：{{ op.paramDescription }}</div>
                       </div>
                       <div>
                         <span>{{ op.className }}</span>
@@ -254,9 +245,8 @@
                   </div>
                 </el-option>
               </el-select>
-              <span class="label">插件参数</span>
+              <span class="label">{{$t('m.plugin_param')}}</span>
               <el-input
-                placeholder="请输入数据转换插件参数"
                 v-model="item.transformPluginParams"
                 style="width:400px"
               ></el-input>
@@ -266,20 +256,18 @@
               type="warning"
               show-icon
             >
-              填写“插件类名”表示对sql执行结果开启数据转换功能，不填写表示不转换。
-              如果有多条sql，每个sql对应一个数据转换插件
+              {{$t('m.transform_plugin_warning')}}
             </el-alert>
 
           </el-form-item>
           <el-form-item :label="$t('m.cache')">
-            <span class="label">插件类名</span>
+            <span class="label">{{$t('m.plugin_name')}}</span>
             <el-select
               v-model="detail.cachePlugin"
               style="width:400px"
-              placeholder="请选择缓存插件java类名"
               clearable
               @clear="clearCachePluginParam()"
-              no-data-text="暂无插件"
+              :no-data-text="$t('m.no_plugin')"
             >
               <el-option
                 v-for="item in cachePlugins"
@@ -291,8 +279,8 @@
                     effect="dark"
                   >
                     <div slot="content">
-                      <div>插件描述：{{ item.description }}</div>
-                      <div>插件参数描述：{{ item.paramDescription }}</div>
+                      <div>{{$t('m.plugin_desc')}}：{{ item.description }}</div>
+                      <div>{{$t('m.plugin_param_desc')}}：{{ item.paramDescription }}</div>
                     </div>
                     <div>
                       <span>{{ item.className }}</span>
@@ -303,9 +291,8 @@
 
               </el-option>
             </el-select>
-            <span class="label">插件参数</span>
+            <span class="label">{{$t('m.plugin_param')}}</span>
             <el-input
-              placeholder="请输入缓存插件参数"
               v-model="detail.cachePluginParams"
               style="width:400px"
             ></el-input>
@@ -313,19 +300,19 @@
               type="warning"
               show-icon
             >
-              填写“插件类名”表示对结果数据开启缓存，不填写表示不开启缓存
+              {{$t('m.cache_plugin_warning')}}
             </el-alert>
 
           </el-form-item>
-          <el-form-item label="失败告警">
-            <span class="label">插件类名</span>
+          <el-form-item :label="$t('m.alarm')">
+            <span class="label">{{$t('m.plugin_name')}}</span>
             <el-select
               v-model="detail.alarmPlugin"
               style="width:400px"
-              placeholder="请选择告警插件java类名"
+              
               clearable
               @clear="clearAlarmPluginParam()"
-              no-data-text="暂无插件"
+              :no-data-text="$t('m.no_plugin')"
             >
               <el-option
                 v-for="item in alarmPlugins"
@@ -338,8 +325,8 @@
                     effect="dark"
                   >
                     <div slot="content">
-                      <div>插件描述：{{ item.description }}</div>
-                      <div>插件参数描述：{{ item.paramDescription }}</div>
+                      <div>{{$t('m.plugin_param')}}：{{ item.description }}</div>
+                      <div>{{$t('m.plugin_param_desc')}}：{{ item.paramDescription }}</div>
                     </div>
                     <div>
                       <span>{{ item.className }}</span>
@@ -349,7 +336,7 @@
                 </div>
               </el-option>
             </el-select>
-            <span class="label">插件参数</span>
+            <span class="label">{{$t('m.plugin_param')}}</span>
 
             <el-input
               v-model="detail.alarmPluginParam"
@@ -359,21 +346,21 @@
               type="warning"
               show-icon
             >
-              填写“插件类名”表示对API失败告警，不填写表示失败不告警
+              {{$t('m.alarm_plugin_warning')}}
             </el-alert>
           </el-form-item>
           <div>
             <a
               class="el-icon-question"
               target="_blank"
-              href="https://gitee.com/freakchicken/db-api/blob/dev/dbapi-assembly/docs/instruction.md#%E6%8F%92%E4%BB%B6"
+              href="http://51dbapi.com/zh/plugin"
             >{{
                 $t('m.what_is_plugin')
               }}</a>
             <a
               class="el-icon-question"
               target="_blank"
-              href="https://gitee.com/freakchicken/db-api/blob/dev/dbapi-assembly/docs/plugin%20development.md#242-%E5%B1%80%E9%83%A8%E5%8F%82%E6%95%B0"
+              href="http://51dbapi.com/zh/plugin/#%E5%B1%80%E9%83%A8%E5%8F%82%E6%95%B0"
             >{{
                 $t('m.what_is_plugin_param')
               }}</a>
@@ -544,7 +531,7 @@ export default {
     else {
       this.$store.commit("initSqls", [
         {
-          sqlText: "-- 请输入sql，一个标签只能输入一条sql",
+          sqlText: "-- only one sql in one tab",
           transformPlugin: null,
           transformPluginParams: null,
         },

@@ -167,12 +167,12 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="事务"
-          width="60"
+          :label="$t('m.transaction')"
+          width="160"
         >
           <template slot-scope="scope">
-            <span v-if="scope.row.openTrans == 1">开启</span>
-            <span v-if="scope.row.openTrans == 0">关闭</span>
+            <span v-if="scope.row.openTrans == 1">{{$t('m.on')}}</span>
+            <span v-if="scope.row.openTrans == 0">{{$t('m.off')}}</span>
           </template>
         </el-table-column>
         <el-table-column
