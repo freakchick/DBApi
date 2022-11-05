@@ -71,8 +71,8 @@ print(re.text)
             <el-radio-button label="1hour">1hour</el-radio-button>
             <el-radio-button label="1day">1day</el-radio-button>
             <el-radio-button label="30day">30day</el-radio-button>
-            <el-radio-button :label="once">{{$t('m.once')}}</el-radio-button>
-            <el-radio-button :label="forever">{{$t('m.forever')}}</el-radio-button>
+            <el-radio-button label="once">{{$t('m.once')}}</el-radio-button>
+            <el-radio-button label="forever">{{$t('m.forever')}}</el-radio-button>
             <!--            <el-radio-button label="300">5min</el-radio-button>-->
             <!--            <el-radio-button label="3600">1hour</el-radio-button>-->
             <!--            <el-radio-button label="86400">1day</el-radio-button>-->

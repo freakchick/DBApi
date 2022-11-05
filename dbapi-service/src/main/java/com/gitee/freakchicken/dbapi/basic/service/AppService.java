@@ -41,9 +41,9 @@ public class AppService {
             app.setExpireDuration(60 * 60 * 24);
         } else if (app.getExpireDesc().equals("30day")) {
             app.setExpireDuration(60 * 60 * 24 * 30);
-        } else if (app.getExpireDesc().equals("单次有效")) {
+        } else if (app.getExpireDesc().equals("once")) {
             app.setExpireDuration(0);
-        } else if (app.getExpireDesc().equals("永久有效")) {
+        } else if (app.getExpireDesc().equals("forever")) {
             app.setExpireDuration(-1);
         }
 
