@@ -4,27 +4,27 @@
     </el-button>
     <h2>{{ $t('m.request_test') }}</h2>
     <el-tabs tab-position="top" type="border-card" @tab-click="handleTabClick">
-      <el-tab-pane label="接口测试">
+      <el-tab-pane :label="$t('m.request_test')">
         <div class="mycontent">
           <div v-show="previlege == PREVILEGE.PRIVATE">
-            <h2>申请token</h2>
+            <h2>{{ $t('m.get_token') }}</h2>
             <el-input v-model="tokenUrl">
               <el-button slot="append" icon="el-icon-caret-right" @click="getToken"></el-button>
             </el-input>
-            <el-alert type="info" show-icon title="请使用您的应用id（appid）和密钥（secret）来申请token，访问私有接口需要使用token"></el-alert>
+            <el-alert type="info" show-icon :title="$t('m.request_tip')"></el-alert>
             <el-alert type="warning" show-icon v-show="this.$store.state.mode == 'cluster' || this.$store.state.mode == 'cluster in docker' "
-                      title="如果是外网访问请将网关地址设置为外网IP端口"
+                      :title="$t('m.ip_tip')"
                       style="margin-top: 10px;">
             </el-alert>
           </div>
 
-          <h2>访问接口</h2>
+          <h2>{{ $t('m.request') }}</h2>
 
           <h4>{{ $t('m.url') }}：</h4>
           <el-input v-model="url"></el-input>
 
           <el-alert type="warning" show-icon v-show="this.$store.state.mode == 'cluster' || this.$store.state.mode == 'cluster in docker' "
-                    title="如果是外网访问请将网关地址设置为外网IP端口"
+                    :title="$t('m.ip_tip')"
                     style="margin-top: 10px;">
           </el-alert>
           <h4>Header：</h4>
@@ -34,13 +34,13 @@
               <el-input v-model="contentType" disabled></el-input>
             </el-form-item>
             <el-form-item label="Authorization" v-show="previlege == PREVILEGE.PRIVATE">
-              <el-input v-model="token" placeholder="请填入token"></el-input>
+              <el-input v-model="token" :placeholder="$t('m.input_token')"></el-input>
             </el-form-item>
           </el-form>
 
           <h4>{{ $t('m.parameters') }}：</h4>
           <div class="textarea">
-            <el-input v-model="jsonParam" placeholder="填写json参数" type="textarea" rows="10"
+            <el-input v-model="jsonParam" :placeholder="$t('m.input_json_param')" type="textarea" rows="10"
                       v-show="contentType === CONTENT_TYPE.JSON"></el-input>
           </div>
           <el-form

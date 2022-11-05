@@ -96,7 +96,7 @@ const cn = {
     run_selected_sql: '运行选中SQL',
     parse_sql: '解析SQL',
     format: '格式化',
-    sql_param:'SQL参数设置',
+    sql_param: 'SQL参数设置',
     sql_param_tip: '填写sql运行需要的参数值，拼接成json格式',
 
     create_app: '创建应用',
@@ -112,7 +112,18 @@ const cn = {
     token_tip2: 'token如何获取？\n使用appid和secret访问以下接口来获取token\n\n',
     firewall: '防火墙',
 
-    no_data:'暂无数据',
+    request_test: '请求测试',
+    request_tip: '请使用您的应用id（appid）和密钥（secret）来申请token，访问私有接口需要使用token',
+    ip_tip: '如果是外网访问请将网关地址设置为外网IP端口',
+    get_token: '申请Token',
+    input_token:'请填入token',
+    request: '访问接口',
+    request_demo:'调用示例',
+    input_json_param:'输入json参数',
+
+    no_data: '暂无数据',
+    
+
 
     mode: '模式',
     black_list: '黑名单',
@@ -120,6 +131,8 @@ const cn = {
     ip_list: 'IP名单',
     status: 'IP防火墙状态',
     firewall_settings: 'IP防火墙设置',
+
+
     black_tip: '除了黑名单列表中的IP禁止访问API，其他IP一律允许访问',
     white_tip: '只有白名单列表中的IP才允许访问API，其他IP一律禁止访问',
     ip_list_tip: '每行填写一个ip，多个ip用换行符隔开',

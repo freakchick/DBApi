@@ -112,9 +112,16 @@ const en = {
         firewall: 'IP Firewall',
 
         request_test: 'Request Test',
-        request_tip1: 'Please get token with your appid and secret, private API need token',
-        request_tip2: '',
+        request_tip: 'Please get token with your appid and secret, private API needs token',
+        ip_tip: 'Please update IP to external network IP',
+        get_token: 'Get Token',
+        input_token:'Please input token',
+        request: 'Request',
+        request_demo:'Code Demo',
+        input_json_param:'Input Json Parameters',
+
         no_data: 'No Data',
+        
 
         mode: 'Mode',
         black_list: 'Black List',
