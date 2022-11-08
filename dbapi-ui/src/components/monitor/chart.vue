@@ -91,7 +91,7 @@ export default {
 
       pieData: {
         title: {
-          text: "API访问总量",
+          text: this.$t('m.api_access_quantity'),
           left: "center",
         },
         tooltip: {
@@ -108,8 +108,7 @@ export default {
             type: "pie",
             radius: "50%",
             data: [
-              {value: 1048, name: "Success"},
-              {value: 735, name: "Fail"}
+              
             ],
             emphasis: {
               itemStyle: {
@@ -123,7 +122,7 @@ export default {
       },
       lineData: {
         title: {
-          text: "API Access Trend",
+          text: this.$t('m.api_access_trend'),
           left: "center",
         },
         color: ["#99CC66", "#FF6666"],
@@ -192,7 +191,7 @@ export default {
       },
       data3: {
         title: {
-          text: "Top 10 App",
+          text: this.$t('m.top_n_app'),
           left: "center",
         },
         color: ['#33CC99'],
@@ -227,7 +226,7 @@ export default {
       },
       data4: {
         title: {
-          text: "Top 10 API",
+          text: this.$t('m.top_n_api'),
           left: "center",
         },
         color: ['#66CCCC'],
@@ -262,7 +261,7 @@ export default {
       },
       data5: {
         title: {
-          text: "Top 10 API of longest duration",
+          text: this.$t('m.top_n_duration'),
           left: "center",
         },
         color: ['#FF9900'],
@@ -297,7 +296,7 @@ export default {
       },
       data6: {
         title: {
-          text: "Top 10 IP",
+          text: this.$t('m.top_n_ip'),
           left: "center",
         },
         color: ['#B39CD0'],
@@ -331,6 +330,17 @@ export default {
         ],
       },
     };
+  },
+  watch:{
+    '$i18n.locale'(newValue) {
+       
+      this.pieData.title.text=this.$t('m.api_access_quantity')
+      this.lineData.title.text=this.$t('m.api_access_trend')
+      this.data3.title.text=this.$t('m.top_n_app')
+      this.data4.title.text=this.$t('m.top_n_api')
+      this.data5.title.text=this.$t('m.top_n_duration')
+      this.data6.title.text=this.$t('m.top_n_ip')
+    }
   },
   methods: {
     query() {

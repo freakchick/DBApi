@@ -80,7 +80,7 @@ const en = {
         type: 'Type',
         description: 'Description',
         no_param: 'No Param',
-        content_type_info: 'xxx',
+        content_type_info: '',
         param_demo_placeholder: 'Please input json format param demo',
         app_json_tip: 'the demo used to generate API doc',
         plugin_desc: 'Plugin Description',
@@ -108,20 +108,20 @@ const en = {
         expire_tip: 'If set null, means forever',
         grant: 'Grant access rights to APIs of selected groups',
         token_tip: 'When request private API,token needed in http header with Authorization field(If public API,no need).\nFor example, python code:\n\n',
-        token_tip2: 'How to get token?\nRequest Api as follows with you appid and secret:\n\n',
+        token_tip2: 'How to get token?\nRequest API as follows with your appid and secret:\n\n',
         firewall: 'IP Firewall',
 
         request_test: 'Request Test',
         request_tip: 'Please get token with your appid and secret, private API needs token',
         ip_tip: 'Please update IP to external network IP',
         get_token: 'Get Token',
-        input_token:'Please input token',
+        input_token: 'Please input token',
         request: 'Request',
-        request_demo:'Code Demo',
-        input_json_param:'Input Json Parameters',
+        request_demo: 'Code Demo',
+        input_json_param: 'Input Json Parameters',
 
         no_data: 'No Data',
-        
+
 
         mode: 'Mode',
         black_list: 'Black List',
@@ -150,8 +150,14 @@ const en = {
         topNDuration: 'Top 10 API ',
         lastWeek: 'Last Week',
         lastMonth: 'Last Month',
-        last3Month: 'Last 3 Months'
+        last3Month: 'Last 3 Months',
 
+        api_access_quantity: 'API Access Quantity',
+        api_access_trend: 'API Access Trend',
+        top_n_app: 'Top 10 APP',
+        top_n_api: 'Top 10 API',
+        top_n_ip: 'Top 10 IP',
+        top_n_duration: 'Top 10 Duration API',
 
     },
     ...enLocale

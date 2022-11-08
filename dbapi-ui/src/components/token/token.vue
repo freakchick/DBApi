@@ -10,7 +10,7 @@
       <el-table-column prop="id" label="appid"></el-table-column>
       <el-table-column prop="name" :label="$t('m.name')"></el-table-column>
       <el-table-column prop="note" :label="$t('m.description')"></el-table-column>
-      <el-table-column prop="secret" label="secret"></el-table-column>
+      <el-table-column prop="secret" label="Secret"></el-table-column>
       <el-table-column prop="expireDesc" :label="$t('m.token_expire_time')"></el-table-column>
 
 

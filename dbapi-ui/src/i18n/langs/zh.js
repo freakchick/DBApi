@@ -81,7 +81,7 @@ const cn = {
     type: '类型',
     description: '说明',
     no_param: '暂无参数',
-    content_type_info: '对于application/x-www-form-urlencoded类型的API，用户在请求该API的时候既可以使用application/x-www-form-urlencoded，也可以使用application/json\n对于application/json类型的API，用户在请求该API的时候只能使用application/json',
+    content_type_info: '对于application/x-www-form-urlencoded类型的API，用户在请求该API的时候既可以使用application/x-www-form-urlencoded，也可以使用application/json。\n对于application/json类型的API，用户在请求该API的时候只能使用application/json',
     param_demo_placeholder: '填写json参数示例，用于生成接口文档',
     app_json_tip: '对于application/json类型的API，这个参数示例仅用来生成接口文档，方便调用API的用户查看接口的json参数格式',
     plugin_desc: '插件描述',
@@ -116,13 +116,13 @@ const cn = {
     request_tip: '请使用您的应用id（appid）和密钥（secret）来申请token，访问私有接口需要使用token',
     ip_tip: '如果是外网访问请将网关地址设置为外网IP端口',
     get_token: '申请Token',
-    input_token:'请填入token',
+    input_token: '请填入token',
     request: '访问接口',
-    request_demo:'调用示例',
-    input_json_param:'输入json参数',
+    request_demo: '调用示例',
+    input_json_param: '输入json参数',
 
     no_data: '暂无数据',
-    
+
 
 
     mode: '模式',
@@ -155,7 +155,14 @@ const cn = {
     topNDuration: 'Top 10 API ',
     lastWeek: '最近一周',
     lastMonth: '最近一个月',
-    last3Month: '最近三个月'
+    last3Month: '最近三个月',
+
+    api_access_quantity: 'API访问量',
+    api_access_trend: 'API访问量走势',
+    top_n_app: '访问API次数最多的客户端',
+    top_n_api: '访问次数最多的API',
+    top_n_ip: '访问次数最多的客户端IP',
+    top_n_duration: '平均访问时长最大的API',
 
   },
   ...zhLocale
