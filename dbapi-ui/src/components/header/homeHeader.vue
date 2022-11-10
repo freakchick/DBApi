@@ -37,7 +37,7 @@
         <span style="font-size: 14px" @click="showLangs">{{
           languageName
         }}</span>
-        <span class="lang el-icon-arrow-down"></span>
+        <span class="lang el-icon-arrow-down" @click="showLangs"></span>
         <div class="options" v-show="visiable">
           <div
             class="option" :key="index"
@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     showLangs() {
-      this.visiable = true;
+      this.visiable = !this.visiable;
     },
     hideLangs() {
       this.visiable = false;
