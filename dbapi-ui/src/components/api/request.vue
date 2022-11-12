@@ -134,7 +134,7 @@
 
         </div>
       </el-tab-pane>
-      <el-tab-pane :label="CALL_EXAMPLE_TAB_NAME">
+      <el-tab-pane :label="$t('m.request_demo')">
         <call-example
             ref="callExample"
             :address="url"
@@ -172,7 +172,6 @@ export default {
       url: "",
       contentType: null,
       jsonParam: null,
-      CALL_EXAMPLE_TAB_NAME: Object.freeze("调用示例"),
       tokenUrl: null
     };
   },
@@ -296,7 +295,7 @@ export default {
     },
     handleTabClick(tab) {
       const label = tab.label;
-      if (label === this.CALL_EXAMPLE_TAB_NAME) {
+      if (label === this.$t('m.request_demo')) {
         this.$nextTick(() => {
           this.$refs.callExample.refresh();
         });

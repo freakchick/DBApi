@@ -111,7 +111,6 @@ const en = {
         token_tip2: 'How to get token?\nRequest API as follows with your appid and secret:\n\n',
         firewall: 'IP Firewall',
 
-        request_test: 'Request Test',
         request_tip: 'Please get token with your appid and secret, private API needs token',
         ip_tip: 'Please update IP to external network IP',
         get_token: 'Get Token',

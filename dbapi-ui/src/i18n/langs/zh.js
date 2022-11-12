@@ -112,7 +112,6 @@ const cn = {
     token_tip2: 'token如何获取？\n使用appid和secret访问以下接口来获取token\n\n',
     firewall: '防火墙',
 
-    request_test: '请求测试',
     request_tip: '请使用您的应用id（appid）和密钥（secret）来申请token，访问私有接口需要使用token',
     ip_tip: '如果是外网访问请将网关地址设置为外网IP端口',
     get_token: '申请Token',
