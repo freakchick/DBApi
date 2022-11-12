@@ -20,7 +20,7 @@ public interface AccessLogMapper extends BaseMapper<AccessLog> {
     public List<JSONObject> top5api(@Param("start") long start, @Param("end") long end);
 
 
-    @Select("select app_id,num from (select app_id,count(1) num from access_log where timestamp >= #{start} and timestamp < #{end} and app_id is not null group by app_id) order by num desc limit 0,10")
+    @Select("select app_id,num from (select app_id,count(1) num from access_log where timestamp >= #{start} and timestamp < #{end} and app_id is not null and app_id != '' group by app_id) order by num desc limit 0,10")
     public List<JSONObject> top5app(@Param("start") long start, @Param("end") long end);
 
     @Select("select ip,num from (select ip,count(1) num from access_log where timestamp >= #{start} and timestamp < #{end} and app_id is not null group by ip) order by num desc limit 0,10")

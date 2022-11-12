@@ -104,7 +104,7 @@ export default {
         color: ["#99CC33", "#FF6600"],
         series: [
           {
-            name: "API Access Quantity",
+            
             type: "pie",
             radius: "50%",
             data: [
@@ -366,7 +366,7 @@ export default {
             end: parseInt(this.$moment(this.time[1]).valueOf() / 1000)
           })
           .then((response) => {
-            this.lineData.series[0].data = [{name: "Success", value: response.data.successNum}, {
+            this.pieData.series[0].data = [{name: "Success", value: response.data.successNum}, {
               name: "Fail",
               value: response.data.failNum
             }]
