@@ -143,6 +143,7 @@ const cn = {
 
 
     monitor: '监控',
+    summary: '汇总',
     detail: '详情',
     query: '查询',
     startDate: '开始日期',
