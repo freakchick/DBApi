@@ -1,6 +1,7 @@
 package com.gitee.freakchicken.dbapi.basic.dao;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.gitee.freakchicken.dbapi.basic.domain.AccessLog;
 import org.apache.ibatis.annotations.Mapper;
@@ -10,6 +11,8 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 @Mapper
+@DS("access-log-db")
+
 public interface AccessLogMapper extends BaseMapper<AccessLog> {
 
 
