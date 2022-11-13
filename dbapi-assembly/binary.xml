@@ -6,7 +6,7 @@
         <format>tar.gz</format>
     </formats>
     <includeBaseDirectory>true</includeBaseDirectory>
-    <baseDirectory>DBApi-${project.version}</baseDirectory>
+    <baseDirectory>dbapi-${project.version}</baseDirectory>
     <dependencySets>
         <dependencySet>
             <useProjectArtifact>true</useProjectArtifact>
@@ -46,20 +46,8 @@
                 <include>*.ps1</include>
             </includes>
         </fileSet>
-        <fileSet>
-            <directory>${project.basedir}/docs</directory>
-            <outputDirectory>docs</outputDirectory>
-            <includes>
-                <include>*.md</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-            <directory>${project.basedir}/../</directory>
-            <outputDirectory>docs</outputDirectory>
-            <includes>
-                <include>*.md</include>
-            </includes>
-        </fileSet>
+
+
         <fileSet>
             <directory>${project.basedir}/sql</directory>
             <outputDirectory>sql</outputDirectory>
