@@ -8,8 +8,6 @@ if [ $# -le 1 ]; then
   exit 1
 fi
 
-startStop=$1
-shift
 group=$1
 shift
 
@@ -22,5 +20,5 @@ export DBAPI_LIB_DIR=$DBAPI_HOME/lib/
 
 CLASS=com.gitee.freakchicken.dbapi.basic.log.AccessLogKafkaReader
 
-command="java -cp $DBAPI_LIB_DIR/*:$DBAPI_CONF_DIR $CLASS"
-nohup $command > /dev/null 2>&1 &
+java -cp $DBAPI_LIB_DIR/*:$DBAPI_CONF_DIR $CLASS $group
+#nohup $command > /dev/null 2>&1 &
