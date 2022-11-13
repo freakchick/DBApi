@@ -46,7 +46,7 @@
 
 
     <build>
-        <finalName>DBApi-${project.version}</finalName>
+        <finalName>dbapi-${project.version}</finalName>
         <plugins>
 
             <plugin>
