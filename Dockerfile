@@ -5,12 +5,12 @@ ARG VERSION
 
 ENV DOCKER true
 
-ADD dist/DBApi-${VERSION}-bin.tar.gz /opt/
+ADD dist/dbapi-${VERSION}-bin.tar.gz /opt/
 
 COPY docker/init_config.sh /opt/init_config.sh
 COPY docker/startup.sh /opt/startup.sh
 
-WORKDIR /opt/DBApi-${VERSION}
+WORKDIR /opt/dbapi-${VERSION}
 
 EXPOSE 8520 8523 8525
 
