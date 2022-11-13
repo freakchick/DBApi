@@ -3,7 +3,7 @@
 usage="Usage: log-kafka2db.sh <group>"
 
 # if no args specified, show usage
-if [ $# -le 1 ]; then
+if [ $# -lt 1 ]; then
   echo $usage
   exit 1
 fi
@@ -20,5 +20,5 @@ export DBAPI_LIB_DIR=$DBAPI_HOME/lib/
 
 CLASS=com.gitee.freakchicken.dbapi.basic.log.AccessLogKafkaReader
 
-java -cp $DBAPI_LIB_DIR/*:$DBAPI_CONF_DIR $CLASS $group
-#nohup $command > /dev/null 2>&1 &
+command="java -cp $DBAPI_LIB_DIR/*:$DBAPI_CONF_DIR $CLASS $group"
+nohup $command > /dev/null 2>&1 &
