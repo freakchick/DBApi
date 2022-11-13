@@ -10,5 +10,5 @@ CREATE TABLE access_log
     `api_id`    String,
     `error`     String
 ) ENGINE = MergeTree
-ORDER BY id
+ORDER BY timestamp
 SETTINGS index_granularity = 8192
