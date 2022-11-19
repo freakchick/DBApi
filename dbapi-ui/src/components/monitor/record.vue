@@ -40,7 +40,7 @@
       <el-table-column prop="duration" label="Duration(ms)"></el-table-column>
       <el-table-column prop="status" label="Response Code"></el-table-column>
       <el-table-column prop="appId" label="appId"></el-table-column>
-      <el-table-column prop="IP" label="IP"></el-table-column>
+      <el-table-column prop="ip" label="IP"></el-table-column>
       <el-table-column prop="error" label="Error"></el-table-column>
     </el-table>
   </div>
