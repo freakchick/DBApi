@@ -80,7 +80,7 @@ const en = {
         type: 'Type',
         description: 'Description',
         no_param: 'No Param',
-        content_type_info: '',
+        content_type_info: 'For application/x-www-form-urlencoded API, clients can access api using application/x-www-form-urlencoded or application/json.For application/json API,clients can access api using only application/json',
         param_demo_placeholder: 'Please input json format param demo',
         app_json_tip: 'the demo used to generate API doc',
         plugin_desc: 'Plugin Description',
