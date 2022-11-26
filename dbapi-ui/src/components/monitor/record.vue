@@ -31,7 +31,7 @@
     <el-divider></el-divider>
 
     <el-table :data="tableData" border stripe max-height="700" size="mini">
-      <el-table-column label="time">
+      <el-table-column label="Time">
         <template slot-scope="scope">
           <span>{{ scope.row.timestamp | dateFormat }}</span>
         </template>
