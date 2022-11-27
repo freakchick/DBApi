@@ -325,7 +325,7 @@
                     effect="dark"
                   >
                     <div slot="content">
-                      <div>{{$t('m.plugin_param')}}：{{ item.description }}</div>
+                      <div>{{$t('m.plugin_desc')}}：{{ item.description }}</div>
                       <div>{{$t('m.plugin_param_desc')}}：{{ item.paramDescription }}</div>
                     </div>
                     <div>
