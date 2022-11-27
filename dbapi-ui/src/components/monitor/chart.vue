@@ -270,6 +270,10 @@ export default {
           axisPointer: {
             type: "shadow",
           },
+          formatter: (params) => {
+            debugger
+            return params[0].data+" (ms)"
+          }
         },
         legend: {},
         grid: {

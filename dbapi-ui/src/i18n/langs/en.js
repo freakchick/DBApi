@@ -153,10 +153,10 @@ const en = {
 
         api_access_quantity: 'API Access Quantity',
         api_access_trend: 'API Access Trend',
-        top_n_app: 'Top 10 APP',
-        top_n_api: 'Top 10 API',
-        top_n_ip: 'Top 10 IP',
-        top_n_duration: 'Top 10 Duration API',
+        top_n_app: 'Clients with the most API access',
+        top_n_api: 'The most visited API',
+        top_n_ip: 'The most visited client IP',
+        top_n_duration: 'API with largest average access time',
 
     },
     ...enLocale
