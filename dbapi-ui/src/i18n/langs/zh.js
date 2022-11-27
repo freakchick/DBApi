@@ -55,7 +55,7 @@ const cn = {
     public: '开放API',
     transform: '数据转换',
     cache: '缓存',
-    alarm: 'shibia',
+    alarm: '告警',
     basic_info: '基本信息',
     access_tip: '开放接口可以直接访问。私有接口在访问时必须在请求头中携带token，且该token值对此接口有访问权限，具体请到权限菜单查看',
     plugin_class: '插件类名',
