@@ -48,6 +48,10 @@
           </div>
         </div>
       </div>
+      <div style="line-height: 60px;margin: 0 5px">
+        <a href="https://github.com/freakchick/DBApi" target="_blank"><i class="iconfont icon-github" style="font-size: 26px"></i></a>
+      </div>
+
     </div>
   </div>
 </template>
