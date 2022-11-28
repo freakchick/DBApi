@@ -38,7 +38,7 @@
 - Supports the API access records query, the API access information statistics.
 
 ## Video Tutorial
-[Video Tutorial](https://www.bilibili.com/video/BV1zL411G7Qh)
+[Video Tutorial](https://www.bilibili.com/video/BV1pM411k74m)
 
 ## Screenshot
 ![](https://freakchicken.gitee.io/images/dbApi/20220503/api_list.png)

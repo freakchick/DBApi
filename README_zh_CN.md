@@ -37,6 +37,9 @@
 - 支持`application/json`和`application/x-www-form-urlencoded`
 - 支持接口调用记录查询，接口访问信息统计
 
+## 视频教程
+[视频教程](https://www.bilibili.com/video/BV1pM411k74m)
+
 ## 官方文档
 [官方文档](http://www.51dbapi.com)
 
