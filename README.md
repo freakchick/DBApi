@@ -14,7 +14,7 @@
 ![](https://freakchicken.gitee.io/images/dbApi//logo.png)
 
 <p align="center">
-	👉 <a target="_blank" href="http://www.51dbapi.com">http://www.51dbapi.com</a>  👈
+	👉 <a target="_blank" href="https://www.51dbapi.com">https://www.51dbapi.com</a>  👈
 </p>
 
 ## Summary
