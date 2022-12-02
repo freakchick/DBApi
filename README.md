@@ -57,3 +57,25 @@
 ![](https://freakchicken.gitee.io/images/dbApi/20210803/ip.png)
 
 
+## 联系
+
+### QQ交流群：
+- 在群里提问前请先把文档读一遍，并阅读[常见问题汇总](https://www.51dbapi.com/zh/question/)
+- **提问请高效提问，提供日志、截图、现象、软件版本、部署模式，不要让回答者替你去思考你的问题是什么**
+<div style="text-align: center"> 
+<img src="https://freakchicken.gitee.io/images/dbApi/qqgroup.jpg" width = "40%" />
+</div>
+
+### 微信交流群：
+- 在群里提问前请先把文档读一遍，并阅读[常见问题汇总](https://www.51dbapi.com/zh/question/)
+- **提问请高效提问，提供日志、截图、现象、软件版本、部署模式，不要让回答者替你去思考你的问题是什么**
+> 如果群二维码失效了请加作者微信，拉你入群
+<div style="text-align: center"> 
+<img src="https://freakchicken.gitee.io/images/dbApi/wechatGroup.png" width = "40%" />
+</div>
+
+### 关于作者
+
+<img align="center" height="200px" src="https://freakchicken.gitee.io/images/wechat.png"/>
+
+Email: jiangqiang110@126.com
