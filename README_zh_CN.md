@@ -41,7 +41,7 @@
 [视频教程](https://www.bilibili.com/video/BV1pM411k74m)
 
 ## 官方文档
-[官方文档](http://www.51dbapi.com)
+[官方文档](https://www.51dbapi.com)
 
 
 ## 软件截图
