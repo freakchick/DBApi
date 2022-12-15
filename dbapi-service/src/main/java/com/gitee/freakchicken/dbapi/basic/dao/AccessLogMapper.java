@@ -36,7 +36,7 @@ public interface AccessLogMapper extends BaseMapper<AccessLog> {
     @Select("select sum(success) successNum,sum(fail) failNum from (select case when status=200 then 1 else 0 end as success,case when status!=200 then 1 else 0 end as fail from access_log where timestamp >= #{start} and timestamp < #{end} )")
     public JSONObject successRatio(@Param("start") long start, @Param("end") long end);
 
-    @Select("<script>select * from default.access_log where timestamp between #{start} and #{end} <if test=\"status != null and status !=''\" > and status = #{status}</if><if test=\"ip != null and ip !=''\" > and ip = #{ip}</if><if test=\"url != null and url !=''\" > and url = #{url}</if><if test=\"appId != null and appId !=''\" > and app_id = #{appId}</if></script>")
+    @Select("<script>select * from access_log where timestamp between #{start} and #{end} <if test=\"status != null and status !=''\" > and status = #{status}</if><if test=\"ip != null and ip !=''\" > and ip = #{ip}</if><if test=\"url != null and url !=''\" > and url = #{url}</if><if test=\"appId != null and appId !=''\" > and app_id = #{appId}</if></script>")
     List<AccessLog> search(@Param("url") String url, @Param("appId") String appId, @Param("start") Long start, @Param("end") Long end, @Param("status") Integer status,@Param("ip") String ip) ;
 
 
