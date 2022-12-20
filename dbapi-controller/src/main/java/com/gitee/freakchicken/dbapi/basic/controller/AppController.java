@@ -45,8 +45,8 @@ public class AppController {
         appService.auth(appId, groupIds);
     }
 
-    @PostMapping("/getAuthGroups")
-    public List<String> getAuthGroups(String appId) {
+    @PostMapping("/getAuthGroups/{appid}")
+    public List<String> getAuthGroups(@PathVariable("appid") String appId) {
         return appService.getAuthGroups(appId);
     }
 }
