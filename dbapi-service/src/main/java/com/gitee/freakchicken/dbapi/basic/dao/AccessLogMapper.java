@@ -26,9 +26,8 @@ public interface AccessLogMapper extends BaseMapper<AccessLog> {
     @Select("select app_id,num from (select app_id,count(1) num from access_log where timestamp >= #{start} and timestamp < #{end} and app_id is not null and app_id != '' group by app_id) a order by num desc limit 0,10")
     public List<JSONObject> top5app(@Param("start") long start, @Param("end") long end);
 
-    @Select("select ip,num from (select ip,count(1) num from access_log where timestamp >= #{start} and timestamp < #{end} and app_id is not null group by ip) a order by num desc limit 0,10")
+    @Select("select ip,num from (select ip,count(1) num from access_log where timestamp >= #{start} and timestamp < #{end} group by ip) a order by num desc limit 0,10")
     public List<JSONObject> topNIP(@Param("start") long start, @Param("end") long end);
-
 
     @Select("select url,duration from (select url,round(avg(duration)) duration from access_log where timestamp >= #{start} and timestamp < #{end} group by url) a order by duration desc limit 0,10")
     public List<JSONObject> top5duration(@Param("start") long start, @Param("end") long end);
