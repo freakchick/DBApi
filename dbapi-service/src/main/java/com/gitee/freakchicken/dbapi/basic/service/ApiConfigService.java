@@ -8,11 +8,11 @@ import com.gitee.freakchicken.dbapi.basic.dao.ApiConfigMapper;
 import com.gitee.freakchicken.dbapi.basic.dao.ApiSqlMapper;
 import com.gitee.freakchicken.dbapi.basic.dao.DataSourceMapper;
 import com.gitee.freakchicken.dbapi.basic.dao.AlarmMapper;
+import com.gitee.freakchicken.dbapi.basic.domain.ApiAlarm;
 import com.gitee.freakchicken.dbapi.basic.domain.ApiDto;
 import com.gitee.freakchicken.dbapi.basic.domain.ApiSql;
 import com.gitee.freakchicken.dbapi.basic.util.UUIDUtil;
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
-import com.gitee.freakchicken.dbapi.basic.domain.Alarm;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
 import com.gitee.freakchicken.dbapi.plugin.CachePlugin;
 import com.gitee.freakchicken.dbapi.plugin.PluginManager;
@@ -80,7 +80,7 @@ public class ApiConfigService {
             });
 
             if (StringUtils.isNoneBlank(apiConfig.getAlarmPlugin())) {
-                Alarm alarm = new Alarm();
+                ApiAlarm alarm = new ApiAlarm();
                 alarm.setApiId(id);
                 alarm.setAlarmPlugin(apiConfig.getAlarmPlugin());
                 alarm.setAlarmPluginParam(apiConfig.getAlarmPluginParam());
@@ -119,7 +119,7 @@ public class ApiConfigService {
 
             alarmMapper.deleteByApiID(apiConfig.getId());
             if (StringUtils.isNoneBlank(apiConfig.getAlarmPlugin())) {
-                Alarm alarm = new Alarm();
+                ApiAlarm alarm = new ApiAlarm();
                 alarm.setApiId(apiConfig.getId());
                 alarm.setAlarmPlugin(apiConfig.getAlarmPlugin());
                 alarm.setAlarmPluginParam(apiConfig.getAlarmPluginParam());
@@ -170,7 +170,7 @@ public class ApiConfigService {
         ApiConfig apiConfig = apiConfigMapper.selectById(id);
         List<ApiSql> list = apiSqlMapper.selectByApiId(apiConfig.getId());
         apiConfig.setSqlList(list);
-        List<Alarm> alarms = alarmMapper.selectByApiId(apiConfig.getId());
+        List<ApiAlarm> alarms = alarmMapper.selectByApiId(apiConfig.getId());
         if (alarms.size() > 0) {
             apiConfig.setAlarmPlugin(alarms.get(0).getAlarmPlugin());
             apiConfig.setAlarmPluginParam(alarms.get(0).getAlarmPluginParam());
@@ -220,7 +220,7 @@ public class ApiConfigService {
         }
         List<ApiSql> apiSqls = apiSqlMapper.selectByApiId(apiConfig.getId());
         apiConfig.setSqlList(apiSqls);
-        List<Alarm> alarms = alarmMapper.selectByApiId(apiConfig.getId());
+        List<ApiAlarm> alarms = alarmMapper.selectByApiId(apiConfig.getId());
         if (alarms.size() > 0) {
             apiConfig.setAlarmPlugin(alarms.get(0).getAlarmPlugin());
             apiConfig.setAlarmPluginParam(alarms.get(0).getAlarmPluginParam());

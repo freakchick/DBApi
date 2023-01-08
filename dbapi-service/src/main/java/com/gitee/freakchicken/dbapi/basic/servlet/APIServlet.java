@@ -3,18 +3,21 @@ package com.gitee.freakchicken.dbapi.basic.servlet;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import com.gitee.freakchicken.dbapi.basic.domain.ApiAlarm;
+import com.gitee.freakchicken.dbapi.basic.domain.ApiCache;
 import com.gitee.freakchicken.dbapi.basic.domain.DataSource;
 import com.gitee.freakchicken.dbapi.basic.executor.SQLExecutor;
 import com.gitee.freakchicken.dbapi.basic.executor.ESExecutor;
-import com.gitee.freakchicken.dbapi.basic.service.ApiConfigService;
-import com.gitee.freakchicken.dbapi.basic.service.ApiService;
-import com.gitee.freakchicken.dbapi.basic.service.DataSourceService;
-import com.gitee.freakchicken.dbapi.basic.service.IPService;
+import com.gitee.freakchicken.dbapi.basic.service.*;
 
+import com.gitee.freakchicken.dbapi.basic.util.ThreadUtils;
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
 
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
 
+import com.gitee.freakchicken.dbapi.plugin.AlarmPlugin;
+import com.gitee.freakchicken.dbapi.plugin.CachePlugin;
+import com.gitee.freakchicken.dbapi.plugin.PluginManager;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -45,7 +49,9 @@ public class APIServlet extends HttpServlet {
     ApiService apiService;
 
     @Autowired
-    IPService ipService;
+    AlarmService alarmService;
+    @Autowired
+    CacheService cacheService;
 
     @Value("${dbapi.api.context}")
     String apiContext;
@@ -79,8 +85,7 @@ public class APIServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doGet(req, resp);
     }
 
@@ -100,18 +105,51 @@ public class APIServlet extends HttpServlet {
                 return ResponseDto.fail("Datasource not exists!");
             }
 
-            Map<String, Object> sqlParam = getParams(request, config);
+            Map<String, Object> requestParam = getParams(request, config);
 
-            ResponseDto res = null;
-            if ("es".equals(datasource.getType())) {
-                res = ESExecutor.execute(config, datasource, sqlParam, request);
-            } else {
-                res = SQLExecutor.execute(config, datasource, sqlParam, request);
+            ApiCache cache = cacheService.getByApiId(config.getId());
+
+            // ger data from cace
+            if (cache != null) {
+                CachePlugin cachePlugin = PluginManager.getCachePlugin(cache.getPlugin());
+                Object o = cachePlugin.get(config, requestParam);
+                if (o != null) {
+                    return ResponseDto.apiSuccess(o); // 如果缓存有数据直接返回
+                }
             }
 
-            return res;
+            Object res = null;
+            if ("es".equals(datasource.getType())) {
+                res = ESExecutor.execute(config, datasource, requestParam);
+            } else {
+                res = SQLExecutor.execute(config, datasource, requestParam);
+            }
+
+            // set data to cache
+            if (cache != null) {
+                CachePlugin cachePlugin = PluginManager.getCachePlugin(cache.getPlugin());
+                cachePlugin.set(config, requestParam, res);
+            }
+
+            return ResponseDto.apiSuccess(res);
 
         } catch (Exception e) {
+            // alarm if error
+            List<ApiAlarm> alarms = alarmService.selectByApiId(config.getId());
+            for (ApiAlarm alarm : alarms) {
+                try {
+                    String param = alarm.getPluginParam();
+                    AlarmPlugin alarmPlugin = PluginManager.getAlarmPlugin(alarm.getPlugin());
+                    ThreadUtils.submitAlarmTask(new Runnable() {
+                        @Override
+                        public void run() {
+                            alarmPlugin.alarm(e, config, request, param);
+                        }
+                    });
+                } catch (Exception error) {
+                    log.error(alarm.getPlugin() + " error!", error);
+                }
+            }
 
             throw new RuntimeException(e.getMessage());
         }
@@ -146,7 +184,7 @@ public class APIServlet extends HttpServlet {
             if (MediaType.APPLICATION_FORM_URLENCODED_VALUE.equalsIgnoreCase(apiConfig.getContentType())) {
                 params = apiService.getSqlParam(request, apiConfig);
             } else {
-                throw new RuntimeException("this API only support content-type: " + apiConfig.getContentType() + ", but you use: " + contentType);
+                throw new RuntimeException("This API only supports content-type: " + apiConfig.getContentType() + ", but you use: " + contentType);
             }
         } else {
             throw new RuntimeException("content-type not supported: " + contentType);

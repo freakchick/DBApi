@@ -16,21 +16,6 @@ public class SQLApiConfig {
     @TableField("open_trans")
     Integer openTrans;
 
-    @TableField
-    String alarmPlugin;
-
-    @TableField
-    String alarmPluginParam;
-
-    @TableField(value = "cache_plugin", insertStrategy = FieldStrategy.NOT_EMPTY)
-    String cachePlugin;
-
-    /**
-     * 缓存插件参数
-     */
-    @TableField(value = "cache_plugin_params", updateStrategy = FieldStrategy.IGNORED)
-    String cachePluginParams;
-
     @TableField(value = "create_time")
     String createTime;
 

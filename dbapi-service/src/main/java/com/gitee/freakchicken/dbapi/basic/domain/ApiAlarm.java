@@ -7,14 +7,14 @@ import java.io.Serializable;
 
 @Data
 @TableName(value = "api_alarm")
-public class Alarm implements Serializable {
+public class ApiAlarm implements Serializable {
 
-    @TableField(value = "api_id")
+    @TableField("api_id")
     String apiId;
     
-    @TableField("alarm_plugin")
-    String alarmPlugin;
+    @TableField("plugin")
+    String plugin;
 
-    @TableField("alarm_plugin_param")
-    String alarmPluginParam;
+    @TableField("plugin_param")
+    String pluginParam;
 }

@@ -39,54 +39,24 @@ public class ESExecutor {
     @Autowired
     ESApiConfigService ESApiConfigService;
 
-    public ResponseDto execute(ApiConfig config, DataSource datasource, Map<String, Object> param,
-            HttpServletRequest servletRequest)
-            throws Exception {
+    public Object execute(ApiConfig config, DataSource datasource, Map<String, Object> param) throws Exception {
 
-        ESApiConfig eSApiConfig = null;
-        try {
+        ESApiConfig eSApiConfig = ESApiConfigService.getConfigByApiId(config.getId());
 
-            eSApiConfig = ESApiConfigService.getConfigByApiId(config.getId());
-            // 从缓存获取数据
-            if (StringUtils.isNoneBlank(eSApiConfig.getCachePlugin())) {
-                CachePlugin cachePlugin = PluginManager.getCachePlugin(eSApiConfig.getCachePlugin());
-                Object o = cachePlugin.get(config, param);
-                if (o != null) {
-                    return ResponseDto.apiSuccess(o); // 如果缓存有数据直接返回
-                }
-            }
+        RestClient restClient = ESPoolManager.getPooledConnection(datasource);
+        Request request = new Request(eSApiConfig.getMethod(), eSApiConfig.getEndpoint());
 
-            RestClient restClient = ESPoolManager.getPooledConnection(datasource);
+        StringSubstitutor StringSubstitutor = new StringSubstitutor(param);
+        String content = StringSubstitutor.replace(eSApiConfig.getBody());
+        request.setJsonEntity(content);
 
-            Request request = new Request(eSApiConfig.getMethod(), eSApiConfig.getEndpoint());
+        Response response = restClient.performRequest(request);
+        HttpEntity entity = response.getEntity();
+        String s = EntityUtils.toString(entity);
+        JSONObject parseObject = JSON.parseObject(s);
 
-            StringSubstitutor StringSubstitutor = new StringSubstitutor(param);
-            String content = StringSubstitutor.replace(eSApiConfig.getBody());
-            request.setJsonEntity(content);
+        return parseObject;
 
-            Response response = restClient.performRequest(request);
-            HttpEntity entity = response.getEntity();
-            String s = EntityUtils.toString(entity);
-            JSONObject parseObject = JSON.parseObject(s);
-
-            return ResponseDto.apiSuccess(parseObject);
-        } catch (Exception e) {
-            if (StringUtils.isNotBlank(eSApiConfig.getAlarmPlugin())) {
-                try {
-                    String pluginParam = eSApiConfig.getAlarmPluginParam();
-                    AlarmPlugin alarmPlugin = PluginManager.getAlarmPlugin(eSApiConfig.getAlarmPlugin());
-                    ThreadUtils.submitAlarmTask(new Runnable() {
-                        @Override
-                        public void run() {
-                            alarmPlugin.alarm(e, config, servletRequest, pluginParam);
-                        }
-                    });
-                } catch (Exception error) {
-                    log.error(eSApiConfig.getAlarmPlugin() + " error!", error);
-                }
-            }
-            throw new RuntimeException(e.getMessage());
-        }
     }
 
 }

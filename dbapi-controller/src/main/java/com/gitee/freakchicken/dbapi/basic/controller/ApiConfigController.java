@@ -8,6 +8,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.gitee.freakchicken.dbapi.basic.domain.ApiSql;
 import com.gitee.freakchicken.dbapi.basic.domain.DataSource;
 import com.gitee.freakchicken.dbapi.basic.domain.Group;
+import com.gitee.freakchicken.dbapi.basic.dto.ApiConfigDto;
 import com.gitee.freakchicken.dbapi.basic.service.ApiConfigService;
 import com.gitee.freakchicken.dbapi.basic.service.DataSourceService;
 import com.gitee.freakchicken.dbapi.basic.service.GroupService;
@@ -65,8 +66,8 @@ public class ApiConfigController {
         return apiContext;
     }
 
-    @RequestMapping("/add")
-    public ResponseDto add(@RequestBody ApiConfig apiConfig) {
+    @RequestMapping("/sqlapi/add")
+    public ResponseDto add(@RequestBody ApiConfigDto apiConfig) {
         return apiConfigService.add(apiConfig);
     }
 

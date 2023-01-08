@@ -39,73 +39,40 @@ public class SQLExecutor {
     @Autowired
     SQLApiConfigService SQLApiConfigService;
 
-    public ResponseDto execute(ApiConfig config, DataSource datasource, Map<String, Object> sqlParam, HttpServletRequest request) throws Exception {
-        SQLApiConfig SQLApiConfig = null;
-        try {
-            SQLApiConfig = SQLApiConfigService.getConfigByApiId(config.getId());
+    public Object execute(ApiConfig config, DataSource datasource, Map<String, Object> sqlParam) throws Exception {
+        SQLApiConfig SQLApiConfig  = SQLApiConfigService.getConfigByApiId(config.getId());
 
-            // 从缓存获取数据
-            if (StringUtils.isNoneBlank(SQLApiConfig.getCachePlugin())) {
-                CachePlugin cachePlugin = PluginManager.getCachePlugin(SQLApiConfig.getCachePlugin());
-                Object o = cachePlugin.get(config, sqlParam);
-                if (o != null) {
-                    return ResponseDto.apiSuccess(o); // 如果缓存有数据直接返回
-                }
-            }
+        List<ApiSql> sqlList = SQLApiConfig.getSqlList();
 
-            List<ApiSql> sqlList = SQLApiConfig.getSqlList();
+        DruidPooledConnection connection = PoolManager.getPooledConnection(datasource);
+        boolean flag = SQLApiConfig.getOpenTrans() == 1 ? true : false;
+        // 执行sql
+        List<Object> dataList = executeSql(connection, sqlList, sqlParam, flag);
 
-            DruidPooledConnection connection = PoolManager.getPooledConnection(datasource);
-            boolean flag = SQLApiConfig.getOpenTrans() == 1 ? true : false;
-            // 执行sql
-            List<Object> dataList = executeSql(connection, sqlList, sqlParam, flag);
-
-            // 执行数据转换
-            for (int i = 0; i < sqlList.size(); i++) {
-                ApiSql apiSql = sqlList.get(i);
-                Object data = dataList.get(i);
-                // 如果此单条sql是查询类sql，并且配置了数据转换插件
-                if (data instanceof Iterable && StringUtils.isNotBlank(apiSql.getTransformPlugin())) {
-                    log.info("transform plugin execute");
-                    List<JSONObject> sourceData = (List<JSONObject>) (data); // 查询类sql的返回结果才可以这样强制转换，只有查询类sql才可以配置转换插件
-                    TransformPlugin transformPlugin = PluginManager.getTransformPlugin(apiSql.getTransformPlugin());
-                    Object resData = transformPlugin.transform(sourceData, apiSql.getTransformPluginParams());
-                    dataList.set(i, resData);// 重新设置值
-                }
+        // 执行数据转换
+        for (int i = 0; i < sqlList.size(); i++) {
+            ApiSql apiSql = sqlList.get(i);
+            Object data = dataList.get(i);
+            // 如果此单条sql是查询类sql，并且配置了数据转换插件
+            if (data instanceof Iterable && StringUtils.isNotBlank(apiSql.getTransformPlugin())) {
+                log.info("transform plugin execute");
+                List<JSONObject> sourceData = (List<JSONObject>) (data); // 查询类sql的返回结果才可以这样强制转换，只有查询类sql才可以配置转换插件
+                TransformPlugin transformPlugin = PluginManager.getTransformPlugin(apiSql.getTransformPlugin());
+                Object resData = transformPlugin.transform(sourceData, apiSql.getTransformPluginParams());
+                dataList.set(i, resData);// 重新设置值
             }
-            Object res = dataList;
-            // 如果只有单条sql,返回结果不是数组格式
-            if (dataList.size() == 1) {
-                res = dataList.get(0);
-            }
-            ResponseDto dto = ResponseDto.apiSuccess(res);
-            // 设置缓存
-            if (StringUtils.isNoneBlank(SQLApiConfig.getCachePlugin())) {
-                CachePlugin cachePlugin = PluginManager.getCachePlugin(SQLApiConfig.getCachePlugin());
-                cachePlugin.set(config, sqlParam, dto.getData());
-            }
-            return dto;
-        } catch (Exception e) {
-            if (StringUtils.isNotBlank(SQLApiConfig.getAlarmPlugin())) {
-                try {
-                    String param = SQLApiConfig.getAlarmPluginParam();
-                    AlarmPlugin alarmPlugin = PluginManager.getAlarmPlugin(SQLApiConfig.getAlarmPlugin());
-                    ThreadUtils.submitAlarmTask(new Runnable() {
-                        @Override
-                        public void run() {
-                            alarmPlugin.alarm(e, config, request, param);
-                        }
-                    });
-                } catch (Exception error) {
-                    log.error(SQLApiConfig.getAlarmPlugin() + " error!", error);
-                }
-            }
-            throw new RuntimeException(e.getMessage());
         }
+        Object res = dataList;
+        // 如果只有单条sql,返回结果不是数组格式
+        if (dataList.size() == 1) {
+            res = dataList.get(0);
+        }
+
+        return res;
+
     }
 
-    public List<Object> executeSql(Connection connection, List<ApiSql> sqlList, Map<String, Object> sqlParam,
-            boolean flag) {
+    public List<Object> executeSql(Connection connection, List<ApiSql> sqlList, Map<String, Object> sqlParam, boolean flag) {
         List<Object> dataList = new ArrayList<>();
         try {
             if (flag)

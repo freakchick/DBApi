@@ -24,18 +24,6 @@ public class ESApiConfig implements Serializable {
     @TableField
     String body;
 
-    @TableField
-    String alarmPlugin;
-
-    @TableField
-    String alarmPluginParam;
-
-    @TableField(value = "cache_plugin", insertStrategy = FieldStrategy.NOT_EMPTY)
-    String cachePlugin;
-
-    @TableField(value = "cache_plugin_params", updateStrategy = FieldStrategy.IGNORED)
-    String cachePluginParams;
-
     @TableField(value = "transform_plugin", insertStrategy = FieldStrategy.NOT_EMPTY)
     String transformPlugin;
 
