@@ -1,25 +1,38 @@
 package com.gitee.freakchicken.dbapi.basic.dto;
 
-import com.baomidou.mybatisplus.annotation.FieldStrategy;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.gitee.freakchicken.dbapi.basic.domain.ApiAlarm;
-import com.gitee.freakchicken.dbapi.basic.domain.ApiCache;
-import com.gitee.freakchicken.dbapi.basic.domain.ApiSql;
-import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 public class ApiConfigDto {
+    String id;
 
-    ApiConfig apiConfig;
+    String name;
 
-    List<ApiSql> sqlList;
+    String note;
 
-    ApiCache apiCache;
+    String path;
+    String params;
 
-    ApiAlarm alarm;
+    Integer status;
 
+    Integer previlege;
+
+    String groupId;
+
+    String contentType;
+
+    String jsonParam;
+
+    String taskType;
+
+    String task;
+
+    String createTime;
+
+    String updateTime;
+
+    String alarmPluginName;
+    String alarmPluginParam;
+    String cachePluginName;
+    String cachePluginParam;
 }

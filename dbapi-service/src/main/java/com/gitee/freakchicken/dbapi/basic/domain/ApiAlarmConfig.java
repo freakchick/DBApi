@@ -6,14 +6,14 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-@TableName(value = "api_alarm")
-public class ApiAlarm implements Serializable {
+@TableName(value = "api_alarm_config")
+public class ApiAlarmConfig implements Serializable {
 
     @TableField("api_id")
     String apiId;
     
-    @TableField("plugin")
-    String plugin;
+    @TableField("plugin_name")
+    String pluginName;
 
     @TableField("plugin_param")
     String pluginParam;

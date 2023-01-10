@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.gitee.freakchicken.dbapi.basic.domain.ApiSql;
 import com.gitee.freakchicken.dbapi.basic.domain.DataSource;
 import com.gitee.freakchicken.dbapi.basic.domain.Group;
 import com.gitee.freakchicken.dbapi.basic.dto.ApiConfigDto;
@@ -19,15 +18,19 @@ import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
 import com.github.freakchick.orange.SqlMeta;
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
+import com.gitee.freakchicken.dbapi.basic.domain.ApiAlarmConfig;
+import com.gitee.freakchicken.dbapi.basic.domain.ApiCacheConfig;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
@@ -66,16 +69,28 @@ public class ApiConfigController {
         return apiContext;
     }
 
-    @RequestMapping("/sqlapi/add")
-    public ResponseDto add(@RequestBody ApiConfigDto apiConfig) {
-        return apiConfigService.add(apiConfig);
+    @RequestMapping("/api/add")
+    public ResponseDto add(ApiConfigDto dto) {
+        ApiConfig apiConfig = new ApiConfig();
+        ApiAlarmConfig alarm = new ApiAlarmConfig();
+        ApiCacheConfig cache = new ApiCacheConfig();
+        try {
+            BeanUtils.copyProperties(apiConfig, dto);
+            BeanUtils.copyProperties(alarm, dto);
+            BeanUtils.copyProperties(cache, dto);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return apiConfigService.add(apiConfig, alarm, cache);
     }
 
     @RequestMapping("/parseParam")
     public ResponseDto parseParam(String sql) {
         try {
             Set<String> set = SqlEngineUtil.getEngine().parseParameter(sql);
-//            转化成前端需要的格式
+            // 转化成前端需要的格式
             List<JSONObject> list = set.stream().map(t -> {
                 JSONObject object = new JSONObject();
                 object.put("value", t);
@@ -92,7 +107,7 @@ public class ApiConfigController {
         return apiConfigService.getAll();
     }
 
-    //给前端使用的数据结构
+    // 给前端使用的数据结构
     @RequestMapping("/getApiTree")
     public JSONArray getApiTree() {
         return apiConfigService.getAllDetail();
@@ -115,24 +130,34 @@ public class ApiConfigController {
     }
 
     @RequestMapping("/update")
-    public ResponseDto update(@RequestBody ApiConfig apiConfig) {
-        return apiConfigService.update(apiConfig);
+    public ResponseDto update(ApiConfigDto dto) {
+        ApiConfig apiConfig = new ApiConfig();
+        ApiAlarmConfig alarm = new ApiAlarmConfig();
+        ApiCacheConfig cache = new ApiCacheConfig();
+        try {
+            BeanUtils.copyProperties(apiConfig, dto);
+            BeanUtils.copyProperties(alarm, dto);
+            BeanUtils.copyProperties(cache, dto);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return apiConfigService.update(apiConfig, alarm, cache);
     }
 
     @RequestMapping("/online/{id}")
     public ApiConfig online(@PathVariable String id) {
-        String path = apiConfigService.getPath(id);
-        apiConfigService.online(id, path);
+        apiConfigService.online(id);
         return null;
     }
 
     @RequestMapping("/offline/{id}")
     public ApiConfig offline(@PathVariable String id) {
-        String path = apiConfigService.getPath(id);
-        apiConfigService.offline(id, path);
+        
+        apiConfigService.offline(id);
         return null;
     }
-
 
     @RequestMapping("/apiDocs")
     public void apiDocs(String ids, HttpServletResponse response) {
@@ -140,7 +165,7 @@ public class ApiConfigController {
         String docs = apiConfigService.apiDocs(collect);
         response.setContentType("application/x-msdownload;charset=utf-8");
         response.setHeader("Content-Disposition", "attachment; filename=API docs.md");
-        OutputStream os = null; //输出流
+        OutputStream os = null; // 输出流
         try {
             os = response.getOutputStream();
             os.write(docs.getBytes("utf-8"));
@@ -185,7 +210,7 @@ public class ApiConfigController {
         List<Group> list = groupService.selectBatch(collect);
         String s = JSON.toJSONString(list);
         response.setContentType("application/x-msdownload;charset=utf-8");
-//        response.setHeader("Content-Disposition", "attachment; filename=api配置.json");
+        // response.setHeader("Content-Disposition", "attachment; filename=api配置.json");
         OutputStream os = null;
         try {
             os = response.getOutputStream();
@@ -208,8 +233,8 @@ public class ApiConfigController {
         String s = IOUtils.toString(file.getInputStream(), "utf-8");
         JSONObject jsonObject = JSON.parseObject(s);
         List<ApiConfig> configs = JSON.parseArray(jsonObject.getJSONArray("api").toJSONString(), ApiConfig.class);
-        List<ApiSql> sqls = JSON.parseArray(jsonObject.getJSONArray("sql").toJSONString(), ApiSql.class);
-        apiConfigService.insertBatch(configs, sqls);
+
+        apiConfigService.insertBatch(configs);
 
     }
 

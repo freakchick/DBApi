@@ -1,34 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
-         updateCheck="false">
-    <defaultCache eternal="false" maxElementsInMemory="1000"
-                  overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="600"
-                  timeToLiveSeconds="600" memoryStoreEvictionPolicy="LRU"/>
-    <!--数据源缓存1小时-->
-    <cache name="datasource" eternal="false" maxElementsInMemory="100"
-           overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="3600"
-           memoryStoreEvictionPolicy="LRU"/>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd" updateCheck="false">
+       <defaultCache eternal="false" maxElementsInMemory="1000" overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="600" timeToLiveSeconds="600" memoryStoreEvictionPolicy="LRU"/>
+       <!--数据源缓存1小时-->
+       <cache name="datasource" eternal="false" maxElementsInMemory="100" overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="3600" memoryStoreEvictionPolicy="LRU"/>
 
-    <!--token_app永久缓存-->
-    <cache name="token_app" eternal="true" maxElementsInMemory="10000"
-           overflowToDisk="false" diskPersistent="false"
-           memoryStoreEvictionPolicy="LRU"/>
+       <!--token_app永久缓存-->
+       <cache name="token_app" eternal="true" maxElementsInMemory="10000" overflowToDisk="false" diskPersistent="false" memoryStoreEvictionPolicy="LRU"/>
 
-    <!--app_token永久缓存-->
-    <cache name="app_token" eternal="true" maxElementsInMemory="10000"
-           overflowToDisk="false" diskPersistent="false"
-           memoryStoreEvictionPolicy="LRU"/>
+       <!--app_token永久缓存-->
+       <cache name="app_token" eternal="true" maxElementsInMemory="10000" overflowToDisk="false" diskPersistent="false" memoryStoreEvictionPolicy="LRU"/>
 
-    <!--app_AuthGroups缓存1小时-->
-    <cache name="app_AuthGroups" eternal="false" maxElementsInMemory="10000"
-           overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="3600"
-           memoryStoreEvictionPolicy="LRU"/>
+       <!--app_AuthGroups缓存1小时-->
+       <cache name="app_AuthGroups" eternal="false" maxElementsInMemory="10000" overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="3600" memoryStoreEvictionPolicy="LRU"/>
 
-    <!--api参数空闲缓存5min-->
-    <cache name="api" eternal="false" maxElementsInMemory="10000"
-           overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="300"
-           memoryStoreEvictionPolicy="LRU"/>
+       <!--api参数空闲缓存5min-->
+       <cache name="api" eternal="false" maxElementsInMemory="10000" overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="300" memoryStoreEvictionPolicy="LRU"/>
+       <cache name="api_cache_config" eternal="false" maxElementsInMemory="10000" overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="300" memoryStoreEvictionPolicy="LRU"/>
+       <cache name="api_alarm_config" eternal="false" maxElementsInMemory="10000" overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="300" memoryStoreEvictionPolicy="LRU"/>
 
 
 </ehcache>

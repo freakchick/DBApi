@@ -2,9 +2,10 @@ package com.gitee.freakchicken.dbapi.basic.service;
 
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.gitee.freakchicken.dbapi.basic.dao.AlarmMapper;
-import com.gitee.freakchicken.dbapi.basic.domain.ApiAlarm;
+import com.gitee.freakchicken.dbapi.basic.domain.ApiAlarmConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,12 +19,13 @@ import java.util.List;
 @Slf4j
 @Service
 @DS("meta-db")
-public class AlarmService {
+public class AlarmConfigService {
 
     @Autowired
     AlarmMapper alarmMapper;
 
-    public List<ApiAlarm> selectByApiId(String apiId){
+    @Cacheable(value = "api_alarm_config", key = "#apiId", unless = "#result == null")
+    public List<ApiAlarmConfig> selectByApiId(String apiId){
         return alarmMapper.selectByApiId(apiId);
     }
 

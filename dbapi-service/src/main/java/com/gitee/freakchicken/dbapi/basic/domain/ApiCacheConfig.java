@@ -5,14 +5,14 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-@TableName(value = "api_cache")
-public class ApiCache {
+@TableName(value = "api_cache_config")
+public class ApiCacheConfig {
 
     @TableField(value = "api_id")
     String apiId;
 
-    @TableField("plugin")
-    String plugin;
+    @TableField("plugin_name")
+    String pluginName;
 
     @TableField("plugin_param")
     String pluginParam;

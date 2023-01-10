@@ -1,10 +1,13 @@
 package com.gitee.freakchicken.dbapi.common;
 
-import com.baomidou.mybatisplus.annotation.*;
-import lombok.Data;
-
 import java.io.Serializable;
-import java.util.List;
+
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+
+import lombok.Data;
 
 /**
  * @program: dbApi
@@ -28,12 +31,6 @@ public class ApiConfig implements Serializable {
     @TableField
     String path;
 
-    @TableField(value = "datasource_id")
-    String datasourceId;
-
-    // @TableField(exist = false)
-    // List<ApiSql> sqlList;
-
     /**
      * application/x-www-form-urlencoded 类API对应的参数
      */
@@ -49,29 +46,8 @@ public class ApiConfig implements Serializable {
     @TableField("group_id")
     String groupId;
 
-    // @TableField(value = "cache_plugin", insertStrategy = FieldStrategy.NOT_EMPTY)
-    // String cachePlugin;
-
-    /**
-     * 缓存插件参数
-     */
-    // @TableField(value = "cache_plugin_params", updateStrategy = FieldStrategy.IGNORED)
-    // String cachePluginParams;
-
-    @TableField(value = "create_time")
-    String createTime;
-
-    @TableField(value = "update_time")
-    String updateTime;
-
     @TableField(value = "content_type")
     String contentType;
-
-    /**
-     * 是否打开事务，1-是；0-否
-     */
-    // @TableField("open_trans")
-    // Integer openTrans;
 
     /**
      * application/json 类API对应的json参数示例
@@ -79,9 +55,17 @@ public class ApiConfig implements Serializable {
     @TableField(value = "json_param", updateStrategy = FieldStrategy.IGNORED)
     String jsonParam;
 
-    // @TableField(exist = false)
-    // String alarmPlugin;
+    @TableField("task_type")
+    String taskType;
 
-    // @TableField(exist = false)
-    // String alarmPluginParam;
+    @TableField
+    String task;
+
+    @TableField(value = "create_time")
+    String createTime;
+
+    @TableField(value = "update_time")
+    String updateTime;
+
+
 }

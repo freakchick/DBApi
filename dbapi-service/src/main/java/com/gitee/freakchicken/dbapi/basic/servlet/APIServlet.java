@@ -1,41 +1,42 @@
 package com.gitee.freakchicken.dbapi.basic.servlet;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
-import com.gitee.freakchicken.dbapi.basic.domain.ApiAlarm;
-import com.gitee.freakchicken.dbapi.basic.domain.ApiCache;
-import com.gitee.freakchicken.dbapi.basic.domain.DataSource;
-import com.gitee.freakchicken.dbapi.basic.executor.SQLExecutor;
-import com.gitee.freakchicken.dbapi.basic.executor.ESExecutor;
-import com.gitee.freakchicken.dbapi.basic.service.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.List;
+import java.util.Map;
 
-import com.gitee.freakchicken.dbapi.basic.util.ThreadUtils;
-import com.gitee.freakchicken.dbapi.common.ApiConfig;
-
-import com.gitee.freakchicken.dbapi.common.ResponseDto;
-
-import com.gitee.freakchicken.dbapi.plugin.AlarmPlugin;
-import com.gitee.freakchicken.dbapi.plugin.CachePlugin;
-import com.gitee.freakchicken.dbapi.plugin.PluginManager;
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
+import com.gitee.freakchicken.dbapi.basic.domain.ApiAlarmConfig;
+import com.gitee.freakchicken.dbapi.basic.domain.ApiCacheConfig;
+import com.gitee.freakchicken.dbapi.basic.executor.ESExecutor;
+import com.gitee.freakchicken.dbapi.basic.executor.SQLExecutor;
+import com.gitee.freakchicken.dbapi.basic.service.AlarmConfigService;
+import com.gitee.freakchicken.dbapi.basic.service.ApiConfigService;
+import com.gitee.freakchicken.dbapi.basic.service.ApiService;
+import com.gitee.freakchicken.dbapi.basic.service.CacheConfigService;
+import com.gitee.freakchicken.dbapi.basic.service.DataSourceService;
+import com.gitee.freakchicken.dbapi.basic.util.ThreadUtils;
+import com.gitee.freakchicken.dbapi.common.ApiConfig;
+import com.gitee.freakchicken.dbapi.common.ResponseDto;
+import com.gitee.freakchicken.dbapi.plugin.AlarmPlugin;
+import com.gitee.freakchicken.dbapi.plugin.CachePlugin;
+import com.gitee.freakchicken.dbapi.plugin.PluginManager;
 
-import java.util.List;
-import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
@@ -49,9 +50,9 @@ public class APIServlet extends HttpServlet {
     ApiService apiService;
 
     @Autowired
-    AlarmService alarmService;
+    AlarmConfigService alarmService;
     @Autowired
-    CacheService cacheService;
+    CacheConfigService cacheService;
 
     @Value("${dbapi.api.context}")
     String apiContext;
@@ -99,19 +100,14 @@ public class APIServlet extends HttpServlet {
         }
 
         try {
-            DataSource datasource = dataSourceService.detail(config.getDatasourceId());
-            if (datasource == null) {
-                response.setStatus(500);
-                return ResponseDto.fail("Datasource not exists!");
-            }
 
             Map<String, Object> requestParam = getParams(request, config);
 
-            ApiCache cache = cacheService.getByApiId(config.getId());
+            ApiCacheConfig cache = cacheService.getByApiId(config.getId());
 
-            // ger data from cace
+            // ger data from cache
             if (cache != null) {
-                CachePlugin cachePlugin = PluginManager.getCachePlugin(cache.getPlugin());
+                CachePlugin cachePlugin = PluginManager.getCachePlugin(cache.getPluginName());
                 Object o = cachePlugin.get(config, requestParam);
                 if (o != null) {
                     return ResponseDto.apiSuccess(o); // 如果缓存有数据直接返回
@@ -119,15 +115,15 @@ public class APIServlet extends HttpServlet {
             }
 
             Object res = null;
-            if ("es".equals(datasource.getType())) {
-                res = ESExecutor.execute(config, datasource, requestParam);
-            } else {
-                res = SQLExecutor.execute(config, datasource, requestParam);
+            if ("es".equals(config.getTaskType())) {
+                res = ESExecutor.execute(config, requestParam);
+            } else if("sql".equals(config.getTaskType())) {
+                res = SQLExecutor.execute(config, requestParam);
             }
 
             // set data to cache
             if (cache != null) {
-                CachePlugin cachePlugin = PluginManager.getCachePlugin(cache.getPlugin());
+                CachePlugin cachePlugin = PluginManager.getCachePlugin(cache.getPluginName());
                 cachePlugin.set(config, requestParam, res);
             }
 
@@ -135,11 +131,11 @@ public class APIServlet extends HttpServlet {
 
         } catch (Exception e) {
             // alarm if error
-            List<ApiAlarm> alarms = alarmService.selectByApiId(config.getId());
-            for (ApiAlarm alarm : alarms) {
+            List<ApiAlarmConfig> alarms = alarmService.selectByApiId(config.getId());
+            for (ApiAlarmConfig alarm : alarms) {
                 try {
                     String param = alarm.getPluginParam();
-                    AlarmPlugin alarmPlugin = PluginManager.getAlarmPlugin(alarm.getPlugin());
+                    AlarmPlugin alarmPlugin = PluginManager.getAlarmPlugin(alarm.getPluginName());
                     ThreadUtils.submitAlarmTask(new Runnable() {
                         @Override
                         public void run() {
@@ -147,7 +143,7 @@ public class APIServlet extends HttpServlet {
                         }
                     });
                 } catch (Exception error) {
-                    log.error(alarm.getPlugin() + " error!", error);
+                    log.error(alarm.getPluginName() + " error!", error);
                 }
             }
 
@@ -158,7 +154,8 @@ public class APIServlet extends HttpServlet {
     private Map<String, Object> getParams(HttpServletRequest request, ApiConfig apiConfig) {
         /**
          * Content-Type格式说明:
-         * {@see <a href="https://www.w3.org/Protocols/rfc1341/4_Content-Type.html">Content-Type</a>}
+         * {@see <a href=
+         * "https://www.w3.org/Protocols/rfc1341/4_Content-Type.html">Content-Type</a>}
          * type/subtype(;parameter)? type
          */
         String unParseContentType = request.getContentType();
@@ -184,7 +181,8 @@ public class APIServlet extends HttpServlet {
             if (MediaType.APPLICATION_FORM_URLENCODED_VALUE.equalsIgnoreCase(apiConfig.getContentType())) {
                 params = apiService.getSqlParam(request, apiConfig);
             } else {
-                throw new RuntimeException("This API only supports content-type: " + apiConfig.getContentType() + ", but you use: " + contentType);
+                throw new RuntimeException("This API only supports content-type: " + apiConfig.getContentType()
+                        + ", but you use: " + contentType);
             }
         } else {
             throw new RuntimeException("content-type not supported: " + contentType);

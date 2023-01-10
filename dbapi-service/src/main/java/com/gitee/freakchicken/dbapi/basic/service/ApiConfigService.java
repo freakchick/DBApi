@@ -5,12 +5,13 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.gitee.freakchicken.dbapi.basic.dao.ApiConfigMapper;
-import com.gitee.freakchicken.dbapi.basic.dao.ApiSqlMapper;
+import com.gitee.freakchicken.dbapi.basic.dao.CacheConfigMapper;
 import com.gitee.freakchicken.dbapi.basic.dao.DataSourceMapper;
 import com.gitee.freakchicken.dbapi.basic.dao.AlarmMapper;
-import com.gitee.freakchicken.dbapi.basic.domain.ApiAlarm;
+import com.gitee.freakchicken.dbapi.basic.domain.ApiAlarmConfig;
+import com.gitee.freakchicken.dbapi.basic.domain.ApiCacheConfig;
 import com.gitee.freakchicken.dbapi.basic.domain.ApiDto;
-import com.gitee.freakchicken.dbapi.basic.domain.ApiSql;
+
 import com.gitee.freakchicken.dbapi.basic.util.UUIDUtil;
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
@@ -45,15 +46,14 @@ public class ApiConfigService {
     @Autowired
     DataSourceMapper dataSourceMapper;
     @Autowired
-    ApiSqlMapper apiSqlMapper;
+    CacheConfigMapper cacheMapper;
     @Autowired
     AlarmMapper alarmMapper;
     @Autowired
     CacheManager cacheManager;
 
     @Transactional
-    public ResponseDto add(ApiConfig apiConfig) {
-
+    public ResponseDto add(ApiConfig apiConfig, ApiAlarmConfig alarm, ApiCacheConfig apiCache) {
         int size = apiConfigMapper.selectCountByPath(apiConfig.getPath());
         if (size > 0) {
             return ResponseDto.fail("Path has been used!");
@@ -63,7 +63,7 @@ public class ApiConfigService {
             apiConfig.setId(id);
 
             if (MediaType.APPLICATION_JSON_VALUE.equals(apiConfig.getContentType())) {
-                apiConfig.setParams("[]"); //不能设置null 前端使用会报错
+                apiConfig.setParams("[]"); // 不能设置null 前端使用会报错
             } else if (MediaType.APPLICATION_FORM_URLENCODED_VALUE.equals(apiConfig.getContentType())) {
                 apiConfig.setJsonParam(null);
             }
@@ -71,29 +71,23 @@ public class ApiConfigService {
             String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
             apiConfig.setCreateTime(now);
             apiConfig.setUpdateTime(now);
-
             apiConfigMapper.insert(apiConfig);
 
-            apiConfig.getSqlList().stream().forEach(t -> {
-                t.setApiId(apiConfig.getId());
-                apiSqlMapper.insert(t);
-            });
-
-            if (StringUtils.isNoneBlank(apiConfig.getAlarmPlugin())) {
-                ApiAlarm alarm = new ApiAlarm();
+            if (alarm != null && StringUtils.isNotBlank(alarm.getPluginName())) {
                 alarm.setApiId(id);
-                alarm.setAlarmPlugin(apiConfig.getAlarmPlugin());
-                alarm.setAlarmPluginParam(apiConfig.getAlarmPluginParam());
                 alarmMapper.insert(alarm);
+            }
+            if (apiCache != null && StringUtils.isNotBlank(alarm.getPluginName())) {
+                apiCache.setApiId(id);
+                cacheMapper.insert(apiCache);
             }
             return ResponseDto.successWithMsg("create API success");
         }
 
     }
 
-    //    @CacheEvict(value = "api", key = "#apiConfig.path")
     @Transactional
-    public ResponseDto update(ApiConfig apiConfig) {
+    public ResponseDto update(ApiConfig apiConfig, ApiAlarmConfig alarm, ApiCacheConfig apiCache) {
 
         int size = apiConfigMapper.selectCountByPathWhenUpdate(apiConfig.getPath(), apiConfig.getId());
         if (size > 0) {
@@ -104,86 +98,81 @@ public class ApiConfigService {
             apiConfig.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 
             if (MediaType.APPLICATION_JSON_VALUE.equals(apiConfig.getContentType())) {
-                apiConfig.setParams("[]"); //不能设置null 前端使用会报错
+                apiConfig.setParams("[]"); // 不能设置null 前端使用会报错
             } else if (MediaType.APPLICATION_FORM_URLENCODED_VALUE.equals(apiConfig.getContentType())) {
                 apiConfig.setJsonParam(null);
             }
-
             apiConfigMapper.updateById(apiConfig);
 
-            apiSqlMapper.deleteByApiID(apiConfig.getId());
-            apiConfig.getSqlList().stream().forEach(t -> {
-                t.setApiId(apiConfig.getId());
-                apiSqlMapper.insert(t);
-            });
-
-            alarmMapper.deleteByApiID(apiConfig.getId());
-            if (StringUtils.isNoneBlank(apiConfig.getAlarmPlugin())) {
-                ApiAlarm alarm = new ApiAlarm();
-                alarm.setApiId(apiConfig.getId());
-                alarm.setAlarmPlugin(apiConfig.getAlarmPlugin());
-                alarm.setAlarmPluginParam(apiConfig.getAlarmPluginParam());
+            alarmMapper.deleteByApiId(apiConfig.getId());
+            if (alarm != null) {
                 alarmMapper.insert(alarm);
             }
-
-            //清除缓存插件对应的所有缓存
-            if (StringUtils.isNoneBlank(oldConfig.getCachePlugin())) {
-                try {
-                    CachePlugin cachePlugin = PluginManager.getCachePlugin(oldConfig.getCachePlugin());
-                    cachePlugin.clean(oldConfig);
-                    log.debug("clean cache from old config when update api");
-                } catch (Exception e) {
-                    log.error("clean cache failed when update api", e);
-                }
+            ApiCacheConfig oldCacheConfig = cacheMapper.selectByApiId(apiConfig.getId());
+            cacheMapper.deleteByApiId(apiConfig.getId());
+            if (apiCache != null) {
+                cacheMapper.insert(apiCache);
             }
 
-            cacheManager.getCache("api").evictIfPresent(oldConfig.getPath());
+            cleanDataCacheAndMetaCache(oldConfig, oldCacheConfig);
 
-            return ResponseDto.successWithMsg("update API success");
+            return ResponseDto.successWithMsg("Update API Success");
         }
 
     }
 
-    //    @CacheEvict(value = "api", key = "#path")
     @Transactional
     public void delete(String id) {
         ApiConfig oldConfig = apiConfigMapper.selectById(id);
-        apiConfigMapper.deleteById(id);
-        apiSqlMapper.deleteByApiID(id);
-        alarmMapper.deleteByApiID(id);
+        ApiCacheConfig oldCacheConfig = cacheMapper.selectByApiId(id);
 
-        //清除所有缓存
-        if (StringUtils.isNoneBlank(oldConfig.getCachePlugin())) {
+        apiConfigMapper.deleteById(id);
+        alarmMapper.deleteByApiId(id);
+        cacheMapper.deleteByApiId(id);
+
+        cleanDataCacheAndMetaCache(oldConfig, oldCacheConfig);
+    }
+
+    /**
+     * 刪除API相关的元数据缓存和 API配置的插件对应的数据缓存
+     * 
+     * @param apiConfig
+     * @param apiCache
+     */
+    public void cleanDataCacheAndMetaCache(ApiConfig apiConfig, ApiCacheConfig apiCache) {
+        // 清除API相关的元数据缓存
+        cacheManager.getCache("api").evictIfPresent(apiConfig.getPath());
+        cacheManager.getCache("api_alarm_config").evictIfPresent(apiConfig.getId());
+        cacheManager.getCache("api_cache_config").evictIfPresent(apiConfig.getId());
+
+        if (apiCache != null) {
             try {
-                CachePlugin cachePlugin = PluginManager.getCachePlugin(oldConfig.getCachePlugin());
-                cachePlugin.clean(oldConfig);
-                log.debug("delete api then clean cache");
+                CachePlugin cachePlugin = PluginManager.getCachePlugin(apiCache.getPluginName());
+                cachePlugin.clean(apiConfig);
+                log.debug("clean data cache when delete api");
             } catch (Exception e) {
                 log.error("clean cache failed when delete api", e);
             }
         }
-        cacheManager.getCache("api").evictIfPresent(oldConfig.getPath());
-
     }
 
     public ApiConfig detail(String id) {
         ApiConfig apiConfig = apiConfigMapper.selectById(id);
-        List<ApiSql> list = apiSqlMapper.selectByApiId(apiConfig.getId());
-        apiConfig.setSqlList(list);
-        List<ApiAlarm> alarms = alarmMapper.selectByApiId(apiConfig.getId());
-        if (alarms.size() > 0) {
-            apiConfig.setAlarmPlugin(alarms.get(0).getAlarmPlugin());
-            apiConfig.setAlarmPluginParam(alarms.get(0).getAlarmPluginParam());
-        }
         return apiConfig;
     }
 
     public List<ApiConfig> getAll() {
         List<ApiConfig> list = apiConfigMapper.selectList(null);
-        List<ApiConfig> collect = list.stream().sorted(Comparator.comparing(ApiConfig::getUpdateTime).reversed()).collect(Collectors.toList());
+        List<ApiConfig> collect = list.stream().sorted(Comparator.comparing(ApiConfig::getUpdateTime).reversed())
+                .collect(Collectors.toList());
         return collect;
     }
 
+    /**
+     * 给前端使用的数据格式
+     * 
+     * @return
+     */
     public JSONArray getAllDetail() {
         List<ApiDto> list = apiConfigMapper.getAllDetail();
 
@@ -214,44 +203,28 @@ public class ApiConfigService {
     @Cacheable(value = "api", key = "#path", unless = "#result == null")
     public ApiConfig getConfig(String path) {
         ApiConfig apiConfig = apiConfigMapper.selectByPathOnline(path);
-        if(Objects.isNull(apiConfig)){
-            log.warn("can't get [{}] api config from db",path);
+        if (Objects.isNull(apiConfig)) {
+            log.warn("can't get [{}] api config from db", path);
             return null;
-        }
-        List<ApiSql> apiSqls = apiSqlMapper.selectByApiId(apiConfig.getId());
-        apiConfig.setSqlList(apiSqls);
-        List<ApiAlarm> alarms = alarmMapper.selectByApiId(apiConfig.getId());
-        if (alarms.size() > 0) {
-            apiConfig.setAlarmPlugin(alarms.get(0).getAlarmPlugin());
-            apiConfig.setAlarmPluginParam(alarms.get(0).getAlarmPluginParam());
         }
         return apiConfig;
     }
 
-    public void online(String id, String path) {
+    public void online(String id) {
         ApiConfig apiConfig = apiConfigMapper.selectById(id);
         apiConfig.setStatus(1);
         apiConfigMapper.updateById(apiConfig);
     }
 
-    //    @CacheEvict(value = "api", key = "#path")
-    public void offline(String id, String path) {
+    public void offline(String id) {
 
         ApiConfig apiConfig = apiConfigMapper.selectById(id);
+        ApiCacheConfig cacheConfig = cacheMapper.selectByApiId(id);
+
         apiConfig.setStatus(0);
         apiConfigMapper.updateById(apiConfig);
 
-        cacheManager.getCache("api").evictIfPresent(path);
-
-        if (StringUtils.isNoneBlank(apiConfig.getCachePlugin())) {
-            try {
-                CachePlugin cachePlugin = PluginManager.getCachePlugin(apiConfig.getCachePlugin());
-                cachePlugin.clean(apiConfig);
-                log.debug("offline api then clean cache");
-            } catch (Exception e) {
-                log.error("clean cache error", e);
-            }
-        }
+        cleanDataCacheAndMetaCache(apiConfig, cacheConfig);
 
     }
 
@@ -305,23 +278,21 @@ public class ApiConfigService {
 
     public JSONObject selectBatch(List<String> ids) {
         List<ApiConfig> list = apiConfigMapper.selectBatchIds(ids);
-        List<ApiSql> sqls = apiSqlMapper.selectByApiIds(ids);
+
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("api", list);
-        jsonObject.put("sql", sqls);
+
         return jsonObject;
     }
 
-
     @Transactional
-    public void insertBatch(List<ApiConfig> configs, List<ApiSql> sqls) {
+    public void insertBatch(List<ApiConfig> configs) {
         configs.stream().forEach(t -> {
             t.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             t.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             t.setStatus(0);
             apiConfigMapper.insert(t);
         });
-        sqls.stream().forEach(t -> apiSqlMapper.insert(t));
 
     }
 }

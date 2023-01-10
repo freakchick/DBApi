@@ -15,42 +15,39 @@ DROP TABLE IF EXISTS `api_config`;
 CREATE TABLE `api_config`
 (
     `id`                  varchar(255) NOT NULL,
-    `path`                varchar(255) DEFAULT NULL,
     `name`                varchar(255) DEFAULT NULL,
     `note`                varchar(255) DEFAULT NULL,
+    `path`                varchar(255) DEFAULT NULL,
     `params`              text,
+    `json_param`          text,
     `status`              int(11) DEFAULT NULL,
-    `datasource_id`       varchar(255) DEFAULT NULL,
     `previlege`           int(11) DEFAULT NULL,
     `group_id`            varchar(255) DEFAULT NULL,
-    `cache_plugin`        varchar(255) DEFAULT NULL,
-    `cache_plugin_params` varchar(255) DEFAULT NULL,
-    `create_time`         varchar(20)  DEFAULT NULL,
-    `update_time`         varchar(20)  DEFAULT NULL,
+ 
     `content_type`        varchar(50)  DEFAULT NULL,
-    `open_trans`          int(11) DEFAULT NULL,
-    `json_param`          text,
+    `task_type`        varchar(20)  DEFAULT NULL,
+    `task`          text,
+       `create_time`         varchar(20)  DEFAULT NULL,
+    `update_time`         varchar(20)  DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `path` (`path`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `api_sql`;
-CREATE TABLE `api_sql`
-(
-    `id`                      int(11) NOT NULL AUTO_INCREMENT,
-    `api_id`                  varchar(11) NOT NULL,
-    `sql_text`                text        NOT NULL,
-    `transform_plugin`        varchar(255) DEFAULT NULL,
-    `transform_plugin_params` varchar(255) DEFAULT NULL,
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `api_alarm`;
-CREATE TABLE `api_alarm`
+DROP TABLE IF EXISTS `api_alarm_config`;
+CREATE TABLE `api_alarm_config`
 (
     `api_id`             varchar(20) NOT NULL,
-    `alarm_plugin`       varchar(255)  DEFAULT NULL,
-    `alarm_plugin_param` varchar(1024) DEFAULT NULL
+    `plugin_name`       varchar(255)  DEFAULT NULL,
+    `plugin_param` varchar(1024) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `api_cache_config`;
+CREATE TABLE `api_cache_config`
+(
+    `api_id`             varchar(20) NOT NULL,
+    `plugin_name`       varchar(255)  DEFAULT NULL,
+    `plugin_param` varchar(1024) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `api_group`;

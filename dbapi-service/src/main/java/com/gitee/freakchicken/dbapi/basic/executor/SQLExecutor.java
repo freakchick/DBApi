@@ -1,57 +1,54 @@
 package com.gitee.freakchicken.dbapi.basic.executor;
 
-import com.alibaba.druid.pool.DruidPooledConnection;
-
-import com.alibaba.fastjson.JSONObject;
-import com.gitee.freakchicken.dbapi.basic.domain.ApiSql;
-import com.gitee.freakchicken.dbapi.basic.domain.DataSource;
-import com.gitee.freakchicken.dbapi.basic.domain.SQLApiConfig;
-import com.gitee.freakchicken.dbapi.basic.util.JdbcUtil;
-import com.gitee.freakchicken.dbapi.basic.util.PoolManager;
-import com.gitee.freakchicken.dbapi.basic.util.SqlEngineUtil;
-import com.gitee.freakchicken.dbapi.basic.util.ThreadUtils;
-import com.gitee.freakchicken.dbapi.basic.service.SQLApiConfigService;
-
-import com.gitee.freakchicken.dbapi.common.ApiConfig;
-import com.gitee.freakchicken.dbapi.common.ResponseDto;
-import com.gitee.freakchicken.dbapi.plugin.CachePlugin;
-import com.gitee.freakchicken.dbapi.plugin.PluginManager;
-import com.gitee.freakchicken.dbapi.plugin.TransformPlugin;
-import com.gitee.freakchicken.dbapi.plugin.AlarmPlugin;
-import com.github.freakchick.orange.SqlMeta;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.alibaba.druid.pool.DruidPooledConnection;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.gitee.freakchicken.dbapi.basic.domain.DataSource;
+import com.gitee.freakchicken.dbapi.basic.dto.ApiSqlDto;
+import com.gitee.freakchicken.dbapi.basic.dto.SQLTaskDto;
+import com.gitee.freakchicken.dbapi.basic.service.DataSourceService;
+import com.gitee.freakchicken.dbapi.basic.util.JdbcUtil;
+import com.gitee.freakchicken.dbapi.basic.util.PoolManager;
+import com.gitee.freakchicken.dbapi.basic.util.SqlEngineUtil;
+import com.gitee.freakchicken.dbapi.common.ApiConfig;
+import com.gitee.freakchicken.dbapi.plugin.PluginManager;
+import com.gitee.freakchicken.dbapi.plugin.TransformPlugin;
+import com.github.freakchick.orange.SqlMeta;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
 public class SQLExecutor {
 
     @Autowired
-    SQLApiConfigService SQLApiConfigService;
+    DataSourceService dataSourceService;
 
-    public Object execute(ApiConfig config, DataSource datasource, Map<String, Object> sqlParam) throws Exception {
-        SQLApiConfig SQLApiConfig  = SQLApiConfigService.getConfigByApiId(config.getId());
+    public Object execute(ApiConfig config, Map<String, Object> sqlParam) throws Exception {
 
-        List<ApiSql> sqlList = SQLApiConfig.getSqlList();
-
+        SQLTaskDto task = JSON.parseObject(config.getTask(), SQLTaskDto.class);
+        DataSource datasource = dataSourceService.detail(task.getDatasourceId());
+        if (datasource == null) {
+            throw new RuntimeException("Datasource not exists!");
+        }
+        List<ApiSqlDto> sqlList = task.getSqlList();
         DruidPooledConnection connection = PoolManager.getPooledConnection(datasource);
-        boolean flag = SQLApiConfig.getOpenTrans() == 1 ? true : false;
         // 执行sql
-        List<Object> dataList = executeSql(connection, sqlList, sqlParam, flag);
+        List<Object> dataList = executeSql(connection, sqlList, sqlParam, task.getTransaction());
 
         // 执行数据转换
         for (int i = 0; i < sqlList.size(); i++) {
-            ApiSql apiSql = sqlList.get(i);
+            ApiSqlDto apiSql = sqlList.get(i);
             Object data = dataList.get(i);
             // 如果此单条sql是查询类sql，并且配置了数据转换插件
             if (data instanceof Iterable && StringUtils.isNotBlank(apiSql.getTransformPlugin())) {
@@ -67,19 +64,18 @@ public class SQLExecutor {
         if (dataList.size() == 1) {
             res = dataList.get(0);
         }
-
         return res;
-
     }
 
-    public List<Object> executeSql(Connection connection, List<ApiSql> sqlList, Map<String, Object> sqlParam, boolean flag) {
+    public List<Object> executeSql(Connection connection, List<ApiSqlDto> sqlList, Map<String, Object> sqlParam,
+            boolean flag) {
         List<Object> dataList = new ArrayList<>();
         try {
             if (flag)
                 connection.setAutoCommit(false);
             else
                 connection.setAutoCommit(true);
-            for (ApiSql apiSql : sqlList) {
+            for (ApiSqlDto apiSql : sqlList) {
                 SqlMeta sqlMeta = SqlEngineUtil.getEngine().parse(apiSql.getSqlText(), sqlParam);
                 Object data = JdbcUtil.executeSql(connection, sqlMeta.getSql(), sqlMeta.getJdbcParamValues());
                 dataList.add(data);
