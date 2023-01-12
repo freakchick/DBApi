@@ -1,23 +1,13 @@
 package com.gitee.freakchicken.dbapi.basic.service;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.baomidou.dynamic.datasource.annotation.DS;
-import com.gitee.freakchicken.dbapi.basic.dao.ApiConfigMapper;
-import com.gitee.freakchicken.dbapi.basic.dao.CacheConfigMapper;
-import com.gitee.freakchicken.dbapi.basic.dao.DataSourceMapper;
-import com.gitee.freakchicken.dbapi.basic.dao.AlarmMapper;
-import com.gitee.freakchicken.dbapi.basic.domain.ApiAlarmConfig;
-import com.gitee.freakchicken.dbapi.basic.domain.ApiCacheConfig;
-import com.gitee.freakchicken.dbapi.basic.domain.ApiDto;
+import java.text.SimpleDateFormat;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
-import com.gitee.freakchicken.dbapi.basic.util.UUIDUtil;
-import com.gitee.freakchicken.dbapi.common.ApiConfig;
-import com.gitee.freakchicken.dbapi.common.ResponseDto;
-import com.gitee.freakchicken.dbapi.plugin.CachePlugin;
-import com.gitee.freakchicken.dbapi.plugin.PluginManager;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
@@ -26,9 +16,22 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.stream.Collectors;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.dynamic.datasource.annotation.DS;
+import com.gitee.freakchicken.dbapi.basic.dao.ApiConfigMapper;
+import com.gitee.freakchicken.dbapi.basic.dao.ApiPluginConfigMapper;
+import com.gitee.freakchicken.dbapi.basic.dao.DataSourceMapper;
+import com.gitee.freakchicken.dbapi.basic.domain.ApiDto;
+import com.gitee.freakchicken.dbapi.basic.domain.ApiPluginConfig;
+import com.gitee.freakchicken.dbapi.basic.util.UUIDUtil;
+import com.gitee.freakchicken.dbapi.common.ApiConfig;
+import com.gitee.freakchicken.dbapi.common.ResponseDto;
+import com.gitee.freakchicken.dbapi.plugin.CachePlugin;
+import com.gitee.freakchicken.dbapi.plugin.PluginManager;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @program: dbApi
@@ -45,15 +48,14 @@ public class ApiConfigService {
     ApiConfigMapper apiConfigMapper;
     @Autowired
     DataSourceMapper dataSourceMapper;
+
     @Autowired
-    CacheConfigMapper cacheMapper;
-    @Autowired
-    AlarmMapper alarmMapper;
+    ApiPluginConfigMapper pluginConfigMapper;
     @Autowired
     CacheManager cacheManager;
 
     @Transactional
-    public ResponseDto add(ApiConfig apiConfig, ApiAlarmConfig alarm, ApiCacheConfig apiCache) {
+    public ResponseDto add(ApiConfig apiConfig, List<ApiPluginConfig> pluginConfigs) {
         int size = apiConfigMapper.selectCountByPath(apiConfig.getPath());
         if (size > 0) {
             return ResponseDto.fail("Path has been used!");
@@ -73,21 +75,18 @@ public class ApiConfigService {
             apiConfig.setUpdateTime(now);
             apiConfigMapper.insert(apiConfig);
 
-            if (alarm != null && StringUtils.isNotBlank(alarm.getPluginName())) {
-                alarm.setApiId(id);
-                alarmMapper.insert(alarm);
-            }
-            if (apiCache != null && StringUtils.isNotBlank(alarm.getPluginName())) {
-                apiCache.setApiId(id);
-                cacheMapper.insert(apiCache);
-            }
+            pluginConfigs.stream().forEach(t -> {
+                t.setApiId(id);
+                pluginConfigMapper.insert(t);
+            });
+
             return ResponseDto.successWithMsg("create API success");
         }
 
     }
 
     @Transactional
-    public ResponseDto update(ApiConfig apiConfig, ApiAlarmConfig alarm, ApiCacheConfig apiCache) {
+    public ResponseDto update(ApiConfig apiConfig, List<ApiPluginConfig> pluginConfigs) {
 
         int size = apiConfigMapper.selectCountByPathWhenUpdate(apiConfig.getPath(), apiConfig.getId());
         if (size > 0) {
@@ -103,19 +102,13 @@ public class ApiConfigService {
                 apiConfig.setJsonParam(null);
             }
             apiConfigMapper.updateById(apiConfig);
+            ApiPluginConfig oldCacheConfig = pluginConfigMapper.selectCachePlugin(apiConfig.getId());
 
-            alarmMapper.deleteByApiId(apiConfig.getId());
-            if (alarm != null) {
-                alarmMapper.insert(alarm);
-            }
-            ApiCacheConfig oldCacheConfig = cacheMapper.selectByApiId(apiConfig.getId());
-            cacheMapper.deleteByApiId(apiConfig.getId());
-            if (apiCache != null) {
-                cacheMapper.insert(apiCache);
-            }
-
+            pluginConfigMapper.deleteByApiId(apiConfig.getId());
+            pluginConfigs.stream().forEach(t -> {
+                pluginConfigMapper.insert(t);
+            });
             cleanDataCacheAndMetaCache(oldConfig, oldCacheConfig);
-
             return ResponseDto.successWithMsg("Update API Success");
         }
 
@@ -124,11 +117,10 @@ public class ApiConfigService {
     @Transactional
     public void delete(String id) {
         ApiConfig oldConfig = apiConfigMapper.selectById(id);
-        ApiCacheConfig oldCacheConfig = cacheMapper.selectByApiId(id);
+        ApiPluginConfig oldCacheConfig = pluginConfigMapper.selectCachePlugin(id);
 
         apiConfigMapper.deleteById(id);
-        alarmMapper.deleteByApiId(id);
-        cacheMapper.deleteByApiId(id);
+        pluginConfigMapper.deleteByApiId(id);
 
         cleanDataCacheAndMetaCache(oldConfig, oldCacheConfig);
     }
@@ -139,15 +131,15 @@ public class ApiConfigService {
      * @param apiConfig
      * @param apiCache
      */
-    public void cleanDataCacheAndMetaCache(ApiConfig apiConfig, ApiCacheConfig apiCache) {
+    private void cleanDataCacheAndMetaCache(ApiConfig apiConfig, ApiPluginConfig apiCacheConfig) {
         // 清除API相关的元数据缓存
         cacheManager.getCache("api").evictIfPresent(apiConfig.getPath());
         cacheManager.getCache("api_alarm_config").evictIfPresent(apiConfig.getId());
         cacheManager.getCache("api_cache_config").evictIfPresent(apiConfig.getId());
-
-        if (apiCache != null) {
+        cacheManager.getCache("api_conversion_config").evictIfPresent(apiConfig.getId());
+        if (apiCacheConfig != null) {
             try {
-                CachePlugin cachePlugin = PluginManager.getCachePlugin(apiCache.getPluginName());
+                CachePlugin cachePlugin = PluginManager.getCachePlugin(apiCacheConfig.getPluginName());
                 cachePlugin.clean(apiConfig);
                 log.debug("clean data cache when delete api");
             } catch (Exception e) {
@@ -219,12 +211,12 @@ public class ApiConfigService {
     public void offline(String id) {
 
         ApiConfig apiConfig = apiConfigMapper.selectById(id);
-        ApiCacheConfig cacheConfig = cacheMapper.selectByApiId(id);
+        ApiPluginConfig oldCacheConfig = pluginConfigMapper.selectCachePlugin(id);
 
         apiConfig.setStatus(0);
         apiConfigMapper.updateById(apiConfig);
 
-        cleanDataCacheAndMetaCache(apiConfig, cacheConfig);
+        cleanDataCacheAndMetaCache(apiConfig, oldCacheConfig);
 
     }
 
@@ -276,22 +268,38 @@ public class ApiConfigService {
 
     }
 
-    public JSONObject selectBatch(List<String> ids) {
+    /**
+     * 导出API配置
+     * 
+     * @param ids
+     * @return
+     */
+    public JSONObject exportAPI(List<String> ids) {
         List<ApiConfig> list = apiConfigMapper.selectBatchIds(ids);
-
+        List<ApiPluginConfig> plugins = pluginConfigMapper.selectByApiIds(ids);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("api", list);
-
+        jsonObject.put("plugins", plugins);
         return jsonObject;
     }
 
+    /**
+     * 导入API配置
+     * 
+     * @param configs
+     * @param plugins
+     */
     @Transactional
-    public void insertBatch(List<ApiConfig> configs) {
+    public void importAPI(List<ApiConfig> configs, List<ApiPluginConfig> plugins) {
         configs.stream().forEach(t -> {
             t.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             t.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             t.setStatus(0);
             apiConfigMapper.insert(t);
+        });
+
+        plugins.stream().forEach(t -> {
+            pluginConfigMapper.insert(t);
         });
 
     }

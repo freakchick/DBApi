@@ -34,18 +34,11 @@ CREATE TABLE `api_config`
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-DROP TABLE IF EXISTS `api_alarm_config`;
-CREATE TABLE `api_alarm_config`
+DROP TABLE IF EXISTS `api_plugin_config`;
+CREATE TABLE `api_plugin_config`
 (
     `api_id`             varchar(20) NOT NULL,
-    `plugin_name`       varchar(255)  DEFAULT NULL,
-    `plugin_param` varchar(1024) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-DROP TABLE IF EXISTS `api_cache_config`;
-CREATE TABLE `api_cache_config`
-(
-    `api_id`             varchar(20) NOT NULL,
+    `plugin_type`       varchar(20)  DEFAULT NULL,
     `plugin_name`       varchar(255)  DEFAULT NULL,
     `plugin_param` varchar(1024) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -1,10 +1,34 @@
 package com.gitee.freakchicken.dbapi.basic.controller;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.alibaba.druid.pool.DruidPooledConnection;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.gitee.freakchicken.dbapi.basic.domain.ApiPluginConfig;
 import com.gitee.freakchicken.dbapi.basic.domain.DataSource;
 import com.gitee.freakchicken.dbapi.basic.domain.Group;
 import com.gitee.freakchicken.dbapi.basic.dto.ApiConfigDto;
@@ -17,26 +41,8 @@ import com.gitee.freakchicken.dbapi.basic.util.SqlEngineUtil;
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
 import com.github.freakchick.orange.SqlMeta;
-import lombok.extern.slf4j.Slf4j;
 
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.io.IOUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import com.gitee.freakchicken.dbapi.basic.domain.ApiAlarmConfig;
-import com.gitee.freakchicken.dbapi.basic.domain.ApiCacheConfig;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @program: dbApi
@@ -70,20 +76,17 @@ public class ApiConfigController {
     }
 
     @RequestMapping("/api/add")
-    public ResponseDto add(ApiConfigDto dto) {
+    public ResponseDto add(@RequestBody ApiConfigDto dto) {
         ApiConfig apiConfig = new ApiConfig();
-        ApiAlarmConfig alarm = new ApiAlarmConfig();
-        ApiCacheConfig cache = new ApiCacheConfig();
         try {
             BeanUtils.copyProperties(apiConfig, dto);
-            BeanUtils.copyProperties(alarm, dto);
-            BeanUtils.copyProperties(cache, dto);
+
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
-        return apiConfigService.add(apiConfig, alarm, cache);
+        return apiConfigService.add(apiConfig, dto.getPlugins());
     }
 
     @RequestMapping("/parseParam")
@@ -130,20 +133,17 @@ public class ApiConfigController {
     }
 
     @RequestMapping("/update")
-    public ResponseDto update(ApiConfigDto dto) {
+    public ResponseDto update(@RequestBody ApiConfigDto dto) {
         ApiConfig apiConfig = new ApiConfig();
-        ApiAlarmConfig alarm = new ApiAlarmConfig();
-        ApiCacheConfig cache = new ApiCacheConfig();
         try {
             BeanUtils.copyProperties(apiConfig, dto);
-            BeanUtils.copyProperties(alarm, dto);
-            BeanUtils.copyProperties(cache, dto);
+
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
-        return apiConfigService.update(apiConfig, alarm, cache);
+        return apiConfigService.update(apiConfig, dto.getPlugins());
     }
 
     @RequestMapping("/online/{id}")
@@ -154,7 +154,7 @@ public class ApiConfigController {
 
     @RequestMapping("/offline/{id}")
     public ApiConfig offline(@PathVariable String id) {
-        
+
         apiConfigService.offline(id);
         return null;
     }
@@ -181,10 +181,16 @@ public class ApiConfigController {
         }
     }
 
+    /**
+     * 导出API 配置
+     * 
+     * @param ids
+     * @param response
+     */
     @RequestMapping("/downloadConfig")
     public void downloadConfig(String ids, HttpServletResponse response) {
         List<String> collect = Arrays.asList(ids.split(","));
-        JSONObject jo = apiConfigService.selectBatch(collect);
+        JSONObject jo = apiConfigService.exportAPI(collect);
         String s = jo.toString(SerializerFeature.WriteMapNullValue);
         response.setContentType("application/x-msdownload;charset=utf-8");
         response.setHeader("Content-Disposition", "attachment; filename=api_config.json");
@@ -227,14 +233,21 @@ public class ApiConfigController {
         }
     }
 
+    /**
+     * 导入API配置
+     * 
+         * @param file
+     * @throws IOException
+     */
     @RequestMapping(value = "/import", produces = "application/json;charset=UTF-8")
     public void uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
 
         String s = IOUtils.toString(file.getInputStream(), "utf-8");
         JSONObject jsonObject = JSON.parseObject(s);
-        List<ApiConfig> configs = JSON.parseArray(jsonObject.getJSONArray("api").toJSONString(), ApiConfig.class);
-
-        apiConfigService.insertBatch(configs);
+        List<ApiConfig> apis = JSON.parseArray(jsonObject.getJSONArray("api").toJSONString(), ApiConfig.class);
+        List<ApiPluginConfig> plugins = JSON.parseArray(jsonObject.getJSONArray("plugins").toJSONString(),
+                ApiPluginConfig.class);
+        apiConfigService.importAPI(apis, plugins);
 
     }
 

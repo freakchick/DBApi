@@ -20,14 +20,12 @@ import org.springframework.stereotype.Component;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
-import com.gitee.freakchicken.dbapi.basic.domain.ApiAlarmConfig;
-import com.gitee.freakchicken.dbapi.basic.domain.ApiCacheConfig;
+import com.gitee.freakchicken.dbapi.basic.domain.ApiPluginConfig;
 import com.gitee.freakchicken.dbapi.basic.executor.ESExecutor;
 import com.gitee.freakchicken.dbapi.basic.executor.SQLExecutor;
-import com.gitee.freakchicken.dbapi.basic.service.AlarmConfigService;
+import com.gitee.freakchicken.dbapi.basic.service.ApiPluginConfigService;
 import com.gitee.freakchicken.dbapi.basic.service.ApiConfigService;
 import com.gitee.freakchicken.dbapi.basic.service.ApiService;
-import com.gitee.freakchicken.dbapi.basic.service.CacheConfigService;
 import com.gitee.freakchicken.dbapi.basic.service.DataSourceService;
 import com.gitee.freakchicken.dbapi.basic.util.ThreadUtils;
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
@@ -50,9 +48,8 @@ public class APIServlet extends HttpServlet {
     ApiService apiService;
 
     @Autowired
-    AlarmConfigService alarmService;
-    @Autowired
-    CacheConfigService cacheService;
+    ApiPluginConfigService pluginConfigService;
+    
 
     @Value("${dbapi.api.context}")
     String apiContext;
@@ -103,7 +100,7 @@ public class APIServlet extends HttpServlet {
 
             Map<String, Object> requestParam = getParams(request, config);
 
-            ApiCacheConfig cache = cacheService.getByApiId(config.getId());
+            ApiPluginConfig cache = pluginConfigService.getCachePlugin(config.getId());
 
             // ger data from cache
             if (cache != null) {
@@ -131,8 +128,8 @@ public class APIServlet extends HttpServlet {
 
         } catch (Exception e) {
             // alarm if error
-            List<ApiAlarmConfig> alarms = alarmService.selectByApiId(config.getId());
-            for (ApiAlarmConfig alarm : alarms) {
+            List<ApiPluginConfig> alarms = pluginConfigService.getAlarmPlugins(config.getId());
+            for (ApiPluginConfig alarm : alarms) {
                 try {
                     String param = alarm.getPluginParam();
                     AlarmPlugin alarmPlugin = PluginManager.getAlarmPlugin(alarm.getPluginName());
