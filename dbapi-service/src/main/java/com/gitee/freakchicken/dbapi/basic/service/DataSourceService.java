@@ -1,5 +1,7 @@
 package com.gitee.freakchicken.dbapi.basic.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.gitee.freakchicken.dbapi.basic.dao.ApiConfigMapper;
 import com.gitee.freakchicken.dbapi.basic.dao.DataSourceMapper;
@@ -7,6 +9,7 @@ import com.gitee.freakchicken.dbapi.basic.domain.DataSource;
 import com.gitee.freakchicken.dbapi.basic.util.DESUtils;
 import com.gitee.freakchicken.dbapi.basic.util.PoolManager;
 import com.gitee.freakchicken.dbapi.basic.util.UUIDUtil;
+import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +50,7 @@ public class DataSourceService {
         dataSource.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         dataSource.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 
-        //新增数据源对密码加密
+        // 新增数据源对密码加密
         try {
             dataSource.setPassword(DESUtils.encrypt(dataSource.getPassword()));
         } catch (Exception e) {
@@ -56,12 +59,12 @@ public class DataSourceService {
         dataSourceMapper.insert(dataSource);
     }
 
-    //    @CacheEvict(value = "datasource", key = "#dataSource.id")
+    // @CacheEvict(value = "datasource", key = "#dataSource.id")
     @Transactional
     public void update(DataSource dataSource) {
         dataSource.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-        //如果修改了密码, 需要对密码加密
-        if (dataSource.isEdit_password()){
+        // 如果修改了密码, 需要对密码加密
+        if (dataSource.isEdit_password()) {
             try {
                 dataSource.setPassword(DESUtils.encrypt(dataSource.getPassword()));
             } catch (Exception e) {
@@ -74,10 +77,20 @@ public class DataSourceService {
 
     }
 
-    //    @CacheEvict(value = "datasource", key = "#id")
+    /**
+     * @param id
+     * @return
+     */
     @Transactional
     public ResponseDto delete(String id) {
-        int i = apiConfigMapper.countByDatasoure(id);
+        List<ApiConfig> list = apiConfigMapper.selectList(null);
+        long i = list.stream().filter(t -> {
+            String task = t.getTask();
+            JSONObject jo = JSON.parseObject(task);
+            String datasourceId = jo.getString("datasourceId");
+            return id.equals(datasourceId);
+        }).count();
+
         if (i == 0) {
             dataSourceMapper.deleteById(id);
 
@@ -86,7 +99,7 @@ public class DataSourceService {
 
             return ResponseDto.successWithMsg("delete success");
         } else {
-            return ResponseDto.fail("datasource has been used, can not delete");
+            return ResponseDto.fail("Datasource has been used, can not delete");
         }
     }
 
@@ -98,7 +111,8 @@ public class DataSourceService {
 
     public List<DataSource> getAll() {
         List<DataSource> list = dataSourceMapper.selectList(null);
-        List<DataSource> collect = list.stream().sorted(Comparator.comparing(DataSource::getUpdateTime).reversed()).collect(Collectors.toList());
+        List<DataSource> collect = list.stream().sorted(Comparator.comparing(DataSource::getUpdateTime).reversed())
+                .collect(Collectors.toList());
         return collect;
     }
 
