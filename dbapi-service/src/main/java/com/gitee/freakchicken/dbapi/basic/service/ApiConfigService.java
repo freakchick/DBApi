@@ -1,5 +1,6 @@
 package com.gitee.freakchicken.dbapi.basic.service;
 
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
@@ -9,6 +10,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringSubstitutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
@@ -53,6 +55,9 @@ public class ApiConfigService {
     ApiPluginConfigMapper pluginConfigMapper;
     @Autowired
     CacheManager cacheManager;
+
+    @Value("${dbapi.api.context}")
+    String apiContext;
 
     @Transactional
     public ResponseDto add(ApiConfig apiConfig, List<ApiPluginConfig> pluginConfigs) {
@@ -228,10 +233,9 @@ public class ApiConfigService {
         StringBuffer temp = new StringBuffer("# 接口文档\n---\n");
         List<ApiConfig> list = apiConfigMapper.selectBatchIds(ids);
         list.stream().forEach(t -> {
-            temp.append("## ").append(t.getName()).append("\n- 接口地址： /api/").append(t.getPath())
-                    .append("\n- 接口备注：").append(t.getNote());
-            temp.append("\n- Content-Type：").append(t.getContentType());
-
+            String templ = "## {0}\n- 接口地址： /{1}/{2}\n- 接口备注：{3}\n- Content-Type：{4}\n";
+            temp.append(
+                    MessageFormat.format(templ, t.getName(), apiContext, t.getPath(), t.getNote(), t.getContentType()));
             temp.append("\n- 请求参数：");
             if (MediaType.APPLICATION_FORM_URLENCODED_VALUE.equalsIgnoreCase(t.getContentType())) {
                 String params = t.getParams();
@@ -246,11 +250,8 @@ public class ApiConfigService {
                         JSONObject jsonObject = array.getJSONObject(i);
                         String name = jsonObject.getString("name");
                         String type = jsonObject.getString("type");
-                        if (type.startsWith("Array")) {
-                            type = type.substring(6, type.length() - 1) + "数组";
-                        }
                         String note = jsonObject.getString("note");
-                        buffer.append("|").append(name).append("|").append(type).append("|").append(note).append("|\n");
+                        buffer.append(MessageFormat.format("| {0} | {1} | {2} |\n", name, type, note));
                     }
 
                     temp.append(buffer);

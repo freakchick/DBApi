@@ -31,8 +31,8 @@ public interface ApiConfigMapper extends BaseMapper<ApiConfig> {
     @Select("select count(1) from api_config where path=#{path} and id != #{id}")
     Integer selectCountByPathWhenUpdate(@Param("path") String path, @Param("id") String id);
 
-    @Select("select count(1) from api_config where datasource_id = #{id}")
-    int countByDatasoure(String id);
+//     @Select("select count(1) from api_config where datasource_id = #{id}")
+//     int countByDatasoure(String id);
 
     @Select("select count(1) from api_config where group_id = #{id}")
     int selectCountByGroup(String id);
