@@ -22,6 +22,7 @@ export default {
   methods: {
 
     save() {
+      debugger
       const detail = this.$refs.apiAdd.detail
       const sqlList = this.$store.getters.getSql
       let p = {
@@ -32,14 +33,13 @@ export default {
         previlege: detail.previlege,
         cachePlugin: detail.cachePlugin,
         cachePluginParams: detail.cachePluginParams,
-        // transformPlugin: detail.transformPlugin,
-        // transformPluginParams: detail.transformPluginParams,
-        datasourceId: this.$refs.apiAdd.$refs.sqlCode.datasourceId,
-        sqlList: sqlList,
+
+        taskJson: this.$refs.apiAdd.$refs.sqlExecutor.taskJson,
+
         params: JSON.stringify(detail.params),
         contentType: detail.contentType,
         jsonParam: detail.jsonParam,
-        openTrans: detail.openTrans,
+
         alarmPlugin: detail.alarmPlugin,
         alarmPluginParam: detail.alarmPluginParam
       }

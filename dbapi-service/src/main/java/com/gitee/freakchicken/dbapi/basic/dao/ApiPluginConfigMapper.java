@@ -25,6 +25,6 @@ public interface ApiPluginConfigMapper extends BaseMapper<ApiPluginConfig> {
     int deleteByApiId(String apiId);
 
     @Select("<script>select * from api_plugin_config where api_id in " +
-    "<foreach open=\"(\" close=\")\" collection=\"ids\" separator=\",\" item=\"item\" index=\"index\">#{item}</foreach>")
+    "<foreach open=\"(\" close=\")\" collection=\"ids\" separator=\",\" item=\"item\" index=\"index\">#{item}</foreach></script>")
     List<ApiPluginConfig> selectByApiIds(List<String> ids);
 }
