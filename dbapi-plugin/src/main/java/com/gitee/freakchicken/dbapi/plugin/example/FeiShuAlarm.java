@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.text.MessageFormat;
 
 /**
- * @description 钉钉告警插件
+ * @description 飞书告警插件
  * @create 2023/3/8 18:03
  */
 public class FeiShuAlarm extends AlarmPlugin {
