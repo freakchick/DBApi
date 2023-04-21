@@ -440,7 +440,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 .my > .el-textarea__inner {
   font-family: "Consolas", Helvetica, Arial, sans-serif;
   /*font-size: 18px;*/

@@ -411,7 +411,7 @@ export default {
   }
 }
 </script>
-<style scoped lang="scss">
+<style scoped lang="less">
 ::-webkit-scrollbar {
   /*滚动条整体样式*/
   width: 6px; /*高宽分别对应横竖滚动条的尺寸*/

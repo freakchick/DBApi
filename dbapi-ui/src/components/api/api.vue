@@ -603,7 +603,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 i {
   font-size: 14px;
 }

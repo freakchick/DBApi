@@ -108,7 +108,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 .head {
   display: flex;
   background-color: #06b176;

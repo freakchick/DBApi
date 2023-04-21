@@ -42,7 +42,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 input::-webkit-input-placeholder {
   /* WebKit browsers */
   color: #ccc;

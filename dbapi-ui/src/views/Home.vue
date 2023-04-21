@@ -42,7 +42,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 .iconfont {
   color: #fff;
   font-size: 20px !important;
