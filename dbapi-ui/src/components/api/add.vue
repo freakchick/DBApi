@@ -22,35 +22,34 @@ export default {
   methods: {
 
     save() {
-      debugger
       const detail = this.$refs.apiAdd.detail
-      const sqlList = this.$store.getters.getSql
+      let list = []
+      list.push(this.$refs.apiAdd.$refs.sqlExecutor.taskJson())
+
       let p = {
         name: detail.name,
         path: detail.path,
-        note: detail.note,
         groupId: detail.groupId,
-        previlege: detail.previlege,
-        cachePlugin: detail.cachePlugin,
-        cachePluginParams: detail.cachePluginParams,
-
-        taskJson: this.$refs.apiAdd.$refs.sqlExecutor.taskJson,
-
-        params: JSON.stringify(detail.params),
+        note: detail.note,
         contentType: detail.contentType,
         jsonParam: detail.jsonParam,
+        paramsJson: detail.paramsJson,
+        access: detail.access,
 
-        alarmPlugin: detail.alarmPlugin,
-        alarmPluginParam: detail.alarmPluginParam
+        taskJson: list,
+
+        cachePlugin: detail.cachePlugin,
+        alarmPlugins: detail.alarmPlugins,
+
       }
 
       console.log(p)
 
-      if (p.sql == "" || p.datasourceId == null || p.name == null
-          || p.path == null || p.groupId == null) {
-        this.$message.error("Something Required!")
-        return
-      }
+      // if (p.sql == "" || p.datasourceId == null || p.name == null
+      //     || p.path == null || p.groupId == null) {
+      //   this.$message.error("Something Required!")
+      //   return
+      // }
 
       this.axios.post("/apiConfig/add", p,
           {headers: {'Content-Type': 'application/json'}}

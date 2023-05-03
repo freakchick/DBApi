@@ -34,9 +34,10 @@ public class SQLExecutor {
     @Autowired
     DataSourceService dataSourceService;
 
-    public Object execute(ApiConfig config, Map<String, Object> sqlParam) throws Exception {
+    public Object execute(JSONObject taskJson, Map<String, Object> sqlParam) throws Exception {
 
-        SQLTaskDto task = JSON.parseObject(config.getTask(), SQLTaskDto.class);
+        SQLTaskDto task = taskJson.toJavaObject(SQLTaskDto.class);
+
         DataSource datasource = dataSourceService.detail(task.getDatasourceId());
         if (datasource == null) {
             throw new RuntimeException("Datasource not exists!");
@@ -55,7 +56,7 @@ public class SQLExecutor {
                 log.info("transform plugin execute");
                 List<JSONObject> sourceData = (List<JSONObject>) (data); // 查询类sql的返回结果才可以这样强制转换，只有查询类sql才可以配置转换插件
                 TransformPlugin transformPlugin = PluginManager.getTransformPlugin(apiSql.getTransformPlugin());
-                Object resData = transformPlugin.transform(sourceData, apiSql.getTransformPluginParams());
+                Object resData = transformPlugin.transform(sourceData, apiSql.getTransformPluginParam());
                 dataList.set(i, resData);// 重新设置值
             }
         }

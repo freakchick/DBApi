@@ -70,6 +70,8 @@ import {
     // Timeline,
     // TimelineItem,
     // Link,
+    Descriptions,
+    DescriptionsItem,
     Divider,
     // Image,
     // Calendar,
@@ -161,6 +163,10 @@ Vue.use(Cascader);
 // Vue.use(TimelineItem);
 // Vue.use(Link);
 Vue.use(Divider);
+Vue.use(Descriptions);
+Vue.use(DescriptionsItem);
+
+
 // Vue.use(Image);
 // Vue.use(Calendar);
 // Vue.use(Backtop);

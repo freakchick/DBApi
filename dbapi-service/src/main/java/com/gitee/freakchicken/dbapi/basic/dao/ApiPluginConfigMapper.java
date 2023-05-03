@@ -1,7 +1,7 @@
 package com.gitee.freakchicken.dbapi.basic.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.gitee.freakchicken.dbapi.basic.domain.ApiPluginConfig;
+import com.gitee.freakchicken.dbapi.common.ApiPluginConfig;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -12,13 +12,13 @@ import java.util.List;
 public interface ApiPluginConfigMapper extends BaseMapper<ApiPluginConfig> {
 
 
-    @Select("select * from api_plugin_config where api_id = #{apiId} and plugin_type='alarm' ")
-    List<ApiPluginConfig> selectAlarmPlugin(String apiId);
+    @Select("select * from api_plugin_config where api_id = #{apiId} and plugin_type=2")
+    List<ApiPluginConfig> selectAlarmPlugins(String apiId);
 
-    @Select("select * from api_plugin_config where api_id = #{apiId} and plugin_type='cache' ")
+    @Select("select * from api_plugin_config where api_id = #{apiId} and plugin_type=1 ")
     ApiPluginConfig selectCachePlugin(String apiId);
 
-    @Select("select * from api_plugin_config where api_id = #{apiId} and plugin_type='conversion' ")
+    @Select("select * from api_plugin_config where api_id = #{apiId} and plugin_type=3")
     ApiPluginConfig selectConversionPlugin(String apiId);
 
     @Delete("delete from api_plugin_config where api_id = #{apiId} ")

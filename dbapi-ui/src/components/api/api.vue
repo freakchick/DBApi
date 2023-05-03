@@ -82,82 +82,29 @@
         </li>
       </ul>
       <div class="search">
-        <my-select
-          v-model="groupId"
-          :label="$t('m.api_group')"
-          :options="groups"
-          option_label="name"
-          option_value="id"
-        ></my-select>
+        <my-select v-model="groupId" :label="$t('m.api_group')" :options="groups" option_label="name" option_value="id"></my-select>
         <!--        <el-select v-model="groupId" class="gap">
                   <el-option label="所有分组" value=""></el-option>
                   <el-option :label="item.name" :value="item.id" v-for="item in groups" :key="item.id"></el-option>
                 </el-select>-->
-        <el-input
-          :placeholder="$t('m.input_keyword')"
-          v-model="keyword"
-          style="width:400px;"
-          clearable
-          @keyup.enter.native="search"
-        >
-          <el-select
-            v-model="field"
-            slot="prepend"
-            placeholder=""
-            style="width:80px;"
-          >
-            <el-option
-              :label="$t('m.name')"
-              value="name"
-            ></el-option>
-            <el-option
-              :label="$t('m.note')"
-              value="note"
-            ></el-option>
-            <el-option
-              :label="$t('m.path')"
-              value="path"
-            ></el-option>
+        <el-input :placeholder="$t('m.input_keyword')" v-model="keyword" style="width:400px;" clearable @keyup.enter.native="search">
+          <el-select v-model="field" slot="prepend" placeholder="" style="width:80px;">
+            <el-option :label="$t('m.name')" value="name"></el-option>
+            <el-option :label="$t('m.note')" value="note"></el-option>
+            <el-option :label="$t('m.path')" value="path"></el-option>
           </el-select>
         </el-input>
-        <el-button
-          type="primary"
-          icon="el-icon-search"
-          @click="search"
-          plain
-        >{{ $t('m.search') }}</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="search" plain>{{ $t('m.search') }}</el-button>
       </div>
 
-      <el-table
-        :data="tableData"
-        border
-        stripe
-        max-height="700"
-        width="100%"
-      >
-        <el-table-column
-          label="id"
-          prop="id"
-          width="100px"
-        ></el-table-column>
+      <el-table :data="tableData" border stripe max-height="700" width="100%">
+        <el-table-column label="id" prop="id" width="100px"></el-table-column>
         <el-table-column :label="$t('m.name')">
           <template slot-scope="scope">
-            <i
-              class="iconfont icon-on_line1 circle"
-              v-if="scope.row.status == 1"
-            ></i>
-            <i
-              class="iconfont icon-off_line circle offline"
-              v-else
-            ></i>
-            <i
-              class="el-icon-lock circle lock"
-              v-if="scope.row.previlege == PREVILEGE.PRIVATE"
-            ></i>
-            <i
-              class="el-icon-unlock circle "
-              v-else
-            ></i>
+            <i class="iconfont icon-on_line1 circle" v-if="scope.row.status == 1"></i>
+            <i class="iconfont icon-off_line circle offline" v-else></i>
+            <i class="el-icon-lock circle lock" v-if="scope.row.previlege == PRIVILEGE.PRIVATE"></i>
+            <i class="el-icon-unlock circle " v-else></i>
             <span :title="scope.row.note">{{ scope.row.name }}</span>
           </template>
         </el-table-column>
@@ -166,189 +113,71 @@
             <span>/{{context}}/{{ scope.row.path }}</span>
           </template>
         </el-table-column>
-        <el-table-column
-          :label="$t('m.transaction')"
-          width="160"
-        >
-          <template slot-scope="scope">
-            <span v-if="scope.row.openTrans == 1">{{$t('m.on')}}</span>
-            <span v-if="scope.row.openTrans == 0">{{$t('m.off')}}</span>
-          </template>
+        <el-table-column :label="$t('m.note')" prop="note">
         </el-table-column>
-        <el-table-column
-          label="Content-Type"
-          prop="contentType"
-          sortable
-        ></el-table-column>
+        <el-table-column label="Content-Type" prop="contentType" sortable></el-table-column>
         <el-table-column :label="$t('m.parameters')">
           <template slot-scope="scope">
             <div v-show="scope.row.contentType === CONTENT_TYPE.FORM_URLENCODED ">
-              <data-tag
-                v-for="item in scope.row.p"
-                :name="item.name"
-                :type="item.type"
-              ></data-tag>
+              <data-tag v-for="item in scope.row.p" :name="item.name" :type="item.type"></data-tag>
             </div>
-            <div v-show="scope.row.contentType === CONTENT_TYPE.JSON ">
-              {{scope.row.jsonParam}}
-            </div>
+            <div v-show="scope.row.contentType === CONTENT_TYPE.JSON ">{{scope.row.jsonParam}}</div>
           </template>
         </el-table-column>
-        <el-table-column
-          prop="updateTime"
-          :label="$t('m.update_time')"
-          width="170px"
-          sortable
-        ></el-table-column>
-        <el-table-column
-          :label="$t('m.operation')"
-          width="220px"
-        >
+        <el-table-column prop="updateTime" :label="$t('m.update_time')" width="170px" sortable></el-table-column>
+        <el-table-column :label="$t('m.operation')" width="220px">
           <template slot-scope="scope">
-            <el-button
-              plain
-              size="mini"
-              type="info"
-              @click="detail(scope.row.id)"
-              circle
-            ><i class="iconfont icon-detail"></i>
-            </el-button>
-            <el-button
-              plain
-              size="mini"
-              type="warning"
-              @click="handleEdit(scope.row.id)"
-              circle
-            >
-              <i class="el-icon-edit"></i>
-            </el-button>
+            <el-button plain size="mini" type="info" @click="detail(scope.row.id)" circle><i class="iconfont icon-detail"></i></el-button>
+            <el-button plain size="mini" type="warning" @click="handleEdit(scope.row.id)" circle><i class="el-icon-edit"></i></el-button>
 
-            <el-button
-              plain
-              size="mini"
-              v-if="scope.row.status == 0"
-              type="warning"
-              @click="online(scope.row.id)"
-              circle
-            >
+            <el-button plain size="mini" v-if="scope.row.status == 0" type="warning" @click="online(scope.row.id)" circle>
               <i class="iconfont icon-on_line2"></i>
             </el-button>
 
-            <el-button
-              plain
-              size="mini"
-              v-if="scope.row.status == 1"
-              type="info"
-              @click="offline(scope.row.id)"
-              circle
-            >
+            <el-button plain size="mini" v-if="scope.row.status == 1" type="info" @click="offline(scope.row.id)" circle>
               <i class="iconfont icon-off_line1"></i>
             </el-button>
 
-            <el-button
-              plain
-              size="mini"
-              v-if="scope.row.status == 1"
-              type="primary"
-              @click="httpTest(scope.row.id)"
-              :title="$t('m.request_test')"
-              circle
-            >
+            <el-button plain size="mini" v-if="scope.row.status == 1" type="primary" @click="httpTest(scope.row.id)" :title="$t('m.request_test')" circle>
               <i class="iconfont icon-HTTPRequest"></i>
             </el-button>
-            <el-button
-              plain
-              size="mini"
-              type="danger"
-              @click="handleDelete(scope.row.id)"
-              circle
-            >
+            <el-button plain size="mini" type="danger" @click="handleDelete(scope.row.id)" circle>
               <i class="el-icon-delete"></i>
             </el-button>
           </template>
         </el-table-column>
       </el-table>
 
-      <el-dialog
-        :title="$t('m.api_group')"
-        :visible.sync="dialogVisible"
-        @close="getAllGroups"
-      >
+      <el-dialog :title="$t('m.api_group')" :visible.sync="dialogVisible" @close="getAllGroups">
         <group></group>
       </el-dialog>
 
-      <el-dialog
-        :title="$t('m.export_api_doc')"
-        :visible.sync="dialogVisible2"
-        @open="getApiTree"
-      >
-        <el-tree
-          :data="treeData"
-          show-checkbox
-          node-key="id"
-          :props="defaultProps"
-          ref="tree"
-        ></el-tree>
-        <span
-          slot="footer"
-          class="dialog-footer"
-        >
+      <el-dialog :title="$t('m.export_api_doc')" :visible.sync="dialogVisible2" @open="getApiTree">
+        <el-tree :data="treeData" show-checkbox node-key="id" :props="defaultProps" ref="tree"></el-tree>
+        <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible2 = false">{{ $t('m.cancel') }}</el-button>
-          <el-button
-            type="primary"
-            @click="dialogVisible2 = false;exportDocs()"
-          >{{ $t('m.export') }}</el-button>
+          <el-button type="primary" @click="dialogVisible2 = false;exportDocs()">{{ $t('m.export') }}</el-button>
         </span>
       </el-dialog>
 
-      <el-dialog
-        :title="$t('m.export_api')"
-        :visible.sync="dialogVisible3"
-        @open="getApiTree"
-      >
-        <el-tree
-          :data="treeData"
-          show-checkbox
-          node-key="id"
-          :props="defaultProps"
-          ref="tree2"
-        ></el-tree>
-        <span
-          slot="footer"
-          class="dialog-footer"
-        >
-          <el-button @click="dialogVisible3 = false">{{ $t('m.cancel') }}</el-button>
-          <el-button
-            type="primary"
-            @click="dialogVisible3 = false;exportConfig()"
-          >{{ $t('m.export') }}</el-button>
+      <el-dialog :title="$t('m.export_api')" :visible.sync="dialogVisible3" @open="getApiTree">
+        <el-tree :data="treeData" show-checkbox node-key="id" :props="defaultProps" ref="tree2"></el-tree>
+        <span slot="footer" class="dialog-footer"><el-button @click="dialogVisible3 = false">{{ $t('m.cancel') }}</el-button>
+          <el-button type="primary" @click="dialogVisible3 = false;exportConfig()">{{ $t('m.export') }}</el-button>
         </span>
       </el-dialog>
 
-      <el-dialog
-        :title="$t('m.export_api_groups')"
-        :visible.sync="dialogVisible4"
-        @open="getAllGroups"
-      >
+      <el-dialog :title="$t('m.export_api_groups')" :visible.sync="dialogVisible4" @open="getAllGroups">
         <el-checkbox-group v-model="checkList">
-          <el-checkbox
-            v-for="item in groups"
-            :label="item.id"
-          >{{ item.name }}
+          <el-checkbox v-for="item in groups" :label="item.id">{{ item.name }}
             <span style="color: #ccc">{{ item.id }}</span>
           </el-checkbox>
 
         </el-checkbox-group>
 
-        <span
-          slot="footer"
-          class="dialog-footer"
-        >
+        <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible4 = false">{{ $t('m.cancel') }}</el-button>
-          <el-button
-            type="primary"
-            @click="dialogVisible4 = false;exportGroupConfig()"
-          >{{ $t('m.export') }}</el-button>
+          <el-button type="primary" @click="dialogVisible4 = false;exportGroupConfig()">{{ $t('m.export') }}</el-button>
         </span>
       </el-dialog>
     </div>
@@ -358,13 +187,13 @@
 <script>
 // import dataTag from "@/components/common/dataTag";
 import group from "@/components/api/group";
-import { CONTENT_TYPE, PREVILEGE } from "@/constant";
+import { CONTENT_TYPE, PRIVILEGE } from "@/constant";
 export default {
   name: "api",
   data() {
     return {
       CONTENT_TYPE: Object.freeze(CONTENT_TYPE),
-      PREVILEGE: Object.freeze(PREVILEGE),
+      PRIVILEGE: Object.freeze(PRIVILEGE),
       dialogVisible: false,
       dialogVisible2: false,
       dialogVisible3: false,

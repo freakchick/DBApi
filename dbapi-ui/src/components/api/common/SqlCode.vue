@@ -1,47 +1,5 @@
 <template>
   <div :class="['root', isFullScreen?'full':'']">
-    <div class="left">
-      <div>
-        <my-select
-          v-model="datasourceId"
-          :options="datasources"
-          :nullable="false"
-          :label="$t('m.datasource')"
-          size="mini"
-          width="176px"
-          option_label="name"
-          option_value="id"
-          @onchange="getTables"
-        ></my-select>
-      </div>
-      <div class="bottom">
-        <!--        <div class="menus" :style="`top:${y}px;left:${x}px`" v-show="showMenuFlag" @onblur="showMenuFlag=false">
-                  <div class="menu" @click="copy">复制</div>
-                </div>-->
-        <div v-for="(item,index) in tables">
-          <div>
-            <div
-              class="table"
-              @click.prevent="getColumns(item.label,index)"
-              @contextmenu.prevent="showMenu()"
-            >
-              <i class="iconfont icon-table"></i>{{ item.label }}
-            </div>
-            <div v-show="item.showColumns">
-              <div
-                v-for="(it) in item.columns"
-                class="column"
-              >
-                <!--              <i class="iconfont icon-ziyuan"></i>-->
-                <span class="columnName">{{ it.label }}</span>
-                <span class="columnType">{{ it.TypeName }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
     <div class="right">
       <div class="top">
         <div class="tool">
@@ -95,109 +53,35 @@
       </div>
       <div class="code">
         <div class="multi-sql" :style="{'width':  !isFullScreen ? '100%' : ''}">
-
-          <code-ui
-            :sql="item.sqlText"
-            :mode="mode"
-            v-for="(item,index) in this.$store.state.sqls"
-            :key="item.id"
-            :ref="'codeui-'+index"
-            :tableHints="tableHints"
-            @appendCm="appendCm"
-            v-show="currentIndex===index"
-          ></code-ui>
-
-          <div class="tabs">
-            <div
-              v-for="(item,index) in this.$store.state.sqls"
-              :class="{'tab':true,'tab-active':currentIndex === index}"
-            >
-              <div
-                @click="focusCM(index, item.sqlText)"
-                class="text"
-              >
-                SQL-{{ item.label }}
-              </div>
-              <span
-                @click="removeTab(index)"
-                class="el-icon-circle-close close"
-                v-if="index > 0"
-              ></span>
-            </div>
-            <div
-              class="tab"
-              @click="addTab"
-            >
-              <div class="text">
-                <i class="el-icon-circle-plus"></i>
-                Add
-              </div>
-            </div>
-          </div>
+          <code-ui :sqlText="sqlText" :mode="mode" :tableHints="tableHints"></code-ui>
         </div>
         <div class="params">
           <div style="display: inline-block">{{$t('m.sql_param')}}：</div>
-          <el-tooltip
-            placement="top-start"
-            effect="dark"
-          >
-            <div slot="content">
-              {{$t('m.sql_param_tip')}}
-            </div>
-            <i
-              class="el-icon-info tip"
-              style="color:#ccc"
-            ></i>
+          <el-tooltip placement="top-start" effect="dark">
+            <div slot="content">{{$t('m.sql_param_tip')}}</div>
+            <i class="el-icon-info tip" style="color:#ccc"></i>
           </el-tooltip>
 
-          <el-input
-            type="textarea"
-            rows="24"
-            v-model="params"
-            @input="input($event)"
-          ></el-input>
-          <el-button
-            @click="formatJson"
-            size="mini"
-          >{{$t('m.format')}}</el-button>
+          <el-input type="textarea" rows="24" v-model="params" @input="input($event)"></el-input>
+          <el-button @click="formatJson" size="mini">{{$t('m.format')}}</el-button>
         </div>
       </div>
       <div class="result">
-        <div
-          v-if="error != null"
-          class="error"
-        >
+        <div v-if="error != null" class="error">
           <i class="el-icon-error"></i>
           {{ error }}
         </div>
-        <div
-          v-if="updateMsg != null"
-          class="updateMsg"
-        >
+        <div v-if="updateMsg != null" class="updateMsg">
           <i class="el-icon-success"></i>
           {{ updateMsg }}
         </div>
-        <div
-          v-if="sqlMeta != null"
-          class="sqlMeta"
-        >
+        <div v-if="sqlMeta != null" class="sqlMeta">
           <div class="sql">{{ sqlMeta.sql }}</div>
           <div class="sql">{{ sqlMeta.jdbcParamValues }}</div>
         </div>
         <div class="table">
-          <el-table
-            :data="resultList"
-            border
-            stripe
-            style="width: 100%"
-            v-if="resultList != null && resultList.length > 0"
-            size="mini"
-          >
-            <el-table-column
-              :prop="item"
-              :label="item"
-              v-for="item in Object.keys(resultList[0])"
-            ></el-table-column>
+          <el-table :data="resultList" border stripe style="width: 100%" v-if="resultList != null && resultList.length > 0" size="mini">
+            <el-table-column :prop="item" :label="item" v-for="item in Object.keys(resultList[0])"></el-table-column>
           </el-table>
           <div v-if="resultList != null && resultList.length == 0">No Result</div>
         </div>
@@ -219,8 +103,7 @@ export default {
       isFullScreen: false,
       mode: 'mini',
       params: "{}",
-      datasourceId: null, datasources: [],
-      tables: [], table: null,
+
       currentIndex: 0,// sql序号
       sqlMeta: null,
 
@@ -229,9 +112,8 @@ export default {
   },
   props: {
     //从父组件传过来的属性
-    apiSql: {
-      type: Array,
-      default: () => [{sqlText: '', transformPlugin: null, transformPluginParams: null}]
+    sqlText: {
+      type: String
     }
   },
 
@@ -239,14 +121,11 @@ export default {
     codeUi
   },
   methods: {
-    appendCm(cm) {
-      this.$store.commit('addCm', cm)
-    },
 
-    addTab() {
-      this.$store.commit('addSql')
-      this.currentIndex = this.$store.state.sqls.length - 1
-    },
+    // addTab() {
+    //   this.$store.commit('addSql')
+    //   this.currentIndex = this.$store.state.sqls.length - 1
+    // },
     formatJson() {
       const o = JSON.parse(this.params)
       this.params = JSON.stringify(o, null, 4)
@@ -260,7 +139,7 @@ export default {
       this.error = null
       this.sqlMeta = null
       this.axios.post("/apiConfig/parseDynamicSql",
-          {sql: this.$store.getters.currentCm(this.currentIndex).getValue(), params: (this.params)}).then((response) => {
+          {sql: this.$store.getters.currentCm.getValue(), params: (this.params)}).then((response) => {
         if (response.data.success) {
           this.sqlMeta = response.data.data
 
@@ -272,19 +151,21 @@ export default {
       })
     },
     formatSql() {
-      var sql = format(this.$store.getters.currentCm(this.currentIndex).getValue())
-          .replace(/# /g, "#")
-          .replace(/{ /g, "{")
-          .replace(/ }/g, "}")
-          .replace(/< foreach/g, "\n<foreach\n")
-          .replace(/< \/ foreach >/g, "\n</foreach>\n")
-          .replace(/< if/g, "\n<if")
-          .replace(/< \/ if >/g, "\n</if>\n")
-          .replace(/<\nwhere\n  >/g, "\n<where>\n")
-          .replace(/< \/\nwhere\n  >/g, "\n</where>\n")
-          .replace(/< trim/g, "\n<trim")
-          .replace(/< \/ trim >/g, "\n</trim>\n");
-      this.$store.getters.currentCm(this.currentIndex).setValue(sql);
+    debugger
+      let p = this.$store.getters.currentCm
+      const sql = format(p.getValue())
+        .replace(/# /g, "#")
+        .replace(/{ /g, "{")
+        .replace(/ }/g, "}")
+        .replace(/< foreach/g, "\n<foreach\n")
+        .replace(/< \/ foreach >/g, "\n</foreach>\n")
+        .replace(/< if/g, "\n<if")
+        .replace(/< \/ if >/g, "\n</if>\n")
+        .replace(/<\nwhere\n  >/g, "\n<where>\n")
+        .replace(/< \/\nwhere\n  >/g, "\n</where>\n")
+        .replace(/< trim/g, "\n<trim")
+        .replace(/< \/ trim >/g, "\n</trim>\n");
+      this.$store.getters.currentCm.setValue(sql);
     },
     run(selected) {
       if (this.datasourceId == null) {
@@ -293,9 +174,9 @@ export default {
       }
       let sql
       if (selected) {
-        sql = this.$store.getters.currentCm(this.currentIndex).getSelection()
+        sql = this.$store.getters.currentCm.getSelection()
       } else {
-        sql = this.$store.getters.currentCm(this.currentIndex).getValue()
+        sql = this.$store.getters.currentCm.getValue()
       }
       if (sql == null || sql.trim() == '') {
         this.$message.error("Please Input sql")
@@ -331,52 +212,8 @@ export default {
       this.mode = "mini"
       this.isFullScreen = false
     },
-    getColumns(table, index) {
-      if (this.tables[index].columns.length == 0) {
-        this.axios.post("/table/getAllColumns", {
-          sourceId: this.datasourceId,
-          table: table
-        }).then((response) => {
-          this.tables[index].columns = response.data
-          this.tables[index].showColumns = true
-        }).catch((error) => {
-          // this.$message.error("查询子节点失败")
-        })
-      } else {
-        this.tables[index].showColumns = !(this.tables[index].showColumns)
-      }
 
-    },
-    getAllSource() {
-      this.axios.post("/datasource/getAll").then((response) => {
-        this.datasources = response.data
-      }).catch((error) => {
-        this.$message.error("Get all datasources Failed")
-      })
-    },
-    getTables(datasourceId) {
-      this.axios.post("/table/getAllTables", {sourceId: datasourceId}).then((response) => {
-        this.tables = response.data
 
-        const hints = {}
-        this.tables.forEach(e => {
-          hints[`${e.label}`] = e.columns.map(j => j.label)
-        })
-        this.tableHints = hints // 表名称注入codemirror 提示
-        // this.cmOptions.hintOptions.tables = hints
-
-      }).catch((error) => {
-        // this.$message.error("查询所有表名称失败；但不影响使用！")
-      })
-    },
-    removeTab(index) {
-      this.$store.commit('removeSql',index)
-      //如果删除的是激活标签的左边标签,或激活标签本身
-      if (index <= this.currentIndex) {
-        this.currentIndex -= 1
-      }
-
-    },
     focusCM(index, sql) {
       this.currentIndex = index
       const _this = this
@@ -396,18 +233,18 @@ export default {
         val = "\n<trim prefix=\"\" suffix=\"\" suffixesToOverride=\"\" prefixesToOverride=\"\"></trim>"
       }
 
-      this.$store.getters.currentCm(this.currentIndex).setValue(this.$store.getters.currentCm(this.currentIndex).getValue() + val)
+      this.$store.getters.currentCm.setValue(this.$store.getters.currentCm.getValue() + val)
     },
   },
 
   created() {
-    this.getAllSource()
+
   },
   watch: {
     // props:apiSql是异步加载过来的，所以要监听
-    apiSql(newV, oldV) {
-      this.$store.commit('initSqls',this.apiSql)
-    }
+    // apiSql(newV, oldV) {
+    //   this.$store.commit('initSqls',this.apiSql)
+    // }
   }
 }
 </script>
@@ -433,21 +270,13 @@ export default {
 }
 
 .full {
+  background-color: rgba(22, 118, 11, 0.53);
   z-index: 10;
   position: fixed;
   top: 10px;
   left: 10px;
   width: calc(100vw - 20px);
   height: calc(100vh - 20px);
-
-  .left {
-    width: 300px !important;
-    height: calc(100vh - 20px) !important;
-
-    .bottom {
-      height: calc(100vh - 30px) !important;
-    }
-  }
 
   .right {
     .code {
@@ -467,92 +296,12 @@ export default {
 .root {
   display: flex;
   //height: 430px;
-
-  .left {
-    width: 250px !important;
-    height: 430px;
-    border: 1px solid #999999;
-    line-height: 20px;
-    background-color: #fff;
-    flex-shrink: 0;
-
-    .bottom {
-      height: 400px;
-      overflow: auto;
-      padding-top: 5px;
-
-      .menus {
-        position: fixed;
-        z-index: 1000;
-        background-color: #fff;
-        width: 100px;
-        height: 40px;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-shadow: 0 0 3px #333;
-        line-height: 20px;
-
-        .menu {
-          cursor: pointer;
-
-          &:hover {
-            background-color: #dedede;
-          }
-        }
-      }
-
-      .table {
-        padding-left: 5px;
-        font-size: 16px;
-
-        i {
-          margin-right: 5px;
-          line-height: 20px;
-        }
-
-        &:hover {
-          background-color: #dedede;
-        }
-      }
-
-      .column {
-        padding-left: 35px;
-
-        .columnType {
-          //background-color: #cdf2f6;
-          margin-left: 5px;
-          padding: 0 3px;
-          color: #ccc;
-          font-size: 10px;
-        }
-
-        .columnName {
-          background-color: #eaeaea;
-          margin-left: 5px;
-          padding: 0 3px;
-          font-size: 16px;
-        }
-
-        i {
-          margin-right: 5px;
-          line-height: 20px;
-        }
-
-        &:hover {
-          background-color: #dedede;
-        }
-      }
-    }
-  }
-
   .right {
     display: block;
     // width: 100%;
-    width: calc(100vw - 250px) !important;
+    width: calc(100vw) !important;
     overflow: auto;
     border: 1px solid #999999;
-    border-left: 0px;
     background-color: #fff;
     //flex-shrink: 0;
     //flex-grow: 3;

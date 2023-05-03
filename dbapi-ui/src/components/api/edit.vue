@@ -31,7 +31,7 @@ export default {
         cachePlugin: detail.cachePlugin,
         transformPlugin: detail.transformPlugin,
         cachePluginParams: detail.cachePluginParams,
-        transformPluginParams: detail.transformPluginParams,
+        transformPluginParam: detail.transformPluginParam,
         datasourceId: this.$refs.apiEditCommon.$refs.sqlCode.datasourceId,
         sqlList: sqlList,
         params: JSON.stringify(detail.params),

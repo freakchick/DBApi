@@ -1,11 +1,13 @@
-package com.gitee.freakchicken.dbapi.basic.domain;
+package com.gitee.freakchicken.dbapi.common;
 
 import com.baomidou.mybatisplus.annotation.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.io.Serializable;
 
 @Data
+@AllArgsConstructor
 @TableName(value = "api_plugin_config")
 public class ApiPluginConfig implements Serializable {
 
@@ -13,7 +15,7 @@ public class ApiPluginConfig implements Serializable {
     String apiId;
 
     @TableField("plugin_type")
-    String pluginType;
+    Integer pluginType;
     
     @TableField("plugin_name")
     String pluginName;

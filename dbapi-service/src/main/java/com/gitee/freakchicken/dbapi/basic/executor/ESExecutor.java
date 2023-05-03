@@ -28,9 +28,11 @@ public class ESExecutor {
     @Autowired
     DataSourceService dataSourceService;
 
-    public Object execute(ApiConfig config, Map<String, Object> param) throws Exception {
+    public Object execute(JSONObject taskJson, Map<String, Object> param) throws Exception {
 
-        ESTaskDto task = JSON.parseObject(config.getTask(), ESTaskDto.class);
+
+
+        ESTaskDto task = taskJson.toJavaObject( ESTaskDto.class);
 
         DataSource datasource = dataSourceService.detail(task.getDatasourceId());
         if (datasource == null) {

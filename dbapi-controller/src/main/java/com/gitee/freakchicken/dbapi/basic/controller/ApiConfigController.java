@@ -4,16 +4,15 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.gitee.freakchicken.dbapi.basic.util.*;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,16 +27,13 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.gitee.freakchicken.dbapi.basic.domain.ApiPluginConfig;
+import com.gitee.freakchicken.dbapi.common.ApiPluginConfig;
 import com.gitee.freakchicken.dbapi.basic.domain.DataSource;
 import com.gitee.freakchicken.dbapi.basic.domain.Group;
 import com.gitee.freakchicken.dbapi.basic.dto.ApiConfigDto;
 import com.gitee.freakchicken.dbapi.basic.service.ApiConfigService;
 import com.gitee.freakchicken.dbapi.basic.service.DataSourceService;
 import com.gitee.freakchicken.dbapi.basic.service.GroupService;
-import com.gitee.freakchicken.dbapi.basic.util.JdbcUtil;
-import com.gitee.freakchicken.dbapi.basic.util.PoolManager;
-import com.gitee.freakchicken.dbapi.basic.util.SqlEngineUtil;
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
 import com.github.freakchick.orange.SqlMeta;
@@ -75,20 +71,35 @@ public class ApiConfigController {
         return apiContext;
     }
 
-    @RequestMapping("/api/add")
-    public ResponseDto add(@RequestBody ApiConfigDto dto) {
-        ApiConfig apiConfig = new ApiConfig();
-        try {
-            BeanUtils.copyProperties(apiConfig, dto);
+    @RequestMapping("/add")
+    public ResponseDto add(@RequestBody JSONObject jo) {
+        ApiConfig config = new ApiConfig();
+        config.setName(jo.getString("name"));
+        config.setPath(jo.getString("path"));
+        config.setNote(jo.getString("note"));
+        config.setContentType(jo.getString("contentType"));
+        config.setJsonParam(jo.getString("jsonParam"));
+        config.setParams(jo.getJSONArray("paramsJson").toJSONString());
+        config.setAccess(jo.getInteger("access"));
+        config.setTask(jo.getJSONArray("taskJson").toJSONString());
+        config.setStatus(Constants.API_STATUS_OFFLINE);
 
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        return apiConfigService.add(apiConfig, dto.getPlugins());
+        String id = UUIDUtil.id();
+        config.setId(id);
+
+        JSONObject obj = jo.getJSONObject("cachePlugin");
+        JSONArray array = jo.getJSONArray("alarmPlugins");
+        array.add(obj);
+
+        List<ApiPluginConfig> javaList = array.toJavaList(ApiPluginConfig.class);
+
+        List<ApiPluginConfig> collect = javaList.stream().filter(t -> StringUtils.isNotEmpty(t.getPluginName())).collect(Collectors.toList());
+        collect.forEach(t -> t.setApiId(id));
+
+        return apiConfigService.add(config, collect);
     }
 
+    @Deprecated
     @RequestMapping("/parseParam")
     public ResponseDto parseParam(String sql) {
         try {
@@ -183,7 +194,7 @@ public class ApiConfigController {
 
     /**
      * 导出API 配置
-     * 
+     *
      * @param ids
      * @param response
      */
@@ -235,8 +246,8 @@ public class ApiConfigController {
 
     /**
      * 导入API配置
-     * 
-         * @param file
+     *
+     * @param file
      * @throws IOException
      */
     @RequestMapping(value = "/import", produces = "application/json;charset=UTF-8")

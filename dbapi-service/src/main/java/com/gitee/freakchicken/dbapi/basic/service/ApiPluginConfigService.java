@@ -2,7 +2,7 @@ package com.gitee.freakchicken.dbapi.basic.service;
 
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.gitee.freakchicken.dbapi.basic.dao.ApiPluginConfigMapper;
-import com.gitee.freakchicken.dbapi.basic.domain.ApiPluginConfig;
+import com.gitee.freakchicken.dbapi.common.ApiPluginConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
@@ -26,7 +26,7 @@ public class ApiPluginConfigService {
 
     @Cacheable(value = "api_alarm_config", key = "#apiId", unless = "#result == null")
     public List<ApiPluginConfig> getAlarmPlugins(String apiId){
-        return pluginConfigMapper.selectAlarmPlugin(apiId);
+        return pluginConfigMapper.selectAlarmPlugins(apiId);
     }
 
     @Cacheable(value = "api_cache_config", key = "#apiId", unless = "#result == null")

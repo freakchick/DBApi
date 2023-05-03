@@ -10,7 +10,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.text.StringSubstitutor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
@@ -27,8 +26,7 @@ import com.gitee.freakchicken.dbapi.basic.dao.ApiConfigMapper;
 import com.gitee.freakchicken.dbapi.basic.dao.ApiPluginConfigMapper;
 import com.gitee.freakchicken.dbapi.basic.dao.DataSourceMapper;
 import com.gitee.freakchicken.dbapi.basic.domain.ApiDto;
-import com.gitee.freakchicken.dbapi.basic.domain.ApiPluginConfig;
-import com.gitee.freakchicken.dbapi.basic.util.UUIDUtil;
+import com.gitee.freakchicken.dbapi.common.ApiPluginConfig;
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
 import com.gitee.freakchicken.dbapi.plugin.CachePlugin;
@@ -61,14 +59,11 @@ public class ApiConfigService {
     String apiContext;
 
     @Transactional
-    public ResponseDto add(ApiConfig apiConfig, List<ApiPluginConfig> pluginConfigs) {
+    public ResponseDto add(ApiConfig apiConfig, List<ApiPluginConfig> list) {
         int size = apiConfigMapper.selectCountByPath(apiConfig.getPath());
         if (size > 0) {
             return ResponseDto.fail("Path has been used!");
         } else {
-            apiConfig.setStatus(0);
-            String id = UUIDUtil.id();
-            apiConfig.setId(id);
 
             if (MediaType.APPLICATION_JSON_VALUE.equals(apiConfig.getContentType())) {
                 apiConfig.setParams("[]"); // 不能设置null 前端使用会报错
@@ -81,12 +76,11 @@ public class ApiConfigService {
             apiConfig.setUpdateTime(now);
             apiConfigMapper.insert(apiConfig);
 
-            pluginConfigs.stream().forEach(t -> {
-                t.setApiId(id);
+            list.stream().forEach(t -> {
                 pluginConfigMapper.insert(t);
             });
 
-            return ResponseDto.successWithMsg("create API success");
+            return ResponseDto.successWithMsg("Create API success");
         }
 
     }
@@ -133,7 +127,7 @@ public class ApiConfigService {
 
     /**
      * 刪除API相关的元数据缓存和 API配置的插件对应的数据缓存
-     * 
+     *
      * @param apiConfig
      * @param apiCache
      */
@@ -156,6 +150,15 @@ public class ApiConfigService {
 
     public ApiConfig detail(String id) {
         ApiConfig apiConfig = apiConfigMapper.selectById(id);
+        apiConfig.setTaskJson(JSON.parseArray(apiConfig.getTask()));
+        apiConfig.setParamsJson(JSON.parseArray(apiConfig.getParams()));
+
+        List<ApiPluginConfig> alarmPlugins = pluginConfigMapper.selectAlarmPlugins(apiConfig.getId());
+        apiConfig.setAlarmPlugins(alarmPlugins);
+
+        ApiPluginConfig cachePlugin = pluginConfigMapper.selectCachePlugin(apiConfig.getId());
+        apiConfig.setCachePlugin(cachePlugin);
+
         return apiConfig;
     }
 
@@ -168,7 +171,7 @@ public class ApiConfigService {
 
     /**
      * 给前端使用的数据格式
-     * 
+     *
      * @return
      */
     public JSONArray getAllDetail() {
@@ -201,10 +204,13 @@ public class ApiConfigService {
     @Cacheable(value = "api", key = "#path", unless = "#result == null")
     public ApiConfig getConfig(String path) {
         ApiConfig apiConfig = apiConfigMapper.selectByPathOnline(path);
+
         if (Objects.isNull(apiConfig)) {
             log.warn("can't get [{}] api config from db", path);
             return null;
         }
+        // 插件组装
+        apiConfig = detail(apiConfig.getId());
         return apiConfig;
     }
 
@@ -272,7 +278,7 @@ public class ApiConfigService {
 
     /**
      * 导出API配置
-     * 
+     *
      * @param ids
      * @return
      */
@@ -287,7 +293,7 @@ public class ApiConfigService {
 
     /**
      * 导入API配置
-     * 
+     *
      * @param configs
      * @param plugins
      */

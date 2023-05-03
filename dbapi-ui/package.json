@@ -4,12 +4,12 @@
     "private": true,
     "scripts": {
         "serve": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve",
-        "build": "vue-cli-service build"
+        "build": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build"
     },
     "dependencies": {
         "axios": "^0.21.0",
         "core-js": "^3.6.5",
-        "element-ui": "^2.4.5",
+        "element-ui": "^2.15.13",
         "moment": "^2.29.1",
         "qs.js": "^0.1.12",
         "sql-formatter": "^4.0.2",

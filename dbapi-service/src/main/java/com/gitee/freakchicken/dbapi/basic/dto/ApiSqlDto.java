@@ -7,6 +7,6 @@ public class ApiSqlDto {
     
     String sqlText;
     String transformPlugin;
-    String transformPluginParams;
+    String transformPluginParam;
     
 }

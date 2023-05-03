@@ -6,6 +6,7 @@ import com.gitee.freakchicken.dbapi.basic.log.AccessLogWriter;
 import com.gitee.freakchicken.dbapi.basic.service.ApiConfigService;
 import com.gitee.freakchicken.dbapi.basic.service.AppService;
 import com.gitee.freakchicken.dbapi.basic.service.AppTokenService;
+import com.gitee.freakchicken.dbapi.basic.util.Constants;
 import com.gitee.freakchicken.dbapi.basic.util.IPUtil;
 import com.gitee.freakchicken.dbapi.basic.util.ThreadUtils;
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
@@ -79,7 +80,7 @@ public class ApiAuthFilter implements Filter {
             }
             accessLog.setApiId(config.getId());
             // 如果是私有接口，校验权限
-            if (config.getPrevilege() == 0) {
+            if (config.getAccess() == Constants.API_ACCESS_PRIVATE) {
                 String tokenStr = request.getHeader("Authorization");
                 if (StringUtils.isBlank(tokenStr)) {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

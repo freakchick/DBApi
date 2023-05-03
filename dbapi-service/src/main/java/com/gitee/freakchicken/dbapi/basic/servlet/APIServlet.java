@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.alibaba.fastjson.JSONArray;
+import com.gitee.freakchicken.dbapi.basic.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -20,7 +23,7 @@ import org.springframework.stereotype.Component;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
-import com.gitee.freakchicken.dbapi.basic.domain.ApiPluginConfig;
+import com.gitee.freakchicken.dbapi.common.ApiPluginConfig;
 import com.gitee.freakchicken.dbapi.basic.executor.ESExecutor;
 import com.gitee.freakchicken.dbapi.basic.executor.SQLExecutor;
 import com.gitee.freakchicken.dbapi.basic.service.ApiPluginConfigService;
@@ -49,7 +52,7 @@ public class APIServlet extends HttpServlet {
 
     @Autowired
     ApiPluginConfigService pluginConfigService;
-    
+
 
     @Value("${dbapi.api.context}")
     String apiContext;
@@ -100,7 +103,7 @@ public class APIServlet extends HttpServlet {
 
             Map<String, Object> requestParam = getParams(request, config);
 
-            ApiPluginConfig cache = pluginConfigService.getCachePlugin(config.getId());
+            ApiPluginConfig cache = config.getCachePlugin();
 
             // ger data from cache
             if (cache != null) {
@@ -111,24 +114,35 @@ public class APIServlet extends HttpServlet {
                 }
             }
 
-            Object res = null;
-            if ("es".equals(config.getTaskType())) {
-                res = ESExecutor.execute(config, requestParam);
-            } else if("sql".equals(config.getTaskType())) {
-                res = SQLExecutor.execute(config, requestParam);
+            List<Object> results = new ArrayList<>();
+
+            JSONArray tasks = config.getTaskJson();
+            for (int i = 0; i < tasks.size(); i++) {
+                JSONObject task = tasks.getJSONObject(i);
+                int type = task.getIntValue("taskType");
+                Object res = null;
+                if (type == Constants.API_EXECUTOR_SQL)
+                    res = SQLExecutor.execute(task, requestParam);
+                else if (type == Constants.API_EXECUTOR_HTTP)
+                    res = SQLExecutor.execute(task, requestParam);
+                else if (type == Constants.API_EXECUTOR_ES)
+                    res = ESExecutor.execute(task, requestParam);
+                else
+                    throw new RuntimeException("Executor type unknown!");
+                results.add(res);
             }
 
             // set data to cache
             if (cache != null) {
                 CachePlugin cachePlugin = PluginManager.getCachePlugin(cache.getPluginName());
-                cachePlugin.set(config, requestParam, res);
+                cachePlugin.set(config, requestParam, results);
             }
 
-            return ResponseDto.apiSuccess(res);
+            return ResponseDto.apiSuccess(results);
 
         } catch (Exception e) {
             // alarm if error
-            List<ApiPluginConfig> alarms = pluginConfigService.getAlarmPlugins(config.getId());
+            List<ApiPluginConfig> alarms = config.getAlarmPlugins();
             for (ApiPluginConfig alarm : alarms) {
                 try {
                     String param = alarm.getPluginParam();

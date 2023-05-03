@@ -1,7 +1,11 @@
 package com.gitee.freakchicken.dbapi.common;
 
 import java.io.Serializable;
+import java.util.List;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -41,7 +45,7 @@ public class ApiConfig implements Serializable {
     Integer status;
 
     @TableField
-    Integer previlege;
+    Integer access;
 
     @TableField("group_id")
     String groupId;
@@ -55,9 +59,6 @@ public class ApiConfig implements Serializable {
     @TableField(value = "json_param", updateStrategy = FieldStrategy.IGNORED)
     String jsonParam;
 
-    @TableField("task_type")
-    String taskType;
-
     @TableField
     String task;
 
@@ -67,5 +68,14 @@ public class ApiConfig implements Serializable {
     @TableField(value = "update_time")
     String updateTime;
 
+
+    @TableField(exist = false)
+    JSONArray paramsJson;// params的json格式
+    @TableField(exist = false)
+    JSONArray taskJson;//task的json格式
+    @TableField(exist = false)
+    List<ApiPluginConfig> alarmPlugins;
+    @TableField(exist = false)
+    ApiPluginConfig cachePlugin;
 
 }

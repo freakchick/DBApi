@@ -1,7 +1,7 @@
 package com.gitee.freakchicken.dbapi.basic.dto;
 
 import java.util.List;
-import com.gitee.freakchicken.dbapi.basic.domain.ApiPluginConfig;
+import com.gitee.freakchicken.dbapi.common.ApiPluginConfig;
 import lombok.Data;
 
 @Data
