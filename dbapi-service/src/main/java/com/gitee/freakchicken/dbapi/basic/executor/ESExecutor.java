@@ -17,17 +17,17 @@ import com.gitee.freakchicken.dbapi.basic.domain.DataSource;
 import com.gitee.freakchicken.dbapi.basic.dto.ESTaskDto;
 import com.gitee.freakchicken.dbapi.basic.es.ESPoolManager;
 import com.gitee.freakchicken.dbapi.basic.service.DataSourceService;
-import com.gitee.freakchicken.dbapi.common.ApiConfig;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class ESExecutor {
+public class ESExecutor  implements Executor {
 
     @Autowired
     DataSourceService dataSourceService;
 
+    @Override
     public Object execute(JSONObject taskJson, Map<String, Object> param) throws Exception {
 
 

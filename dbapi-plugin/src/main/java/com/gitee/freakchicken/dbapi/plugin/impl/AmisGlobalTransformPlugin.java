@@ -1,21 +1,22 @@
 package com.gitee.freakchicken.dbapi.plugin.impl;
 
-import com.gitee.freakchicken.dbapi.plugin.TransformPlugin;
+import com.gitee.freakchicken.dbapi.common.ResponseDto;
+import com.gitee.freakchicken.dbapi.plugin.GlobalTransformPlugin;
 
-public class DemoTransformPlugin extends TransformPlugin {
+public class AmisGlobalTransformPlugin extends GlobalTransformPlugin {
     @Override
     public void init() {
         System.out.println("------demo transform------");
     }
 
     @Override
-    public Object transform(Object data, String params) {
+    public Object transform(ResponseDto data, String params) {
         return null;
     }
 
     @Override
     public String getName() {
-        return "demo数据转换插件";
+        return "Amis格式转换插件";
     }
 
     @Override

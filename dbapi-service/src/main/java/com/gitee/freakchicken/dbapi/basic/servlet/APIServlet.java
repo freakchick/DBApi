@@ -23,8 +23,10 @@ import org.springframework.stereotype.Component;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.gitee.freakchicken.dbapi.common.ApiPluginConfig;
 import com.gitee.freakchicken.dbapi.basic.executor.ESExecutor;
+import com.gitee.freakchicken.dbapi.basic.executor.Executor;
 import com.gitee.freakchicken.dbapi.basic.executor.SQLExecutor;
 import com.gitee.freakchicken.dbapi.basic.service.ApiConfigService;
 import com.gitee.freakchicken.dbapi.basic.service.ApiService;
@@ -34,6 +36,7 @@ import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
 import com.gitee.freakchicken.dbapi.plugin.AlarmPlugin;
 import com.gitee.freakchicken.dbapi.plugin.CachePlugin;
+import com.gitee.freakchicken.dbapi.plugin.GlobalTransformPlugin;
 import com.gitee.freakchicken.dbapi.plugin.PluginManager;
 
 import lombok.extern.slf4j.Slf4j;
@@ -66,11 +69,11 @@ public class APIServlet extends HttpServlet {
         PrintWriter out = null;
         try {
             out = response.getWriter();
-            ResponseDto responseDto = process(servletPath, request, response);
-            out.append(JSON.toJSONString(responseDto));
+            Object responseDto = process(servletPath, request, response);
+            out.append(JSON.toJSONString(responseDto, SerializerFeature.WriteMapNullValue));
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            out.append(JSON.toJSONString(ResponseDto.fail(e.toString())));
+            out.append(JSON.toJSONString(ResponseDto.fail(e.toString()), SerializerFeature.WriteMapNullValue));
             log.error(e.toString(), e);
         } finally {
             if (out != null)
@@ -83,7 +86,7 @@ public class APIServlet extends HttpServlet {
         doGet(req, resp);
     }
 
-    public ResponseDto process(String path, HttpServletRequest request, HttpServletResponse response) {
+    public Object process(String path, HttpServletRequest request, HttpServletResponse response) {
         // // 校验接口是否存在
         ApiConfig config = apiConfigService.getConfig(path);
         if (config == null) {
@@ -98,35 +101,39 @@ public class APIServlet extends HttpServlet {
                 CachePlugin cachePlugin = PluginManager.getCachePlugin(cache.getPluginName());
                 Object o = cachePlugin.get(config, requestParam);
                 if (o != null) {
-                    return ResponseDto.apiSuccess(o); // 如果缓存有数据直接返回
+                    return transformReponse(ResponseDto.apiSuccess(o), config); // 如果缓存有数据直接返回
                 }
             }
 
-            List<Object> results = new ArrayList<>();
+            List<Object> executorResults = new ArrayList<>();
 
             JSONArray tasks = config.getTaskJson();
             for (int i = 0; i < tasks.size(); i++) {
                 JSONObject task = tasks.getJSONObject(i);
                 int type = task.getIntValue("taskType");
-                Object res = null;
+                Executor executor;
+
                 if (type == Constants.API_EXECUTOR_SQL)
-                    res = SQLExecutor.execute(task, requestParam);
+                    executor = SQLExecutor;
                 else if (type == Constants.API_EXECUTOR_HTTP)
-                    res = SQLExecutor.execute(task, requestParam);
+                    executor = SQLExecutor;
                 else if (type == Constants.API_EXECUTOR_ES)
-                    res = ESExecutor.execute(task, requestParam);
+                    executor = ESExecutor;
                 else
                     throw new RuntimeException("Executor type unknown!");
-                results.add(res);
+                Object res = executor.execute(task, requestParam);
+                executorResults.add(res);
             }
+            // 如果只有一个执行器就不返回数组格式的数据，返回对象格式
+            Object result = executorResults.size() == 1 ? executorResults.get(0) : executorResults;
 
             // set data to cache
             if (cache != null) {
                 CachePlugin cachePlugin = PluginManager.getCachePlugin(cache.getPluginName());
-                cachePlugin.set(config, requestParam, results);
+                cachePlugin.set(config, requestParam, result);
             }
 
-            return ResponseDto.apiSuccess(results);
+            return transformReponse(ResponseDto.apiSuccess(result), config);
 
         } catch (Exception e) {
             // alarm if error
@@ -147,6 +154,24 @@ public class APIServlet extends HttpServlet {
             }
 
             throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    /**
+     * 如果配置了全局数据转换插件，执行转换
+     * 
+     * @param response
+     * @param config
+     * @return
+     */
+    private Object transformReponse(ResponseDto response, ApiConfig config) {
+        ApiPluginConfig globalTransformPlugin = config.getGlobalTransformPlugin();
+        if (globalTransformPlugin != null) {
+            GlobalTransformPlugin plugin = PluginManager
+                    .getGlobalTransformPlugin(globalTransformPlugin.getPluginName());
+            return plugin.transform(response, globalTransformPlugin.getPluginParam());
+        } else {
+            return response;
         }
     }
 

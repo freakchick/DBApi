@@ -19,7 +19,7 @@ public interface ApiPluginConfigMapper extends BaseMapper<ApiPluginConfig> {
     ApiPluginConfig selectCachePlugin(String apiId);
 
     @Select("select * from api_plugin_config where api_id = #{apiId} and plugin_type=3")
-    ApiPluginConfig selectConversionPlugin(String apiId);
+    ApiPluginConfig selectGlobalTransformPlugin(String apiId);
 
     @Delete("delete from api_plugin_config where api_id = #{apiId} ")
     int deleteByApiId(String apiId);

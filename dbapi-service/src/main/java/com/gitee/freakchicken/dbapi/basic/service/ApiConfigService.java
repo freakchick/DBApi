@@ -6,7 +6,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -27,8 +26,8 @@ import com.gitee.freakchicken.dbapi.basic.dao.ApiPluginConfigMapper;
 import com.gitee.freakchicken.dbapi.basic.dao.DataSourceMapper;
 import com.gitee.freakchicken.dbapi.basic.domain.ApiDto;
 import com.gitee.freakchicken.dbapi.basic.util.Constants;
-import com.gitee.freakchicken.dbapi.common.ApiPluginConfig;
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
+import com.gitee.freakchicken.dbapi.common.ApiPluginConfig;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
 import com.gitee.freakchicken.dbapi.plugin.CachePlugin;
 import com.gitee.freakchicken.dbapi.plugin.PluginManager;
@@ -140,9 +139,9 @@ public class ApiConfigService {
             try {
                 CachePlugin cachePlugin = PluginManager.getCachePlugin(apiConfig.getCachePlugin().getPluginName());
                 cachePlugin.clean(apiConfig);
-                log.debug("clean data cache when delete api");
+                log.debug("clean data cache when delete/update/offline api");
             } catch (Exception e) {
-                log.error("clean cache failed when delete api", e);
+                log.error("clean cache failed when delete/update/offline api", e);
             }
         }
     }
@@ -170,8 +169,8 @@ public class ApiConfigService {
             ApiPluginConfig cachePlugin = pluginConfigMapper.selectCachePlugin(apiConfig.getId());
             apiConfig.setCachePlugin(cachePlugin);
 
-            ApiPluginConfig conversionPlugin = pluginConfigMapper.selectConversionPlugin(apiConfig.getId());
-            apiConfig.setConversionPlugin(conversionPlugin);
+            ApiPluginConfig globalTransformPlugin = pluginConfigMapper.selectGlobalTransformPlugin(apiConfig.getId());
+            apiConfig.setGlobalTransformPlugin(globalTransformPlugin);
         }
     }
 

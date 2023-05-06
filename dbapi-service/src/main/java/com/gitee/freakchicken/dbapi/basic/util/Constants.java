@@ -18,6 +18,7 @@ public class Constants {
 
     public static int PLUGIN_TYPE_CACHE = 1;
     public static int PLUGIN_TYPE_ALARM = 2;
-    public static int PLUGIN_TYPE_CONVERSION = 3;
+    public static int PLUGIN_TYPE_GLOBAL_TRANSFORM = 3;
+    public static int PLUGIN_TYPE_TRANSFORM = 4;
 
 }

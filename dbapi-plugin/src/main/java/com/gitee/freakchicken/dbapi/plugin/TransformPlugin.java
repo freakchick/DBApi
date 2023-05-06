@@ -1,15 +1,11 @@
 package com.gitee.freakchicken.dbapi.plugin;
 
-import com.alibaba.fastjson.JSONObject;
-import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
+public abstract class TransformPlugin implements BasePlugin {
 
-public abstract class TransformPlugin implements BasePlugin  {
-
-    public Logger logger = LoggerFactory.getLogger(CachePlugin.class);
+    public Logger logger = LoggerFactory.getLogger(TransformPlugin.class);
 
     /**
      * 插件初始化方法，实例化插件的时候执行，永远只会执行一次，
@@ -19,9 +15,9 @@ public abstract class TransformPlugin implements BasePlugin  {
     /**
      * 数据转换逻辑
      *
-     * @param data   sql查询结果
-     * @param params 缓存插件局部参数
+     * @param data   if SQL Executor , the data type is List<JSONObject>
+     * @param params 局部转换插件的局部参数
      * @return
      */
-    public abstract Object transform(List<JSONObject> data, String params);
+    public abstract Object transform(Object data, String params);
 }

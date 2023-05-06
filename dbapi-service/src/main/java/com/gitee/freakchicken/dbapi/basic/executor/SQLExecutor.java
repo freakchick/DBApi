@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.druid.pool.DruidPooledConnection;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.gitee.freakchicken.dbapi.basic.domain.DataSource;
 import com.gitee.freakchicken.dbapi.basic.dto.ApiSqlDto;
@@ -20,7 +19,6 @@ import com.gitee.freakchicken.dbapi.basic.service.DataSourceService;
 import com.gitee.freakchicken.dbapi.basic.util.JdbcUtil;
 import com.gitee.freakchicken.dbapi.basic.util.PoolManager;
 import com.gitee.freakchicken.dbapi.basic.util.SqlEngineUtil;
-import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.plugin.PluginManager;
 import com.gitee.freakchicken.dbapi.plugin.TransformPlugin;
 import com.github.freakchick.orange.SqlMeta;
@@ -29,11 +27,12 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class SQLExecutor {
+public class SQLExecutor implements Executor {
 
     @Autowired
     DataSourceService dataSourceService;
 
+    @Override
     public Object execute(JSONObject taskJson, Map<String, Object> sqlParam) throws Exception {
 
         SQLTaskDto task = taskJson.toJavaObject(SQLTaskDto.class);
@@ -60,12 +59,8 @@ public class SQLExecutor {
                 dataList.set(i, resData);// 重新设置值
             }
         }
-        Object res = dataList;
         // 如果只有单条sql,返回结果不是数组格式
-        if (dataList.size() == 1) {
-            res = dataList.get(0);
-        }
-        return res;
+        return dataList.size() == 1 ? dataList.get(0) : dataList;
     }
 
     public List<Object> executeSql(Connection connection, List<ApiSqlDto> sqlList, Map<String, Object> sqlParam,

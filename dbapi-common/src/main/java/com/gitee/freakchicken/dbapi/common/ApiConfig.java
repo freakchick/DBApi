@@ -78,6 +78,6 @@ public class ApiConfig implements Serializable {
     @TableField(exist = false)
     ApiPluginConfig cachePlugin;
     @TableField(exist = false)
-    ApiPluginConfig conversionPlugin;
+    ApiPluginConfig globalTransformPlugin;
 
 }

@@ -12,6 +12,7 @@ public class PluginManager {
 
     private static Map<String, CachePlugin> cachePlugins = new ConcurrentHashMap<>();
     private static Map<String, TransformPlugin> transformPlugins = new ConcurrentHashMap<>();
+    private static Map<String, GlobalTransformPlugin> globalTransformPlugins = new ConcurrentHashMap<>();
     private static Map<String, AlarmPlugin> alarmPlugins = new ConcurrentHashMap<>();
 
     public static void loadPlugins() {
@@ -45,6 +46,16 @@ public class PluginManager {
             alarmPlugins.put(plugin.getClass().getName(), plugin);
         }
         log.info("scan alarm plugin finish");
+
+        ServiceLoader<GlobalTransformPlugin> serviceLoader4 = ServiceLoader.load(GlobalTransformPlugin.class);
+        Iterator<GlobalTransformPlugin> GlobalTransformPlugins = serviceLoader4.iterator();
+        while (GlobalTransformPlugins.hasNext()) {
+            GlobalTransformPlugin plugin = GlobalTransformPlugins.next();
+            plugin.init();
+            log.info("{} registered", plugin.getClass().getName());
+            globalTransformPlugins.put(plugin.getClass().getName(), plugin);
+        }
+        log.info("scan global transform plugin finish");
     }
 
     public static CachePlugin getCachePlugin(String className) {
@@ -59,6 +70,13 @@ public class PluginManager {
             throw new RuntimeException("Plugin not found: " + className);
         }
         return transformPlugins.get(className);
+    }
+
+    public static GlobalTransformPlugin getGlobalTransformPlugin(String className) {
+        if (!globalTransformPlugins.containsKey(className)) {
+            throw new RuntimeException("Plugin not found: " + className);
+        }
+        return globalTransformPlugins.get(className);
     }
 
     public static AlarmPlugin getAlarmPlugin(String className) {
@@ -81,7 +99,6 @@ public class PluginManager {
     }
 
     public static List<JSONObject> getAllTransformPlugin() {
-//        return transformPlugins.keySet();
         List<JSONObject> collect = transformPlugins.values().stream().map(t -> {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("className", t.getClass().getName());
@@ -93,8 +110,19 @@ public class PluginManager {
         return collect;
     }
 
+    public static List<JSONObject> getAllGlobalTransformPlugin() {
+        List<JSONObject> collect = globalTransformPlugins.values().stream().map(t -> {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("className", t.getClass().getName());
+            jsonObject.put("name", t.getName());
+            jsonObject.put("description", t.getDescription());
+            jsonObject.put("paramDescription", t.getParamDescription());
+            return jsonObject;
+        }).collect(Collectors.toList());
+        return collect;
+    }
+
     public static List<JSONObject> getAllAlarmPlugin() {
-//        return alarmPlugins.keySet();
         List<JSONObject> collect = alarmPlugins.values().stream().map(t -> {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("className", t.getClass().getName());

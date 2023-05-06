@@ -15,9 +15,6 @@
 
        <!--api参数空闲缓存5min-->
        <cache name="api" eternal="false" maxElementsInMemory="10000" overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="300" memoryStoreEvictionPolicy="LRU"/>
-       <cache name="api_cache_config" eternal="false" maxElementsInMemory="10000" overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="300" memoryStoreEvictionPolicy="LRU"/>
-       <cache name="api_alarm_config" eternal="false" maxElementsInMemory="10000" overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="300" memoryStoreEvictionPolicy="LRU"/>
-       <cache name="api_conversion_config" eternal="false" maxElementsInMemory="10000" overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="300" memoryStoreEvictionPolicy="LRU"/>
-
+      
 
 </ehcache>
