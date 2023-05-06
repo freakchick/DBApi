@@ -26,6 +26,7 @@ import com.gitee.freakchicken.dbapi.basic.dao.ApiConfigMapper;
 import com.gitee.freakchicken.dbapi.basic.dao.ApiPluginConfigMapper;
 import com.gitee.freakchicken.dbapi.basic.dao.DataSourceMapper;
 import com.gitee.freakchicken.dbapi.basic.domain.ApiDto;
+import com.gitee.freakchicken.dbapi.basic.util.Constants;
 import com.gitee.freakchicken.dbapi.common.ApiPluginConfig;
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
@@ -92,23 +93,25 @@ public class ApiConfigService {
         if (size > 0) {
             return ResponseDto.fail("Path has been used");
         } else {
-            ApiConfig oldConfig = apiConfigMapper.selectById(apiConfig.getId());
-            apiConfig.setStatus(0);
-            apiConfig.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+
+            // clean data cache if cache plugin configured before
+            ApiConfig oldConfig = detail(apiConfig.getId());
+            cleanDataCacheAndMetaCache(oldConfig);
 
             if (MediaType.APPLICATION_JSON_VALUE.equals(apiConfig.getContentType())) {
                 apiConfig.setParams("[]"); // 不能设置null 前端使用会报错
             } else if (MediaType.APPLICATION_FORM_URLENCODED_VALUE.equals(apiConfig.getContentType())) {
                 apiConfig.setJsonParam(null);
             }
-            apiConfigMapper.updateById(apiConfig);
-            ApiPluginConfig oldCacheConfig = pluginConfigMapper.selectCachePlugin(apiConfig.getId());
+            String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+            apiConfig.setUpdateTime(now);
 
+            apiConfigMapper.updateById(apiConfig);
             pluginConfigMapper.deleteByApiId(apiConfig.getId());
             pluginConfigs.stream().forEach(t -> {
                 pluginConfigMapper.insert(t);
             });
-            cleanDataCacheAndMetaCache(oldConfig, oldCacheConfig);
+
             return ResponseDto.successWithMsg("Update API Success");
         }
 
@@ -116,30 +119,26 @@ public class ApiConfigService {
 
     @Transactional
     public void delete(String id) {
-        ApiConfig oldConfig = apiConfigMapper.selectById(id);
-        ApiPluginConfig oldCacheConfig = pluginConfigMapper.selectCachePlugin(id);
-
+        ApiConfig oldConfig = detail(id);
+        cleanDataCacheAndMetaCache(oldConfig);
+        
         apiConfigMapper.deleteById(id);
         pluginConfigMapper.deleteByApiId(id);
 
-        cleanDataCacheAndMetaCache(oldConfig, oldCacheConfig);
     }
 
     /**
      * 刪除API相关的元数据缓存和 API配置的插件对应的数据缓存
      *
      * @param apiConfig
-     * @param apiCache
      */
-    private void cleanDataCacheAndMetaCache(ApiConfig apiConfig, ApiPluginConfig apiCacheConfig) {
+    private void cleanDataCacheAndMetaCache(ApiConfig apiConfig) {
         // 清除API相关的元数据缓存
         cacheManager.getCache("api").evictIfPresent(apiConfig.getPath());
-        cacheManager.getCache("api_alarm_config").evictIfPresent(apiConfig.getId());
-        cacheManager.getCache("api_cache_config").evictIfPresent(apiConfig.getId());
-        cacheManager.getCache("api_conversion_config").evictIfPresent(apiConfig.getId());
-        if (apiCacheConfig != null) {
+
+        if (apiConfig.getCachePlugin() != null) {
             try {
-                CachePlugin cachePlugin = PluginManager.getCachePlugin(apiCacheConfig.getPluginName());
+                CachePlugin cachePlugin = PluginManager.getCachePlugin(apiConfig.getCachePlugin().getPluginName());
                 cachePlugin.clean(apiConfig);
                 log.debug("clean data cache when delete api");
             } catch (Exception e) {
@@ -148,18 +147,32 @@ public class ApiConfigService {
         }
     }
 
+    /**
+     * get API full detail
+     * 
+     * @param id
+     * @return
+     */
     public ApiConfig detail(String id) {
         ApiConfig apiConfig = apiConfigMapper.selectById(id);
-        apiConfig.setTaskJson(JSON.parseArray(apiConfig.getTask()));
-        apiConfig.setParamsJson(JSON.parseArray(apiConfig.getParams()));
-
-        List<ApiPluginConfig> alarmPlugins = pluginConfigMapper.selectAlarmPlugins(apiConfig.getId());
-        apiConfig.setAlarmPlugins(alarmPlugins);
-
-        ApiPluginConfig cachePlugin = pluginConfigMapper.selectCachePlugin(apiConfig.getId());
-        apiConfig.setCachePlugin(cachePlugin);
-
+        enhanceApiConfig(apiConfig);
         return apiConfig;
+    }
+
+    private void enhanceApiConfig(ApiConfig apiConfig) {
+        if (apiConfig != null) {
+            apiConfig.setTaskJson(JSON.parseArray(apiConfig.getTask()));
+            apiConfig.setParamsJson(JSON.parseArray(apiConfig.getParams()));
+
+            List<ApiPluginConfig> alarmPlugins = pluginConfigMapper.selectAlarmPlugins(apiConfig.getId());
+            apiConfig.setAlarmPlugins(alarmPlugins);
+
+            ApiPluginConfig cachePlugin = pluginConfigMapper.selectCachePlugin(apiConfig.getId());
+            apiConfig.setCachePlugin(cachePlugin);
+
+            ApiPluginConfig conversionPlugin = pluginConfigMapper.selectConversionPlugin(apiConfig.getId());
+            apiConfig.setConversionPlugin(conversionPlugin);
+        }
     }
 
     public List<ApiConfig> getAll() {
@@ -174,7 +187,7 @@ public class ApiConfigService {
      *
      * @return
      */
-    public JSONArray getAllDetail() {
+    public JSONArray getAllApiTree() {
         List<ApiDto> list = apiConfigMapper.getAllDetail();
 
         Map<String, List<ApiDto>> map = list.stream().collect(Collectors.groupingBy(ApiDto::getGroupName));
@@ -204,32 +217,21 @@ public class ApiConfigService {
     @Cacheable(value = "api", key = "#path", unless = "#result == null")
     public ApiConfig getConfig(String path) {
         ApiConfig apiConfig = apiConfigMapper.selectByPathOnline(path);
-
-        if (Objects.isNull(apiConfig)) {
-            log.warn("can't get [{}] api config from db", path);
-            return null;
-        }
-        // 插件组装
-        apiConfig = detail(apiConfig.getId());
+        enhanceApiConfig(apiConfig);
         return apiConfig;
     }
 
     public void online(String id) {
         ApiConfig apiConfig = apiConfigMapper.selectById(id);
-        apiConfig.setStatus(1);
+        apiConfig.setStatus(Constants.API_STATUS_ONLINE);
         apiConfigMapper.updateById(apiConfig);
     }
 
     public void offline(String id) {
-
-        ApiConfig apiConfig = apiConfigMapper.selectById(id);
-        ApiPluginConfig oldCacheConfig = pluginConfigMapper.selectCachePlugin(id);
-
-        apiConfig.setStatus(0);
+        ApiConfig apiConfig = detail(id);
+        cleanDataCacheAndMetaCache(apiConfig);
+        apiConfig.setStatus(Constants.API_STATUS_OFFLINE);
         apiConfigMapper.updateById(apiConfig);
-
-        cleanDataCacheAndMetaCache(apiConfig, oldCacheConfig);
-
     }
 
     public String getPath(String id) {
@@ -302,7 +304,7 @@ public class ApiConfigService {
         configs.stream().forEach(t -> {
             t.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             t.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-            t.setStatus(0);
+            t.setStatus(Constants.API_STATUS_OFFLINE);
             apiConfigMapper.insert(t);
         });
 

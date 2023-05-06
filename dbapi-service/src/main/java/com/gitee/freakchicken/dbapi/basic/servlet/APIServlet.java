@@ -26,7 +26,6 @@ import com.alibaba.fastjson.TypeReference;
 import com.gitee.freakchicken.dbapi.common.ApiPluginConfig;
 import com.gitee.freakchicken.dbapi.basic.executor.ESExecutor;
 import com.gitee.freakchicken.dbapi.basic.executor.SQLExecutor;
-import com.gitee.freakchicken.dbapi.basic.service.ApiPluginConfigService;
 import com.gitee.freakchicken.dbapi.basic.service.ApiConfigService;
 import com.gitee.freakchicken.dbapi.basic.service.ApiService;
 import com.gitee.freakchicken.dbapi.basic.service.DataSourceService;
@@ -50,10 +49,6 @@ public class APIServlet extends HttpServlet {
     @Autowired
     ApiService apiService;
 
-    @Autowired
-    ApiPluginConfigService pluginConfigService;
-
-
     @Value("${dbapi.api.context}")
     String apiContext;
 
@@ -68,13 +63,11 @@ public class APIServlet extends HttpServlet {
         log.debug("servlet execute");
         String servletPath = request.getRequestURI();
         servletPath = servletPath.substring(apiContext.length() + 2);
-
         PrintWriter out = null;
         try {
             out = response.getWriter();
             ResponseDto responseDto = process(servletPath, request, response);
             out.append(JSON.toJSONString(responseDto));
-
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             out.append(JSON.toJSONString(ResponseDto.fail(e.toString())));
@@ -91,21 +84,16 @@ public class APIServlet extends HttpServlet {
     }
 
     public ResponseDto process(String path, HttpServletRequest request, HttpServletResponse response) {
-
         // // 校验接口是否存在
         ApiConfig config = apiConfigService.getConfig(path);
         if (config == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return ResponseDto.fail("Api not exists");
         }
-
         try {
-
             Map<String, Object> requestParam = getParams(request, config);
-
             ApiPluginConfig cache = config.getCachePlugin();
-
-            // ger data from cache
+            // get data from cache
             if (cache != null) {
                 CachePlugin cachePlugin = PluginManager.getCachePlugin(cache.getPluginName());
                 Object o = cachePlugin.get(config, requestParam);
@@ -196,7 +184,7 @@ public class APIServlet extends HttpServlet {
                         + ", but you use: " + contentType);
             }
         } else {
-            throw new RuntimeException("content-type not supported: " + contentType);
+            throw new RuntimeException("Content-type not supported: " + contentType);
         }
 
         return params;

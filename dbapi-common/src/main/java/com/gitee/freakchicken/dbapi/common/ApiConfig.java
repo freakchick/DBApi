@@ -77,5 +77,7 @@ public class ApiConfig implements Serializable {
     List<ApiPluginConfig> alarmPlugins;
     @TableField(exist = false)
     ApiPluginConfig cachePlugin;
+    @TableField(exist = false)
+    ApiPluginConfig conversionPlugin;
 
 }

@@ -67,7 +67,7 @@ public class ApiConfigController {
     String apiContext;
 
     @RequestMapping("/context")
-    public String add() {
+    public String getContext() {
         return apiContext;
     }
 
@@ -87,13 +87,13 @@ public class ApiConfigController {
         String id = UUIDUtil.id();
         config.setId(id);
 
-        JSONObject obj = jo.getJSONObject("cachePlugin");
         JSONArray array = jo.getJSONArray("alarmPlugins");
-        array.add(obj);
+        array.add(jo.getJSONObject("cachePlugin"));
+        array.add(jo.getJSONObject("conversionPlugin"));
 
         List<ApiPluginConfig> javaList = array.toJavaList(ApiPluginConfig.class);
 
-        List<ApiPluginConfig> collect = javaList.stream().filter(t -> StringUtils.isNotEmpty(t.getPluginName())).collect(Collectors.toList());
+        List<ApiPluginConfig> collect = javaList.stream().filter(t -> t != null && StringUtils.isNotEmpty(t.getPluginName())).collect(Collectors.toList());
         collect.forEach(t -> t.setApiId(id));
 
         return apiConfigService.add(config, collect);
@@ -123,8 +123,8 @@ public class ApiConfigController {
 
     // 给前端使用的数据结构
     @RequestMapping("/getApiTree")
-    public JSONArray getApiTree() {
-        return apiConfigService.getAllDetail();
+    public JSONArray getAllApiTree() {
+        return apiConfigService.getAllApiTree();
     }
 
     @RequestMapping("/search")
@@ -138,36 +138,42 @@ public class ApiConfigController {
     }
 
     @RequestMapping("/delete/{id}")
-    public ApiConfig delete(@PathVariable String id) {
+    public void delete(@PathVariable String id) {
         apiConfigService.delete(id);
-        return null;
     }
 
     @RequestMapping("/update")
-    public ResponseDto update(@RequestBody ApiConfigDto dto) {
-        ApiConfig apiConfig = new ApiConfig();
-        try {
-            BeanUtils.copyProperties(apiConfig, dto);
+    public ResponseDto update(@RequestBody JSONObject jo) {
+        ApiConfig config = new ApiConfig();
+        config.setId(jo.getString("id"));
+        config.setName(jo.getString("name"));
+        config.setPath(jo.getString("path"));
+        config.setNote(jo.getString("note"));
+        config.setContentType(jo.getString("contentType"));
+        config.setJsonParam(jo.getString("jsonParam"));
+        config.setParams(jo.getJSONArray("paramsJson").toJSONString());
+        config.setAccess(jo.getInteger("access"));
+        config.setTask(jo.getJSONArray("taskJson").toJSONString());
+        config.setStatus(Constants.API_STATUS_OFFLINE);
 
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        }
-        return apiConfigService.update(apiConfig, dto.getPlugins());
+        JSONArray array = jo.getJSONArray("alarmPlugins");
+        array.add(jo.getJSONObject("cachePlugin"));
+        array.add(jo.getJSONObject("conversionPlugin"));
+
+        List<ApiPluginConfig> javaList = array.toJavaList(ApiPluginConfig.class);
+        List<ApiPluginConfig> collect = javaList.stream().filter(t -> t !=null && StringUtils.isNotEmpty(t.getPluginName())).collect(Collectors.toList());
+
+        return apiConfigService.update(config, collect);
     }
 
     @RequestMapping("/online/{id}")
-    public ApiConfig online(@PathVariable String id) {
+    public void online(@PathVariable String id) {
         apiConfigService.online(id);
-        return null;
     }
 
     @RequestMapping("/offline/{id}")
-    public ApiConfig offline(@PathVariable String id) {
-
+    public void offline(@PathVariable String id) {
         apiConfigService.offline(id);
-        return null;
     }
 
     @RequestMapping("/apiDocs")
@@ -252,23 +258,18 @@ public class ApiConfigController {
      */
     @RequestMapping(value = "/import", produces = "application/json;charset=UTF-8")
     public void uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
-
         String s = IOUtils.toString(file.getInputStream(), "utf-8");
         JSONObject jsonObject = JSON.parseObject(s);
-        List<ApiConfig> apis = JSON.parseArray(jsonObject.getJSONArray("api").toJSONString(), ApiConfig.class);
-        List<ApiPluginConfig> plugins = JSON.parseArray(jsonObject.getJSONArray("plugins").toJSONString(),
-                ApiPluginConfig.class);
+        List<ApiConfig> apis = jsonObject.getJSONArray("api").toJavaList(ApiConfig.class);
+        List<ApiPluginConfig> plugins = jsonObject.getJSONArray("plugins").toJavaList(ApiPluginConfig.class);
         apiConfigService.importAPI(apis, plugins);
-
     }
 
     @RequestMapping(value = "/importGroup", produces = "application/json;charset=UTF-8")
     public void importGroup(@RequestParam("file") MultipartFile file) throws IOException {
-
         String s = IOUtils.toString(file.getInputStream(), "utf-8");
         List<Group> configs = JSON.parseArray(s, Group.class);
         groupService.insertBatch(configs);
-
     }
 
     @RequestMapping("/sql/execute")
