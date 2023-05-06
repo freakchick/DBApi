@@ -103,7 +103,7 @@
           <template slot-scope="scope">
             <i class="iconfont icon-on_line1 circle" v-if="scope.row.status == 1"></i>
             <i class="iconfont icon-off_line circle offline" v-else></i>
-            <i class="el-icon-lock circle lock" v-if="scope.row.previlege == PRIVILEGE.PRIVATE"></i>
+            <i class="el-icon-lock circle lock" v-if="scope.row.access == PRIVILEGE.PRIVATE"></i>
             <i class="el-icon-unlock circle " v-else></i>
             <span :title="scope.row.note">{{ scope.row.name }}</span>
           </template>

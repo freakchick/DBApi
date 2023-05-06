@@ -22,9 +22,11 @@ export default {
   methods: {
 
     save() {
+      debugger
       const detail = this.$refs.apiAdd.detail
-      let list = []
-      list.push(this.$refs.apiAdd.$refs.sqlExecutor.taskJson())
+
+      const executors = this.$refs.apiAdd.$refs.sqlExecutor
+      const taskJson = executors.map(node => node.getTaskJson())
 
       let p = {
         name: detail.name,
@@ -36,7 +38,7 @@ export default {
         paramsJson: detail.paramsJson,
         access: detail.access,
 
-        taskJson: list,
+        taskJson: taskJson,
 
         cachePlugin: detail.cachePlugin,
         alarmPlugins: detail.alarmPlugins,
@@ -52,7 +54,7 @@ export default {
       // }
 
       this.axios.post("/apiConfig/add", p,
-          {headers: {'Content-Type': 'application/json'}}
+        {headers: {'Content-Type': 'application/json'}}
       ).then((response) => {
         if (response.data.success) {
           this.$message.success(response.data.msg)

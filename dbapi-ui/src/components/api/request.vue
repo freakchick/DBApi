@@ -6,7 +6,7 @@
     <el-tabs tab-position="top" type="border-card" @tab-click="handleTabClick">
       <el-tab-pane :label="$t('m.request_test')">
         <div class="mycontent">
-          <div v-show="previlege == PREVILEGE.PRIVATE">
+          <div v-show="previlege == PRIVILEGE.PRIVATE">
             <h2>{{ $t('m.get_token') }}</h2>
             <el-input v-model="tokenUrl">
               <el-button slot="append" icon="el-icon-caret-right" @click="getToken"></el-button>
@@ -33,7 +33,7 @@
             <el-form-item label="Content-Type">
               <el-input v-model="contentType" disabled></el-input>
             </el-form-item>
-            <el-form-item label="Authorization" v-show="previlege == PREVILEGE.PRIVATE">
+            <el-form-item label="Authorization" v-show="privilege == PRIVILEGE.PRIVATE">
               <el-input v-model="token" :placeholder="$t('m.input_token')"></el-input>
             </el-form-item>
           </el-form>
@@ -148,7 +148,7 @@
 </template>
 
 <script>
-import {CONTENT_TYPE, PREVILEGE} from "@/constant";
+import {CONTENT_TYPE, PRIVILEGE} from "@/constant";
 import callExample from "@/components/api/common/callExample";
 
 export default {
@@ -157,11 +157,11 @@ export default {
   data() {
     return {
       CONTENT_TYPE: Object.freeze(CONTENT_TYPE),
-      PREVILEGE: Object.freeze(PREVILEGE),
+      PRIVILEGE: Object.freeze(PRIVILEGE),
       api: {},
       params: [],
       path: null,
-      previlege: PREVILEGE.PRIVATE,
+      privilege: PRIVILEGE.PRIVATE,
       address: null,
       response: null,
       isSelect: null,

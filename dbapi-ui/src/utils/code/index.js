@@ -19,7 +19,7 @@
  * }
  */
 
-import { LANGUAGE, CONTENT_TYPE, PREVILEGE, DATA_TYPE } from '@/constant'
+import { LANGUAGE, CONTENT_TYPE, PRIVILEGE, DATA_TYPE } from '@/constant'
 import { generateShellCallExampleCode } from './shell'
 import { generatePythonCallExampleCode } from './python'
 import { generateGoCallExampleCode } from './go'
@@ -54,8 +54,8 @@ function generateParam({ lang, address, detail }) {
   const params = detail.params
   const requestUrl = address
   const previlege = detail.previlege
-  const isPrevilegePrivate = previlege === PREVILEGE.PRIVATE
-  const isPrevilegePublic = previlege === PREVILEGE.PUBLIC
+  const isPrevilegePrivate = previlege === PRIVILEGE.PRIVATE
+  const isPrevilegePublic = previlege === PRIVILEGE.PUBLIC
   const isContentTypeJson = contentType === CONTENT_TYPE.JSON
   const isContentTypeFormUrlEncoded = contentType === CONTENT_TYPE.FORM_URLENCODED
   // 暂时不知道token,仅作占位用

@@ -85,7 +85,7 @@
         </el-form>
       </el-tab-pane>
       <el-tab-pane label="执行器">
-        <div>
+        <div v-for="(item,index) in detail.taskJson">
           <el-form label-width="120px">
             <el-form-item label="Executor Type">
               <el-radio-group v-model="detail.taskType">
@@ -101,8 +101,6 @@
       </el-tab-pane>
       <el-tab-pane label="全局插件">
         <div>
-
-
           <el-form label-width="120px">
             <el-form-item :label="$t('m.cache')">
               <span class="label">{{ $t('m.plugin_name') }}</span>
@@ -129,6 +127,9 @@
                 {{ $t('m.cache_plugin_warning') }}
               </el-alert>
             </el-form-item>
+
+            <el-button v-for="(item,index) in alarmPlugins" @click="click(index)"></el-button>
+
             <el-form-item :label="$t('m.alarm')">
               <div v-for="(item,index) in detail.alarmPlugins">
                 <span class="label">{{ $t('m.plugin_name') }}</span>
@@ -199,7 +200,7 @@ export default {
 
         cachePlugin: {pluginName: null, pluginParam: null, pluginType: PLUGIN_TYPE.CACHE_PLUGIN, apiId: null},
         alarmPlugins: [{pluginName: null, pluginParam: null, pluginType: PLUGIN_TYPE.ALARM_PLUGIN, apiId: null}],
-
+        taskJson: [{"taskType":1,"sqlList":[{"sqlText":"--one","transformPlugin":null,"transformPluginParam":null}],"transaction":0,"datasourceId":"2biv61Q4"}],
         jsonParam: null,
         taskType: 1,
         // sqlList: [
@@ -263,28 +264,8 @@ export default {
     getDetail(id) {
       this.id = id;
       this.axios.post("/apiConfig/detail/" + id).then((response) => {
-        this.detail.name = response.data.name;
-        this.detail.note = response.data.note;
-        this.detail.path = response.data.path;
-        this.detail.access = response.data.access;
-        this.detail.groupId = response.data.groupId;
-        this.detail.paramsJson = response.data.paramsJson;
-        this.detail.cachePlugin = response.data.cachePlugin;
-        this.detail.cachePluginParam = response.data.cachePluginParam;
-        this.detail.openTrans = response.data.openTrans;
-        this.detail.contentType = response.data.contentType;
-        this.detail.jsonParam = response.data.jsonParam;
-        this.detail.alarmPlugin = response.data.alarmPlugin;
-        this.detail.alarmPluginParam = response.data.alarmPluginParam;
-
-        this.$refs.sqlCode.datasourceId = response.data.datasourceId;
-        // this.detail.sqlList = response.data.sqlList.map((t) => {
-        //   return {
-        //     sqlText: t.sqlText,
-        //     transformPlugin: t.transformPlugin,
-        //     transformPluginParams: t.transformPluginParams,
-        //   };
-        // });
+        this.detail = response.data
+        console.log(this.detail)
       });
     },
 

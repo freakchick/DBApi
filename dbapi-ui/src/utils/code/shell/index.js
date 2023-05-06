@@ -11,7 +11,7 @@
  *  --data-urlencode id=1 \
  *  'http://127.0.0.1:8520/api/test'
  */
-import { DATA_TYPE, CONTENT_TYPE, PREVILEGE } from "@/constant";
+import { DATA_TYPE, CONTENT_TYPE, PRIVILEGE } from "@/constant";
 
 export function generateShellCallExampleCode({
   lang,

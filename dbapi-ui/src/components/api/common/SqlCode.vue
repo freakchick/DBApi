@@ -53,7 +53,10 @@
       </div>
       <div class="code">
         <div class="multi-sql" :style="{'width':  !isFullScreen ? '100%' : ''}">
-          <code-ui :sqlText="sqlText" :mode="mode" :tableHints="tableHints"></code-ui>
+
+          <codemirror :ref="'cms'+index" :textareaRef="'cm'+index" :value="sqlText" :mode="mode"></codemirror>
+
+<!--          <code-ui :sqlText="sqlText" :mode="mode" :tableHints="tableHints"></code-ui>-->
         </div>
         <div class="params">
           <div style="display: inline-block">{{$t('m.sql_param')}}：</div>
@@ -113,6 +116,9 @@ export default {
   props: {
     //从父组件传过来的属性
     sqlText: {
+      type: String
+    },
+    index:{
       type: String
     }
   },

@@ -17,8 +17,8 @@
         <div>
           <el-tabs v-model="currentActiveTabName" type="card" editable @edit="handleTabsEdit" tab-position="top">
             <el-tab-pane :key="item.name" v-for="(item, index) in editableTabs" :label="item.title" :name="item.name">
-              <sql-code :ref="'sqlCode'+ item.name" :sqlText="item.sqlText"></sql-code>
-
+<!--              <sql-code ref="sqlCode" :sqlText="item.sqlText" :index="index+''"></sql-code>-->
+              <codemirror :textareaRef="'cms'+index" :value="item.sqlText" @setCode="setCode" mode="mini"></codemirror>
               <span>sql-{{ item.name }} : </span>
               <span class="label">{{ $t('m.plugin_name') }}</span>
               <el-select v-model="item.transformPlugin" style="width:400px" clearable @clear="clearTransPluginParam(index)" :no-data-text="$t('m.no_plugin')">
@@ -68,7 +68,8 @@
 </template>
 
 <script>
-import sqlCode from "@/components/api/common/SqlCode";
+// import sqlCode from "@/components/api/common/SqlCode";
+import codemirror from "@/components/api/common/codemirror.vue";
 import {EXECUTOR_TYPE} from "@/constant";
 
 export default {
@@ -87,13 +88,16 @@ export default {
     }
   },
   methods: {
-    taskJson() {
-      const sqlList = this.$store.getters.getSql
-      console.log(sqlList)
+    setCode(code){
+      this.editableTabs[this.currentActiveTabIndex].sqlText = code
+      // console.log(this.editableTabs)
+    },
+    getTaskJson() {
+
       let p = this.editableTabs.map((item, index) => {
-        return {sqlText: sqlList[index], transformPlugin: item.transformPlugin, transformPluginParam: item.transformPluginParam}
+        return {sqlText: item.sqlText, transformPlugin: item.transformPlugin, transformPluginParam: item.transformPluginParam}
       })
-      console.log(p)
+      // console.log(p)
       return {
         taskType: EXECUTOR_TYPE.SQL_EXECUTOR,
         sqlList: p,
@@ -145,28 +149,28 @@ export default {
     }
   },
   components: {
-    sqlCode
+    codemirror
   },
   watch: {
     editableTabs(newV, oldV) {
       let i = 0;
       this.editableTabs.forEach((tab, index) => {
         if (tab.name === this.currentActiveTabName) {
-          i = index;
+          this.currentActiveTabIndex = index;
         }
       });
-      console.log(i)
-      this.$store.commit('setCurrentActiveCmIndex', i)
+      // console.log(i)
+      // this.$store.commit('setCurrentActiveCmIndex', i)
     },
     currentActiveTabName(newV, oldV) {
       let i = 0;
       this.editableTabs.forEach((tab, index) => {
         if (tab.name === this.currentActiveTabName) {
-          i = index;
+          this.currentActiveTabIndex = index;
         }
       });
-      console.log(i)
-      this.$store.commit('setCurrentActiveCmIndex', i)
+      // console.log(i)
+      // this.$store.commit('setCurrentActiveCmIndex', i)
     }
   },
   computed: {},

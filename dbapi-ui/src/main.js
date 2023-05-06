@@ -11,7 +11,7 @@ import i18n from './i18n/i18n'
 import './theme/index.css'
 import './icon/iconfont.css'
 
-import VueCodeMirror from 'vue-codemirror'
+// import VueCodeMirror from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
 
 import install from '@/components/common/index.js'
@@ -27,7 +27,7 @@ import ECharts from 'vue-echarts';
 Vue.component('v-chart', ECharts);
 
 Vue.use(VueClipboard)
-Vue.use(VueCodeMirror)
+// Vue.use(VueCodeMirror)
 Vue.use(install) // 导入模块
 moment.locale('zh-cn'); // 设置语言 或 moment.lang('zh-cn');
 Vue.prototype.$moment = moment;// 赋值使用
