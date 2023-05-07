@@ -17,6 +17,7 @@ public class PluginController {
         jsonObject.put("cache", PluginManager.getAllCachePlugin());
         jsonObject.put("transform", PluginManager.getAllTransformPlugin());
         jsonObject.put("alarm", PluginManager.getAllAlarmPlugin());
+        jsonObject.put("globalTransform", PluginManager.getAllGlobalTransformPlugin());
         return jsonObject;
     }
 

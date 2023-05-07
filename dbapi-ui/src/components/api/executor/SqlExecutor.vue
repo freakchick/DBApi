@@ -16,30 +16,31 @@
         </div>
         <div>
           <el-tabs v-model="currentActiveTabName" type="card" editable @edit="handleTabsEdit" tab-position="top">
-            <el-tab-pane :key="item.name" v-for="(item, index) in editableTabs" :label="item.title" :name="item.name">
-<!--              <sql-code ref="sqlCode" :sqlText="item.sqlText" :index="index+''"></sql-code>-->
+            <el-tab-pane :key="item.name" v-for="(item, index) in editableTabs" :label="'SQL-'+item.name" :name="item.name">
               <codemirror :textareaRef="'cms'+index" :value="item.sqlText" @setCode="setCode" mode="mini"></codemirror>
-              <span>sql-{{ item.name }} : </span>
-              <span class="label">{{ $t('m.plugin_name') }}</span>
-              <el-select v-model="item.transformPlugin" style="width:400px" clearable @clear="clearTransPluginParam(index)" :no-data-text="$t('m.no_plugin')">
+              <div style="margin-top: 10px">
+                <span>SQL-{{ item.name }} : </span>
+                <span class="label">{{ $t('m.plugin_name') }}</span>
+                <el-select v-model="item.transformPlugin" style="width:400px" clearable @clear="clearTransPluginParam(index)" :no-data-text="$t('m.no_plugin')">
 
-                <el-option v-for="op in transformPlugins" :value="op.className" :label="op.className">
-                  <div>
-                    <el-tooltip placement="top-start" effect="dark">
-                      <div slot="content">
-                        <div>{{ $t('m.plugin_desc') }}：{{ op.description }}</div>
-                        <div>{{ $t('m.plugin_param_desc') }}：{{ op.paramDescription }}</div>
-                      </div>
-                      <div>
-                        <span>{{ op.className }}</span>
-                        <span style="color: #cccccc;margin-left:10px;">{{ op.name }} </span>
-                      </div>
-                    </el-tooltip>
-                  </div>
-                </el-option>
-              </el-select>
-              <span class="label">{{ $t('m.plugin_param') }}</span>
-              <el-input v-model="item.transformPluginParam" style="width:400px"></el-input>
+                  <el-option v-for="op in transformPlugins" :value="op.className" :label="op.name">
+                    <div>
+                      <el-tooltip placement="top-start" effect="dark">
+                        <div slot="content">
+                          <div>{{ $t('m.plugin_desc') }}：{{ op.description }}</div>
+                          <div>{{ $t('m.plugin_param_desc') }}：{{ op.paramDescription }}</div>
+                        </div>
+                        <div>
+                          <span>{{ op.name }}</span>
+                          <span style="color: #cccccc;margin-left:10px;">{{ op.className }} </span>
+                        </div>
+                      </el-tooltip>
+                    </div>
+                  </el-option>
+                </el-select>
+                <span class="label">{{ $t('m.plugin_param') }}</span>
+                <el-input v-model="item.transformPluginParam" style="width:400px"></el-input>
+              </div>
 
             </el-tab-pane>
           </el-tabs>
@@ -60,7 +61,6 @@
           <el-radio :label="0">{{ $t('m.off') }}</el-radio>
         </el-radio-group>
 
-      
       </el-form-item>
 
     </el-form>
@@ -68,7 +68,6 @@
 </template>
 
 <script>
-// import sqlCode from "@/components/api/common/SqlCode";
 import codemirror from "@/components/api/common/codemirror.vue";
 import {EXECUTOR_TYPE} from "@/constant";
 
@@ -77,18 +76,31 @@ export default {
   data() {
     return {
       transformPlugins: [],
-      // sqlList: [{sqlText: "", transformPlugin: null, transformPluginParams: null}], //默认空字符串，当创建API的时候，默认打开一个标签
       transaction: 0,
       currentActiveTabName: '1', //当前选中的tab的name
       currentActiveTabIndex: 0, // 当前选中tab的索引值
-      editableTabs: [{title: 'SQL 1', name: '1', sqlText: "--one", transformPlugin: null, transformPluginParam: null}],
+      editableTabs: [{name: '1', sqlText: "-- only one sql in one tab", transformPlugin: null, transformPluginParam: null}],
       tabIndex: 1, //tab 总数
       datasourceId: null,
       datasources: []
     }
   },
+  props: {
+    detail: {
+      type: Object
+    }
+  },
   methods: {
-    setCode(code){
+    getAllPlugins() {
+      this.axios
+        .post("/plugin/all")
+        .then((response) => {
+          this.transformPlugins = response.data.transform;
+        })
+        .catch((error) => {
+        });
+    },
+    setCode(code) {
       this.editableTabs[this.currentActiveTabIndex].sqlText = code
       // console.log(this.editableTabs)
     },
@@ -152,34 +164,44 @@ export default {
     codemirror
   },
   watch: {
+    detail: function (newVal, oldVal) {
+      debugger
+      this.transaction = newVal.transaction
+      this.datasourceId = newVal.datasourceId
+
+      for (let j = 0; j < newVal.sqlList.length; j++) {
+        const b = newVal.sqlList[j]
+        b.name = (j + 1) + '';
+      }
+      this.editableTabs = newVal.sqlList;
+      this.tabIndex = newVal.sqlList.length;
+    },
     editableTabs(newV, oldV) {
-      let i = 0;
       this.editableTabs.forEach((tab, index) => {
         if (tab.name === this.currentActiveTabName) {
           this.currentActiveTabIndex = index;
         }
       });
-      // console.log(i)
-      // this.$store.commit('setCurrentActiveCmIndex', i)
     },
     currentActiveTabName(newV, oldV) {
-      let i = 0;
       this.editableTabs.forEach((tab, index) => {
         if (tab.name === this.currentActiveTabName) {
           this.currentActiveTabIndex = index;
         }
       });
-      // console.log(i)
-      // this.$store.commit('setCurrentActiveCmIndex', i)
     }
   },
   computed: {},
   created() {
     this.getAllSource();
+    this.getAllPlugins()
   }
 }
 </script>
 
 <style scoped>
-
+.label {
+    font-weight: 700;
+    margin: 0 5px 0 20px;
+}
 </style>

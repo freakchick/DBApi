@@ -1,7 +1,7 @@
 <template>
   <div class="in-coder-panel">
     <textarea :ref="textareaRef" v-model="code" autofocus="true"></textarea>
-    <el-button @click="show">show</el-button>
+<!--    <el-button @click="show">show</el-button>-->
   </div>
 </template>
 

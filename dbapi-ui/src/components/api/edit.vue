@@ -21,29 +21,27 @@ export default {
   methods: {
     save() {
       const detail = this.$refs.apiEditCommon.detail
-      const sqlList = this.$store.getters.getSql
+
+      const executors = this.$refs.apiEditCommon.$refs.sqlExecutor
+      const taskJson = executors.map(node => node.getTaskJson())
+
       let p = {
         name: detail.name,
         path: detail.path,
-        note: detail.note,
         groupId: detail.groupId,
-        previlege: detail.previlege,
-        cachePlugin: detail.cachePlugin,
-        transformPlugin: detail.transformPlugin,
-        cachePluginParams: detail.cachePluginParams,
-        transformPluginParam: detail.transformPluginParam,
-        datasourceId: this.$refs.apiEditCommon.$refs.sqlCode.datasourceId,
-        sqlList: sqlList,
-        params: JSON.stringify(detail.params),
+        note: detail.note,
         contentType: detail.contentType,
         jsonParam: detail.jsonParam,
-        openTrans: detail.openTrans,
-        alarmPlugin: detail.alarmPlugin,
-        alarmPluginParam: detail.alarmPluginParam,
+        paramsJson: detail.paramsJson,
+        access: detail.access,
+        taskJson: taskJson,
+        cachePlugin: detail.cachePlugin,
+        alarmPlugins: detail.alarmPlugins,
         id: this.$route.query.id
       }
 
-      // console.log(detail)
+      console.log(p)
+
       if (p.sql == "" || p.datasourceId == null || p.name == null
           || p.path == null || p.groupId == null) {
         this.$message.error("Something Required!")

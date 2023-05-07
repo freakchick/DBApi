@@ -81,6 +81,7 @@ public class ApiConfigController {
         config.setName(jo.getString("name"));
         config.setPath(jo.getString("path"));
         config.setNote(jo.getString("note"));
+        config.setGroupId(jo.getString("groupId"));
         config.setContentType(jo.getString("contentType"));
         config.setJsonParam(jo.getString("jsonParam"));
         config.setParams(jo.getJSONArray("paramsJson").toString(SerializerFeature.WriteMapNullValue));
@@ -153,6 +154,7 @@ public class ApiConfigController {
         config.setName(jo.getString("name"));
         config.setPath(jo.getString("path"));
         config.setNote(jo.getString("note"));
+        config.setGroupId(jo.getString("groupId"));
         config.setContentType(jo.getString("contentType"));
         config.setJsonParam(jo.getString("jsonParam"));
         config.setParams(jo.getJSONArray("paramsJson").toString(SerializerFeature.WriteMapNullValue));

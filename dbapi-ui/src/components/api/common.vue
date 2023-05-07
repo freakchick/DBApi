@@ -88,7 +88,7 @@
         <div v-for="(item,index) in detail.taskJson">
           <el-form label-width="120px">
             <el-form-item label="Executor Type">
-              <el-radio-group v-model="detail.taskType">
+              <el-radio-group v-model="item.taskType">
                 <el-radio :label="1">SQL Executor</el-radio>
                 <el-radio :label="2">ElasticSearch DSL Executor</el-radio>
                 <el-radio :label="3">HTTP API Executor</el-radio>
@@ -96,16 +96,24 @@
             </el-form-item>
           </el-form>
 
-          <sql-executor v-if="detail.taskType == 1" ref="sqlExecutor"></sql-executor>
+          <sql-executor v-if="item.taskType == 1" ref="sqlExecutor" :detail="item"></sql-executor>
         </div>
       </el-tab-pane>
       <el-tab-pane label="全局插件">
         <div>
           <el-form label-width="120px">
             <el-form-item :label="$t('m.cache')">
+              <div slot="label">
+                {{ $t('m.cache') }}
+                <el-tooltip placement="top-start" effect="dark">
+                  <div slot="content">{{ $t('m.cache_plugin_warning') }}</div>
+                  <i class="el-icon-info tip"></i>
+                </el-tooltip>
+              </div>
+
               <span class="label">{{ $t('m.plugin_name') }}</span>
               <el-select v-model="detail.cachePlugin.pluginName" style="width:400px" clearable @clear="clearCachePluginParam()" :no-data-text="$t('m.no_plugin')">
-                <el-option v-for="item in cachePlugins" :value="item.className">
+                <el-option v-for="item in cachePlugins" :value="item.className" :label="item.name">
                   <div>
                     <el-tooltip placement="top-start" effect="dark">
                       <div slot="content">
@@ -113,8 +121,8 @@
                         <div>{{ $t('m.plugin_param_desc') }}：{{ item.paramDescription }}</div>
                       </div>
                       <div>
-                        <span>{{ item.className }}</span>
-                        <span style="color: #cccccc;margin-left:10px;">{{ item.name }} </span>
+                        <span>{{ item.name }}</span>
+                        <span style="color: #cccccc;margin-left:10px;">{{ item.className }} </span>
                       </div>
                     </el-tooltip>
                   </div>
@@ -123,18 +131,22 @@
               </el-select>
               <span class="label">{{ $t('m.plugin_param') }}</span>
               <el-input v-model="detail.cachePlugin.pluginParam" style="width:400px"></el-input>
-              <el-alert type="warning" show-icon>
-                {{ $t('m.cache_plugin_warning') }}
-              </el-alert>
+
             </el-form-item>
 
-            <el-button v-for="(item,index) in alarmPlugins" @click="click(index)"></el-button>
+            <el-form-item>
+              <div slot="label">
+                {{ $t('m.alarm') }}
+                <el-tooltip placement="top-start" effect="dark">
+                  <div slot="content">{{ $t('m.alarm_plugin_warning') }}</div>
+                  <i class="el-icon-info tip"></i>
+                </el-tooltip>
+              </div>
 
-            <el-form-item :label="$t('m.alarm')">
               <div v-for="(item,index) in detail.alarmPlugins">
                 <span class="label">{{ $t('m.plugin_name') }}</span>
                 <el-select v-model="item.pluginName" style="width:400px" clearable @clear="clearAlarmPluginParam()" :no-data-text="$t('m.no_plugin')">
-                  <el-option v-for="item in alarmPlugins" :value="item.className" :label="item.className">
+                  <el-option v-for="item in alarmPlugins" :value="item.className" :label="item.name">
                     <div>
                       <el-tooltip placement="top-start" effect="dark">
                         <div slot="content">
@@ -142,8 +154,8 @@
                           <div>{{ $t('m.plugin_param_desc') }}：{{ item.paramDescription }}</div>
                         </div>
                         <div>
-                          <span>{{ item.className }}</span>
-                          <span style="color: #cccccc;margin-left:10px;">{{ item.name }} </span>
+                          <span>{{ item.name }}</span>
+                          <span style="color: #cccccc;margin-left:10px;">{{ item.className }} </span>
                         </div>
                       </el-tooltip>
                     </div>
@@ -154,9 +166,7 @@
                 <el-input v-model="item.pluginParam" style="width:400px"></el-input>
 
               </div>
-              <el-alert type="warning" show-icon>
-                {{ $t('m.alarm_plugin_warning') }}
-              </el-alert>
+
             </el-form-item>
           </el-form>
           <div>
@@ -173,14 +183,10 @@
 import sqlCode from "@/components/api/common/SqlCode";
 import SqlExecutor from "@/components/api/executor/SqlExecutor";
 import MySelect from "../common/MySelect";
-import {DATA_TYPE, CONTENT_TYPE, PRIVILEGE, PLUGIN_TYPE} from "@/constant";
+import {DATA_TYPE, CONTENT_TYPE, PRIVILEGE, PLUGIN_TYPE, EXECUTOR_TYPE} from "@/constant";
 
 export default {
-  components: {
-    MySelect,
-    sqlCode,
-    SqlExecutor
-  },
+  components: {MySelect, sqlCode, SqlExecutor},
   data() {
     return {
       CONTENT_TYPE: Object.freeze(CONTENT_TYPE),
@@ -200,12 +206,13 @@ export default {
 
         cachePlugin: {pluginName: null, pluginParam: null, pluginType: PLUGIN_TYPE.CACHE_PLUGIN, apiId: null},
         alarmPlugins: [{pluginName: null, pluginParam: null, pluginType: PLUGIN_TYPE.ALARM_PLUGIN, apiId: null}],
-        taskJson: [{"taskType":1,"sqlList":[{"sqlText":"--one","transformPlugin":null,"transformPluginParam":null}],"transaction":0,"datasourceId":"2biv61Q4"}],
+        taskJson: [{
+          taskType: EXECUTOR_TYPE.SQL_EXECUTOR,
+          sqlList: [{sqlText: "--xxxxxx", transformPlugin: null, transformPluginParam: null}],
+          transaction: 0,
+          datasourceId: null
+        }],
         jsonParam: null,
-        taskType: 1,
-        // sqlList: [
-        //   {sqlText: "", transformPlugin: null, transformPluginParams: null},
-        // ], //默认空字符串，当创建API的时候，默认打开一个标签
         contentType: CONTENT_TYPE.FORM_URLENCODED,
         openTrans: 0,
       },
@@ -262,10 +269,16 @@ export default {
         });
     },
     getDetail(id) {
-      this.id = id;
+      // this.id = id;
       this.axios.post("/apiConfig/detail/" + id).then((response) => {
         this.detail = response.data
-        console.log(this.detail)
+        if (response.data.cachePlugin == null) {
+          this.detail.cachePlugin = {pluginName: null, pluginParam: null, pluginType: PLUGIN_TYPE.CACHE_PLUGIN, apiId: id}
+        }
+        console.log(response.data.alarmPlugins)
+        if (response.data.alarmPlugins == null || response.data.alarmPlugins.length == 0) {
+          this.detail.alarmPlugins = [{pluginName: null, pluginParam: null, pluginType: PLUGIN_TYPE.ALARM_PLUGIN, apiId: id}];
+        }
       });
     },
 
@@ -359,6 +372,7 @@ a {
 }
 
 .label {
-  margin: 0 5px 0 15px;
+  margin: 0 5px 0 20px !important;
+  font-weight: 700;
 }
 </style>

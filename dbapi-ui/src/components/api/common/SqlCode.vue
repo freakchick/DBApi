@@ -56,7 +56,6 @@
 
           <codemirror :ref="'cms'+index" :textareaRef="'cm'+index" :value="sqlText" :mode="mode"></codemirror>
 
-<!--          <code-ui :sqlText="sqlText" :mode="mode" :tableHints="tableHints"></code-ui>-->
         </div>
         <div class="params">
           <div style="display: inline-block">{{$t('m.sql_param')}}：</div>
