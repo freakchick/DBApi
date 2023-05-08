@@ -1,5 +1,6 @@
 package com.gitee.freakchicken.dbapi.plugin.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
 import com.gitee.freakchicken.dbapi.plugin.GlobalTransformPlugin;
 
@@ -9,23 +10,37 @@ public class AmisGlobalTransformPlugin extends GlobalTransformPlugin {
         System.out.println("------demo transform------");
     }
 
+    /**
+     * 返回AMIS框架指定的数据格式
+     */
     @Override
     public Object transform(ResponseDto data, String params) {
-        return null;
+        JSONObject obj = new JSONObject();
+        if (data.getSuccess()) {
+            obj.put("status", 0);
+            obj.put("msg", data.getMsg());
+            obj.put("data", data.getData());
+        } else {
+            obj.put("status", -1);
+            obj.put("msg", data.getMsg());
+            obj.put("data", data.getData());
+        }
+        
+        return obj;
     }
 
     @Override
     public String getName() {
-        return "Amis格式转换插件";
+        return "AMIS格式转换插件";
     }
 
     @Override
     public String getDescription() {
-        return "demo数据转换插件描述";
+        return "将数据格式转化成AMIS框架需要的格式：{\"msg\":\"xxx\",\"status\":0,\"data\":{\"key\":\"value\"}}";
     }
 
     @Override
     public String getParamDescription() {
-        return "demo数据转换参数插件";
+        return "不需要填参数";
     }
 }

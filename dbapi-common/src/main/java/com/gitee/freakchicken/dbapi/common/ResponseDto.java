@@ -34,7 +34,7 @@ public class ResponseDto {
         this.data = data;
     }
 
-    public boolean isSuccess() {
+    public boolean getSuccess() {
         return success;
     }
 

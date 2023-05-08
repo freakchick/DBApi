@@ -61,6 +61,8 @@ public class APIServlet extends HttpServlet {
     @Autowired
     ESExecutor ESExecutor;
 
+    ApiConfig config;
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         log.debug("servlet execute");
@@ -69,11 +71,16 @@ public class APIServlet extends HttpServlet {
         PrintWriter out = null;
         try {
             out = response.getWriter();
-            Object responseDto = process(servletPath, request, response);
-            out.append(JSON.toJSONString(responseDto, SerializerFeature.WriteMapNullValue));
+            ResponseDto responseDto = process(servletPath, request, response);
+            // 全局数据转换
+            Object res = globalTransform(responseDto);
+            out.append(JSON.toJSONString(res, SerializerFeature.WriteMapNullValue));
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            out.append(JSON.toJSONString(ResponseDto.fail(e.toString()), SerializerFeature.WriteMapNullValue));
+            ResponseDto responseDto = ResponseDto.fail(e.toString());
+            // 全局数据转换
+            Object res = globalTransform(responseDto);
+            out.append(JSON.toJSONString(res, SerializerFeature.WriteMapNullValue));
             log.error(e.toString(), e);
         } finally {
             if (out != null)
@@ -86,9 +93,9 @@ public class APIServlet extends HttpServlet {
         doGet(req, resp);
     }
 
-    public Object process(String path, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseDto process(String path, HttpServletRequest request, HttpServletResponse response) {
         // // 校验接口是否存在
-        ApiConfig config = apiConfigService.getConfig(path);
+        this.config = apiConfigService.getConfig(path);
         if (config == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return ResponseDto.fail("Api not exists");
@@ -101,7 +108,7 @@ public class APIServlet extends HttpServlet {
                 CachePlugin cachePlugin = PluginManager.getCachePlugin(cache.getPluginName());
                 Object o = cachePlugin.get(config, requestParam);
                 if (o != null) {
-                    return transformReponse(ResponseDto.apiSuccess(o), config); // 如果缓存有数据直接返回
+                    return ResponseDto.apiSuccess(o); // 如果缓存有数据直接返回
                 }
             }
 
@@ -133,7 +140,7 @@ public class APIServlet extends HttpServlet {
                 cachePlugin.set(config, requestParam, result);
             }
 
-            return transformReponse(ResponseDto.apiSuccess(result), config);
+            return ResponseDto.apiSuccess(result);
 
         } catch (Exception e) {
             // alarm if error
@@ -154,24 +161,6 @@ public class APIServlet extends HttpServlet {
             }
 
             throw new RuntimeException(e.getMessage());
-        }
-    }
-
-    /**
-     * 如果配置了全局数据转换插件，执行转换
-     * 
-     * @param response
-     * @param config
-     * @return
-     */
-    private Object transformReponse(ResponseDto response, ApiConfig config) {
-        ApiPluginConfig globalTransformPlugin = config.getGlobalTransformPlugin();
-        if (globalTransformPlugin != null) {
-            GlobalTransformPlugin plugin = PluginManager
-                    .getGlobalTransformPlugin(globalTransformPlugin.getPluginName());
-            return plugin.transform(response, globalTransformPlugin.getPluginParam());
-        } else {
-            return response;
         }
     }
 
@@ -235,4 +224,21 @@ public class APIServlet extends HttpServlet {
         return null;
     }
 
+    /**
+     * 全局转换数据
+     * 
+     * @param responseDto
+     * @return
+     */
+    private Object globalTransform(ResponseDto responseDto) {
+        if (this.config != null) {
+            ApiPluginConfig globalTransformPlugin = config.getGlobalTransformPlugin();
+            if (globalTransformPlugin != null) {
+                GlobalTransformPlugin plugin = PluginManager
+                        .getGlobalTransformPlugin(globalTransformPlugin.getPluginName());
+                return plugin.transform(responseDto, globalTransformPlugin.getPluginParam());
+            }
+        }
+        return responseDto;
+    }
 }
