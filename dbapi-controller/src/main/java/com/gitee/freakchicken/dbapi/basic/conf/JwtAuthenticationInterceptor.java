@@ -43,7 +43,7 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
             if (token == null) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 writer = response.getWriter();
-                writer.append("\"无token，请重新登录\"");
+                writer.append("No Token!");
                 return false;
             }
 
@@ -54,18 +54,19 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
             if (user == null) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 writer = response.getWriter();
-                writer.append("用户不存在，请重新登录");
+                writer.append("User not exists!");
                 return false;
             }
 
             // 验证 token
             boolean b = JwtUtils.verifyToken(token, user.getPassword());
             if (b) {
+                request.setAttribute("id", user.getId());
                 return true;
             } else {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 writer = response.getWriter();
-                writer.append("token无效，请重新登录");
+                writer.append("Token Invalid!");
                 return false;
             }
 
