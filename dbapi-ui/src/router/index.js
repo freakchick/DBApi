@@ -17,8 +17,8 @@ import apiAdd from '../components/api/add'
 import apiEdit from '../components/api/edit'
 import detail from '../components/api/detail'
 import request from '../components/api/request'
-import token from '../components/token/token'
-import tokenAdd from '../components/token/add'
+import client from '../components/client/client'
+import clientAdd from '../components/client/add'
 import user from '../components/setting/user'
 import firewall from '../components/setting/firewall'
 
@@ -45,8 +45,8 @@ const routes = [
       { path: '/api/edit', name: 'apiEdit', component: apiEdit },
       { path: '/api/detail', name: 'detail', component: detail },
       { path: '/api/request', name: 'request', component: request },
-      { path: '/token', component: token },
-      { path: '/token/add', component: tokenAdd },
+      { path: '/client', component: client },
+      { path: '/client/add', component: clientAdd },
       { path: '/setting/password', component: user },
       { path: '/setting/firewall', component: firewall }
     ]

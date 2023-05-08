@@ -6,6 +6,7 @@ const en = {
         ok: 'OK',
         export: 'Export',
         datasource: 'Datasource',
+        clientManagement: 'Client Management',
         authority: 'Authority',
         settings: 'Settings',
         createDS: 'New Datasource',
@@ -98,7 +99,7 @@ const en = {
         sql_param: 'SQL Params',
         sql_param_tip: 'Please input params with json format',
 
-        create_app: 'New APP',
+        create_client: 'New APP',
         create_time: 'Create Time',
         forever: 'Forever',
         once: 'Once',

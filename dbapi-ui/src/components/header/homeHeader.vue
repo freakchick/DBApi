@@ -13,8 +13,8 @@
         {{ $t("m.datasource") }}
       </div>
       <div class="menu iconfont icon-api" @click="clickMenu('/api')">API</div>
-      <div class="menu iconfont icon-quanxian" @click="clickMenu('/token')">
-        {{ $t("m.authority") }}
+      <div class="menu iconfont icon-quanxian" @click="clickMenu('/client')">
+        {{ $t("m.clientManagement") }}
       </div>
       <div class="menu iconfont icon-shezhi">
         {{ $t("m.settings") }}
