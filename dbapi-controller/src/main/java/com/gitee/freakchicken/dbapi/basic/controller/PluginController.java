@@ -14,10 +14,10 @@ public class PluginController {
     public JSONObject getAllCachePlugin() {
 
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("cache", PluginManager.getAllCachePlugin());
-        jsonObject.put("transform", PluginManager.getAllTransformPlugin());
-        jsonObject.put("alarm", PluginManager.getAllAlarmPlugin());
-        jsonObject.put("globalTransform", PluginManager.getAllGlobalTransformPlugin());
+        jsonObject.put("cache", PluginManager.getAllCachePlugins());
+        jsonObject.put("transform", PluginManager.getAllTransformPlugins());
+        jsonObject.put("alarm", PluginManager.getAllAlarmPlugins());
+        jsonObject.put("globalTransform", PluginManager.getAllGlobalTransformPlugins());
         return jsonObject;
     }
 

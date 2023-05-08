@@ -106,4 +106,20 @@ public class PluginManager {
         }).collect(Collectors.toList());
         return collect;
     }
+
+    public static List<JSONObject>  getAllCachePlugins(){
+        return allCachePlugins;
+    }
+
+    public static List<JSONObject>  getAllAlarmPlugins(){
+        return allAlarmPlugins;
+    }
+
+    public static List<JSONObject>  getAllTransformPlugins(){
+        return allTransformPlugins;
+    }
+
+    public static List<JSONObject>  getAllGlobalTransformPlugins(){
+        return allGlobalTransformPlugins;
+    }
 }
