@@ -7,7 +7,7 @@
     </div>
 
     <el-table :data="tableData" border stripe max-height="700" class="gap">
-      <el-table-column prop="id" label="appid"></el-table-column>
+      <el-table-column prop="id" label="clientId"></el-table-column>
       <el-table-column prop="name" :label="$t('m.name')"></el-table-column>
       <el-table-column prop="note" :label="$t('m.description')"></el-table-column>
       <el-table-column prop="secret" label="Secret"></el-table-column>
@@ -52,7 +52,7 @@ print(re.text)
       <el-divider></el-divider>
       <div>
         <pre>{{$t('m.token_tip2')}}</pre>
-        http://{{ip}}/token/generate?appid=xxx&secret=xxx
+        http://{{ip}}/token/generate?clientId=xxx&secret=xxx
       </div>
 
     </el-alert>
@@ -60,13 +60,13 @@ print(re.text)
     <el-dialog :title="$t('m.create_client')" :visible.sync="dialogCreateApp" width="60%">
       <el-form label-width="150px">
         <el-form-item :label="$t('m.name')">
-          <el-input v-model="app.name"></el-input>
+          <el-input v-model="client.name"></el-input>
         </el-form-item>
         <el-form-item :label="$t('m.description')">
-          <el-input type="textarea" v-model="app.note"></el-input>
+          <el-input type="textarea" v-model="client.note"></el-input>
         </el-form-item>
         <el-form-item :label="$t('m.token_expire_time')">
-          <el-radio-group v-model="app.expireDesc">
+          <el-radio-group v-model="client.expireDesc">
             <el-radio-button label="5min">5min</el-radio-button>
             <el-radio-button label="1hour">1hour</el-radio-button>
             <el-radio-button label="1day">1day</el-radio-button>
@@ -84,7 +84,7 @@ print(re.text)
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogCreateApp = false">{{$t('m.cancel')}}</el-button>
-        <el-button type="primary" @click="dialogCreateApp = false;createApp()">{{$t('m.ok')}}</el-button>
+        <el-button type="primary" @click="dialogCreateApp = false;create()">{{$t('m.ok')}}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -100,8 +100,8 @@ export default {
       dialogCreateApp: false,
       groups: [],
       checkList: [],
-      tokenId: null,
-      app: {
+      clientId: null,
+      client: {
         name: null,
         note: null,
         expireDesc: null
@@ -110,9 +110,9 @@ export default {
     }
   },
   methods: {
-    createApp() {
-      this.axios.post("/app/create", this.app).then((response) => {
-        const msg = `Created！Please save:<br/><br/>appid = ${response.data.id}<br/>secret = ${response.data.secret}`
+    create() {
+      this.axios.post("/client/create", this.client).then((response) => {
+        const msg = `Created！Please save:<br/><br/>clientId = ${response.data.id}<br/>secret = ${response.data.secret}`
         this.$message.success({
 
           dangerouslyUseHTMLString: true,
@@ -124,7 +124,7 @@ export default {
       })
     },
     getAll() {
-      this.axios.post("/app/getAll").then((response) => {
+      this.axios.post("/client/getAll").then((response) => {
         this.tableData = response.data
       }).catch((error) => {
       })
@@ -137,14 +137,14 @@ export default {
     },
     auth() {
       console.log(this.checkList)
-      this.axios.post("/app/auth/", {appId: this.tokenId, groupIds: this.checkList.join(",")}).then((response) => {
+      this.axios.post("/client/auth/", {clientId: this.clientId, groupIds: this.checkList.join(",")}).then((response) => {
         this.$message.success("Authorization Success")
       }).catch((error) => {
         this.$message.error("Authorization Failed")
       })
     },
     handleDelete(id) {
-      this.axios.post("/app/delete/" + id).then((response) => {
+      this.axios.post("/client/delete/" + id).then((response) => {
         this.$message.success("Delete Success")
         this.getAll()
       }).catch((error) => {
@@ -153,8 +153,8 @@ export default {
     },
     handleAuth(id) {
       this.dialogVisible = true
-      this.tokenId = id
-      this.axios.post("/app/getAuthGroups/" + id).then((response) => {
+      this.clientId = id
+      this.axios.post("/client/getAuthGroups/" + id).then((response) => {
         this.checkList = response.data
       }).catch((error) => {
       })

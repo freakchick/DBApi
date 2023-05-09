@@ -42,11 +42,13 @@ export default {
 
       console.log(p)
 
+/*
       if (p.sql == "" || p.datasourceId == null || p.name == null
           || p.path == null || p.groupId == null) {
         this.$message.error("Something Required!")
         return
       }
+*/
 
       this.axios.post("/apiConfig/update", p,
           {headers: {'Content-Type': 'application/json'}}

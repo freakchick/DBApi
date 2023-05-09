@@ -7,7 +7,7 @@ import com.gitee.freakchicken.dbapi.plugin.GlobalTransformPlugin;
 public class AmisGlobalTransformPlugin extends GlobalTransformPlugin {
     @Override
     public void init() {
-        System.out.println("------demo transform------");
+
     }
 
     /**

@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.gitee.freakchicken.dbapi.basic.domain.AccessLog;
 import com.gitee.freakchicken.dbapi.basic.log.AccessLogWriter;
 import com.gitee.freakchicken.dbapi.basic.service.ApiConfigService;
-import com.gitee.freakchicken.dbapi.basic.service.AppService;
-import com.gitee.freakchicken.dbapi.basic.service.AppTokenService;
+import com.gitee.freakchicken.dbapi.basic.service.ClientService;
+import com.gitee.freakchicken.dbapi.basic.service.ClientTokenService;
 import com.gitee.freakchicken.dbapi.basic.util.Constants;
 import com.gitee.freakchicken.dbapi.basic.util.IPUtil;
 import com.gitee.freakchicken.dbapi.basic.util.ThreadUtils;
@@ -36,10 +36,10 @@ public class ApiAuthFilter implements Filter {
     private ApiConfigService apiConfigService;
 
     @Autowired
-    private AppTokenService tokenService;
+    private ClientTokenService tokenService;
 
     @Autowired
-    AppService appService;
+    ClientService appService;
 
     @Autowired
     AccessLogWriter accessLogWriter;
@@ -87,17 +87,17 @@ public class ApiAuthFilter implements Filter {
                     response.getWriter().append(JSON.toJSONString(ResponseDto.fail("No Token!")));
                     return;
                 } else {
-                    String appId = tokenService.verifyToken(tokenStr);
-                    accessLog.setAppId(appId);
-                    if (appId == null) {
-                        log.error("token[{}] matched no appid", tokenStr);
+                    String clientId = tokenService.verifyToken(tokenStr);
+                    accessLog.setClientId(clientId);
+                    if (clientId == null) {
+                        log.error("token[{}] matched no clientId", tokenStr);
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                         response.getWriter().append(JSON.toJSONString(ResponseDto.fail("Token Invalid!")));
                         return;
                     } else {
-                        List<String> authGroups = appService.getAuthGroups(appId);
+                        List<String> authGroups = appService.getAuthGroups(clientId);
                         if (!authGroups.contains(config.getGroupId())) {
-                            log.error("token[{}] matched appid[{}], but appid not authorized", tokenStr, appId);
+                            log.error("token[{}] matched clientId[{}], but clientId not authorized", tokenStr, clientId);
                             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                             response.getWriter().append(JSON.toJSONString(ResponseDto.fail("Token Invalid!")));
                             return;

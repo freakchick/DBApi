@@ -18,8 +18,8 @@
     <el-input v-model="status" size="mini" style="width: 200px">
       <template slot="prepend">Status:</template>
     </el-input>
-    <el-input v-model="appId" size="mini" style="width: 250px">
-      <template slot="prepend">appId:</template>
+    <el-input v-model="clientId" size="mini" style="width: 250px">
+      <template slot="prepend">clientId:</template>
     </el-input>
 
     <el-input v-model="ip" size="mini" style="width: 250px">
@@ -39,7 +39,7 @@
       <el-table-column prop="url" label="URL"></el-table-column>
       <el-table-column prop="duration" label="Duration(ms)"></el-table-column>
       <el-table-column prop="status" label="Response Code"></el-table-column>
-      <el-table-column prop="appId" label="appId"></el-table-column>
+      <el-table-column prop="clientId" label="clientId"></el-table-column>
       <el-table-column prop="ip" label="IP"></el-table-column>
       <el-table-column prop="error" label="Error"></el-table-column>
     </el-table>
@@ -85,7 +85,7 @@ export default {
       time: [],
       url: null,
       status: null,
-      appId: null,
+      clientId: null,
       ip: null,
       tableData: [],
     };
@@ -100,7 +100,7 @@ export default {
           end: parseInt(this.$moment(this.time[1]).valueOf() / 1000),
           url: this.url,
           status: this.status,
-          appId: this.appId,
+          clientId: this.clientId,
           ip: this.ip,
         })
         .then((response) => {

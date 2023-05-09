@@ -6,15 +6,13 @@
     <el-tabs tab-position="top" type="border-card" @tab-click="handleTabClick">
       <el-tab-pane :label="$t('m.request_test')">
         <div class="mycontent">
-          <div v-show="previlege == PRIVILEGE.PRIVATE">
+          <div v-show="access == PRIVILEGE.PRIVATE">
             <h2>{{ $t('m.get_token') }}</h2>
             <el-input v-model="tokenUrl">
               <el-button slot="append" icon="el-icon-caret-right" @click="getToken"></el-button>
             </el-input>
             <el-alert type="info" show-icon :title="$t('m.request_tip')"></el-alert>
-            <el-alert type="warning" show-icon v-show="this.$store.state.mode == 'cluster' || this.$store.state.mode == 'cluster in docker' "
-                      :title="$t('m.ip_tip')"
-                      style="margin-top: 10px;">
+            <el-alert type="warning" show-icon v-show="this.$store.state.mode == 'cluster' || this.$store.state.mode == 'cluster in docker' " :title="$t('m.ip_tip')" style="margin-top: 10px;">
             </el-alert>
           </div>
 
@@ -23,9 +21,7 @@
           <h4>{{ $t('m.url') }}：</h4>
           <el-input v-model="url"></el-input>
 
-          <el-alert type="warning" show-icon v-show="this.$store.state.mode == 'cluster' || this.$store.state.mode == 'cluster in docker' "
-                    :title="$t('m.ip_tip')"
-                    style="margin-top: 10px;">
+          <el-alert type="warning" show-icon v-show="this.$store.state.mode == 'cluster' || this.$store.state.mode == 'cluster in docker' " :title="$t('m.ip_tip')" style="margin-top: 10px;">
           </el-alert>
           <h4>Header：</h4>
 
@@ -33,67 +29,31 @@
             <el-form-item label="Content-Type">
               <el-input v-model="contentType" disabled></el-input>
             </el-form-item>
-            <el-form-item label="Authorization" v-show="privilege == PRIVILEGE.PRIVATE">
+            <el-form-item label="Authorization" v-show="access == PRIVILEGE.PRIVATE">
               <el-input v-model="token" :placeholder="$t('m.input_token')"></el-input>
             </el-form-item>
           </el-form>
 
           <h4>{{ $t('m.parameters') }}：</h4>
           <div class="textarea">
-            <el-input v-model="jsonParam" :placeholder="$t('m.input_json_param')" type="textarea" rows="10"
-                      v-show="contentType === CONTENT_TYPE.JSON"></el-input>
+            <el-input v-model="jsonParam" :placeholder="$t('m.input_json_param')" type="textarea" rows="10" v-show="contentType === CONTENT_TYPE.JSON"></el-input>
           </div>
-          <el-form
-              label-width="200px"
-              style="width: 650px"
-              size="medium"
-              v-show="contentType === CONTENT_TYPE.FORM_URLENCODED"
-          >
-            <el-form-item
-                v-for="(item,index) in params"
-                :key="item.id"
-                style="margin-bottom: 5px"
-            >
+          <el-form label-width="200px" style="width: 650px" size="medium" v-show="contentType === CONTENT_TYPE.FORM_URLENCODED">
+            <el-form-item v-for="(item,index) in params" :key="item.id" style="margin-bottom: 5px">
               <template slot="label">
-                <data-tag
-                    :name="item.name"
-                    :type="item.type"
-                ></data-tag>
+                <data-tag :name="item.name" :type="item.type"></data-tag>
               </template>
-              <el-input
-                  v-model="item.value"
-                  v-if="!item.type.startsWith('Array')"  :placeholder="item.note"
-              >
+              <el-input v-model="item.value" v-if="!item.type.startsWith('Array')"  :placeholder="item.note">
                 <!--          <template slot="append">{{ item.type }}</template>-->
               </el-input>
               <div v-show="item.type.startsWith('Array')">
-                <div
-                    v-for="(childItem,childIndex) in item.values"
-                    :key="childIndex"
-                >
-                  <el-input
-                      v-model="childItem.va"  :placeholder="item.note"
-                      style="width: 400px"
-                  >
+                <div v-for="(childItem,childIndex) in item.values" :key="childIndex">
+                  <el-input v-model="childItem.va"  :placeholder="item.note" style="width: 400px">
                   </el-input>
-                  <el-button
-                      slot="append"
-                      icon="el-icon-delete"
-                      type="danger"
-                      circle
-                      size="mini"
-                      @click="deleteRow(index,childIndex)"
-                      style="margin-left: 4px;"
-                  ></el-button>
+                  <el-button slot="append" icon="el-icon-delete" type="danger" circle size="mini" @click="deleteRow(index,childIndex)" style="margin-left: 4px;"></el-button>
                 </div>
 
-                <el-button
-                    icon="el-icon-plus"
-                    type="primary"
-                    circle
-                    size="mini"
-                    @click="addRow(index)"
-                ></el-button>
+                <el-button icon="el-icon-plus" type="primary" circle size="mini" @click="addRow(index)"></el-button>
               </div>
             </el-form-item>
 
@@ -102,44 +62,18 @@
 
           <h4>{{ $t('m.result') }}：</h4>
 
-          <el-table
-              :data="tableData"
-              v-show="showTable"
-              size="mini"
-              border
-              stripe
-              max-height="700"
-          >
-            <el-table-column
-                :prop="item"
-                :label="item"
-                v-for="item in keys"
-                :key="item"
-            ></el-table-column>
+          <el-table :data="tableData" v-show="showTable" size="mini" border stripe max-height="700">
+            <el-table-column :prop="item" :label="item" v-for="item in keys" :key="item"></el-table-column>
           </el-table>
-          <el-input
-              type="textarea"
-              v-model="response"
-              :autosize="{ minRows: 5, maxRows: 20 }"
-              class="my"
-              v-show="!showTable"
-          ></el-input>
+          <el-input type="textarea" v-model="response" :autosize="{ minRows: 5, maxRows: 20 }" class="my" v-show="!showTable"></el-input>
 
-          <el-button
-              size="small"
-              @click="format"
-              class="button"
-          >{{ $t('m.json_format') }}
+          <el-button size="small" @click="format" class="button">{{ $t('m.json_format') }}
           </el-button>
 
         </div>
       </el-tab-pane>
       <el-tab-pane :label="$t('m.request_demo')">
-        <call-example
-            ref="callExample"
-            :address="url"
-            :detail="{path,params,previlege,jsonParam,contentType,token}"
-        />
+        <call-example ref="callExample" :address="url" :detail="{path,params,access,jsonParam,contentType,token}"/>
       </el-tab-pane>
     </el-tabs>
 
@@ -161,10 +95,10 @@ export default {
       api: {},
       params: [],
       path: null,
-      privilege: PRIVILEGE.PRIVATE,
+      access: PRIVILEGE.PRIVATE,
       address: null,
       response: null,
-      isSelect: null,
+      // isSelect: null,
       keys: [],
       tableData: [],
       showTable: false,
@@ -192,16 +126,18 @@ export default {
       await this.axios
           .post("/apiConfig/detail/" + id)
           .then((response) => {
+            console.log(response.data)
+            debugger
             this.path = response.data.path;
-            this.previlege = response.data.previlege;
-            let params = JSON.parse(response.data.params);
+            this.access = response.data.access;
+            let params = response.data.paramsJson;
             params.forEach((t) => {
               if (t.type.startsWith("Array")) {
                 t.values = [{va: ""}];
               }
             });
             this.params = params;
-            this.isSelect = response.data.isSelect;
+            // this.isSelect = response.data.isSelect;
 
             this.url = `http://${this.address}/${this.path}`;
             this.contentType = response.data.contentType;
@@ -226,7 +162,7 @@ export default {
       await this.axios
           .post("/system/getIP")
           .then((response) => {
-            this.tokenUrl = `http://${response.data}/token/generate?appid=xxx&secret=xxx`;
+            this.tokenUrl = `http://${response.data}/token/generate?clientId=xxx&secret=xxx`;
           })
           .catch((error) => {
             this.$message.error("get ip failed");

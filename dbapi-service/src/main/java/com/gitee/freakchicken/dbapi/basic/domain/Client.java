@@ -6,8 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
 
-@TableName("app_info")
-public class AppInfo implements Serializable {
+@TableName("client")
+public class Client implements Serializable {
 
     @TableId()
     String id;

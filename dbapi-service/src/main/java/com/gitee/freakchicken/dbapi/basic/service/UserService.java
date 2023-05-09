@@ -3,8 +3,7 @@ package com.gitee.freakchicken.dbapi.basic.service;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.gitee.freakchicken.dbapi.basic.dao.UserMapper;
 import com.gitee.freakchicken.dbapi.basic.domain.User;
-import com.gitee.freakchicken.dbapi.basic.util.MD5;
-
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +17,7 @@ public class UserService {
 
     public User getUser(String username, String password) {
         
-        User user = userMapper.login(username, MD5.encodeByMd5(password));
+        User user = userMapper.login(username, DigestUtils.md5Hex(password));
         return user;
     }
 
@@ -28,6 +27,6 @@ public class UserService {
 
     @Transactional
     public void resetPassword(String password) {
-        userMapper.updatePassword(MD5.encodeByMd5(password));
+        userMapper.updatePassword(DigestUtils.md5Hex(password));
     }
 }

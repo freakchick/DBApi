@@ -1,7 +1,7 @@
 package com.gitee.freakchicken.dbapi.basic.service;
 
 import com.baomidou.dynamic.datasource.annotation.DS;
-import com.gitee.freakchicken.dbapi.basic.dao.ApiAuthMapper;
+import com.gitee.freakchicken.dbapi.basic.dao.ClientAuthMapper;
 import com.gitee.freakchicken.dbapi.basic.dao.ApiConfigMapper;
 import com.gitee.freakchicken.dbapi.basic.dao.GroupMapper;
 import com.gitee.freakchicken.dbapi.basic.domain.Group;
@@ -21,7 +21,7 @@ public class GroupService {
     @Autowired
     ApiConfigMapper apiConfigMapper;
     @Autowired
-    ApiAuthMapper apiAuthMapper;
+    ClientAuthMapper clientAuthMapper;
 
     public void insert(Group group) {
         group.setId(UUIDUtil.id());
@@ -35,7 +35,7 @@ public class GroupService {
             return ResponseDto.fail("group is not empty, can not delete");
         }else{
             groupMapper.deleteById(id);
-            apiAuthMapper.deleteByGroupId(id);
+            clientAuthMapper.deleteByGroupId(id);
             return ResponseDto.successWithMsg("delete success");
         }
 

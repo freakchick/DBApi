@@ -1,8 +1,8 @@
 package com.gitee.freakchicken.dbapi.basic.servlet;
 
 import com.alibaba.fastjson.JSON;
-import com.gitee.freakchicken.dbapi.basic.domain.AppToken;
-import com.gitee.freakchicken.dbapi.basic.service.AppTokenService;
+import com.gitee.freakchicken.dbapi.basic.domain.ClientToken;
+import com.gitee.freakchicken.dbapi.basic.service.ClientTokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,7 @@ import java.io.PrintWriter;
 public class TokenServlet extends HttpServlet {
 
     @Autowired
-    private AppTokenService tokenService;
+    private ClientTokenService tokenService;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
@@ -29,10 +29,10 @@ public class TokenServlet extends HttpServlet {
         response.setHeader("Access-Control-Allow-Headers", "*");//这里很重要，要不然js header不能跨域携带  Authorization属性
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE");
 
-        String appid = request.getParameter("appid");
+        String clientId = request.getParameter("clientId");
         String secret = request.getParameter("secret");
 
-        AppToken token = tokenService.generateToken(appid, secret);
+        ClientToken token = tokenService.generateToken(clientId, secret);
         PrintWriter out = null;
         try {
             out = response.getWriter();

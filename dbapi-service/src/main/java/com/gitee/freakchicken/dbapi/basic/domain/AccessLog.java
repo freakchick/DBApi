@@ -27,8 +27,8 @@ public class AccessLog {
     @TableField
     private String ip;
 
-    @TableField("app_id")
-    private String appId;
+    @TableField("client_id")
+    private String clientId;
 
     @TableField("api_id")
     private String apiId;

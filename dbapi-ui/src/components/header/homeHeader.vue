@@ -14,7 +14,7 @@
       </div>
       <div class="menu iconfont icon-api" @click="clickMenu('/api')">API</div>
       <div class="menu iconfont icon-quanxian" @click="clickMenu('/client')">
-        {{ $t("m.clientManagement") }}
+        {{ $t("m.client") }}
       </div>
       <div class="menu iconfont icon-shezhi">
         {{ $t("m.settings") }}

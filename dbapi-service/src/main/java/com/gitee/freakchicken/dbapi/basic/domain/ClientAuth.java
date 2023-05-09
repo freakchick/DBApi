@@ -9,14 +9,14 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-@TableName(value = "api_auth")
-public class ApiAuth implements Serializable {
+@TableName(value = "client_auth")
+public class ClientAuth implements Serializable {
 
     @TableId(value = "id", type = IdType.AUTO)
     Integer id;
 
-    @TableField("app_id")
-    String appId;
+    @TableField("client_id")
+    String clientId;
 
     @TableField("group_id")
     String groupId;
