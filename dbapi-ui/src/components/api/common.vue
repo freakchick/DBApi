@@ -101,7 +101,7 @@
       </el-tab-pane>
       <el-tab-pane label="全局插件">
         <div>
-          <el-form label-width="120px">
+          <el-form label-width="160px">
             <el-form-item :label="$t('m.cache')">
               <div slot="label">
                 {{ $t('m.cache') }}
@@ -133,6 +133,40 @@
               <el-input v-model="detail.cachePlugin.pluginParam" style="width:400px"></el-input>
 
             </el-form-item>
+
+
+            <el-form-item>
+              <div slot="label">
+                全局数据转换
+                <el-tooltip placement="top-start" effect="dark">
+                  <div slot="content">{{ $t('m.cache_plugin_warning') }}</div>
+                  <i class="el-icon-info tip"></i>
+                </el-tooltip>
+              </div>
+
+              <span class="label">{{ $t('m.plugin_name') }}</span>
+              <el-select v-model="detail.globalTransformPlugin.pluginName" style="width:400px" clearable @clear="clearCachePluginParam()" :no-data-text="$t('m.no_plugin')">
+                <el-option v-for="item in globalTransformPlugins" :value="item.className" :label="item.name">
+                  <div>
+                    <el-tooltip placement="top-start" effect="dark">
+                      <div slot="content">
+                        <div>{{ $t('m.plugin_desc') }}：{{ item.description }}</div>
+                        <div>{{ $t('m.plugin_param_desc') }}：{{ item.paramDescription }}</div>
+                      </div>
+                      <div>
+                        <span>{{ item.name }}</span>
+                        <span style="color: #cccccc;margin-left:10px;">{{ item.className }} </span>
+                      </div>
+                    </el-tooltip>
+                  </div>
+
+                </el-option>
+              </el-select>
+              <span class="label">{{ $t('m.plugin_param') }}</span>
+              <el-input v-model="detail.globalTransformPlugin.pluginParam" style="width:400px"></el-input>
+
+            </el-form-item>
+
 
             <el-form-item>
               <div slot="label">
@@ -206,6 +240,7 @@ export default {
 
         cachePlugin: {pluginName: null, pluginParam: null, pluginType: PLUGIN_TYPE.CACHE_PLUGIN, apiId: null},
         alarmPlugins: [{pluginName: null, pluginParam: null, pluginType: PLUGIN_TYPE.ALARM_PLUGIN, apiId: null}],
+        globalTransformPlugin: {pluginName: null, pluginParam: null, pluginType: PLUGIN_TYPE.GLOBALTRANSFORM_PLUGIN, apiId: null},
         taskJson: [{
           taskType: EXECUTOR_TYPE.SQL_EXECUTOR,
           sqlList: [{sqlText: "--xxxxxx", transformPlugin: null, transformPluginParam: null}],
@@ -236,6 +271,7 @@ export default {
       cachePlugins: [],
       transformPlugins: [],
       alarmPlugins: [],
+      globalTransformPlugins:[]
 
 
     };
@@ -298,6 +334,7 @@ export default {
           this.cachePlugins = response.data.cache;
           this.transformPlugins = response.data.transform;
           this.alarmPlugins = response.data.alarm;
+          this.globalTransformPlugins = response.data.globalTransform;
         })
         .catch((error) => {
         });
