@@ -36,7 +36,9 @@ public class FilterConfig {
         String format = String.format("/%s/*", apiContext);
         FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         registrationBean.setFilter(new ApiHeaderFilter());
-        registrationBean.addUrlPatterns(format);
+        registrationBean.addUrlPatterns(format); // API Servlet 跨域
+        registrationBean.addUrlPatterns("/token/generate"); // token Servlet 跨域
+
         registrationBean.setOrder(apiHeaderFilterOrder);
         registrationBean.setEnabled(true);
         log.info("regist apiHeaderFilter for {} UrlPatterns, and order is {}",format,apiHeaderFilterOrder);
