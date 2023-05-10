@@ -5,7 +5,6 @@ import com.gitee.freakchicken.dbapi.basic.domain.AccessLog;
 import com.gitee.freakchicken.dbapi.basic.log.AccessLogWriter;
 import com.gitee.freakchicken.dbapi.basic.service.ApiConfigService;
 import com.gitee.freakchicken.dbapi.basic.service.ClientService;
-import com.gitee.freakchicken.dbapi.basic.service.ClientTokenService;
 import com.gitee.freakchicken.dbapi.basic.util.Constants;
 import com.gitee.freakchicken.dbapi.basic.util.IPUtil;
 import com.gitee.freakchicken.dbapi.basic.util.ThreadUtils;
@@ -36,7 +35,7 @@ public class ApiAuthFilter implements Filter {
     private ApiConfigService apiConfigService;
 
     @Autowired
-    private ClientTokenService tokenService;
+    private ClientService clientService;
 
     @Autowired
     ClientService appService;
@@ -87,7 +86,7 @@ public class ApiAuthFilter implements Filter {
                     response.getWriter().append(JSON.toJSONString(ResponseDto.fail("No Token!")));
                     return;
                 } else {
-                    String clientId = tokenService.verifyToken(tokenStr);
+                    String clientId = clientService.verifyToken(tokenStr);
                     accessLog.setClientId(clientId);
                     if (clientId == null) {
                         log.error("token[{}] matched no clientId", tokenStr);
