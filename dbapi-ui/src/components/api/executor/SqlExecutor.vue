@@ -17,7 +17,7 @@
               <div style="margin-top: 10px">
                 <span>SQL-{{ item.name }} : </span>
                 <span class="label">{{ $t('m.plugin_name') }}</span>
-                <el-select v-model="item.transformPlugin" style="width:400px" clearable @clear="clearTransPluginParam(index)" :no-data-text="$t('m.no_plugin')">
+                <el-select v-model="item.transformPlugin" style="width:400px" clearable @clear="item.transformPluginParam = null;" :no-data-text="$t('m.no_plugin')">
 
                   <el-option v-for="op in transformPlugins" :value="op.className" :label="op.name">
                     <div>
