@@ -17,13 +17,12 @@ public interface ApiConfigMapper extends BaseMapper<ApiConfig> {
             "select * from api_config\n" +
             "<where>\n" +
             "<if test='groupId != null and groupId !=\"\"'> group_id = #{groupId} </if>\n" +
-            "<if test='keyword != null and keyword !=\"\"'>\n" +
-            "\t<if test='field != null and field !=\"\"'> and ${field} like #{keyword} </if>\n" +
-            "\t<if test='field == null or field ==\"\"'> and (name like #{keyword} or note like #{keyword} or path like #{keyword} )</if>\n" +
-            "</if>\n" +
+            "\t<if test='name != null and name !=\"\"'> and name like #{name} </if>\n" +
+            "\t<if test='note == null or note ==\"\"'> and note like #{note} </if>\n" +
+            "\t<if test='path == null or path ==\"\"'> and path like #{path} </if>\n" +
             "</where>" +
             "</script>")
-    List<ApiConfig> selectByKeyword(@Param("keyword") String keyword, @Param("field") String field, @Param("groupId") String groupId);
+    List<ApiConfig> search(@Param("name")String name, @Param("note")String note, @Param("path")String path, @Param("groupId") String groupId);
 
     @Select("select count(1) from api_config where path=#{path}")
     Integer selectCountByPath(String path);

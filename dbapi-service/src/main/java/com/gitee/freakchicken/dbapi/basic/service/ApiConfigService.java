@@ -120,7 +120,7 @@ public class ApiConfigService {
     public void delete(String id) {
         ApiConfig oldConfig = detail(id);
         cleanDataCacheAndMetaCache(oldConfig);
-        
+
         apiConfigMapper.deleteById(id);
         pluginConfigMapper.deleteByApiId(id);
 
@@ -203,11 +203,17 @@ public class ApiConfigService {
 
     }
 
-    public List<ApiConfig> search(String keyword, String field, String groupId) {
-        if (StringUtils.isNoneBlank(keyword)) {
-            keyword = "%" + keyword + "%";
+    public List<ApiConfig> search(String name, String note, String path, String groupId) {
+        if (StringUtils.isNoneBlank(name)) {
+            name = "%" + name + "%";
         }
-        return apiConfigMapper.selectByKeyword(keyword, field, groupId);
+        if (StringUtils.isNoneBlank(note)) {
+            note = "%" + note + "%";
+        }
+        if (StringUtils.isNoneBlank(path)) {
+            path = "%" + path + "%";
+        }
+        return apiConfigMapper.search(name, note, path, groupId);
     }
 
     /**
