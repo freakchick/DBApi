@@ -18,8 +18,8 @@ public interface ApiConfigMapper extends BaseMapper<ApiConfig> {
             "<where>\n" +
             "<if test='groupId != null and groupId !=\"\"'> group_id = #{groupId} </if>\n" +
             "\t<if test='name != null and name !=\"\"'> and name like #{name} </if>\n" +
-            "\t<if test='note == null or note ==\"\"'> and note like #{note} </if>\n" +
-            "\t<if test='path == null or path ==\"\"'> and path like #{path} </if>\n" +
+            "\t<if test='note != null and note !=\"\"'> and note like #{note} </if>\n" +
+            "\t<if test='path != null and path !=\"\"'> and path like #{path} </if>\n" +
             "</where>" +
             "</script>")
     List<ApiConfig> search(@Param("name")String name, @Param("note")String note, @Param("path")String path, @Param("groupId") String groupId);
