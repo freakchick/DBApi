@@ -37,6 +37,7 @@ export default {
         taskJson: taskJson,
         cachePlugin: detail.cachePlugin,
         alarmPlugins: detail.alarmPlugins,
+        globalTransformPlugin: detail.globalTransformPlugin,
         id: this.$route.query.id
       }
 

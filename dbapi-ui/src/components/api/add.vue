@@ -37,11 +37,10 @@ export default {
         jsonParam: detail.jsonParam,
         paramsJson: detail.paramsJson,
         access: detail.access,
-
         taskJson: taskJson,
-
         cachePlugin: detail.cachePlugin,
         alarmPlugins: detail.alarmPlugins,
+        globalTransformPlugin: detail.globalTransformPlugin
 
       }
 
