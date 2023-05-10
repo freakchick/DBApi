@@ -4,11 +4,11 @@
     <ul>
       <li>
         <!--          <router-link to='/api/add'>-->
-        <el-button type="" icon="el-icon-plus" @click="handleAdd" size="mini" plain>{{ $t('m.create_api') }}</el-button>
+        <el-button type="primary" icon="el-icon-plus" @click="handleAdd" size="mini" plain>{{ $t('m.create_api') }}</el-button>
         <!--          </router-link>-->
       </li>
       <li>
-        <el-button @click="dialogVisible = true" type="" size="mini" plain>{{ $t('m.api_group_manage') }}</el-button>
+        <el-button @click="dialogVisible = true" type="primary" size="mini" plain>{{ $t('m.api_group_manage') }}</el-button>
       </li>
       <li>
         <el-button @click="dialogVisible2=true" icon="el-icon-download" round size="mini" plain>

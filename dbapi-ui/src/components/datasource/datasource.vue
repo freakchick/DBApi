@@ -4,7 +4,7 @@
       <ul>
         <li>
           <router-link to="/datasource/add">
-            <el-button icon="el-icon-plus" size="mini" plain>{{$t('m.create_ds')}}</el-button>
+            <el-button icon="el-icon-plus" size="mini" type="primary" plain>{{$t('m.create_ds')}}</el-button>
           </router-link>
         </li>
         <li>

@@ -44,7 +44,7 @@ export default {
 
 <style scoped lang="less">
 .iconfont {
-  color: #fff;
+  //color: #fff;
   font-size: 20px !important;
   font-weight: 700;
   padding-right: 3px;
