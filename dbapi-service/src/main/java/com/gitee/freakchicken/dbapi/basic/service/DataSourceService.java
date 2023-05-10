@@ -84,7 +84,7 @@ public class DataSourceService {
     @Transactional
     public ResponseDto delete(String id) {
         List<ApiConfig> list = apiConfigMapper.selectList(null);
-        list = list.stream().filter(t -> {
+        List<String> str = list.stream().filter(t -> {
             String task = t.getTask();
             JSONArray array = JSON.parseArray(task);
             for (int i = 0; i < array.size(); i++) {
@@ -95,7 +95,7 @@ public class DataSourceService {
                 }
             }
             return false;
-        }).collect(Collectors.toList());
+        }).map(item -> item.getName() + "(" + item.getId() + ")").collect(Collectors.toList());
 
         if (list.size() == 0) {
             dataSourceMapper.deleteById(id);
@@ -105,7 +105,7 @@ public class DataSourceService {
 
             return ResponseDto.successWithMsg("Datasource delete success");
         } else {
-            return ResponseDto.failWithData("Datasource has been used, can not delete!", list);
+            return ResponseDto.fail("Can not delete! Used by API: " + str.stream().collect(Collectors.joining(";")));
         }
     }
 

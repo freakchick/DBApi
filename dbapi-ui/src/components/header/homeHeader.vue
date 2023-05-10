@@ -115,7 +115,8 @@ export default {
 <style scoped lang="less">
 .head {
   display: flex;
-  background-color: #304156;
+  //background-color: #304156;
+  background-image: linear-gradient(15deg,#486180,#222d3b,#486180);
   color: #bfcbd9;
   width: 100%;
 

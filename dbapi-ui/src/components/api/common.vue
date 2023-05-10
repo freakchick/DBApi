@@ -127,7 +127,6 @@
 
             </el-form-item>
 
-
             <el-form-item>
               <div slot="label">
                 <label-tip :label="$t('m.global_transform')" :tip="$t('m.global_transform_plugin_warning')"></label-tip>
@@ -155,7 +154,6 @@
               <el-input v-model="detail.globalTransformPlugin.pluginParam" style="width:400px"></el-input>
 
             </el-form-item>
-
 
             <el-form-item>
               <div slot="label">
@@ -291,7 +289,7 @@ export default {
           this.detail.alarmPlugins = [{pluginName: null, pluginParam: null, pluginType: PLUGIN_TYPE.ALARM_PLUGIN, apiId: id}];
         }
 
-        // console.log(this.detail)
+        console.log(this.detail)
       });
     },
 

@@ -113,7 +113,8 @@ export default {
     top: 0;
     left: 0;
     overflow-y: auto;
-    background-color: #304156;
+    background-image: radial-gradient( #486180, #222d3b);
+    /*background-color: #5a7aa1;*/
     color: #bfcbd9;
 }
 </style>
