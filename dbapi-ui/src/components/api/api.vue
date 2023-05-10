@@ -4,89 +4,38 @@
       <ul>
         <li>
           <!--          <router-link to='/api/add'>-->
-          <el-button
-            type="primary"
-            icon="el-icon-plus"
-            @click="handleAdd"
-          >{{ $t('m.create_api') }}</el-button>
+          <el-button type="" icon="el-icon-plus" @click="handleAdd" size="mini" plain>{{ $t('m.create_api') }}</el-button>
           <!--          </router-link>-->
         </li>
         <li>
-          <el-button
-            @click="dialogVisible = true"
-            type="primary"
-          >{{ $t('m.api_group_manage') }}</el-button>
+          <el-button @click="dialogVisible = true" type="" size="mini" plain>{{ $t('m.api_group_manage') }}</el-button>
         </li>
         <li>
-          <el-button
-            type="warning"
-            plain
-            @click="dialogVisible2=true"
-            icon="el-icon-download"
-            round
-          >
+          <el-button @click="dialogVisible2=true" icon="el-icon-download" round size="mini" plain>
             {{ $t('m.export_api_doc') }}
           </el-button>
         </li>
         <li>
-          <el-button
-            type="warning"
-            @click="dialogVisible3=true"
-            icon="el-icon-download"
-            round
-          >
+          <el-button @click="dialogVisible3=true" icon="el-icon-download" round size="mini" plain>
             {{ $t('m.export_api') }}
           </el-button>
         </li>
         <li>
-          <el-upload
-            action="/apiConfig/import"
-            accept=".json"
-            :on-success="importSuccess"
-            :headers="headers"
-            :on-error="importFail"
-            :file-list="fileList"
-          >
-            <el-button
-              type="warning"
-              icon="el-icon-upload2"
-              round
-            >{{ $t('m.import_api') }}</el-button>
+          <el-upload action="/apiConfig/import" accept=".json" :on-success="importSuccess" :headers="headers" :on-error="importFail" :file-list="fileList">
+            <el-button type="warning" icon="el-icon-upload2" round size="mini" plain>{{ $t('m.import_api') }}</el-button>
           </el-upload>
         </li>
         <li>
-          <el-button
-            type="warning"
-            @click="dialogVisible4=true"
-            icon="el-icon-download"
-            round
-          >
-            {{ $t('m.export_api_groups') }}
-          </el-button>
+          <el-button @click="dialogVisible4=true" icon="el-icon-download" round size="mini" plain>{{ $t('m.export_api_groups') }}</el-button>
         </li>
         <li>
-          <el-upload
-            action="/apiConfig/importGroup"
-            accept=".json"
-            :on-success="importGroupSuccess"
-            :headers="headers"
-            :on-error="importFail"
-            :file-list="groupFile"
-          >
-            <el-button
-              type="warning"
-              icon="el-icon-upload2"
-              round
-            >{{ $t('m.import_api_groups') }}</el-button>
+          <el-upload action="/apiConfig/importGroup" accept=".json" :on-success="importGroupSuccess" :headers="headers" :on-error="importFail" :file-list="groupFile">
+            <el-button type="warning" icon="el-icon-upload2" round size="mini" plain>{{ $t('m.import_api_groups') }}</el-button>
           </el-upload>
         </li>
       </ul>
       <div class="search">
         <my-select v-model="groupId" :label="$t('m.api_group')" :options="groups" option_label="name" option_value="id"></my-select>
-        <!--        <el-select v-model="groupId" class="gap">
-                  <el-option label="所有分组" value=""></el-option>
-                  <el-option :label="item.name" :value="item.id" v-for="item in groups" :key="item.id"></el-option>
-                </el-select>-->
         <el-input :placeholder="$t('m.input_keyword')" v-model="keyword" style="width:400px;" clearable @keyup.enter.native="search">
           <el-select v-model="field" slot="prepend" placeholder="" style="width:80px;">
             <el-option :label="$t('m.name')" value="name"></el-option>

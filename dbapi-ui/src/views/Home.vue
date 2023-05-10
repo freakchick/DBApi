@@ -51,7 +51,7 @@ export default {
 }
 
 .main {
-  background-color: #fff;
+  // background-color: #fff;
   //max-width: 1500px;
   //margin: 0 auto;
   //border-radius: 5px;

@@ -2,7 +2,7 @@
   <div>
     <div class="gap">
       <!--      <router-link to="/token/add">-->
-      <el-button type="primary" plain @click="dialogCreateApp = true">{{$t('m.create_client')}}</el-button>
+      <el-button type="primary" icon="el-icon-plus" plain @click="dialogCreateApp = true" size="mini">{{$t('m.create_client')}}</el-button>
       <!--      </router-link>-->
     </div>
 

@@ -6,10 +6,7 @@
     <!--    <div class="logo">DBApi</div>-->
     <span class="version">{{ version }}</span>
     <div class="menus">
-      <div
-        class="menu iconfont icon-database"
-        @click="clickMenu('/datasource')"
-      >
+      <div class="menu iconfont icon-database" @click="clickMenu('/datasource')">
         {{ $t("m.datasource") }}
       </div>
       <div class="menu iconfont icon-api" @click="clickMenu('/api')">API</div>
@@ -39,11 +36,7 @@
         }}</span>
         <span class="lang el-icon-arrow-down" @click="showLangs"></span>
         <div class="options" v-show="visiable">
-          <div
-            class="option" :key="index"
-            v-for="(item,index) in langs"
-            @click="changeLanguage(item)"
-          >
+          <div class="option" :key="index" v-for="(item,index) in langs" @click="changeLanguage(item)">
             {{ item.name }}
           </div>
         </div>
@@ -111,33 +104,25 @@ export default {
 <style scoped lang="less">
 .head {
   display: flex;
-  background-color: #06b176;
+  background-color: #304156;
+  color: #bfcbd9;
   width: 100%;
-  //box-shadow: 1px 1px 5px #72767b;
   .logo2 {
     flex-shrink: 0;
-    //width: 60px;
-    color: #045008;
     display: block;
     height: 50px;
   }
 
   .version {
-    //line-height: 60px;
     padding: 30px 20px 0px 0px;
     font-size: 14px;
-    //color: #fff;
-    //text-shadow: 2px 2px 1px #a5d4b7;
   }
 
   .menus {
-    background-color: #06b176;
     flex-shrink: 0;
     flex-grow: 1;
     display: flex;
     line-height: 60px;
-    //font-size: 40px;
-    color: #fff;
 
     .menu {
       margin: 0 5px;
@@ -154,11 +139,10 @@ export default {
         position: absolute;
         top: 60px;
         left: 0px;
-        background-color: #06b176;
+        background-color: #304156;
         //padding: 0 10px;
         width: 200px;
 
-        //font-size: 20px;
         border-radius: 5px;
         //border: 1px solid #00ff00;
         .submenu {
@@ -171,13 +155,13 @@ export default {
           text-overflow: ellipsis;
 
           &:hover {
-            background-color: #059463;
+            background-color: #222d3b;
           }
         }
       }
 
       &:hover {
-        background-color: #059463;
+        background-color: #222d3b;
 
         .submenus {
           display: block;
@@ -190,16 +174,11 @@ export default {
     margin: 0 20px;
     flex-shrink: 0;
     display: flex;
-
-    background-color: #06b176;
-
     .mode {
       font-family: Helvetica;
       font-weight: 900;
       font-size: 15px;
       margin-right: 10px;
-      //color: #045008;
-      //text-shadow: 2px 2px 1px #a5d4b7;
       line-height: 60px;
     }
     .langs {
@@ -209,7 +188,6 @@ export default {
         cursor: pointer;
         line-height: 60px;
         font-size: 18px;
-        color: #fff;
       }
 
       .options {
@@ -217,8 +195,7 @@ export default {
         position: absolute;
         right: 0;
         // display: none;
-        background-color: #06b176;
-        color: #fff;
+        background-color: #304156;
 
         line-height: 30px;
 
@@ -227,7 +204,7 @@ export default {
           padding: 0 10px;
 
           &:hover {
-            background-color: #059463;
+            background-color: #222d3b;
           }
         }
       }

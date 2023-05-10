@@ -5,23 +5,13 @@
         DBAPI
       </div>
       <div class="item">
-        <el-input
-          v-model="username"
-          :placeholder="$t('m.username')"
-        ></el-input>
+        <el-input v-model="username" :placeholder="$t('m.username')"></el-input>
       </div>
       <div class="item">
-        <el-input
-          v-model="password"
-          :placeholder="$t('m.password')"
-          type="password"
-        ></el-input>
+        <el-input v-model="password" :placeholder="$t('m.password')" type="password"></el-input>
       </div>
       <div class="item">
-        <div
-          class="buttton"
-          @click="login"
-        >{{$t('m.login')}}</div>
+        <div class="buttton" @click="login">{{$t('m.login')}}</div>
       </div>
     </div>
   </div>
@@ -97,22 +87,22 @@ export default {
   height: 40px;
   line-height: 40px;
   text-align: center;
-  background-color: #06b176;
+  background-color: #273446;
   border-radius: 10px;
-  color: #ffffff;
+  color: #bfcbd9;
   font-weight: 700;
   font-size: 20px;
 }
 
 .header {
   text-align: center;
-  color: #06b176;
+  color: #bfcbd9;
   font-weight: 700;
   font-size: 40px;
 }
 
 .buttton:hover {
-  background-color: #07a863;
+  background-color: #0b0f14;
   font-size: 21px;
   cursor: pointer;
 }
@@ -124,6 +114,7 @@ export default {
   top: 0;
   left: 0;
   overflow-y: auto;
-  background-color: #c7edcc;
+  background-color: #304156;
+  color: #bfcbd9;
 }
 </style>
