@@ -105,7 +105,7 @@
               </div>
 
               <span class="label">{{ $t('m.plugin_name') }}</span>
-              <el-select v-model="detail.cachePlugin.pluginName" style="width:400px" clearable @clear="detail.cachePlugin.cachePluginParam = null" :no-data-text="$t('m.no_plugin')">
+              <el-select v-model="detail.cachePlugin.pluginName" style="width:400px" clearable @clear="detail.cachePlugin.pluginParam = null" :no-data-text="$t('m.no_plugin')">
                 <el-option v-for="item in cachePlugins" :value="item.className" :label="item.name">
                   <div>
                     <el-tooltip placement="top-start" effect="dark">
