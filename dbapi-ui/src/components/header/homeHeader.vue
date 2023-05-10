@@ -10,7 +10,7 @@
         {{ $t("m.datasource") }}
       </div>
       <div class="menu iconfont icon-api" @click="clickMenu('/api')">API</div>
-      <div class="menu iconfont icon-quanxian" @click="clickMenu('/client')">
+      <div class="menu iconfont icon-kehu" @click="clickMenu('/client')">
         {{ $t("m.client") }}
       </div>
       <div class="menu iconfont icon-shezhi">
@@ -116,7 +116,7 @@ export default {
 .head {
   display: flex;
   //background-color: #304156;
-  background-image: linear-gradient(15deg,#486180,#222d3b,#486180);
+  background-image: linear-gradient(15deg,#486180, #324256,#486180);
   color: #bfcbd9;
   width: 100%;
 

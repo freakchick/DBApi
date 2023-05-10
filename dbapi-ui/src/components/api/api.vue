@@ -8,15 +8,15 @@
         <!--          </router-link>-->
       </li>
       <li>
-        <el-button @click="dialogVisible = true" type="primary" size="mini" plain>{{ $t('m.api_group_manage') }}</el-button>
+        <el-button @click="dialogVisible = true" icon="iconfont icon-fenzuguanli" type="primary" size="mini" plain>{{ $t('m.api_group_manage') }}</el-button>
       </li>
       <li>
-        <el-button @click="dialogVisible2=true" icon="el-icon-download" round size="mini" plain>
+        <el-button type="primary" @click="dialogVisible2=true" icon="iconfont icon-document" round size="mini" plain>
           {{ $t('m.export_api_doc') }}
         </el-button>
       </li>
       <li>
-        <el-button @click="dialogVisible3=true" icon="el-icon-download" round size="mini" plain>
+        <el-button type="primary" @click="dialogVisible3=true" icon="el-icon-download" round size="mini" plain>
           {{ $t('m.export_api') }}
         </el-button>
       </li>
@@ -26,11 +26,11 @@
         </el-upload>
       </li>
       <li>
-        <el-button @click="dialogVisible4=true" icon="el-icon-download" round size="mini" plain>{{ $t('m.export_api_groups') }}</el-button>
+        <el-button type="primary" @click="dialogVisible4=true" icon="iconfont icon-group" round size="mini" plain>{{ $t('m.export_api_groups') }}</el-button>
       </li>
       <li>
         <el-upload action="/apiConfig/importGroup" accept=".json" :on-success="importGroupSuccess" :headers="headers" :on-error="importFail" :file-list="groupFile">
-          <el-button type="warning" icon="el-icon-upload2" round size="mini" plain>{{ $t('m.import_api_groups') }}</el-button>
+          <el-button type="warning" icon="iconfont icon-group" round size="mini" plain>{{ $t('m.import_api_groups') }}</el-button>
         </el-upload>
       </li>
     </ul>
