@@ -32,11 +32,11 @@ public class GroupService {
     public ResponseDto deleteById(String id) {
         int size = apiConfigMapper.selectCountByGroup(id);
         if (size > 0){
-            return ResponseDto.fail("group is not empty, can not delete");
+            return ResponseDto.fail("Group is not empty, can not delete");
         }else{
             groupMapper.deleteById(id);
             clientAuthMapper.deleteByGroupId(id);
-            return ResponseDto.successWithMsg("delete success");
+            return ResponseDto.successWithMsg("Group delete success");
         }
 
     }

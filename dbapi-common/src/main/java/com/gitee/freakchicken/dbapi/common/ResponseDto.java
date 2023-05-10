@@ -15,7 +15,7 @@ public class ResponseDto {
     String msg;
     boolean success;
 
-    @JSONField(serialzeFeatures = {SerializerFeature.WriteMapNullValue})
+    @JSONField(serialzeFeatures = { SerializerFeature.WriteMapNullValue })
     Object data;
 
     public String getMsg() {
@@ -46,7 +46,7 @@ public class ResponseDto {
         ResponseDto dto = new ResponseDto();
         dto.setData(data);
         dto.setSuccess(true);
-//        dto.setMsg("Api access succeeded");
+        // dto.setMsg("Api access succeeded");
         return dto;
 
     }
@@ -71,6 +71,13 @@ public class ResponseDto {
         dto.setSuccess(false);
         dto.setMsg(msg);
         return dto;
+    }
 
+    public static ResponseDto failWithData(String msg, Object data) {
+        ResponseDto dto = new ResponseDto();
+        dto.setSuccess(false);
+        dto.setMsg(msg);
+        dto.setData(data);
+        return dto;
     }
 }

@@ -1,6 +1,7 @@
 package com.gitee.freakchicken.dbapi.basic.service;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.gitee.freakchicken.dbapi.basic.dao.ApiConfigMapper;
@@ -13,7 +14,6 @@ import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -84,22 +84,28 @@ public class DataSourceService {
     @Transactional
     public ResponseDto delete(String id) {
         List<ApiConfig> list = apiConfigMapper.selectList(null);
-        long i = list.stream().filter(t -> {
+        list = list.stream().filter(t -> {
             String task = t.getTask();
-            JSONObject jo = JSON.parseObject(task);
-            String datasourceId = jo.getString("datasourceId");
-            return id.equals(datasourceId);
-        }).count();
+            JSONArray array = JSON.parseArray(task);
+            for (int i = 0; i < array.size(); i++) {
+                JSONObject jo = array.getJSONObject(i);
+                String datasourceId = jo.getString("datasourceId");
+                if (id.equals(datasourceId)) {
+                    return true;
+                }
+            }
+            return false;
+        }).collect(Collectors.toList());
 
-        if (i == 0) {
+        if (list.size() == 0) {
             dataSourceMapper.deleteById(id);
 
             PoolManager.removeJdbcConnectionPool(id);
             cacheManager.getCache("datasource").evictIfPresent(id);
 
-            return ResponseDto.successWithMsg("delete success");
+            return ResponseDto.successWithMsg("Datasource delete success");
         } else {
-            return ResponseDto.fail("Datasource has been used, can not delete");
+            return ResponseDto.failWithData("Datasource has been used, can not delete!", list);
         }
     }
 
