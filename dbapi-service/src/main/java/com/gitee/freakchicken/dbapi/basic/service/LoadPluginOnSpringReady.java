@@ -30,9 +30,9 @@ public class LoadPluginOnSpringReady {
     public void loadToken() {
         List<ClientToken> allToken = clientMapper.getAllToken();
         for (ClientToken clientToken : allToken) {
-            cacheManager.getCache(Constants.EHCACHE_TOKEN_APP).putIfAbsent(clientToken.getToken(), clientToken);
+            cacheManager.getCache(Constants.EHCACHE_TOKEN_CLIENT).putIfAbsent(clientToken.getToken(), clientToken);
             // clientId和最新token关系记录下来,便于下次可以找到旧token可以删除，否则缓存中token越来越多
-            cacheManager.getCache(Constants.EHCACHE_APP_TOKEN).put(clientToken.getClientId(), clientToken.getToken());
+            cacheManager.getCache(Constants.EHCACHE_CLIENT_TOKEN).put(clientToken.getClientId(), clientToken.getToken());
         }
     }
 

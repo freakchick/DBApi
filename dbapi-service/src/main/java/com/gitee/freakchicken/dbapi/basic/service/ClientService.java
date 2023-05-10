@@ -63,16 +63,16 @@ public class ClientService {
     @Transactional
     public void delete(String clientId) {
         clientMapper.deleteById(clientId);
-        String oldToken = cacheManager.getCache(Constants.EHCACHE_APP_TOKEN).get(clientId, String.class);
+        String oldToken = cacheManager.getCache(Constants.EHCACHE_CLIENT_TOKEN).get(clientId, String.class);
         if (oldToken != null)
-            cacheManager.getCache(Constants.EHCACHE_TOKEN_APP).evict(oldToken);
-        cacheManager.getCache(Constants.EHCACHE_APP_TOKEN).evict(clientId);
-        cacheManager.getCache(Constants.EHCACHE_APP_AUTH_GROUPS).evict(clientId);
+            cacheManager.getCache(Constants.EHCACHE_TOKEN_CLIENT).evict(oldToken);
+        cacheManager.getCache(Constants.EHCACHE_CLIENT_TOKEN).evict(clientId);
+        cacheManager.getCache(Constants.EHCACHE_CLIENT_AUTH_GROUPS).evict(clientId);
     }
 
     @Transactional
     public void auth(String clientId, String groupIds) {
-        cacheManager.getCache(Constants.EHCACHE_APP_AUTH_GROUPS).evictIfPresent(clientId);
+        cacheManager.getCache(Constants.EHCACHE_CLIENT_AUTH_GROUPS).evictIfPresent(clientId);
         clientAuthMapper.deleteByClientId(clientId);
         if (StringUtils.isNoneBlank(groupIds)) {
             String[] split = groupIds.split(",");
@@ -85,7 +85,7 @@ public class ClientService {
         }
     }
 
-    @Cacheable(value = "app_AuthGroups", key = "#clientId", unless = "#result == null")
+    @Cacheable(value = "client_auth_groups", key = "#clientId", unless = "#result == null")
     public List<String> getAuthGroups(String clientId) {
         List<String> list = clientAuthMapper.selectByClientId(clientId);
         return list;
@@ -136,15 +136,15 @@ public class ClientService {
             }
 
             // 最新token存入缓存
-            cacheManager.getCache(Constants.EHCACHE_TOKEN_APP).putIfAbsent(token, clientToken);
+            cacheManager.getCache(Constants.EHCACHE_TOKEN_CLIENT).putIfAbsent(token, clientToken);
 
             // clean old token
-            String oldToken = cacheManager.getCache(Constants.EHCACHE_APP_TOKEN).get(clientId, String.class);
+            String oldToken = cacheManager.getCache(Constants.EHCACHE_CLIENT_TOKEN).get(clientId, String.class);
             if (oldToken != null)
-                cacheManager.getCache(Constants.EHCACHE_TOKEN_APP).evict(oldToken);
+                cacheManager.getCache(Constants.EHCACHE_TOKEN_CLIENT).evict(oldToken);
 
             // clientId和最新token关系记录下来,便于下次可以找到旧token可以删除，否则缓存中token越来越多
-            cacheManager.getCache(Constants.EHCACHE_APP_TOKEN).put(clientId, token);
+            cacheManager.getCache(Constants.EHCACHE_CLIENT_TOKEN).put(clientId, token);
 
             return clientToken;
         }
@@ -157,14 +157,14 @@ public class ClientService {
      * @return
      */
     public String verifyToken(String token) {
-        ClientToken clientToken = cacheManager.getCache(Constants.EHCACHE_TOKEN_APP).get(token, ClientToken.class);
+        ClientToken clientToken = cacheManager.getCache(Constants.EHCACHE_TOKEN_CLIENT).get(token, ClientToken.class);
         if (clientToken == null) {
             return null;
         } else {
             Long expireTime = clientToken.getExpireAt();
             // 单次失效
             if (expireTime == 0) {
-                cacheManager.getCache(Constants.EHCACHE_TOKEN_APP).evict(token);
+                cacheManager.getCache(Constants.EHCACHE_TOKEN_CLIENT).evict(token);
                 return clientToken.getClientId();
             }
             // 永久有效
@@ -177,7 +177,7 @@ public class ClientService {
                     return clientToken.getClientId();
                 } else {
                     // token已经过期就清除
-                    cacheManager.getCache(Constants.EHCACHE_TOKEN_APP).evict(token);
+                    cacheManager.getCache(Constants.EHCACHE_TOKEN_CLIENT).evict(token);
                     log.error("token [{}] expired!", token);
                     throw new RuntimeException("token expired!");
                 }

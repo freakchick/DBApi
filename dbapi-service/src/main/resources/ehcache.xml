@@ -4,14 +4,14 @@
        <!--数据源缓存1小时-->
        <cache name="datasource" eternal="false" maxElementsInMemory="100" overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="3600" memoryStoreEvictionPolicy="LRU"/>
 
-       <!--token_app永久缓存-->
-       <cache name="token_app" eternal="true" maxElementsInMemory="10000" overflowToDisk="false" diskPersistent="false" memoryStoreEvictionPolicy="LRU"/>
+       <!--token_client永久缓存-->
+       <cache name="token_client" eternal="true" maxElementsInMemory="10000" overflowToDisk="false" diskPersistent="false" memoryStoreEvictionPolicy="LRU"/>
 
-       <!--app_token永久缓存-->
-       <cache name="app_token" eternal="true" maxElementsInMemory="10000" overflowToDisk="false" diskPersistent="false" memoryStoreEvictionPolicy="LRU"/>
+       <!--client_token永久缓存-->
+       <cache name="client_token" eternal="true" maxElementsInMemory="10000" overflowToDisk="false" diskPersistent="false" memoryStoreEvictionPolicy="LRU"/>
 
-       <!--app_AuthGroups缓存1小时-->
-       <cache name="app_AuthGroups" eternal="false" maxElementsInMemory="10000" overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="3600" memoryStoreEvictionPolicy="LRU"/>
+       <!--client_auth_groups永久缓存-->
+       <cache name="client_auth_groups" eternal="false" maxElementsInMemory="10000" overflowToDisk="false" diskPersistent="false" memoryStoreEvictionPolicy="LRU"/>
 
        <!--api参数空闲缓存5min-->
        <cache name="api" eternal="false" maxElementsInMemory="10000" overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="300" memoryStoreEvictionPolicy="LRU"/>
