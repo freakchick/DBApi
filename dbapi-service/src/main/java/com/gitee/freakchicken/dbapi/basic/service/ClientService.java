@@ -39,17 +39,17 @@ public class ClientService {
         client.setId(RandomStringUtils.random(16, true, true));
         client.setSecret(RandomStringUtils.random(32, true, true));
         if (client.getExpireDesc().equals("5min")) {
-            client.setExpireDuration(5 * 60);
+            client.setExpireDuration(5 * 60l);
         } else if (client.getExpireDesc().equals("1hour")) {
-            client.setExpireDuration(60 * 60);
+            client.setExpireDuration(60 * 60l);
         } else if (client.getExpireDesc().equals("1day")) {
-            client.setExpireDuration(60 * 60 * 24);
+            client.setExpireDuration(60 * 60 * 24l);
         } else if (client.getExpireDesc().equals("30day")) {
-            client.setExpireDuration(60 * 60 * 24 * 30);
+            client.setExpireDuration(60 * 60 * 24 * 30l);
         } else if (client.getExpireDesc().equals("once")) {
-            client.setExpireDuration(0);
+            client.setExpireDuration(0l);
         } else if (client.getExpireDesc().equals("forever")) {
-            client.setExpireDuration(-1);
+            client.setExpireDuration(-1l);
         }
 
         clientMapper.insert(client);
