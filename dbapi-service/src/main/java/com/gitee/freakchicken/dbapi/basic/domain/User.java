@@ -20,4 +20,7 @@ public class User implements Serializable {
 
     @TableField
     String password;
+
+    @TableField(exist = false)
+    String token;
 }

@@ -278,13 +278,20 @@ export default {
     getDetail(id) {
       this.axios.post("/apiConfig/detail/" + id).then((response) => {
         this.detail = response.data
+
+        // 防止前端报错
         if (response.data.cachePlugin == null) {
           this.detail.cachePlugin = {pluginName: null, pluginParam: null, pluginType: PLUGIN_TYPE.CACHE_PLUGIN, apiId: id}
         }
-        console.log(response.data.alarmPlugins)
+        if (response.data.globalTransformPlugin == null) {
+          this.detail.globalTransformPlugin = {pluginName: null, pluginParam: null, pluginType: PLUGIN_TYPE.GLOBALTRANSFORM_PLUGIN, apiId: id}
+        }
+
         if (response.data.alarmPlugins == null || response.data.alarmPlugins.length == 0) {
           this.detail.alarmPlugins = [{pluginName: null, pluginParam: null, pluginType: PLUGIN_TYPE.ALARM_PLUGIN, apiId: id}];
         }
+
+        // console.log(this.detail)
       });
     },
 

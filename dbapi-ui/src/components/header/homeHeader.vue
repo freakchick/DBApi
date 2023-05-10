@@ -1,7 +1,7 @@
 <template>
   <div class="head">
     <div style="padding: 5px 10px">
-      <img src="@/img/logo.png" alt="" class="logo2" />
+      <img src="@/img/logo.png" alt="" class="logo2"/>
     </div>
     <!--    <div class="logo">DBApi</div>-->
     <span class="version">{{ version }}</span>
@@ -29,21 +29,29 @@
       </div>
     </div>
     <div class="right">
-      <span class="mode">{{ this.$store.state.mode }}</span>
-      <div class="langs">
-        <span style="font-size: 14px" @click="showLangs">{{
-          languageName
-        }}</span>
-        <span class="lang el-icon-arrow-down" @click="showLangs"></span>
-        <div class="options" v-show="visiable">
-          <div class="option" :key="index" v-for="(item,index) in langs" @click="changeLanguage(item)">
-            {{ item.name }}
-          </div>
-        </div>
-      </div>
+      <!--      <span class="mode">{{ this.$store.state.mode }}</span>-->
       <div style="line-height: 60px;margin: 0 5px">
         <a href="https://github.com/freakchick/DBApi" target="_blank"><i class="iconfont icon-github" style="font-size: 26px"></i></a>
       </div>
+
+      <el-dropdown @command="changeLanguage" style="margin-right: 15px">
+        <span class="el-dropdown-link" style="line-height: 60px;color: #bfcbd9">
+          {{ languageName }}<i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item :command="item" :key="index" v-for="(item,index) in langs">{{ item.name }}</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+
+
+      <el-dropdown @command="handleCommand">
+        <span class="el-dropdown-link" style="line-height: 60px;color: #bfcbd9">
+          {{ username}}<i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item command="logout">{{$t('m.logout')}}</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
 
     </div>
   </div>
@@ -55,26 +63,28 @@ export default {
   data() {
     return {
       langs: [
-        { name: "English", value: "en" },
-        { name: "中文", value: "cn" },
+        {name: "English", value: "en"},
+        {name: "中文", value: "cn"},
       ],
       currentLang: this.$i18n.locale,
       version: null,
-      visiable: false,
+      username: localStorage.getItem("username")
     };
   },
   methods: {
-    showLangs() {
-      this.visiable = !this.visiable;
+    handleCommand(command) {
+      if (command == 'logout') {
+        localStorage.removeItem("token")
+        localStorage.removeItem("username")
+        localStorage.removeItem("userId")
+        this.$router.push("login");
+      }
     },
-    hideLangs() {
-      this.visiable = false;
-    },
+
     clickMenu(data) {
       this.$router.push(data);
     },
     changeLanguage(data) {
-      this.visiable = false;
       this.$i18n.locale = data.value;
       localStorage.setItem("locale", data.value);
       this.currentLang = data.value;
@@ -85,7 +95,8 @@ export default {
         .then((response) => {
           this.version = response.data;
         })
-        .catch((error) => {});
+        .catch((error) => {
+        });
     },
   },
   created() {
@@ -107,6 +118,7 @@ export default {
   background-color: #304156;
   color: #bfcbd9;
   width: 100%;
+
   .logo2 {
     flex-shrink: 0;
     display: block;
@@ -174,6 +186,7 @@ export default {
     margin: 0 20px;
     flex-shrink: 0;
     display: flex;
+
     .mode {
       font-family: Helvetica;
       font-weight: 900;
@@ -181,6 +194,7 @@ export default {
       margin-right: 10px;
       line-height: 60px;
     }
+
     .langs {
       position: relative;
 

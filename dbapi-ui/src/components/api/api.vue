@@ -37,7 +37,7 @@
     <div class="search">
       <div>
         <span class="label">{{$t('m.api_group')}}</span>
-        <el-select v-model="groupId" placeholder="" style="width:180px;" size="mini">
+        <el-select v-model="groupId" placeholder="" style="width:180px;" size="mini" clearable>
           <el-option v-for="(item,index) in groups" :label="item.name" :value="item.id" :key="index"></el-option>
         </el-select>
         <span class="label">{{$t('m.name')}}</span>

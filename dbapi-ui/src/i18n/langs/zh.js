@@ -3,6 +3,7 @@ import zhLocale from 'element-ui/lib/locale/lang/zh-CN' // 引入element语言�
 const cn = {
   m: {
     login: '登 录',
+    logout: '注销',
     cancel: '取消',
     ok: '确定',
     export: '导出',

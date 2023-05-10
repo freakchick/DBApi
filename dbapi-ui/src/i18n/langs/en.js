@@ -2,6 +2,7 @@ import enLocale from 'element-ui/lib/locale/lang/en' // 引入element语言包
 const en = {
     m: {
         login: 'Login',
+        logout: 'Logout',
         cancel: 'Cancel',
         ok: 'OK',
         export: 'Export',
