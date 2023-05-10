@@ -1,13 +1,13 @@
 <template>
   <div>
     <el-tabs tab-position="left">
-      <el-tab-pane label="基本信息">
-        <el-form label-width="120px">
+      <el-tab-pane :label="$t('m.basic')">
+        <el-form label-width="140px">
           <el-form-item :label="$t('m.name')">
-            <el-input v-model="detail.name"></el-input>
+            <el-input v-model="detail.name" style="max-width:600px"></el-input>
           </el-form-item>
           <el-form-item :label="$t('m.path')">
-            <el-input v-model="detail.path">
+            <el-input v-model="detail.path" style="max-width:600px">
               <template slot="prepend">http://{{ address }}/</template>
             </el-input>
           </el-form-item>
@@ -17,16 +17,15 @@
             </el-select>
           </el-form-item>
           <el-form-item :label="$t('m.note')">
-            <el-input v-model="detail.note"></el-input>
+            <el-input v-model="detail.note" style="max-width:600px"></el-input>
           </el-form-item>
           <el-form-item label="Content Type">
+            <div slot="label">
+              <label-tip label="Content Type" :tip="$t('m.content_type_info')"></label-tip>
+            </div>
             <el-select v-model="detail.contentType" style="width:300px">
               <el-option v-for="item in types" :label="item" :value="item"></el-option>
             </el-select>
-            <el-tooltip placement="top-start" effect="dark">
-              <div slot="content"><p>{{ $t('m.content_type_info') }}</p></div>
-              <i class="el-icon-info tip"></i>
-            </el-tooltip>
           </el-form-item>
           <el-form-item :label="$t('m.parameters')">
             <div slot="label">
@@ -71,27 +70,25 @@
             </div>
           </el-form-item>
 
-          <el-form-item :label="$t('m.authority')">
+          <el-form-item>
+            <div slot="label">
+              <label-tip :label="$t('m.access')" :tip="$t('m.access_tip')"></label-tip>
+            </div>
             <el-radio-group v-model="detail.access">
               <el-radio :label="PRIVILEGE.PRIVATE">{{ $t('m.private') }}</el-radio>
               <el-radio :label="PRIVILEGE.PUBLIC">{{ $t('m.public') }}</el-radio>
             </el-radio-group>
-
-            <el-tooltip placement="top-start" effect="dark">
-              <div slot="content">{{ $t('m.access_tip') }}</div>
-              <i class="el-icon-info tip"></i>
-            </el-tooltip>
           </el-form-item>
         </el-form>
       </el-tab-pane>
-      <el-tab-pane label="执行器">
+      <el-tab-pane :label="$t('m.executor')">
         <div v-for="(item,index) in detail.taskJson">
           <el-form label-width="120px">
-            <el-form-item label="Executor Type">
+            <el-form-item :label="$t('m.executor_type')">
               <el-radio-group v-model="item.taskType">
-                <el-radio :label="1">SQL Executor</el-radio>
-                <el-radio :label="2">ElasticSearch DSL Executor</el-radio>
-                <el-radio :label="3">HTTP API Executor</el-radio>
+                <el-radio :label="1">{{$t('m.executor_sql')}}</el-radio>
+                <!-- <el-radio :label="2">{{$t('m.executor_es')}}</el-radio>
+                <el-radio :label="3">{{$t('m.executor_http')}}</el-radio> -->
               </el-radio-group>
             </el-form-item>
           </el-form>
@@ -99,20 +96,16 @@
           <sql-executor v-if="item.taskType == 1" ref="sqlExecutor" :detail="item"></sql-executor>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="全局插件">
+      <el-tab-pane :label="$t('m.global_plugin')">
         <div>
           <el-form label-width="160px">
             <el-form-item :label="$t('m.cache')">
               <div slot="label">
-                {{ $t('m.cache') }}
-                <el-tooltip placement="top-start" effect="dark">
-                  <div slot="content">{{ $t('m.cache_plugin_warning') }}</div>
-                  <i class="el-icon-info tip"></i>
-                </el-tooltip>
+                <label-tip :label="$t('m.cache')" :tip="$t('m.cache_plugin_warning')"></label-tip>
               </div>
 
               <span class="label">{{ $t('m.plugin_name') }}</span>
-              <el-select v-model="detail.cachePlugin.pluginName" style="width:400px" clearable @clear="clearCachePluginParam()" :no-data-text="$t('m.no_plugin')">
+              <el-select v-model="detail.cachePlugin.pluginName" style="width:400px" clearable @clear="detail.cachePlugin.cachePluginParam = null" :no-data-text="$t('m.no_plugin')">
                 <el-option v-for="item in cachePlugins" :value="item.className" :label="item.name">
                   <div>
                     <el-tooltip placement="top-start" effect="dark">
@@ -137,15 +130,11 @@
 
             <el-form-item>
               <div slot="label">
-                全局数据转换
-                <el-tooltip placement="top-start" effect="dark">
-                  <div slot="content">{{ $t('m.cache_plugin_warning') }}</div>
-                  <i class="el-icon-info tip"></i>
-                </el-tooltip>
+                <label-tip :label="$t('m.global_transform')" :tip="$t('m.global_transform_plugin_warning')"></label-tip>
               </div>
 
               <span class="label">{{ $t('m.plugin_name') }}</span>
-              <el-select v-model="detail.globalTransformPlugin.pluginName" style="width:400px" clearable @clear="clearCachePluginParam()" :no-data-text="$t('m.no_plugin')">
+              <el-select v-model="detail.globalTransformPlugin.pluginName" style="width:400px" clearable @clear="detail.globalTransformPlugin.pluginParam = null;" :no-data-text="$t('m.no_plugin')">
                 <el-option v-for="item in globalTransformPlugins" :value="item.className" :label="item.name">
                   <div>
                     <el-tooltip placement="top-start" effect="dark">
@@ -170,16 +159,12 @@
 
             <el-form-item>
               <div slot="label">
-                {{ $t('m.alarm') }}
-                <el-tooltip placement="top-start" effect="dark">
-                  <div slot="content">{{ $t('m.alarm_plugin_warning') }}</div>
-                  <i class="el-icon-info tip"></i>
-                </el-tooltip>
+                <label-tip :label="$t('m.alarm')" :tip="$t('m.alarm_plugin_warning')"></label-tip>
               </div>
 
               <div v-for="(item,index) in detail.alarmPlugins">
                 <span class="label">{{ $t('m.plugin_name') }}</span>
-                <el-select v-model="item.pluginName" style="width:400px" clearable @clear="clearAlarmPluginParam()" :no-data-text="$t('m.no_plugin')">
+                <el-select v-model="item.pluginName" style="width:400px" clearable @clear="item.pluginParam=null;" :no-data-text="$t('m.no_plugin')">
                   <el-option v-for="item in alarmPlugins" :value="item.className" :label="item.name">
                     <div>
                       <el-tooltip placement="top-start" effect="dark">
@@ -196,11 +181,10 @@
                   </el-option>
                 </el-select>
                 <span class="label">{{ $t('m.plugin_param') }}</span>
-
                 <el-input v-model="item.pluginParam" style="width:400px"></el-input>
-
+                <el-button @click="detail.alarmPlugins.splice(index, 1);" circle type="danger" icon="el-icon-delete" size="mini" v-if="index > 0"></el-button>
               </div>
-
+              <el-button @click="addAlarmRow" icon="el-icon-plus" type="primary" circle size="mini"></el-button>
             </el-form-item>
           </el-form>
           <div>
@@ -216,20 +200,16 @@
 <script>
 import sqlCode from "@/components/api/common/SqlCode";
 import SqlExecutor from "@/components/api/executor/SqlExecutor";
-import MySelect from "../common/MySelect";
 import {DATA_TYPE, CONTENT_TYPE, PRIVILEGE, PLUGIN_TYPE, EXECUTOR_TYPE} from "@/constant";
 
 export default {
-  components: {MySelect, sqlCode, SqlExecutor},
+  components: { sqlCode, SqlExecutor},
   data() {
     return {
       CONTENT_TYPE: Object.freeze(CONTENT_TYPE),
       PRIVILEGE: Object.freeze(PRIVILEGE),
-      datasources: [],
       address: null,
-      show: false,
-      groups: [],
-      dialogVisible: false,
+      
       detail: {
         name: null,
         note: null,
@@ -249,7 +229,6 @@ export default {
         }],
         jsonParam: null,
         contentType: CONTENT_TYPE.FORM_URLENCODED,
-        openTrans: 0,
       },
       options: [
         {label: "string", value: DATA_TYPE.STRING},
@@ -265,30 +244,22 @@ export default {
       tables: [],
       columns: [],
       column: null,
-      // isFullScreen: false,
-      // mode: "mini",
+
+      groups: [],
       types: [CONTENT_TYPE.FORM_URLENCODED, CONTENT_TYPE.JSON],
       cachePlugins: [],
       transformPlugins: [],
       alarmPlugins: [],
       globalTransformPlugins:[]
-
-
     };
   },
   props: ["id"],
   methods: {
-    // clearTransPluginParam(index) {
-    //   this.$store.commit("clearTransformPluginParam", index);
-    // },
-    clearCachePluginParam() {
-      this.detail.cachePluginParam = null;
-    },
-    clearAlarmPluginParam() {
-      this.detail.alarmPluginParam = null;
+    addAlarmRow(){
+      this.detail.alarmPlugins.push({pluginName: null, pluginParam: null, pluginType: PLUGIN_TYPE.ALARM_PLUGIN, apiId: this.id})
     },
     addRow() {
-      this.detail.paramsJson.push({name: null, type: null});
+      this.detail.paramsJson.push({name: null, type: null, note:null});
     },
     deleteRow(index) {
       this.detail.paramsJson.splice(index, 1);
@@ -305,7 +276,6 @@ export default {
         });
     },
     getDetail(id) {
-      // this.id = id;
       this.axios.post("/apiConfig/detail/" + id).then((response) => {
         this.detail = response.data
         if (response.data.cachePlugin == null) {
@@ -348,13 +318,6 @@ export default {
     }
     // 新增页面
     else {
-      // this.$store.commit("initSqls", [
-      //   {
-      //     sqlText: "-- only one sql in one tab",
-      //     transformPlugin: null,
-      //     transformPluginParams: null,
-      //   },
-      // ]);
     }
     this.getAllGroups();
     this.getAllPlugin();
@@ -382,11 +345,11 @@ i {
 
 .tip {
   /*display: inline-block !important;*/
-  margin-left: 10px;
+  // margin-left: 2px;
   /*background-color: #fdf6ec;*/
   /*padding: 15px;*/
-  color: #afafaf;
-  font-size: 20px;
+  color: #111111;
+  font-size: 14px;
   font-weight: 100;
 }
 

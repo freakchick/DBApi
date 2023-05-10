@@ -1,18 +1,14 @@
 <template>
   <div>
     <el-form label-width="120px">
-      <el-form-item label="datasource">
+      <el-form-item :label="$t('m.datasource')">
         <el-select v-model="datasourceId">
           <el-option :value="item.id" :label="item.name" v-for="item in datasources">{{ item.name }}</el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
         <div slot="label">
-          sql
-          <el-tooltip placement="top-start" effect="dark">
-            <div slot="content">可以编写多条sql，多条sql执行结果会拼接后返回</div>
-            <i class="el-icon-info tip"></i>
-          </el-tooltip>
+          <label-tip label="SQL" :tip="$t('m.sql_warning')"></label-tip>
         </div>
         <div>
           <el-tabs v-model="currentActiveTabName" type="card" editable @edit="handleTabsEdit" tab-position="top">
@@ -49,11 +45,7 @@
       </el-form-item>
       <el-form-item>
         <div slot="label">
-          {{ $t('m.transaction') }}
-          <el-tooltip placement="top-start" effect="dark">
-            <div slot="content">{{ $t('m.transaction_tip') }}</div>
-            <i class="el-icon-info tip"></i>
-          </el-tooltip>
+          <label-tip :label="$t('m.transaction')" :tip="$t('m.transaction_tip')"></label-tip>
         </div>
 
         <el-radio-group v-model="transaction">
