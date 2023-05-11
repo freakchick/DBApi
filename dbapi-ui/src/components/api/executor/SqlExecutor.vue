@@ -13,7 +13,7 @@
         <div>
           <el-tabs v-model="currentActiveTabName" type="card" editable @edit="handleTabsEdit" tab-position="top">
             <el-tab-pane :key="item.name" v-for="(item, index) in editableTabs" :label="'SQL-'+item.name" :name="item.name">
-              <codemirror ref="codemirror" :textareaRef="'cms'+index" :value="item.sqlText" mode="mini"></codemirror>
+              <codemirror ref="codemirror" :textareaRef="'cms'+index" :value="item.sqlText" :ds="datasourceId"></codemirror>
               <div style="margin-top: 10px">
                 <label-tip :label="$t('m.transform')" :tip="$t('m.transform_plugin_warning')"></label-tip>
                 <span>SQL-{{ item.name }} : </span>
