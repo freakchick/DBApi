@@ -1,34 +1,31 @@
-DROP TABLE IF EXISTS `api_auth`;
+DROP TABLE IF EXISTS `client_auth`;
 
-CREATE TABLE `api_auth`
+CREATE TABLE `client_auth`
 (
-    `id`       int(11) NOT NULL AUTO_INCREMENT,
-    `app_id`   varchar(64)  DEFAULT NULL,
-    `group_id` varchar(255) DEFAULT NULL,
+    `id`        int(11) NOT NULL AUTO_INCREMENT,
+    `client_id` varchar(20) DEFAULT NULL,
+    `group_id`  varchar(20) DEFAULT NULL,
     PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 
 DROP TABLE IF EXISTS `api_config`;
 
 CREATE TABLE `api_config`
 (
-    `id`                  varchar(255) NOT NULL,
-    `name`                varchar(255) DEFAULT NULL,
-    `note`                varchar(255) DEFAULT NULL,
-    `path`                varchar(255) DEFAULT NULL,
-    `params`              text,
-    `json_param`          text,
-    `status`              int(11) DEFAULT NULL,
-    `previlege`           int(11) DEFAULT NULL,
-    `group_id`            varchar(255) DEFAULT NULL,
- 
-    `content_type`        varchar(50)  DEFAULT NULL,
-    `task_type`        varchar(20)  DEFAULT NULL,
-    `task`          text,
-       `create_time`         varchar(20)  DEFAULT NULL,
-    `update_time`         varchar(20)  DEFAULT NULL,
+    `id`           varchar(20) NOT NULL,
+    `name`         varchar(255) DEFAULT NULL,
+    `note`         varchar(255) DEFAULT NULL,
+    `path`         varchar(255) DEFAULT NULL,
+    `params`       text,
+    `json_param`   text,
+    `status`       int(11) DEFAULT NULL COMMENT '0-offline;1-online',
+    `access`       int(11) DEFAULT NULL COMMENT '0-private;1-public',
+    `group_id`     varchar(20)  DEFAULT NULL,
+    `content_type` varchar(50)  DEFAULT NULL,
+    `task`         text,
+    `create_time`  varchar(20)  DEFAULT NULL,
+    `update_time`  varchar(20)  DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `path` (`path`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -37,10 +34,10 @@ CREATE TABLE `api_config`
 DROP TABLE IF EXISTS `api_plugin_config`;
 CREATE TABLE `api_plugin_config`
 (
-    `api_id`             varchar(20) NOT NULL,
-    `plugin_type`       varchar(20)  DEFAULT NULL,
-    `plugin_name`       varchar(255)  DEFAULT NULL,
-    `plugin_param` varchar(1024) DEFAULT NULL
+    `api_id`       varchar(20) NOT NULL,
+    `plugin_type`  int(11) DEFAULT NULL,
+    `plugin_name`  varchar(255) DEFAULT NULL,
+    `plugin_param` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `api_group`;
@@ -51,8 +48,7 @@ CREATE TABLE `api_group`
     `name` varchar(255) DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `name` (`name`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 DROP TABLE IF EXISTS `datasource`;
@@ -71,8 +67,7 @@ CREATE TABLE `datasource`
     `create_time` varchar(20)  DEFAULT NULL,
     `update_time` varchar(20)  DEFAULT NULL,
     PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 DROP TABLE IF EXISTS `firewall`;
@@ -102,15 +97,15 @@ CREATE TABLE `user`
     `id`       int(11) NOT NULL AUTO_INCREMENT,
     `username` varchar(255) DEFAULT NULL,
     `password` varchar(255) DEFAULT NULL,
+    `type`     int(11) DEFAULT NULL,
+    `email`    varchar(255) DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `username` (`username`)
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  DEFAULT CHARSET = utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `app_info`;
+DROP TABLE IF EXISTS `client`;
 
-CREATE TABLE `app_info`
+CREATE TABLE `client`
 (
     `id`              varchar(255) NOT NULL DEFAULT '',
     `name`            varchar(255)          DEFAULT NULL,
@@ -131,5 +126,5 @@ insert into `ip_rules`(`type`, `ip`)
 values ('white', NULL),
        ('black', NULL);
 
-insert into `user`(`id`, `username`, `password`)
-values (1, 'admin', 'admin');
+insert into `user`(`id`, `username`, `password`, `type`)
+values (1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 1);
