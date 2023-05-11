@@ -87,7 +87,7 @@ export default {
           sql: 'show tables'
         },
         sqlserver: {
-          url: 'jdbc:microsoft:sqlserver://localhost:1433;databaseName=<db>',
+          url: 'jdbc:sqlserver://localhost:1433;databaseName=<db>',
           driver: 'com.microsoft.sqlserver.jdbc.SQLServerDriver',
           sql: 'select * from sys.tables'
         },
