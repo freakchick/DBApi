@@ -6,7 +6,7 @@ CREATE TABLE access_log
     `duration`  Int64,
     `timestamp` Int64,
     `ip`        String,
-    `app_id`    String,
+    `client_id`    String,
     `api_id`    String,
     `error`     String
 ) ENGINE = MergeTree
