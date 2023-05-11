@@ -1,17 +1,9 @@
 <template>
   <div>
-    <el-date-picker
-        size="mini"
-        v-model="time"
-        type="datetimerange"
-        :picker-options="pickerOptions"
-        :range-separator="$t('m.to')"
-        :start-placeholder="$t('m.startDate')"
-        :end-placeholder="$t('m.endDate')"
-        align="right"
-    >
+    <el-date-picker size="mini" v-model="time" type="datetimerange" :picker-options="pickerOptions" :range-separator="$t('m.to')" :start-placeholder="$t('m.startDate')"
+                    :end-placeholder="$t('m.endDate')" align="right">
     </el-date-picker>
-    <el-button size="mini" @click="query" type="primary">{{$t('m.query')}}</el-button>
+    <el-button size="mini" @click="query" type="primary">{{ $t('m.query') }}</el-button>
     <div>
       <el-row :gutter="20">
 
@@ -104,12 +96,10 @@ export default {
         color: ["#99CC33", "#FF6600"],
         series: [
           {
-            
+
             type: "pie",
             radius: "50%",
-            data: [
-              
-            ],
+            data: [],
             emphasis: {
               itemStyle: {
                 shadowBlur: 10,
@@ -272,7 +262,7 @@ export default {
           },
           formatter: (params) => {
             debugger
-            return params[0].data+" (ms)"
+            return params[0].data + " (ms)"
           }
         },
         legend: {},
@@ -335,83 +325,83 @@ export default {
       },
     };
   },
-  watch:{
+  watch: {
     '$i18n.locale'(newValue) {
-       
-      this.pieData.title.text=this.$t('m.api_access_quantity')
-      this.lineData.title.text=this.$t('m.api_access_trend')
-      this.data3.title.text=this.$t('m.top_n_app')
-      this.data4.title.text=this.$t('m.top_n_api')
-      this.data5.title.text=this.$t('m.top_n_duration')
-      this.data6.title.text=this.$t('m.top_n_ip')
+
+      this.pieData.title.text = this.$t('m.api_access_quantity')
+      this.lineData.title.text = this.$t('m.api_access_trend')
+      this.data3.title.text = this.$t('m.top_n_app')
+      this.data4.title.text = this.$t('m.top_n_api')
+      this.data5.title.text = this.$t('m.top_n_duration')
+      this.data6.title.text = this.$t('m.top_n_ip')
     }
   },
   methods: {
     query() {
 
       this.axios
-          .post("/access/countByDay", {
-            start: parseInt(this.$moment(this.time[0]).valueOf() / 1000),
-            end: parseInt(this.$moment(this.time[1]).valueOf() / 1000)
-          })
-          .then((response) => {
-            this.lineData.xAxis[0].data = response.data.map(t => t.date)
-            this.lineData.series[0].data = response.data.map(t => t.successNum)
-            this.lineData.series[1].data = response.data.map(t => t.failNum)
+        .post("/access/countByDay", {
+          start: parseInt(this.$moment(this.time[0]).valueOf() / 1000),
+          end: parseInt(this.$moment(this.time[1]).valueOf() / 1000)
+        })
+        .then((response) => {
+          this.lineData.xAxis[0].data = response.data.map(t => t.date)
+          this.lineData.series[0].data = response.data.map(t => t.successNum)
+          this.lineData.series[1].data = response.data.map(t => t.failNum)
 
-            console.log(this.lineData.xAxis[0].data)
-            console.log(this.lineData.series[0].data)
-            console.log(this.lineData.series[1].data)
-          })
-
-      this.axios
-          .post("/access/successRatio", {
-            start: parseInt(this.$moment(this.time[0]).valueOf() / 1000),
-            end: parseInt(this.$moment(this.time[1]).valueOf() / 1000)
-          })
-          .then((response) => {
-            this.pieData.series[0].data = [{name: "Success", value: response.data.successNum}, {
-              name: "Fail",
-              value: response.data.failNum
-            }]
-          })
-      this.axios
-          .post("/access/top5api", {
-            start: parseInt(this.$moment(this.time[0]).valueOf() / 1000),
-            end: parseInt(this.$moment(this.time[1]).valueOf() / 1000)
-          })
-          .then((response) => {
-            this.data4.yAxis.data = response.data.map(t => t.url).reverse()
-            this.data4.series[0].data = response.data.map(t => t.num).reverse()
-          });
-      this.axios
-          .post("/access/topNIP", {
-            start: parseInt(this.$moment(this.time[0]).valueOf() / 1000),
-            end: parseInt(this.$moment(this.time[1]).valueOf() / 1000)
-          })
-          .then((response) => {
-            this.data6.yAxis.data = response.data.map(t => t.ip).reverse()
-            this.data6.series[0].data = response.data.map(t => t.num).reverse()
-          });
-      this.axios
-          .post("/access/top5app", {
-            start: parseInt(this.$moment(this.time[0]).valueOf() / 1000),
-            end: parseInt(this.$moment(this.time[1]).valueOf() / 1000)
-          })
-          .then((response) => {
-            this.data3.yAxis.data = response.data.map(t => t.app_id).reverse()
-            this.data3.series[0].data = response.data.map(t => t.num).reverse()
-          });
+          console.log(this.lineData.xAxis[0].data)
+          console.log(this.lineData.series[0].data)
+          console.log(this.lineData.series[1].data)
+        })
 
       this.axios
-          .post("/access/top5duration", {
-            start: parseInt(this.$moment(this.time[0]).valueOf() / 1000),
-            end: parseInt(this.$moment(this.time[1]).valueOf() / 1000)
-          })
-          .then((response) => {
-            this.data5.yAxis.data = response.data.map(t => t.url).reverse()
-            this.data5.series[0].data = response.data.map(t => t.duration).reverse()
-          });
+        .post("/access/successRatio", {
+          start: parseInt(this.$moment(this.time[0]).valueOf() / 1000),
+          end: parseInt(this.$moment(this.time[1]).valueOf() / 1000)
+        })
+        .then((response) => {
+          this.pieData.series[0].data = [{name: "Success", value: response.data.successNum}, {
+            name: "Fail",
+            value: response.data.failNum
+          }]
+        })
+      this.axios
+        .post("/access/top5api", {
+          start: parseInt(this.$moment(this.time[0]).valueOf() / 1000),
+          end: parseInt(this.$moment(this.time[1]).valueOf() / 1000)
+        })
+        .then((response) => {
+          this.data4.yAxis.data = response.data.map(t => t.url).reverse()
+          this.data4.series[0].data = response.data.map(t => t.num).reverse()
+        });
+      this.axios
+        .post("/access/topNIP", {
+          start: parseInt(this.$moment(this.time[0]).valueOf() / 1000),
+          end: parseInt(this.$moment(this.time[1]).valueOf() / 1000)
+        })
+        .then((response) => {
+          this.data6.yAxis.data = response.data.map(t => t.ip).reverse()
+          this.data6.series[0].data = response.data.map(t => t.num).reverse()
+        });
+      this.axios
+        .post("/access/top5client", {
+          start: parseInt(this.$moment(this.time[0]).valueOf() / 1000),
+          end: parseInt(this.$moment(this.time[1]).valueOf() / 1000)
+        })
+        .then((response) => {
+          this.data3.yAxis.data = response.data.map(t => t.client_id).reverse()
+          this.data3.series[0].data = response.data.map(t => t.num).reverse()
+        });
+
+      this.axios
+        .post("/access/top5duration", {
+          start: parseInt(this.$moment(this.time[0]).valueOf() / 1000),
+          end: parseInt(this.$moment(this.time[1]).valueOf() / 1000)
+        })
+        .then((response) => {
+          this.data5.yAxis.data = response.data.map(t => t.url).reverse()
+          this.data5.series[0].data = response.data.map(t => t.duration).reverse()
+        });
     },
 
   },

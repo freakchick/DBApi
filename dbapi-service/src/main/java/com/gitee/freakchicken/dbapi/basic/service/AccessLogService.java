@@ -62,8 +62,8 @@ public class AccessLogService {
         return accessLogMapper.top5api(start, end);
     }
 
-    public List<JSONObject> top5app(long start, long end){
-        return accessLogMapper.top5app(start, end);
+    public List<JSONObject> top5client(long start, long end){
+        return accessLogMapper.top5client(start, end);
     }
 
     public List<JSONObject> topNIP(long start, long end){
