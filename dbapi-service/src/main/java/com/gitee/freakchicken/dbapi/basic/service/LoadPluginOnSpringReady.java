@@ -7,12 +7,14 @@ import com.gitee.freakchicken.dbapi.plugin.PluginManager;
 
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class LoadPluginOnSpringReady {
     @Autowired
@@ -34,6 +36,7 @@ public class LoadPluginOnSpringReady {
             // clientId和最新token关系记录下来,便于下次可以找到旧token可以删除，否则缓存中token越来越多
             cacheManager.getCache(Constants.EHCACHE_CLIENT_TOKEN).put(clientToken.getClientId(), clientToken.getToken());
         }
+        log.info("load token from db to cache success");
     }
 
 }
