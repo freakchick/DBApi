@@ -77,7 +77,7 @@ export default {
         localStorage.removeItem("token")
         localStorage.removeItem("username")
         localStorage.removeItem("userId")
-        this.$router.push("login");
+        this.$router.push("/login");
       }
     },
 
