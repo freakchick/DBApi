@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form label-width="120px">
+    <el-form label-width="160px">
       <el-form-item :label="$t('m.datasource')">
         <el-select v-model="datasourceId">
           <el-option :value="item.id" :label="item.name" v-for="item in datasources">{{ item.name }}</el-option>
@@ -15,6 +15,7 @@
             <el-tab-pane :key="item.name" v-for="(item, index) in editableTabs" :label="'SQL-'+item.name" :name="item.name">
               <codemirror ref="codemirror" :textareaRef="'cms'+index" :value="item.sqlText" mode="mini"></codemirror>
               <div style="margin-top: 10px">
+                <label-tip :label="$t('m.transform')" :tip="$t('m.transform_plugin_warning')"></label-tip>
                 <span>SQL-{{ item.name }} : </span>
                 <span class="label">{{ $t('m.plugin_name') }}</span>
                 <el-select v-model="item.transformPlugin" style="width:400px" clearable @clear="item.transformPluginParam = null;" :no-data-text="$t('m.no_plugin')">

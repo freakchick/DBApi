@@ -20,6 +20,8 @@ export default {
 <style scoped lang="less">
 .labeltip {
 //   font-weight: 700;
+  display: inline;
+  margin-right: 5px;
   .tip {
     color: #505050;
     font-size: 14px;

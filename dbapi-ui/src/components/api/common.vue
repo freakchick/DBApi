@@ -2,7 +2,7 @@
   <div>
     <el-tabs tab-position="left">
       <el-tab-pane :label="$t('m.basic')">
-        <el-form label-width="140px">
+        <el-form label-width="160px">
           <el-form-item :label="$t('m.name')">
             <el-input v-model="detail.name" style="max-width:600px"></el-input>
           </el-form-item>
@@ -83,7 +83,7 @@
       </el-tab-pane>
       <el-tab-pane :label="$t('m.executor')">
         <div v-for="(item,index) in detail.taskJson">
-          <el-form label-width="120px">
+          <el-form label-width="160px">
             <el-form-item :label="$t('m.executor_type')">
               <el-radio-group v-model="item.taskType">
                 <el-radio :label="1">{{ $t('m.executor_sql') }}</el-radio>
