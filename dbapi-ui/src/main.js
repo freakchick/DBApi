@@ -63,7 +63,7 @@ axios.interceptors.response.use(response => {
 }, error => {
     if (error.response.status == '401') {
         // 不是api请求测试的请求，就跳转登录页
-        if (!error.response.config.url.startsWith("http://")) {
+        if ((!error.response.config.url.startsWith("http://")) && (!error.response.config.url.startsWith("https://"))) {
             router.push("/login");
         } else {
             return Promise.reject(error)

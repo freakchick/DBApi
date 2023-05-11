@@ -20,14 +20,15 @@ export default {
   },
   components: {common},
   methods: {
-
     save() {
       debugger
+      if(!this.$refs.apiAdd.checkValue()){
+        return;
+      }
       const detail = this.$refs.apiAdd.detail
 
-      const executors = this.$refs.apiAdd.$refs.sqlExecutor
+      const executors = this.$refs.apiAdd.$refs.executor
       const taskJson = executors.map(node => node.getTaskJson())
-
       let p = {
         name: detail.name,
         path: detail.path,
@@ -43,15 +44,7 @@ export default {
         globalTransformPlugin: detail.globalTransformPlugin
 
       }
-
       console.log(p)
-
-      // if (p.sql == "" || p.datasourceId == null || p.name == null
-      //     || p.path == null || p.groupId == null) {
-      //   this.$message.error("Something Required!")
-      //   return
-      // }
-
       this.axios.post("/apiConfig/add", p,
         {headers: {'Content-Type': 'application/json'}}
       ).then((response) => {
@@ -63,7 +56,7 @@ export default {
         }
 
       }).catch((error) => {
-        this.$message.error("Failed")
+        this.$message.error("Create API Failed")
       })
     }
   },

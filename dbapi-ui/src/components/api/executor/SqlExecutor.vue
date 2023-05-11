@@ -13,7 +13,7 @@
         <div>
           <el-tabs v-model="currentActiveTabName" type="card" editable @edit="handleTabsEdit" tab-position="top">
             <el-tab-pane :key="item.name" v-for="(item, index) in editableTabs" :label="'SQL-'+item.name" :name="item.name">
-              <codemirror :textareaRef="'cms'+index" :value="item.sqlText" @setCode="setCode" mode="mini"></codemirror>
+              <codemirror ref="codemirror" :textareaRef="'cms'+index" :value="item.sqlText" mode="mini"></codemirror>
               <div style="margin-top: 10px">
                 <span>SQL-{{ item.name }} : </span>
                 <span class="label">{{ $t('m.plugin_name') }}</span>
@@ -71,7 +71,7 @@ export default {
       transaction: 0,
       currentActiveTabName: '1', //当前选中的tab的name
       currentActiveTabIndex: 0, // 当前选中tab的索引值
-      editableTabs: [{name: '1', sqlText: "-- only one sql in one tab", transformPlugin: null, transformPluginParam: null}],
+      editableTabs: [{name: '1', sqlText: "", transformPlugin: null, transformPluginParam: null}],
       tabIndex: 1, //tab 总数
       datasourceId: null,
       datasources: []
@@ -92,14 +92,11 @@ export default {
         .catch((error) => {
         });
     },
-    setCode(code) {
-      this.editableTabs[this.currentActiveTabIndex].sqlText = code
-      // console.log(this.editableTabs)
-    },
     getTaskJson() {
-
+      debugger
+      let sqls = this.$refs.codemirror.map((item, index) => item.code)
       let p = this.editableTabs.map((item, index) => {
-        return {sqlText: item.sqlText, transformPlugin: item.transformPlugin, transformPluginParam: item.transformPluginParam}
+        return {sqlText: sqls[index], transformPlugin: item.transformPlugin, transformPluginParam: item.transformPluginParam}
       })
       // console.log(p)
       return {
@@ -108,6 +105,22 @@ export default {
         transaction: this.transaction,
         datasourceId: this.datasourceId
       }
+    },
+    check() {
+      if (this.datasourceId == null) {
+        this.$message.warning("SQL Executor: datasource empty!")
+        return false
+      }
+      debugger
+      let sqls = this.$refs.codemirror.map((item, index) => item.code)
+      for (let sql of sqls) {
+        console.log(sql, sql.trim())
+        if (sql.trim() == '') {
+          this.$message.warning("SQL Executor: SQL empty!")
+          return false
+        }
+      }
+      return true
     },
     getAllSource() {
       this.axios.post("/datasource/getAll").then((response) => {
@@ -122,7 +135,7 @@ export default {
         this.editableTabs.push({
           title: 'SQL ' + newTabName,
           name: newTabName,
-          sqlText: "--add", transformPlugin: null, transformPluginParam: null
+          sqlText: "", transformPlugin: null, transformPluginParam: null
         });
         this.currentActiveTabName = newTabName;
       }
@@ -156,17 +169,20 @@ export default {
     codemirror
   },
   watch: {
+    // 编辑API页面，本组件生成的时候，props还没注入进来，所以要监听
     detail: function (newVal, oldVal) {
-      debugger
+      // debugger
       this.transaction = newVal.transaction
       this.datasourceId = newVal.datasourceId
 
+      // 生成子组件中的tabPane需要的数据格式
       for (let j = 0; j < newVal.sqlList.length; j++) {
         const b = newVal.sqlList[j]
         b.name = (j + 1) + '';
       }
       this.editableTabs = newVal.sqlList;
       this.tabIndex = newVal.sqlList.length;
+      // console.log(this.editableTabs)
     },
     editableTabs(newV, oldV) {
       this.editableTabs.forEach((tab, index) => {

@@ -1,7 +1,7 @@
 <template>
   <div class="in-coder-panel">
     <textarea :ref="textareaRef" v-model="code" autofocus="true"></textarea>
-<!--    <el-button @click="show">show</el-button>-->
+    <!--    <el-button @click="show">show</el-button>-->
   </div>
 </template>
 
@@ -37,7 +37,7 @@ export default {
   data() {
     return {
       CodeMirror: null,
-      code: "select gg ",
+      code: "",//不能null，否则报错
       coder: null,
       options: {
         tabSize: 2,
@@ -48,6 +48,7 @@ export default {
         readOnly: false,
         lineWrapping: false,
         autofocus: true,
+        autoRefresh: true, //很重要，否则编辑API页面初始化加载不显示
         styleActiveLine: true,
         lint: true, // 代码出错提醒
         matchBrackets: true,
@@ -64,27 +65,40 @@ export default {
     this._initialize();
   },
   methods: {
-    show() {
-      alert(this.code);
-    },
+    // show() {
+    //   alert(this.code);
+    // },
     _initialize() {
+      // debugger
       this.coder = CodeMirror.fromTextArea(
         this.$refs[this.textareaRef],
         this.options
       );
       this.coder.setSize("90%", "400px");
+      // alert(this.value)
       this.coder.setValue(this.value || this.code);
+
       this.coder.on("change", (coder, changeObj) => {
         this.code = coder.getValue();
         if (/^[a-zA-Z.]/.test(changeObj.text[0])) {
-          coder.showHint();
+          this.coder.showHint();
         }
-        this.$emit('setCode',this.code)
       });
-
 
     },
   },
+  watch: {
+    //编辑api页面初次渲染的时候还获取不到props值，是先生成本组件再从父组件注入props值，所以要监听
+    value: function (newVal, oldVal) {
+      // console.log("监听到value :" + newVal)
+      // debugger
+      this.code = newVal
+      this.coder.setValue(newVal);
+      //编辑页面初次渲染注入value值会触发codemirror change事件，导致页面显示代码提示框，应该关闭
+      this.coder.closeHint();
+
+    }
+  }
 };
 </script>
 

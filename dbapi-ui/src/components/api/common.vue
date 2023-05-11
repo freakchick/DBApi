@@ -86,14 +86,14 @@
           <el-form label-width="120px">
             <el-form-item :label="$t('m.executor_type')">
               <el-radio-group v-model="item.taskType">
-                <el-radio :label="1">{{$t('m.executor_sql')}}</el-radio>
+                <el-radio :label="1">{{ $t('m.executor_sql') }}</el-radio>
                 <!-- <el-radio :label="2">{{$t('m.executor_es')}}</el-radio>
                 <el-radio :label="3">{{$t('m.executor_http')}}</el-radio> -->
               </el-radio-group>
             </el-form-item>
           </el-form>
 
-          <sql-executor v-if="item.taskType == 1" ref="sqlExecutor" :detail="item"></sql-executor>
+          <sql-executor v-if="item.taskType == 1" ref="executor" :detail="item"></sql-executor>
         </div>
       </el-tab-pane>
       <el-tab-pane :label="$t('m.global_plugin')">
@@ -133,7 +133,8 @@
               </div>
 
               <span class="label">{{ $t('m.plugin_name') }}</span>
-              <el-select v-model="detail.globalTransformPlugin.pluginName" style="width:400px" clearable @clear="detail.globalTransformPlugin.pluginParam = null;" :no-data-text="$t('m.no_plugin')">
+              <el-select v-model="detail.globalTransformPlugin.pluginName" style="width:400px" clearable @clear="detail.globalTransformPlugin.pluginParam = null;"
+                         :no-data-text="$t('m.no_plugin')">
                 <el-option v-for="item in globalTransformPlugins" :value="item.className" :label="item.name">
                   <div>
                     <el-tooltip placement="top-start" effect="dark">
@@ -201,13 +202,13 @@ import SqlExecutor from "@/components/api/executor/SqlExecutor";
 import {DATA_TYPE, CONTENT_TYPE, PRIVILEGE, PLUGIN_TYPE, EXECUTOR_TYPE} from "@/constant";
 
 export default {
-  components: { sqlCode, SqlExecutor},
+  components: {sqlCode, SqlExecutor},
   data() {
     return {
       CONTENT_TYPE: Object.freeze(CONTENT_TYPE),
       PRIVILEGE: Object.freeze(PRIVILEGE),
       address: null,
-      
+
       detail: {
         name: null,
         note: null,
@@ -248,16 +249,59 @@ export default {
       cachePlugins: [],
       transformPlugins: [],
       alarmPlugins: [],
-      globalTransformPlugins:[]
+      globalTransformPlugins: []
     };
   },
   props: ["id"],
   methods: {
-    addAlarmRow(){
+    isNull(item) {
+      if (typeof item == 'undefined' || item == null || item == '') {
+        return true
+      } else {
+        return false
+      }
+    },
+    // 检查必填项
+    checkValue() {
+      if (this.isNull(this.detail.name)) {
+        this.$message.warning("API name empty!")
+        return false
+      }
+      if (this.isNull(this.detail.path)) {
+        this.$message.warning("API path empty!")
+        return false
+      }
+      if (this.isNull(this.detail.groupId)) {
+        this.$message.warning("API group empty!")
+        return false
+      }
+      if (this.detail.contentType == CONTENT_TYPE.FORM_URLENCODED) {
+        for (let o of this.detail.paramsJson) {
+          if (this.isNull(o.name)) {
+            this.$message.warning("Request parameter name empty!")
+            return false;
+          }
+          if (this.isNull(o.type)) {
+            this.$message.warning("Request parameter type empty!")
+            return false;
+          }
+        }
+      }
+
+      //检查执行器中的必填项
+      for (let e of this.$refs.executor) {
+        if (!e.check()) {
+          return false;
+        }
+      }
+
+      return true;
+    },
+    addAlarmRow() {
       this.detail.alarmPlugins.push({pluginName: null, pluginParam: null, pluginType: PLUGIN_TYPE.ALARM_PLUGIN, apiId: this.id})
     },
     addRow() {
-      this.detail.paramsJson.push({name: null, type: null, note:null});
+      this.detail.paramsJson.push({name: null, type: null, note: null});
     },
     deleteRow(index) {
       this.detail.paramsJson.splice(index, 1);
