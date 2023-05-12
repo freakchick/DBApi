@@ -1,36 +1,10 @@
 <template>
   <div>
-    <code-view
-      ref="shell"
-      lang-display-name="shell"
-      :value="shellCode"
-      mode="application/x-sh"
-      :is-first="true"
-    />
-    <code-view
-      ref="javascript"
-      lang-display-name="javascript"
-      :value="javaScriptCode"
-      mode="text/javascript"
-    />
-    <code-view
-      ref="python"
-      lang-display-name="python"
-      :value="pythonCode"
-      mode="text/x-python"
-    />
-    <code-view
-      ref="go"
-      lang-display-name="go"
-      :value="goCode"
-      mode="text/x-go"
-    />
-    <code-view
-      ref="java"
-      lang-display-name="java"
-      :value="javaCode"
-      mode="text/x-java"
-    />
+    <code-view ref="shell" lang-display-name="shell" :value="shellCode" mode="application/x-sh" :is-first="true" />
+    <code-view ref="javascript" lang-display-name="javascript" :value="javaScriptCode" mode="text/javascript" />
+    <code-view ref="python" lang-display-name="python" :value="pythonCode" mode="text/x-python" />
+    <code-view ref="go" lang-display-name="go" :value="goCode" mode="text/x-go" />
+    <code-view ref="java" lang-display-name="java" :value="javaCode" mode="text/x-java" />
   </div>
 </template>
 

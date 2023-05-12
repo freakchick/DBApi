@@ -1,33 +1,12 @@
 <template>
   <div class="code-view-container">
-    <h1
-      ref="displayName"
-      :class="{'display-name-unfirst':!isFirst,'display-name-first':isFirst}"
-    >{{langDisplayName}}</h1>
-    <el-card
-      @mouseover.native="onMouseOverCard"
-      @mouseleave.native="onMouseLeaveCard"
-    >
-      <codemirror
-        class="code-block"
-        ref="codemirror"
-        :value="code"
-        :options="cmOptions"
-        @ready="onCmReady"
-        @mouseenter.native="onMouseEnterCodemirror"
-      >
-      </codemirror>
+    <h1 ref="displayName" :class="{'display-name-unfirst':!isFirst,'display-name-first':isFirst}">{{langDisplayName}}</h1>
+    <el-card @mouseover.native="onMouseOverCard" @mouseleave.native="onMouseLeaveCard">
+      <pre>{{code}}</pre>
+      <!-- <codemirror class="code-block" ref="codemirror" :value="code" :options="cmOptions" @ready="onCmReady" @mouseenter.native="onMouseEnterCodemirror">
+      </codemirror> -->
     </el-card>
-    <el-button
-      ref="btn"
-      v-show="btnVisiable"
-      class="code-btn"
-      plain
-      size="mini"
-      :icon="iconName"
-      @click="copyCode"
-      @mouseover.native="onMouseOverBtn"
-    />
+    <el-button ref="btn" v-show="btnVisiable" class="code-btn" plain size="mini" :icon="iconName" @click="copyCode" @mouseover.native="onMouseOverBtn" />
   </div>
 
 </template>
