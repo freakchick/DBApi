@@ -87,7 +87,7 @@ public class ApiConfigController {
 
         String id = UUIDUtil.id();
         config.setId(id);
-        config.setCreateUserId(ThreadContainer.userThreadLocal.get().getId());
+        config.setCreateUserId(ThreadContainer.getCurrentThreadUserId());
 
         JSONArray array = jo.getJSONArray("alarmPlugins");
         array.add(jo.getJSONObject("cachePlugin"));

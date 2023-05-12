@@ -19,7 +19,7 @@ public class GroupController {
 
     @RequestMapping("/create")
     public void create(Group group) {
-        group.setCreateUserId(ThreadContainer.userThreadLocal.get().getId());
+        group.setCreateUserId(ThreadContainer.getCurrentThreadUserId());
         groupService.insert(group);
     }
 

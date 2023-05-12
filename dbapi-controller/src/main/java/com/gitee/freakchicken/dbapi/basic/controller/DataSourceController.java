@@ -39,7 +39,7 @@ public class DataSourceController {
 
     @RequestMapping("/add")
     public void add(DataSource dataSource) {
-        dataSource.setCreateUserId(ThreadContainer.userThreadLocal.get().getId());
+        dataSource.setCreateUserId(ThreadContainer.getCurrentThreadUserId());
         dataSourceService.add(dataSource);
     }
 

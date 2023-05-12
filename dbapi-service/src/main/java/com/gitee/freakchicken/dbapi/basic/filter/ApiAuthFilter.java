@@ -93,8 +93,6 @@ public class ApiAuthFilter implements Filter {
             String clientId = clientService.verifyToken(tokenStr);
             accessLog.setClientId(clientId);
 
-            ThreadContainer.clientThreadLocal.set(clientId);
-            
             // 如果是私有接口，校验权限
             if (config.getAccess() == Constants.API_ACCESS_PRIVATE) {
                 
@@ -129,8 +127,6 @@ public class ApiAuthFilter implements Filter {
             log.error(e.getMessage(), e);
             accessLog.setError(e.getMessage());
         } finally {
-
-
             if (response.getWriter() != null) {
                 response.getWriter().close();
             }
@@ -156,7 +152,7 @@ public class ApiAuthFilter implements Filter {
 
     @Override
     public void destroy() {
-        ThreadContainer.clientThreadLocal.remove();
+
     }
 
 }

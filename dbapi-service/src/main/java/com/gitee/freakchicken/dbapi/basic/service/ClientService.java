@@ -18,7 +18,9 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -51,6 +53,9 @@ public class ClientService {
         } else if (client.getExpireDesc().equals("forever")) {
             client.setExpireDuration(-1l);
         }
+
+        client.setCreateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        client.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 
         clientMapper.insert(client);
         return client;

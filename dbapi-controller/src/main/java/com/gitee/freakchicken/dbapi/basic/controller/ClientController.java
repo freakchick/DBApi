@@ -26,7 +26,7 @@ public class ClientController {
      */
     @PostMapping("/create")
     public Client create(Client client) {
-        client.setCreateUserId(ThreadContainer.userThreadLocal.get().getId());
+        client.setCreateUserId(ThreadContainer.getCurrentThreadUserId());
         client = clientService.add(client);
         return client;
     }

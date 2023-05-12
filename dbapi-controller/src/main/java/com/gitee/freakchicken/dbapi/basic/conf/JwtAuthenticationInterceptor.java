@@ -64,7 +64,7 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
             boolean b = JwtUtils.verifyToken(token, user.getPassword());
             if (b) {
                 request.setAttribute("id", user.getId());
-                ThreadContainer.userThreadLocal.set(user);
+                ThreadContainer.setCurrentThreadUser(user);
                 return true;
             } else {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -93,6 +93,6 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object o, Exception e) throws Exception {
-        ThreadContainer.userThreadLocal.remove();
+        ThreadContainer.clearCurrentThreadUser();
     }
 }
