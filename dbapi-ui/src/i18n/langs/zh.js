@@ -10,7 +10,7 @@ const cn = {
     datasource: '数据源',
     client: '客户端',
     access: '访问权限',
-    settings: '系统设置',
+    security: '安全管理',
     createDS: '创建数据源',
     exportDS: '导出数据源',
     importDS: '导入数据源',
@@ -20,6 +20,7 @@ const cn = {
     jdbc_driver_class: 'JDBC驱动Class',
     username: '用户名',
     password: '密码',
+    change_password :'修改密码',
     edit_password: '修改',
     sql_query_all_table_name: '查询所有表名称的SQL',
     test_connection: '连接测试',
@@ -140,15 +141,13 @@ const cn = {
     status: 'IP防火墙状态',
     firewall_settings: 'IP防火墙设置',
 
-
     black_tip: '除了黑名单列表中的IP禁止访问API，其他IP一律允许访问',
     white_tip: '只有白名单列表中的IP才允许访问API，其他IP一律禁止访问',
     ip_list_tip: '每行填写一个ip，多个ip用换行符隔开',
 
-    change_pass: '修改管理员密码',
-    input_pwd: '请输入密码',
-    input_pwd_again: '请再次输入密码',
-
+    old_pwd:'请输入旧密码',
+    input_pwd: '请输入新密码',
+    input_pwd_again: '请再次输入新密码',
 
     monitor: '监控',
     summary: '汇总',

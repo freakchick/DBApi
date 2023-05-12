@@ -13,13 +13,10 @@
       <div class="menu iconfont icon-kehu" @click="clickMenu('/client')">
         {{ $t("m.client") }}
       </div>
-      <div class="menu iconfont icon-shezhi">
-        {{ $t("m.settings") }}
+      <div class="menu iconfont icon-quanxian">
+        {{ $t("m.security") }}
         <div class="submenus">
-          <div class="submenu" @click="clickMenu('/setting/password')">
-            {{ $t("m.change_pass") }}
-          </div>
-          <div class="submenu" @click="clickMenu('/setting/firewall')">
+          <div class="submenu" @click="clickMenu('/security/firewall')">
             {{ $t("m.firewall") }}
           </div>
         </div>
@@ -46,22 +43,31 @@
 
       <el-dropdown @command="handleCommand">
         <span class="el-dropdown-link" style="line-height: 60px;color: #bfcbd9">
-          {{ username}}<i class="el-icon-arrow-down el-icon--right"></i>
+          <i class="el-icon-user"></i>{{ username}}<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="logout">{{$t('m.logout')}}</el-dropdown-item>
+          <el-dropdown-item command="changePassword">{{$t('m.change_password')}}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
+
+      <el-dialog :title="$t('m.change_password')" :visible.sync="dialogVisible">
+        <password></password>
+      </el-dialog>
 
     </div>
   </div>
 </template>
 
 <script>
+import password from "@/components/user/password.vue"
+
 export default {
   name: "homeHeader",
+  components: {password},
   data() {
     return {
+      dialogVisible:false,
       langs: [
         {name: "English", value: "en"},
         {name: "中文", value: "cn"},
@@ -72,12 +78,15 @@ export default {
     };
   },
   methods: {
+
     handleCommand(command) {
       if (command == 'logout') {
         localStorage.removeItem("token")
         localStorage.removeItem("username")
         localStorage.removeItem("userId")
         this.$router.push("/login");
+      }else if (command == 'changePassword'){
+        this.dialogVisible = true
       }
     },
 

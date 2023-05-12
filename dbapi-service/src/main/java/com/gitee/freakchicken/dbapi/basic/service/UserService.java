@@ -3,6 +3,7 @@ package com.gitee.freakchicken.dbapi.basic.service;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.gitee.freakchicken.dbapi.basic.dao.UserMapper;
 import com.gitee.freakchicken.dbapi.basic.domain.User;
+import com.gitee.freakchicken.dbapi.common.ResponseDto;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,18 @@ public class UserService {
     }
 
     @Transactional
-    public void resetPassword(String password) {
-        userMapper.updatePassword(DigestUtils.md5Hex(password));
+    public ResponseDto resetPassword(String userId,String oldPassword, String newPassword) {
+
+        User user = userMapper.selectById(userId);
+        if (user!=null && DigestUtils.md5Hex(oldPassword).equals(user.getPassword())){
+
+            user.setPassword(DigestUtils.md5Hex(newPassword));
+            userMapper.updateById(user);
+            return ResponseDto.successWithMsg("Change password success!");
+        }else{
+            return ResponseDto.fail("Old password incorrect");
+        }
+
+
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -19,7 +20,7 @@ public class UserController {
 
         User user = userService.getUser(username, password);
         if (user == null) {
-            return ResponseDto.fail("username or password error");
+            return ResponseDto.fail("Username or password incorrect!");
         } else {
             String token = JwtUtils.createToken(user.getId().toString(), user.getPassword());
             user.setToken(token);
@@ -29,9 +30,9 @@ public class UserController {
     }
 
     @RequestMapping("/resetPassword")
-    public void resetPassword(String password) {
+    public ResponseDto resetPassword(String userId, String oldPassword, String newPassword) {
 
-        userService.resetPassword(password);
+        return userService.resetPassword(userId, oldPassword, newPassword);
 
     }
 

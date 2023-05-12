@@ -19,8 +19,7 @@ import detail from '../components/api/detail'
 import request from '../components/api/request'
 import client from '../components/client/client'
 import clientAdd from '../components/client/add'
-import user from '../components/setting/user'
-import firewall from '../components/setting/firewall'
+import firewall from '../components/security/firewall'
 
 Vue.use(VueRouter)
 
@@ -47,8 +46,7 @@ const routes = [
       { path: '/api/request', name: 'request', component: request },
       { path: '/client', component: client },
       { path: '/client/add', component: clientAdd },
-      { path: '/setting/password', component: user },
-      { path: '/setting/firewall', component: firewall }
+      { path: '/security/firewall', component: firewall }
     ]
   }
 ]
