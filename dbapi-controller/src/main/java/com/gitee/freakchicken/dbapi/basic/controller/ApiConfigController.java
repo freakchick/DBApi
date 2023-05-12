@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.gitee.freakchicken.dbapi.basic.util.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +33,6 @@ import com.gitee.freakchicken.dbapi.basic.domain.Group;
 import com.gitee.freakchicken.dbapi.basic.service.ApiConfigService;
 import com.gitee.freakchicken.dbapi.basic.service.DataSourceService;
 import com.gitee.freakchicken.dbapi.basic.service.GroupService;
-import com.gitee.freakchicken.dbapi.basic.util.Constants;
-import com.gitee.freakchicken.dbapi.basic.util.JdbcUtil;
-import com.gitee.freakchicken.dbapi.basic.util.PoolManager;
-import com.gitee.freakchicken.dbapi.basic.util.SqlEngineUtil;
-import com.gitee.freakchicken.dbapi.basic.util.UUIDUtil;
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.common.ApiPluginConfig;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
@@ -91,6 +87,7 @@ public class ApiConfigController {
 
         String id = UUIDUtil.id();
         config.setId(id);
+        config.setCreateUserId(ThreadContainer.userThreadLocal.get().getId());
 
         JSONArray array = jo.getJSONArray("alarmPlugins");
         array.add(jo.getJSONObject("cachePlugin"));

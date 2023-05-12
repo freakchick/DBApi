@@ -50,6 +50,9 @@ public class DataSource implements Serializable {
     @TableField(value = "table_sql")
     String tableSql;
 
+    @TableField("create_user_id")
+    Integer createUserId;
+
     @TableField(value = "create_time")
     String createTime;
 

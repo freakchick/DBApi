@@ -16,4 +16,13 @@ public class Group implements Serializable {
 
     @TableField
     String name;
+
+    @TableField("create_user_id")
+    Integer createUserId;
+
+    @TableField(value = "create_time")
+    String createTime;
+
+    @TableField(value = "update_time")
+    String updateTime;
 }

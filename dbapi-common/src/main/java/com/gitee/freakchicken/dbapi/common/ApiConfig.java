@@ -68,6 +68,9 @@ public class ApiConfig implements Serializable {
     @TableField(value = "update_time")
     String updateTime;
 
+    @TableField("create_user_id")
+    Integer createUserId;
+
 
     @TableField(exist = false)
     JSONArray paramsJson;// params的json格式

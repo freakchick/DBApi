@@ -2,6 +2,7 @@ package com.gitee.freakchicken.dbapi.basic.controller;
 
 import com.gitee.freakchicken.dbapi.basic.domain.Group;
 import com.gitee.freakchicken.dbapi.basic.service.GroupService;
+import com.gitee.freakchicken.dbapi.basic.util.ThreadContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ public class GroupController {
 
     @RequestMapping("/create")
     public void create(Group group) {
+        group.setCreateUserId(ThreadContainer.userThreadLocal.get().getId());
         groupService.insert(group);
     }
 

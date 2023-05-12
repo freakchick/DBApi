@@ -3,6 +3,7 @@ package com.gitee.freakchicken.dbapi.basic.conf;
 import com.gitee.freakchicken.dbapi.basic.service.UserService;
 import com.gitee.freakchicken.dbapi.basic.domain.User;
 import com.gitee.freakchicken.dbapi.basic.util.JwtUtils;
+import com.gitee.freakchicken.dbapi.basic.util.ThreadContainer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -18,8 +19,6 @@ import java.io.PrintWriter;
 @Component
 @Slf4j
 public class JwtAuthenticationInterceptor implements HandlerInterceptor {
-
-    public static ThreadLocal<User> userThreadLocal = new ThreadLocal<>();
 
     @Autowired
     UserService userService;
@@ -65,7 +64,7 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
             boolean b = JwtUtils.verifyToken(token, user.getPassword());
             if (b) {
                 request.setAttribute("id", user.getId());
-                userThreadLocal.set(user);
+                ThreadContainer.userThreadLocal.set(user);
                 return true;
             } else {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -78,7 +77,7 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
             e.printStackTrace();
             return false;
         } finally {
-            userThreadLocal.remove();
+
             if (writer != null) {
                 writer.close();
             }
@@ -94,5 +93,6 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object o, Exception e) throws Exception {
+        ThreadContainer.userThreadLocal.remove();
     }
 }

@@ -35,4 +35,13 @@ public class Client implements Serializable {
     @TableField("expire_at")
     Long expireAt;
 
+    @TableField("create_user_id")
+    Integer createUserId;
+
+    @TableField(value = "create_time")
+    String createTime;
+
+    @TableField(value = "update_time")
+    String updateTime;
+
 }

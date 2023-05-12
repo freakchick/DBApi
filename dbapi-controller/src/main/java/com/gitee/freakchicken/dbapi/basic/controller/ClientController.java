@@ -2,6 +2,7 @@ package com.gitee.freakchicken.dbapi.basic.controller;
 
 import com.gitee.freakchicken.dbapi.basic.domain.Client;
 import com.gitee.freakchicken.dbapi.basic.service.ClientService;
+import com.gitee.freakchicken.dbapi.basic.util.ThreadContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,13 +21,14 @@ public class ClientController {
     /**
      * 创建应用
      *
-     * @param app
+     * @param client
      * @return
      */
     @PostMapping("/create")
-    public Client createA(Client app) {
-        Client add = clientService.add(app);
-        return add;
+    public Client create(Client client) {
+        client.setCreateUserId(ThreadContainer.userThreadLocal.get().getId());
+        client = clientService.add(client);
+        return client;
     }
 
     @PostMapping("/getAll")
