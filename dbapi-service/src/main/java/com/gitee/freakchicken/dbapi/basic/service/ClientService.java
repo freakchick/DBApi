@@ -157,6 +157,9 @@ public class ClientService {
      * @return
      */
     public String verifyToken(String token) {
+        if(token == null) {
+            return null;
+        }
         ClientToken clientToken = cacheManager.getCache(Constants.EHCACHE_TOKEN_CLIENT).get(token, ClientToken.class);
         if (clientToken == null) {
             return null;

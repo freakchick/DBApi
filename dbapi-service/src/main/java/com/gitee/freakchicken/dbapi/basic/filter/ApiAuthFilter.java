@@ -78,16 +78,19 @@ public class ApiAuthFilter implements Filter {
                 return;
             }
             accessLog.setApiId(config.getId());
+
+            String tokenStr = request.getHeader("Authorization");
+            String clientId = clientService.verifyToken(tokenStr);
+            accessLog.setClientId(clientId);
+
             // 如果是私有接口，校验权限
             if (config.getAccess() == Constants.API_ACCESS_PRIVATE) {
-                String tokenStr = request.getHeader("Authorization");
+                
                 if (StringUtils.isBlank(tokenStr)) {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     response.getWriter().append(JSON.toJSONString(ResponseDto.fail("No Token!")));
                     return;
                 } else {
-                    String clientId = clientService.verifyToken(tokenStr);
-                    accessLog.setClientId(clientId);
                     if (clientId == null) {
                         log.error("token[{}] matched no clientId", tokenStr);
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
