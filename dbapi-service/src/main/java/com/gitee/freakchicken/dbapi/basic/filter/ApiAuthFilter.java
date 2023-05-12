@@ -1,5 +1,25 @@
 package com.gitee.freakchicken.dbapi.basic.filter;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.UUID;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import com.alibaba.fastjson.JSON;
 import com.gitee.freakchicken.dbapi.basic.domain.AccessLog;
 import com.gitee.freakchicken.dbapi.basic.log.AccessLogWriter;
@@ -10,26 +30,16 @@ import com.gitee.freakchicken.dbapi.basic.util.IPUtil;
 import com.gitee.freakchicken.dbapi.basic.util.ThreadUtils;
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.List;
-import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
 public class ApiAuthFilter implements Filter {
 
     private static Logger accessLogger = LoggerFactory.getLogger("accessLogger");
+
+    public static ThreadLocal<String> clientThreadLocal = new ThreadLocal<>();
 
     @Autowired
     private ApiConfigService apiConfigService;
@@ -82,6 +92,9 @@ public class ApiAuthFilter implements Filter {
             String tokenStr = request.getHeader("Authorization");
             String clientId = clientService.verifyToken(tokenStr);
             accessLog.setClientId(clientId);
+            clientThreadLocal.set(clientId);
+            
+            
 
             // 如果是私有接口，校验权限
             if (config.getAccess() == Constants.API_ACCESS_PRIVATE) {
@@ -117,6 +130,8 @@ public class ApiAuthFilter implements Filter {
             log.error(e.getMessage(), e);
             accessLog.setError(e.getMessage());
         } finally {
+            clientThreadLocal.remove();
+
             if (response.getWriter() != null) {
                 response.getWriter().close();
             }
