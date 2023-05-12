@@ -97,7 +97,7 @@ public class DataSourceService {
             return false;
         }).map(item -> item.getName() + "(" + item.getId() + ")").collect(Collectors.toList());
 
-        if (list.size() == 0) {
+        if (str.size() == 0) {
             dataSourceMapper.deleteById(id);
 
             PoolManager.removeJdbcConnectionPool(id);
