@@ -18,6 +18,9 @@ import java.io.PrintWriter;
 @Component
 @Slf4j
 public class JwtAuthenticationInterceptor implements HandlerInterceptor {
+
+    public static ThreadLocal<User> userThreadLocal = new ThreadLocal<>();
+
     @Autowired
     UserService userService;
 
@@ -62,6 +65,7 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
             boolean b = JwtUtils.verifyToken(token, user.getPassword());
             if (b) {
                 request.setAttribute("id", user.getId());
+                userThreadLocal.set(user);
                 return true;
             } else {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -74,6 +78,7 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
             e.printStackTrace();
             return false;
         } finally {
+            userThreadLocal.remove();
             if (writer != null) {
                 writer.close();
             }
