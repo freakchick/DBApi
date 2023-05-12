@@ -65,7 +65,7 @@ import {format} from "sql-formatter";
 import LabelTip from "@/components/common/LabelTip.vue";
 
 export default {
-  name: "codemirror",
+  name: "sqlIDE",
   components: {LabelTip},
   props: {
     value: String,
