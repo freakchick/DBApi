@@ -6,24 +6,16 @@
     <!--    <div class="logo">DBApi</div>-->
     <span class="version">{{ version }}</span>
     <div class="menus">
-      <div class="menu iconfont icon-database" @click="clickMenu('/datasource')">
-        {{ $t("m.datasource") }}
-      </div>
-      <div class="menu iconfont icon-api" @click="clickMenu('/api')">API</div>
-      <div class="menu iconfont icon-kehu" @click="clickMenu('/client')">
-        {{ $t("m.client") }}
-      </div>
-      <div class="menu iconfont icon-quanxian">
+      <div class="menu iconfont icon-database " :class="{'activeMenu':$route.path == '/datasource'}" @click="clickMenu('/datasource')">{{ $t("m.datasource") }}</div>
+      <div class="menu iconfont icon-api" :class="{'activeMenu':$route.path == '/api'}" @click="clickMenu('/api')">API</div>
+      <div class="menu iconfont icon-kehu" :class="{'activeMenu':$route.path == '/client'}" @click="clickMenu('/client')">{{ $t("m.client") }}</div>
+      <div class="menu iconfont icon-quanxian" :class="{'activeMenu':$route.path.startsWith('/security')}">
         {{ $t("m.security") }}
         <div class="submenus">
-          <div class="submenu" @click="clickMenu('/security/firewall')">
-            {{ $t("m.firewall") }}
-          </div>
+          <div class="submenu" :class="{'activeMenu':$route.path == '/security/firewall'}" @click="clickMenu('/security/firewall')">{{ $t("m.firewall") }}</div>
         </div>
       </div>
-      <div class="menu iconfont icon-jiankong" @click="clickMenu('/monitor')">
-        {{ $t("m.monitor") }}
-      </div>
+      <div class="menu iconfont icon-jiankong" :class="{'activeMenu':$route.path == '/monitor'}" @click="clickMenu('/monitor')">{{ $t("m.monitor") }}</div>
     </div>
     <div class="right">
       <!--      <span class="mode">{{ this.$store.state.mode }}</span>-->
@@ -43,11 +35,11 @@
 
       <el-dropdown @command="handleCommand">
         <span class="el-dropdown-link" style="line-height: 60px;color: #bfcbd9">
-          <i class="el-icon-user"></i>{{ username}}<i class="el-icon-arrow-down el-icon--right"></i>
+          <i class="el-icon-user"></i>{{ username }}<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="logout">{{$t('m.logout')}}</el-dropdown-item>
-          <el-dropdown-item command="changePassword">{{$t('m.change_password')}}</el-dropdown-item>
+          <el-dropdown-item command="logout">{{ $t('m.logout') }}</el-dropdown-item>
+          <el-dropdown-item command="changePassword">{{ $t('m.change_password') }}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
 
@@ -67,7 +59,7 @@ export default {
   components: {password},
   data() {
     return {
-      dialogVisible:false,
+      dialogVisible: false,
       langs: [
         {name: "English", value: "en"},
         {name: "中文", value: "cn"},
@@ -85,8 +77,9 @@ export default {
         localStorage.removeItem("username")
         localStorage.removeItem("userId")
         this.$router.push("/login");
-      }else if (command == 'changePassword'){
+      } else if (command == 'changePassword') {
         this.dialogVisible = true
+        console.log(this.$route.path)
       }
     },
 
@@ -125,7 +118,7 @@ export default {
 .head {
   display: flex;
   //background-color: #304156;
-  background-image: linear-gradient(15deg,#486180, #324256,#486180);
+  background-image: linear-gradient(15deg, #486180, #324256, #486180);
   color: #bfcbd9;
   width: 100%;
 
@@ -145,6 +138,12 @@ export default {
     flex-grow: 1;
     display: flex;
     line-height: 60px;
+
+    .activeMenu {
+      //background-image: linear-gradient(90deg, #495f7a, #2f3d50, #495f7a);
+      background-image: radial-gradient( #486180, #283546);
+      color: #d5dfea;
+    }
 
     .menu {
       margin: 0 5px;
