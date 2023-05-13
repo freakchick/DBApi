@@ -13,19 +13,20 @@ DROP TABLE IF EXISTS `api_config`;
 
 CREATE TABLE `api_config`
 (
-    `id`           varchar(20) NOT NULL,
-    `name`         varchar(255) DEFAULT NULL,
-    `note`         varchar(255) DEFAULT NULL,
-    `path`         varchar(255) DEFAULT NULL,
-    `params`       text,
-    `json_param`   text,
-    `status`       int(11) DEFAULT NULL COMMENT '0-offline;1-online',
-    `access`       int(11) DEFAULT NULL COMMENT '0-private;1-public',
-    `group_id`     varchar(20)  DEFAULT NULL,
-    `content_type` varchar(50)  DEFAULT NULL,
-    `task`         text,
-    `create_time`  varchar(20)  DEFAULT NULL,
-    `update_time`  varchar(20)  DEFAULT NULL,
+    `id`             varchar(20) NOT NULL,
+    `name`           varchar(255) DEFAULT NULL,
+    `note`           varchar(255) DEFAULT NULL,
+    `path`           varchar(255) DEFAULT NULL,
+    `params`         text,
+    `json_param`     text,
+    `status`         int(11) DEFAULT NULL COMMENT '0-offline;1-online',
+    `access`         int(11) DEFAULT NULL COMMENT '0-private;1-public',
+    `group_id`       varchar(20)  DEFAULT NULL,
+    `content_type`   varchar(50)  DEFAULT NULL,
+    `task`           text,
+    `create_user_id` int(11) DEFAULT NULL,
+    `create_time`    varchar(20)  DEFAULT NULL,
+    `update_time`    varchar(20)  DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `path` (`path`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -44,8 +45,11 @@ DROP TABLE IF EXISTS `api_group`;
 
 CREATE TABLE `api_group`
 (
-    `id`   varchar(255) NOT NULL,
-    `name` varchar(255) DEFAULT NULL,
+    `id`             varchar(255) NOT NULL,
+    `name`           varchar(255) DEFAULT NULL,
+    `create_user_id` int(11) DEFAULT NULL,
+    `create_time`    varchar(20)  DEFAULT NULL,
+    `update_time`    varchar(20)  DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -55,17 +59,19 @@ DROP TABLE IF EXISTS `datasource`;
 
 CREATE TABLE `datasource`
 (
-    `id`          varchar(255) NOT NULL,
-    `name`        varchar(255) DEFAULT NULL,
-    `note`        varchar(255) DEFAULT NULL,
-    `type`        varchar(255) DEFAULT NULL,
-    `url`         varchar(255) DEFAULT NULL,
-    `username`    varchar(255) DEFAULT NULL,
-    `password`    varchar(255) DEFAULT NULL,
-    `driver`      varchar(100) DEFAULT NULL,
-    `table_sql`   varchar(255) DEFAULT NULL,
-    `create_time` varchar(20)  DEFAULT NULL,
-    `update_time` varchar(20)  DEFAULT NULL,
+    `id`             varchar(255) NOT NULL,
+    `name`           varchar(255) DEFAULT NULL,
+    `note`           varchar(255) DEFAULT NULL,
+    `type`           varchar(255) DEFAULT NULL,
+    `url`            varchar(255) DEFAULT NULL,
+    `username`       varchar(255) DEFAULT NULL,
+    `password`       varchar(255) DEFAULT NULL,
+    `driver`         varchar(100) DEFAULT NULL,
+    `table_sql`      varchar(255) DEFAULT NULL,
+    `create_user_id` int(11) DEFAULT NULL,
+    `create_time`    varchar(20)  DEFAULT NULL,
+    `update_time`    varchar(20)  DEFAULT NULL,
+
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -92,19 +98,6 @@ CREATE TABLE `ip_rules`
 
 DROP TABLE IF EXISTS `user`;
 
-CREATE TABLE `user`
-(
-    `id`       int(11) NOT NULL AUTO_INCREMENT,
-    `username` varchar(255) DEFAULT NULL,
-    `password` varchar(255) DEFAULT NULL,
-    `type`     int(11) DEFAULT NULL,
-    `email`    varchar(255) DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
-
-DROP TABLE IF EXISTS `client`;
-
 CREATE TABLE `client`
 (
     `id`              varchar(255) NOT NULL DEFAULT '',
@@ -115,9 +108,26 @@ CREATE TABLE `client`
     `expire_duration` varchar(255)          DEFAULT NULL,
     `token`           varchar(255)          DEFAULT NULL,
     `expire_at`       bigint(32) DEFAULT NULL,
+    `create_user_id`  int(11) DEFAULT NULL,
+    `create_time`     varchar(20)           DEFAULT NULL,
+    `update_time`     varchar(20)           DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `user`
+(
+    `id`          int(11) NOT NULL AUTO_INCREMENT,
+    `username`    varchar(255) DEFAULT NULL,
+    `password`    varchar(255) DEFAULT NULL,
+    `type`        int(11) DEFAULT NULL,
+    `email`       varchar(255) DEFAULT NULL,
+    `create_time` varchar(20)  DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `client`;
 
 insert into `firewall`(`status`, `mode`)
 values ('off', 'black');
