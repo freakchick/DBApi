@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding: 20px">
     <el-button icon="el-icon-d-arrow-left" type="info" plain @click="$router.go(-1)" size="small">{{ $t('m.back') }}
     </el-button>
     <h2>{{ $t('m.request_test') }}</h2>

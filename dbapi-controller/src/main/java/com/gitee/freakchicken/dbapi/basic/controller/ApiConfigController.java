@@ -125,7 +125,7 @@ public class ApiConfigController {
 
     // 给前端使用的数据结构
     @RequestMapping("/getApiTree")
-    public JSONArray getAllApiTree() {
+    public List<JSONObject> getAllApiTree() {
         return apiConfigService.getAllApiTree();
     }
 

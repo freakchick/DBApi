@@ -43,4 +43,7 @@ public interface ApiConfigMapper extends BaseMapper<ApiConfig> {
     })
     @Select("select t1.id,t1.name,t2.name as group_name from api_config t1 join api_group t2 on t1.group_id = t2.id")
     List<ApiDto> getAllDetail();
+
+    @Select("select * from api_config where group_id = #{groupId}")
+    List<ApiConfig> selectByGroup(String groupId);
 }

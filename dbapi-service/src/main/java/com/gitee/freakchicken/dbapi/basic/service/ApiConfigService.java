@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.gitee.freakchicken.dbapi.basic.dao.GroupMapper;
+import com.gitee.freakchicken.dbapi.basic.domain.Group;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,6 +49,8 @@ public class ApiConfigService {
 
     @Autowired
     ApiConfigMapper apiConfigMapper;
+    @Autowired
+    GroupMapper groupMapper;
     @Autowired
     DataSourceMapper dataSourceMapper;
 
@@ -186,20 +190,43 @@ public class ApiConfigService {
      *
      * @return
      */
-    public JSONArray getAllApiTree() {
-        List<ApiDto> list = apiConfigMapper.getAllDetail();
+    public List<JSONObject> getAllApiTree() {
 
-        Map<String, List<ApiDto>> map = list.stream().collect(Collectors.groupingBy(ApiDto::getGroupName));
+        List<Group> groups = groupMapper.selectList(null);
+        List<JSONObject> list = groups.stream().sorted(Comparator.comparing(Group::getUpdateTime)).map(g -> {
+            List<ApiConfig> apiConfigs = apiConfigMapper.selectByGroup(g.getId());
+            List<JSONObject> children = apiConfigs.stream().sorted(Comparator.comparing(ApiConfig::getUpdateTime)).map(t -> {
+                JSONObject jo = new JSONObject();
+                jo.put("name", t.getName());
+                jo.put("id", t.getId());
+                jo.put("type","api");
+                jo.put("access",t.getAccess());
+                jo.put("status",t.getStatus());
+                return jo;
+            }).collect(Collectors.toList());
 
-        JSONArray array = new JSONArray();
-        map.keySet().forEach(t -> {
-            JSONObject jo = new JSONObject();
-            jo.put("name", t);
-            List<ApiDto> apiDtos = map.get(t);
-            jo.put("children", apiDtos);
-            array.add(jo);
-        });
-        return array;
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("name", g.getName());
+            jsonObject.put("id", g.getId());
+            jsonObject.put("type","group");
+            jsonObject.put("children",children);
+            return jsonObject;
+        }).collect(Collectors.toList());
+
+        return list;
+//        List<ApiDto> list = apiConfigMapper.getAllDetail();
+//
+//        Map<String, List<ApiDto>> map = list.stream().collect(Collectors.groupingBy(ApiDto::getGroupName));
+//
+//        JSONArray array = new JSONArray();
+//        map.keySet().forEach(t -> {
+//            JSONObject jo = new JSONObject();
+//            jo.put("name", t);
+//            List<ApiDto> apiDtos = map.get(t);
+//            jo.put("children", apiDtos);
+//            array.add(jo);
+//        });
+//        return array;
 
     }
 

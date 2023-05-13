@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding: 20px">
     <el-tabs v-model="activeName">
     <el-tab-pane :label="$t('m.summary')" name="first">
       <chart></chart>

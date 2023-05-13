@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding: 20px">
     <div class="gap">
       <!--      <router-link to="/token/add">-->
       <el-button type="primary" icon="el-icon-plus" plain @click="dialogCreateApp = true" size="mini">{{$t('m.create_client')}}</el-button>

@@ -56,7 +56,7 @@ export default {
   //margin: 0 auto;
   //border-radius: 5px;
   //box-shadow: 1px 1px 5px #72767b;
-  padding: 20px;
+  //padding: 20px;
   //min-height: calc(100vh - 100px);
 }
 

@@ -4,7 +4,7 @@
     </el-button>
     <h2>{{ $t('m.create_api') }}</h2>
 
-    <common ref="apiAdd"></common>
+    <common ref="apiAdd" :groupId="groupId"></common>
 
     <el-button @click="save" type="primary" plain style="margin:10px 0">{{ $t('m.save') }}</el-button>
 
@@ -16,13 +16,15 @@ import common from '@/components/api/common'
 
 export default {
   data() {
-    return {}
+    return {
+      groupId: this.$route.query.groupId
+    }
   },
   components: {common},
   methods: {
     save() {
       debugger
-      if(!this.$refs.apiAdd.checkValue()){
+      if (!this.$refs.apiAdd.checkValue()) {
         return;
       }
       const detail = this.$refs.apiAdd.detail
@@ -61,12 +63,14 @@ export default {
     }
   },
   created() {
-
+    this.groupId = this.$route.query.groupId
   }
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="less">
+.mycontent {
+  padding: 20px;
+}
 
 </style>

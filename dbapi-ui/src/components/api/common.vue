@@ -252,7 +252,7 @@ export default {
       globalTransformPlugins: []
     };
   },
-  props: ["id"],
+  props: ["id", "groupId"],
   methods: {
     isNull(item) {
       if (typeof item == 'undefined' || item == null || item == '') {
@@ -367,10 +367,13 @@ export default {
     }
     // 新增页面
     else {
+      //从侧边栏分组上点击的创建API按钮，会默认选中对应的分组
+      this.detail.groupId = this.groupId
     }
     this.getAllGroups();
     this.getAllPlugin();
-  },
+  }
+
 };
 </script>
 
