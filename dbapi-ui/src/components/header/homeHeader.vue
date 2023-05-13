@@ -24,7 +24,7 @@
       </div>
 
       <el-dropdown @command="changeLanguage" style="margin-right: 15px">
-        <span class="el-dropdown-link" style="line-height: 60px;color: #bfcbd9">
+        <span class="el-dropdown-link" style="color: #bfcbd9">
           {{ languageName }}<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
@@ -34,7 +34,7 @@
 
 
       <el-dropdown @command="handleCommand">
-        <span class="el-dropdown-link" style="line-height: 60px;color: #bfcbd9">
+        <span class="el-dropdown-link" style="color: #bfcbd9">
           <i class="el-icon-user"></i>{{ username }}<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
@@ -121,6 +121,7 @@ export default {
   background-image: linear-gradient(15deg, #486180, #324256, #486180);
   color: #bfcbd9;
   width: 100%;
+  line-height: 60px;
 
   .logo2 {
     flex-shrink: 0;
@@ -131,24 +132,27 @@ export default {
   .version {
     padding: 30px 20px 0px 0px;
     font-size: 14px;
+    line-height: 20px;
   }
 
   .menus {
     flex-shrink: 0;
     flex-grow: 1;
     display: flex;
-    line-height: 60px;
+
 
     .activeMenu {
       //background-image: linear-gradient(90deg, #495f7a, #2f3d50, #495f7a);
-      background-image: radial-gradient( #486180, #283546);
-      color: #d5dfea;
+      //background-image: radial-gradient( #486180, #283546);
+      //opacity: 0.3;
+      color: #f9fbfd;
+      font-size: 22px;
     }
 
     .menu {
       margin: 0 5px;
       padding: 0 10px;
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 700;
       cursor: pointer;
       position: relative;
@@ -201,7 +205,7 @@ export default {
       font-weight: 900;
       font-size: 15px;
       margin-right: 10px;
-      line-height: 60px;
+
     }
 
     .langs {
@@ -209,7 +213,7 @@ export default {
 
       span {
         cursor: pointer;
-        line-height: 60px;
+
         font-size: 18px;
       }
 
