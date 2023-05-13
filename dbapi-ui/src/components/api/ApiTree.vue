@@ -2,18 +2,17 @@
   <div class="tree_root">
     <el-button type="primary" icon="el-icon-plus" @click="createDialog = true" size="mini" plain>{{ $t('m.create_group') }}</el-button>
 
-    <el-tree :data="data" node-key="id" default-expand-all :expand-on-click-node="false" :props="defaultProp">
+    <el-button type="primary" icon="el-icon-refresh" circle @click="getAllApiTree" size="mini" plain></el-button>
+
+    <el-tree :data="data" node-key="id" default-expand-all :expand-on-click-node="true" :props="defaultProp">
         <span class="custom-tree-node" slot-scope="{ node, data }">
           <span class="el-icon-folder-opened" v-if="data.type=='group'">{{ node.label }}</span>
           <span class="iconfont icon-api" :class="{disable:data.status === 0}" v-if="data.type=='api'">
-<!--             <i class="iconfont icon-on_line1 circle" v-if="data.status == 1"></i>-->
-            <!--              <i class="iconfont icon-off_line circle offline" v-else></i>-->
-            <!--            <i class="el-icon-lock circle lock" v-if="data.access == PRIVILEGE.PRIVATE"></i>-->
-            <!--            <i class="el-icon-unlock circle " v-else></i>-->
+
             {{ node.label }}
           </span>
 
-           <span class="align:right" v-if="data.type=='api'">
+            <span class="align:right" v-if="data.type=='api'">
             <el-dropdown size="small">
                 <i class="el-icon-arrow-down el-icon--right"></i>
               <el-dropdown-menu slot="dropdown">
@@ -41,7 +40,7 @@
 
                 <el-dropdown-item>
                   <el-tooltip class="item" effect="light" content="Delete API" placement="left">
-                    <i class="el-icon-delete" @click="deleteAPI(data.id)"></i>
+                    <i class="el-icon-delete" style="color: #c50303" @click="deleteAPI(data.id)"></i>
                   </el-tooltip>
                 </el-dropdown-item>
 
@@ -50,15 +49,11 @@
           </span>
           <span class="align:right" v-if="data.type=='group'">
             <el-tooltip :open-delay="500" class="item" effect="light" content="Delete Group" placement="top" v-if="data.children.length == 0">
-              <i class="el-icon-delete" @click="deleteGroup(data.id)"></i>
+              <i class="el-icon-delete" @click="deleteGroup(data.id)" style="color: #c50303"></i>
             </el-tooltip>
             <el-tooltip :open-delay="500" class="item" effect="light" :content="$t('m.create_api')" placement="top">
               <i class="el-icon-circle-plus" @click="$router.push({path: '/api/add', query: {groupId: data.id}});"></i>
             </el-tooltip>
-
-
-            <!--          <el-button type="text" size="mini" @click="() => append(data)">Append</el-button>-->
-            <!--          <el-button type="text" size="mini" @click="() => remove(data)">Delete</el-button>-->
           </span>
         </span>
     </el-tree>

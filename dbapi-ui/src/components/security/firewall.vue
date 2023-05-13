@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding: 20px">
     <h2>{{$t('m.firewall_settings')}}</h2>
     <el-form label-width="200px">
       <el-form-item :label="$t('m.status')">
