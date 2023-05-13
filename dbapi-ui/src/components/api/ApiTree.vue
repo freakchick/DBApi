@@ -49,10 +49,10 @@
             </el-dropdown>
           </span>
           <span class="align:right" v-if="data.type=='group'">
-            <el-tooltip class="item" effect="light" content="Delete Group" placement="top" v-if="data.children.length == 0">
+            <el-tooltip :open-delay="500" class="item" effect="light" content="Delete Group" placement="top" v-if="data.children.length == 0">
               <i class="el-icon-delete" @click="deleteGroup(data.id)"></i>
             </el-tooltip>
-            <el-tooltip class="item" effect="light" :content="$t('m.create_api')" placement="top">
+            <el-tooltip :open-delay="500" class="item" effect="light" :content="$t('m.create_api')" placement="top">
               <i class="el-icon-circle-plus" @click="$router.push({path: '/api/add', query: {groupId: data.id}});"></i>
             </el-tooltip>
 
