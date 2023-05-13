@@ -98,6 +98,20 @@ CREATE TABLE `ip_rules`
 
 DROP TABLE IF EXISTS `user`;
 
+CREATE TABLE `user`
+(
+    `id`          int(11) NOT NULL AUTO_INCREMENT,
+    `username`    varchar(255) DEFAULT NULL,
+    `password`    varchar(255) DEFAULT NULL,
+    `type`        int(11) DEFAULT NULL,
+    `email`       varchar(255) DEFAULT NULL,
+    `create_time` varchar(20)  DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `client`;
+
 CREATE TABLE `client`
 (
     `id`              varchar(255) NOT NULL DEFAULT '',
@@ -114,20 +128,6 @@ CREATE TABLE `client`
     PRIMARY KEY (`id`),
     UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE `user`
-(
-    `id`          int(11) NOT NULL AUTO_INCREMENT,
-    `username`    varchar(255) DEFAULT NULL,
-    `password`    varchar(255) DEFAULT NULL,
-    `type`        int(11) DEFAULT NULL,
-    `email`       varchar(255) DEFAULT NULL,
-    `create_time` varchar(20)  DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
-DROP TABLE IF EXISTS `client`;
 
 insert into `firewall`(`status`, `mode`)
 values ('off', 'black');
