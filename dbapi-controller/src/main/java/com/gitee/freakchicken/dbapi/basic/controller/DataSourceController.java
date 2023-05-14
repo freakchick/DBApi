@@ -7,6 +7,7 @@ import com.gitee.freakchicken.dbapi.basic.util.JdbcUtil;
 import com.gitee.freakchicken.dbapi.basic.util.ThreadContainer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,7 @@ import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -109,10 +111,15 @@ public class DataSourceController {
 
 
     @RequestMapping(value = "/import", produces = "application/json;charset=UTF-8")
-    public void uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
+    public void importDatasource(@RequestParam("file") MultipartFile file) throws IOException {
 
         String s = IOUtils.toString(file.getInputStream(), "utf-8");
         List<DataSource> list = JSON.parseArray(s, DataSource.class);
+        list.stream().forEach(t -> {
+            t.setCreateUserId(ThreadContainer.getCurrentThreadUserId());
+            t.setCreateTime(DateFormatUtils.format(new Date(), "yyyy-MM-dd hh:mm:ss"));
+            t.setUpdateTime(DateFormatUtils.format(new Date(), "yyyy-MM-dd hh:mm:ss"));
+        });
         dataSourceService.insertBatch(list);
 
     }

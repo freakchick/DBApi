@@ -3,10 +3,7 @@ package com.gitee.freakchicken.dbapi.basic.controller;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.gitee.freakchicken.dbapi.basic.util.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -260,10 +258,15 @@ public class ApiConfigController {
      * @throws IOException
      */
     @RequestMapping(value = "/import", produces = "application/json;charset=UTF-8")
-    public void uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
+    public void importAPI(@RequestParam("file") MultipartFile file) throws IOException {
         String s = IOUtils.toString(file.getInputStream(), "utf-8");
         JSONObject jsonObject = JSON.parseObject(s);
         List<ApiConfig> apis = jsonObject.getJSONArray("api").toJavaList(ApiConfig.class);
+        apis.stream().forEach(t -> {
+           t.setCreateUserId(ThreadContainer.getCurrentThreadUserId());
+            t.setCreateTime(DateFormatUtils.format(new Date(),"yyyy-MM-dd hh:mm:ss"));
+            t.setUpdateTime(DateFormatUtils.format(new Date(),"yyyy-MM-dd hh:mm:ss"));
+        });
         List<ApiPluginConfig> plugins = jsonObject.getJSONArray("plugins").toJavaList(ApiPluginConfig.class);
         apiConfigService.importAPI(apis, plugins);
     }
@@ -272,6 +275,11 @@ public class ApiConfigController {
     public void importGroup(@RequestParam("file") MultipartFile file) throws IOException {
         String s = IOUtils.toString(file.getInputStream(), "utf-8");
         List<Group> configs = JSON.parseArray(s, Group.class);
+        configs.stream().forEach(t -> {
+            t.setCreateUserId(ThreadContainer.getCurrentThreadUserId());
+            t.setCreateTime(DateFormatUtils.format(new Date(),"yyyy-MM-dd hh:mm:ss"));
+            t.setUpdateTime(DateFormatUtils.format(new Date(),"yyyy-MM-dd hh:mm:ss"));
+        });
         groupService.insertBatch(configs);
     }
 

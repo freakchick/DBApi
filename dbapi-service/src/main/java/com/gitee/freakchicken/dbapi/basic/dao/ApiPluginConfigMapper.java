@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.gitee.freakchicken.dbapi.common.ApiPluginConfig;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -26,5 +27,5 @@ public interface ApiPluginConfigMapper extends BaseMapper<ApiPluginConfig> {
 
     @Select("<script>select * from api_plugin_config where api_id in " +
     "<foreach open=\"(\" close=\")\" collection=\"ids\" separator=\",\" item=\"item\" index=\"index\">#{item}</foreach></script>")
-    List<ApiPluginConfig> selectByApiIds(List<String> ids);
+    List<ApiPluginConfig> selectByApiIds(@Param("ids") List<String> ids);
 }
