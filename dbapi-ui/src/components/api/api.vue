@@ -418,7 +418,7 @@ export default {
   height: calc(100vh - 65px);
 
   .group {
-    width: 20%;
+    width: 350px;
     padding: 20px 10px;
 
     //flex-grow: 0;
@@ -428,7 +428,7 @@ export default {
 
   .api {
     padding: 20px;
-    width: 80%;
+    width: calc(100vw - 330px);
 
     .search {
       margin: 0 0 5px 0;
