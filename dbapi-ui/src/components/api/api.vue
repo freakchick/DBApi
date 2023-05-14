@@ -346,7 +346,7 @@ export default {
         });
     },
     exportConfig() {
-      let a = this.$refs.tree2.getCheckedKeys().filter((t) => {
+      let a = this.$refs.tree2.getCheckedKeys(true).filter((t) => {
         return t != undefined;
       });
       const ids = a.join(",");
