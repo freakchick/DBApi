@@ -12,7 +12,7 @@
             </el-input>
           </el-form-item>
           <el-form-item :label="$t('m.api_group')">
-            <el-select v-model="detail.groupId" style="width:300px">
+            <el-select v-model="detail.groupId" style="width:300px" disabled>
               <el-option :value="item.id" v-for="item in groups" :label="item.name">{{ item.name }}</el-option>
             </el-select>
           </el-form-item>

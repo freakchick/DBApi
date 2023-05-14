@@ -6,11 +6,11 @@
     </div>
     <div class="api">
       <ul>
-        <li>
-          <!--          <router-link to='/api/add'>-->
-          <el-button type="primary" icon="el-icon-plus" @click="handleAdd" size="mini" plain>{{ $t('m.create_api') }}</el-button>
-          <!--          </router-link>-->
-        </li>
+<!--        <li>-->
+<!--          &lt;!&ndash;          <router-link to='/api/add'>&ndash;&gt;-->
+<!--          <el-button type="primary" icon="el-icon-plus" @click="handleAdd" size="mini" plain>{{ $t('m.create_api') }}</el-button>-->
+<!--          &lt;!&ndash;          </router-link>&ndash;&gt;-->
+<!--        </li>-->
         <li>
           <el-button type="primary" @click="dialogVisible2=true" icon="iconfont icon-document" round size="mini" plain>{{ $t('m.export_api_doc') }}</el-button>
         </li>

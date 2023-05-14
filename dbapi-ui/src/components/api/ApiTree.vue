@@ -13,7 +13,7 @@
           </span>
 
             <span class="align:right" v-if="data.type=='api'">
-            <el-dropdown size="small">
+            <el-dropdown size="medium">
                 <i class="el-icon-arrow-down el-icon--right"></i>
               <el-dropdown-menu slot="dropdown">
                  <el-dropdown-item>
@@ -153,7 +153,7 @@ export default {
 .tree_root {
   i {
     padding: 0 5px;
-
+    font-size: 20px;
     &:hover {
       font-weight: bold;
     }
