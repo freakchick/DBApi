@@ -17,29 +17,29 @@
                 <i class="el-icon-arrow-down el-icon--right"></i>
               <el-dropdown-menu slot="dropdown">
                  <el-dropdown-item>
-                  <el-tooltip class="item" effect="light" content="Edit API" placement="left">
+                  <el-tooltip class="item" effect="light" :content="$t('m.edit')" placement="left">
                     <i class="el-icon-edit" @click="$router.push({path: '/api/edit', query: {id: data.id}});"></i>
                   </el-tooltip>
                 </el-dropdown-item>
 
                 <el-dropdown-item v-if="data.status == 0">
-                  <el-tooltip class="item" effect="light" content="Online API" placement="left">
+                  <el-tooltip class="item" effect="light" :content="$t('m.online')" placement="left">
                     <i class="el-icon-top" @click="online(data.id)"></i>
                   </el-tooltip>
                 </el-dropdown-item>
                 <el-dropdown-item v-if="data.status == 1">
-                  <el-tooltip class="item" effect="light" content="Offline API" placement="left">
+                  <el-tooltip class="item" effect="light" :content="$t('m.offline')" placement="left">
                     <i class="el-icon-bottom" @click="offline(data.id)"></i>
                   </el-tooltip>
                 </el-dropdown-item>
                 <el-dropdown-item>
-                  <el-tooltip class="item" effect="light" content="Request" placement="left">
+                  <el-tooltip class="item" effect="light" :content="$t('m.request_test')" placement="left">
                     <i class="iconfont icon-HTTPRequest" @click="$router.push({path: '/api/request', query: {id: data.id}});"></i>
                   </el-tooltip>
                 </el-dropdown-item>
 
                 <el-dropdown-item>
-                  <el-tooltip class="item" effect="light" content="Delete API" placement="left">
+                  <el-tooltip class="item" effect="light" :content="$t('m.delete')" placement="left">
                     <i class="el-icon-delete" style="color: #c50303" @click="deleteAPI(data.id)"></i>
                   </el-tooltip>
                 </el-dropdown-item>
