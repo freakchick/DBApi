@@ -43,6 +43,7 @@ const en = {
         executor_es: 'Elasticsearch DSL Executor',
         executor_http: 'HTTP API Executor',
         create_api: 'New API',
+        update_api: 'Edit API',
         edit: 'Edit',
         online: 'Online',
         offline: 'Offline',

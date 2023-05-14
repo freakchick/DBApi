@@ -44,6 +44,7 @@ const cn = {
     executor_es: 'Elasticsearch DSL执行器',
     executor_http: 'HTTP接口代理执行器',
     create_api: '创建API',
+    update_api: '修改API',
     edit: '编辑',
     online: '上线',
     offline: '下线',
