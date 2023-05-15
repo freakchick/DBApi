@@ -195,7 +195,7 @@ export default {
     importSuccess(response, file, fileList) {
       this.fileList = [];
       this.$message.success("Import Success");
-      this.getAllApis();
+      // this.getAllApis();
     },
     importGroupSuccess(response, file, fileList) {
       this.groupFile = [];
@@ -205,21 +205,21 @@ export default {
     importFail(error, file, fileList) {
       this.$message.error("Import failed!  " + error.message);
     },
-    getAllApis() {
-      this.axios
-        .post("/apiConfig/getAll")
-        .then((response) => {
-          const list = response.data;
-          list.forEach((t) => {
-            const obj = JSON.parse(t.params);
-            t["p"] = obj;
-          });
-          this.tableData = list;
-        })
-        .catch((error) => {
-          // this.$message.error("查询所有api失败")
-        });
-    },
+    // getAllApis() {
+    //   this.axios
+    //     .post("/apiConfig/getAll")
+    //     .then((response) => {
+    //       const list = response.data;
+    //       list.forEach((t) => {
+    //         const obj = JSON.parse(t.params);
+    //         t["p"] = obj;
+    //       });
+    //       this.tableData = list;
+    //     })
+    //     .catch((error) => {
+    //       // this.$message.error("查询所有api失败")
+    //     });
+    // },
     search() {
       this.axios
         .post("/apiConfig/search", {
@@ -255,7 +255,7 @@ export default {
         .post("/apiConfig/delete/" + id)
         .then((response) => {
           this.$message.success("Delete Success");
-          this.getAllApis();
+          this.search();
         })
         .catch((error) => {
           this.$message.error("Delete Failed");
@@ -267,7 +267,7 @@ export default {
         .post("/apiConfig/online/" + id)
         .then((response) => {
           this.$message.success("Publish Success");
-          this.getAllApis();
+          this.search();
         })
         .catch((error) => {
           this.$message.error("Publish Failed");
@@ -279,7 +279,7 @@ export default {
         .post("/apiConfig/offline/" + id)
         .then((response) => {
           this.$message.success("Already Offline");
-          this.getAllApis();
+          this.search();
         })
         .catch((error) => {
           this.$message.error("Failed");
