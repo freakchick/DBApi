@@ -50,6 +50,7 @@ const cn = {
     offline: '下线',
     delete: '删除',
 
+    tool:'工具',
     api_detail: 'API详情',
     create_group: '创建API分组',
     api_group_manage: 'API分组管理',

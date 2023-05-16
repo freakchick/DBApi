@@ -156,7 +156,12 @@ export default {
 
 <style scoped lang="less">
 .tree_root {
+  box-shadow: 0px 0px 3px 2px rgba(196, 194, 194, 0.34);
+  height: calc(100vh - 100px);
   font-size: 18px;
+  padding: 5px ;
+  overflow: auto;
+  //border-radius: 5px;
 
   i {
     padding: 0 5px;

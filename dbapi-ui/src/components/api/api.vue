@@ -5,105 +5,116 @@
       <api-tree></api-tree>
     </div>
     <div class="api">
-      <ul>
-<!--        <li>-->
-<!--          &lt;!&ndash;          <router-link to='/api/add'>&ndash;&gt;-->
-<!--          <el-button type="primary" icon="el-icon-plus" @click="handleAdd" size="mini" plain>{{ $t('m.create_api') }}</el-button>-->
-<!--          &lt;!&ndash;          </router-link>&ndash;&gt;-->
-<!--        </li>-->
-        <li>
-          <el-button type="primary" @click="dialogVisible2=true" icon="iconfont icon-document" round size="mini" plain>{{ $t('m.export_api_doc') }}</el-button>
-        </li>
-        <li>
-          <el-button type="primary" @click="dialogVisible3=true" icon="el-icon-download" round size="mini" plain>{{ $t('m.export_api') }}</el-button>
-        </li>
-        <li>
-          <el-upload action="/apiConfig/import" accept=".json" :on-success="importSuccess" :headers="headers" :on-error="importFail" :file-list="fileList">
-            <el-button type="warning" icon="el-icon-upload2" round size="mini" plain>{{ $t('m.import_api') }}</el-button>
-          </el-upload>
-        </li>
-        <li>
-          <el-button type="primary" @click="dialogVisible4=true" icon="iconfont icon-group" round size="mini" plain>{{ $t('m.export_api_groups') }}</el-button>
-        </li>
-        <li>
-          <el-upload action="/apiConfig/importGroup" accept=".json" :on-success="importGroupSuccess" :headers="headers" :on-error="importFail" :file-list="groupFile">
-            <el-button type="warning" icon="iconfont icon-group" round size="mini" plain>{{ $t('m.import_api_groups') }}</el-button>
-          </el-upload>
-        </li>
-      </ul>
-      <div class="search">
-        <div>
-          <span class="label">{{ $t('m.api_group') }}</span>
-          <el-select v-model="groupId" placeholder="" style="width:180px;" size="mini" clearable>
-            <el-option v-for="(item,index) in groups" :label="item.name" :value="item.id" :key="index"></el-option>
-          </el-select>
-          <span class="label">{{ $t('m.name') }}</span>
-          <el-input v-model="keyword.name" style="width:200px;" clearable size="mini"></el-input>
-          <span class="label">{{ $t('m.note') }}</span>
-          <el-input v-model="keyword.note" style="width:200px;" clearable size="mini"></el-input>
-          <span class="label">{{ $t('m.path') }}</span>
-          <el-input v-model="keyword.path" style="width:200px;" clearable size="mini">
-            <template slot="prepend">/{{ context }}/</template>
-          </el-input>
-          <el-button type="primary" icon="el-icon-search" @click="search" plain size="mini">{{ $t('m.search') }}</el-button>
+      <div class="tool">
+        <div class="left">
+          <div class="search">
+            <div>
+              <span class="label">{{ $t('m.api_group') }}</span>
+              <el-select v-model="groupId" placeholder="" style="width:140px;" size="mini" clearable>
+                <el-option v-for="(item,index) in groups" :label="item.name" :value="item.id" :key="index"></el-option>
+              </el-select>
+              <span class="label">{{ $t('m.name') }}</span>
+              <el-input v-model="keyword.name" style="width:150px;" clearable size="mini"></el-input>
+              <span class="label">{{ $t('m.note') }}</span>
+              <el-input v-model="keyword.note" style="width:150px;" clearable size="mini"></el-input>
+              <span class="label">{{ $t('m.path') }}</span>
+              <el-input v-model="keyword.path" style="width:200px;" clearable size="mini">
+                <template slot="prepend">/{{ context }}/</template>
+              </el-input>
+              <el-button type="primary" icon="el-icon-search" @click="search" plain size="mini">{{ $t('m.search') }}</el-button>
+            </div>
+
+          </div>
+        </div>
+        <div class="right" >
+          <el-dropdown @command="" style="margin-right: 15px">
+            <span class="el-dropdown-link" style="line-height: 30px" >
+              {{$t('m.tool')}}<i class="el-icon-arrow-down"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="item">
+                <span class="iconfont icon-document" @click="dialogVisible2=true">{{ $t('m.export_api_doc') }}</span>
+              </el-dropdown-item>
+              <el-dropdown-item command="item">
+                <span class="el-icon-download" @click="dialogVisible3=true">{{ $t('m.export_api') }}</span>
+              </el-dropdown-item>
+              <el-dropdown-item command="item">
+                <el-upload action="/apiConfig/import" accept=".json" :on-success="importSuccess" :headers="headers" :on-error="importFail" :file-list="fileList">
+                  <span class="el-icon-upload2">{{ $t('m.import_api') }}</span>
+                </el-upload>
+              </el-dropdown-item>
+              <el-dropdown-item command="item">
+                <span class="iconfont icon-group" @click="dialogVisible4=true">{{ $t('m.export_api_groups') }}</span>
+              </el-dropdown-item>
+
+              <el-dropdown-item command="item">
+                <el-upload action="/apiConfig/importGroup" accept=".json" :on-success="importGroupSuccess" :headers="headers" :on-error="importFail" :file-list="groupFile">
+                  <span class="iconfont icon-group">{{ $t('m.import_api_groups') }}</span>
+                </el-upload>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+
         </div>
 
       </div>
 
-      <el-table :data="tableData" border stripe max-height="700" width="100%">
-        <el-table-column label="id" prop="id" width="100px"></el-table-column>
-        <el-table-column :label="$t('m.name')">
-          <template slot-scope="scope">
-            <i class="iconfont icon-on_line1 circle" v-if="scope.row.status == 1"></i>
-            <i class="iconfont icon-off_line circle offline" v-else></i>
-            <i class="el-icon-lock circle lock" v-if="scope.row.access == PRIVILEGE.PRIVATE"></i>
-            <i class="el-icon-unlock circle " v-else></i>
-            <span :title="scope.row.note">{{ scope.row.name }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column :label="$t('m.path')">
-          <template slot-scope="scope">
-            <span>/{{ context }}/{{ scope.row.path }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column :label="$t('m.note')" prop="note">
-        </el-table-column>
-        <el-table-column label="Content-Type" prop="contentType" sortable></el-table-column>
-        <el-table-column :label="$t('m.parameters')">
-          <template slot-scope="scope">
-            <div v-show="scope.row.contentType === CONTENT_TYPE.FORM_URLENCODED ">
-              <data-tag v-for="item in scope.row.p" :name="item.name" :type="item.type"></data-tag>
-            </div>
-            <div v-show="scope.row.contentType === CONTENT_TYPE.JSON ">{{ scope.row.jsonParam }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="updateTime" :label="$t('m.update_time')" sortable></el-table-column>
-        <el-table-column :label="$t('m.operation')" width="220px">
-          <template slot-scope="scope">
-            <el-button plain size="mini" type="info" @click="detail(scope.row.id)" circle><i class="iconfont icon-detail"></i></el-button>
-            <el-button plain size="mini" type="warning" @click="handleEdit(scope.row.id)" circle><i class="el-icon-edit"></i></el-button>
+      <div class="table">
+        <el-table :data="tableData" border stripe width="100%">
+          <el-table-column label="id" prop="id"></el-table-column>
+          <el-table-column :label="$t('m.name')">
+            <template slot-scope="scope">
+              <i class="iconfont icon-on_line1 circle" v-if="scope.row.status == 1"></i>
+              <i class="iconfont icon-off_line circle offline" v-else></i>
+              <i class="el-icon-lock circle lock" v-if="scope.row.access == PRIVILEGE.PRIVATE"></i>
+              <i class="el-icon-unlock circle " v-else></i>
+              <span :title="scope.row.note">{{ scope.row.name }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column :label="$t('m.path')">
+            <template slot-scope="scope">
+              <span>/{{ context }}/{{ scope.row.path }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column :label="$t('m.note')" prop="note">
+          </el-table-column>
+          <el-table-column label="Content-Type" prop="contentType" sortable></el-table-column>
+          <el-table-column :label="$t('m.parameters')">
+            <template slot-scope="scope">
+              <div v-show="scope.row.contentType === CONTENT_TYPE.FORM_URLENCODED ">
+                <data-tag v-for="item in scope.row.p" :name="item.name" :type="item.type"></data-tag>
+              </div>
+              <div v-show="scope.row.contentType === CONTENT_TYPE.JSON ">{{ scope.row.jsonParam }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="updateTime" :label="$t('m.update_time')" sortable></el-table-column>
+          <el-table-column :label="$t('m.operation')" width="220px">
+            <template slot-scope="scope">
+              <el-button plain size="mini" type="info" @click="detail(scope.row.id)" circle><i class="iconfont icon-detail"></i></el-button>
+              <el-button plain size="mini" type="warning" @click="handleEdit(scope.row.id)" circle><i class="el-icon-edit"></i></el-button>
 
-            <el-button plain size="mini" v-if="scope.row.status == 0" type="warning" @click="online(scope.row.id)" circle>
-              <i class="iconfont icon-on_line2"></i>
-            </el-button>
+              <el-button plain size="mini" v-if="scope.row.status == 0" type="warning" @click="online(scope.row.id)" circle>
+                <i class="iconfont icon-on_line2"></i>
+              </el-button>
 
-            <el-button plain size="mini" v-if="scope.row.status == 1" type="info" @click="offline(scope.row.id)" circle>
-              <i class="iconfont icon-off_line1"></i>
-            </el-button>
+              <el-button plain size="mini" v-if="scope.row.status == 1" type="info" @click="offline(scope.row.id)" circle>
+                <i class="iconfont icon-off_line1"></i>
+              </el-button>
 
-            <el-button plain size="mini" v-if="scope.row.status == 1" type="primary" @click="httpTest(scope.row.id)" :title="$t('m.request_test')" circle>
-              <i class="iconfont icon-HTTPRequest"></i>
-            </el-button>
-            <el-button plain size="mini" type="danger" @click="handleDelete(scope.row.id)" circle>
-              <i class="el-icon-delete"></i>
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+              <el-button plain size="mini" v-if="scope.row.status == 1" type="primary" @click="httpTest(scope.row.id)" :title="$t('m.request_test')" circle>
+                <i class="iconfont icon-HTTPRequest"></i>
+              </el-button>
+              <el-button plain size="mini" type="danger" @click="handleDelete(scope.row.id)" circle>
+                <i class="el-icon-delete"></i>
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
 
-<!--      <el-dialog :title="$t('m.api_group')" :visible.sync="dialogVisible" @close="getAllGroups">-->
-<!--        <group></group>-->
-<!--      </el-dialog>-->
+      <!--      <el-dialog :title="$t('m.api_group')" :visible.sync="dialogVisible" @close="getAllGroups">-->
+      <!--        <group></group>-->
+      <!--      </el-dialog>-->
 
       <el-dialog :title="$t('m.export_api_doc')" :visible.sync="dialogVisible2" @open="getApiTree">
         <el-tree :data="treeData" show-checkbox node-key="id" :props="defaultProps" ref="tree"></el-tree>
@@ -179,7 +190,7 @@ export default {
       context: null,
     };
   },
-  components: {group,ApiTree},
+  components: {group, ApiTree},
   methods: {
 
     getAllApiTree() {
@@ -427,17 +438,41 @@ export default {
   }
 
   .api {
-    padding: 20px;
+    padding: 20px 10px;
     width: calc(100vw - 330px);
 
-    .search {
-      margin: 0 0 5px 0;
+    .tool {
+      box-shadow: 0px 0px 3px 2px rgba(196, 194, 194, 0.34);
+      padding: 5px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
 
-      .label {
-        font-weight: 700;
-        font-size: 14px;
-        margin: 0 5px 0 10px;
+      .left {
+
       }
+
+      .right {
+
+      }
+
+      .search {
+        margin: 0 0 5px 0;
+
+        .label {
+          font-weight: 700;
+          font-size: 14px;
+          margin: 0 5px 0 10px;
+        }
+      }
+    }
+
+    .table {
+      height: calc(100vh - 165px);
+      overflow: auto;
+      padding: 10px;
+      box-shadow: 0px 0px 3px 2px rgba(196, 194, 194, 0.34);
+
     }
   }
 }

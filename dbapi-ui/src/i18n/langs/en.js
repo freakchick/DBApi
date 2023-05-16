@@ -49,6 +49,7 @@ const en = {
         offline: 'Offline',
         delete: 'Delete',
 
+        tool: 'Tool',
         api_detail: 'API Detail',
         create_group: 'New Group',
         api_group_manage: 'API Group Manage',
