@@ -10,15 +10,17 @@ import java.util.stream.Collectors;
 @Slf4j
 public class PluginManager {
 
-    private static Map<String, BasePlugin> cachePluginsMap = new ConcurrentHashMap<>();
-    private static Map<String, BasePlugin> transformPluginsMap = new ConcurrentHashMap<>();
-    private static Map<String, BasePlugin> globalTransformPluginsMap = new ConcurrentHashMap<>();
-    private static Map<String, BasePlugin> alarmPluginsMap = new ConcurrentHashMap<>();
+    private static Map<String, BasePlugin> cachePluginMap = new ConcurrentHashMap<>();
+    private static Map<String, BasePlugin> transformPluginMap = new ConcurrentHashMap<>();
+    private static Map<String, BasePlugin> globalTransformPluginMap = new ConcurrentHashMap<>();
+    private static Map<String, BasePlugin> alarmPluginMap = new ConcurrentHashMap<>();
+    private static Map<String, BasePlugin> parameterValidatorMap = new ConcurrentHashMap<>();
 
     private static List<JSONObject> allCachePlugins = new ArrayList<>();
     private static List<JSONObject> allTransformPlugins = new ArrayList<>();
     private static List<JSONObject> allGlobalTransformPlugins = new ArrayList<>();
     private static List<JSONObject> allAlarmPlugins = new ArrayList<>();
+    private static List<JSONObject> allParameterValidators = new ArrayList<>();
 
     public static void loadPlugins() {
 
@@ -28,9 +30,9 @@ public class PluginManager {
             CachePlugin plugin = CachePlugins.next();
             plugin.init();
             log.info("{} registered", plugin.getClass().getName());
-            cachePluginsMap.put(plugin.getClass().getName(), plugin);
+            cachePluginMap.put(plugin.getClass().getName(), plugin);
         }
-        allCachePlugins = getAllList(cachePluginsMap);
+        allCachePlugins = getAllList(cachePluginMap);
         log.info("scan cache plugin finish");
 
         ServiceLoader<TransformPlugin> serviceLoader2 = ServiceLoader.load(TransformPlugin.class);
@@ -39,9 +41,9 @@ public class PluginManager {
             TransformPlugin plugin = TransformPlugins.next();
             plugin.init();
             log.info("{} registered", plugin.getClass().getName());
-            transformPluginsMap.put(plugin.getClass().getName(), plugin);
+            transformPluginMap.put(plugin.getClass().getName(), plugin);
         }
-        allTransformPlugins = getAllList(transformPluginsMap);
+        allTransformPlugins = getAllList(transformPluginMap);
         log.info("scan transform plugin finish");
 
         ServiceLoader<AlarmPlugin> serviceLoader3 = ServiceLoader.load(AlarmPlugin.class);
@@ -50,9 +52,9 @@ public class PluginManager {
             AlarmPlugin plugin = AlarmPlugins.next();
             plugin.init();
             log.info("{} registered", plugin.getClass().getName());
-            alarmPluginsMap.put(plugin.getClass().getName(), plugin);
+            alarmPluginMap.put(plugin.getClass().getName(), plugin);
         }
-        allAlarmPlugins = getAllList(alarmPluginsMap);
+        allAlarmPlugins = getAllList(alarmPluginMap);
         log.info("scan alarm plugin finish");
 
         ServiceLoader<GlobalTransformPlugin> serviceLoader4 = ServiceLoader.load(GlobalTransformPlugin.class);
@@ -61,38 +63,56 @@ public class PluginManager {
             GlobalTransformPlugin plugin = GlobalTransformPlugins.next();
             plugin.init();
             log.info("{} registered", plugin.getClass().getName());
-            globalTransformPluginsMap.put(plugin.getClass().getName(), plugin);
+            globalTransformPluginMap.put(plugin.getClass().getName(), plugin);
         }
-        allGlobalTransformPlugins = getAllList(globalTransformPluginsMap);
+        allGlobalTransformPlugins = getAllList(globalTransformPluginMap);
         log.info("scan global transform plugin finish");
+
+        ServiceLoader<ParameterValidator> serviceLoader5 = ServiceLoader.load(ParameterValidator.class);
+        Iterator<ParameterValidator> ParameterValidators = serviceLoader5.iterator();
+        while (ParameterValidators.hasNext()) {
+            ParameterValidator plugin = ParameterValidators.next();
+            plugin.init();
+            log.info("{} registered", plugin.getClass().getName());
+            parameterValidatorMap.put(plugin.getClass().getName(), plugin);
+        }
+        allParameterValidators = getAllList(parameterValidatorMap);
+        log.info("scan validator plugin finish");
     }
 
     public static CachePlugin getCachePlugin(String className) {
-        if (!cachePluginsMap.containsKey(className)) {
+        if (!cachePluginMap.containsKey(className)) {
             throw new RuntimeException("Plugin not found: " + className);
         }
-        return (CachePlugin) cachePluginsMap.get(className);
+        return (CachePlugin) cachePluginMap.get(className);
     }
 
     public static TransformPlugin getTransformPlugin(String className) {
-        if (!transformPluginsMap.containsKey(className)) {
+        if (!transformPluginMap.containsKey(className)) {
             throw new RuntimeException("Plugin not found: " + className);
         }
-        return (TransformPlugin)transformPluginsMap.get(className);
+        return (TransformPlugin) transformPluginMap.get(className);
     }
 
     public static GlobalTransformPlugin getGlobalTransformPlugin(String className) {
-        if (!globalTransformPluginsMap.containsKey(className)) {
+        if (!globalTransformPluginMap.containsKey(className)) {
             throw new RuntimeException("Plugin not found: " + className);
         }
-        return (GlobalTransformPlugin)globalTransformPluginsMap.get(className);
+        return (GlobalTransformPlugin) globalTransformPluginMap.get(className);
     }
 
     public static AlarmPlugin getAlarmPlugin(String className) {
-        if (!alarmPluginsMap.containsKey(className)) {
+        if (!alarmPluginMap.containsKey(className)) {
             throw new RuntimeException("Plugin not found: " + className);
         }
-        return (AlarmPlugin)alarmPluginsMap.get(className);
+        return (AlarmPlugin) alarmPluginMap.get(className);
+    }
+
+    public static ParameterValidator getParameterValidator(String className) {
+        if (!parameterValidatorMap.containsKey(className)) {
+            throw new RuntimeException("Plugin not found: " + className);
+        }
+        return (ParameterValidator) parameterValidatorMap.get(className);
     }
 
     private static List<JSONObject> getAllList(Map<String, BasePlugin> map) {
@@ -107,19 +127,23 @@ public class PluginManager {
         return collect;
     }
 
-    public static List<JSONObject>  getAllCachePlugins(){
+    public static List<JSONObject> getAllCachePlugins() {
         return allCachePlugins;
     }
 
-    public static List<JSONObject>  getAllAlarmPlugins(){
+    public static List<JSONObject> getAllAlarmPlugins() {
         return allAlarmPlugins;
     }
 
-    public static List<JSONObject>  getAllTransformPlugins(){
+    public static List<JSONObject> getAllTransformPlugins() {
         return allTransformPlugins;
     }
 
-    public static List<JSONObject>  getAllGlobalTransformPlugins(){
+    public static List<JSONObject> getAllGlobalTransformPlugins() {
         return allGlobalTransformPlugins;
+    }
+
+    public static List<JSONObject> getAllParameterValidators() {
+        return allParameterValidators;
     }
 }
