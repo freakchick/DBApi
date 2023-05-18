@@ -60,7 +60,7 @@
       </div>
 
       <div class="table">
-        <el-table :data="tableData" border stripe width="100%">
+        <el-table :data="tableData" border stripe width="100%" size="mini">
           <el-table-column label="id" prop="id"></el-table-column>
           <el-table-column :label="$t('m.name')">
             <template slot-scope="scope">
@@ -480,6 +480,7 @@ export default {
 
 i {
   font-size: 14px;
+
 }
 
 .circle {
