@@ -50,7 +50,7 @@ const cn = {
     offline: '下线',
     delete: '删除',
 
-    tool:'工具',
+    tool: '工具',
     api_detail: 'API详情',
     create_group: '创建API分组',
     edit_group: '修改API分组',
@@ -152,7 +152,7 @@ const cn = {
     white_tip: '只有白名单列表中的IP才允许访问API，其他IP一律禁止访问',
     ip_list_tip: '每行填写一个ip，多个ip用换行符隔开',
 
-    old_pwd:'请输入旧密码',
+    old_pwd: '请输入旧密码',
     input_pwd: '请输入新密码',
     input_pwd_again: '请再次输入新密码',
 
@@ -178,7 +178,7 @@ const cn = {
     top_n_api: '访问次数最多的API',
     top_n_ip: '访问次数最多的客户端IP',
     top_n_duration: '平均访问时长最大的API',
-
+    settings: '系统设置'
   },
   ...zhLocale
 }

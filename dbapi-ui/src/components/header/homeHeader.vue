@@ -9,8 +9,8 @@
       <div class="menu iconfont icon-database " :class="{'activeMenu':$route.path == '/datasource'}" @click="clickMenu('/datasource')">{{ $t("m.datasource") }}</div>
       <div class="menu iconfont icon-api" :class="{'activeMenu':$route.path.startsWith('/api')}" @click="clickMenu('/api')">API</div>
       <div class="menu iconfont icon-kehu" :class="{'activeMenu':$route.path == '/client'}" @click="clickMenu('/client')">{{ $t("m.client") }}</div>
-      <div class="menu iconfont icon-quanxian" :class="{'activeMenu':$route.path.startsWith('/security')}">
-        {{ $t("m.security") }}
+      <div class="menu iconfont icon-shezhi" :class="{'activeMenu':$route.path.startsWith('/security')}">
+        {{ $t("m.settings") }}
         <div class="submenus">
           <div class="submenu" :class="{'activeMenu':$route.path == '/security/firewall'}" @click="clickMenu('/security/firewall')">{{ $t("m.firewall") }}</div>
         </div>

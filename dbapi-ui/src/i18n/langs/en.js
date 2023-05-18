@@ -174,6 +174,7 @@ const en = {
         top_n_api: 'The most visited API',
         top_n_ip: 'The most visited client IP',
         top_n_duration: 'API with largest average access time',
+        settings: 'Settings'
 
     },
     ...enLocale
