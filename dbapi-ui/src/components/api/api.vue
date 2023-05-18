@@ -443,32 +443,32 @@ export default {
 
     .tool {
       box-shadow: 0px 0px 3px 2px rgba(196, 194, 194, 0.34);
-      padding: 5px;
+      padding: 10px 5px 5px 5px;
       margin-bottom: 20px;
       display: flex;
       justify-content: space-between;
 
       .left {
+        .search {
+          margin: 0 0 5px 0;
 
+          .label {
+            font-weight: 700;
+            font-size: 14px;
+            margin: 0 5px 0 10px;
+          }
+        }
       }
 
       .right {
 
       }
 
-      .search {
-        margin: 0 0 5px 0;
 
-        .label {
-          font-weight: 700;
-          font-size: 14px;
-          margin: 0 5px 0 10px;
-        }
-      }
     }
 
     .table {
-      height: calc(100vh - 165px);
+      height: calc(100vh - 170px);
       overflow: auto;
       padding: 10px;
       box-shadow: 0px 0px 3px 2px rgba(196, 194, 194, 0.34);
