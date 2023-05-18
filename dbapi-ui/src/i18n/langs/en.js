@@ -52,6 +52,7 @@ const en = {
         tool: 'Tool',
         api_detail: 'API Detail',
         create_group: 'New Group',
+        edit_group: 'Edit Group',
         api_group_manage: 'API Group Manage',
         export_api_doc: 'Export API Doc',
         export_api: 'Export API',

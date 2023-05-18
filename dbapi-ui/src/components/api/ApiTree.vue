@@ -1,6 +1,6 @@
 <template>
   <div class="tree_root">
-    <el-button type="primary" icon="el-icon-plus" @click="createDialog = true" size="mini" plain>{{ $t('m.create_group') }}</el-button>
+    <el-button type="primary" icon="el-icon-circle-plus" @click="createDialog = true" size="mini" plain>{{ $t('m.create_group') }}</el-button>
 
     <el-button type="primary" icon="el-icon-refresh" circle @click="getAllApiTree" size="mini" plain></el-button>
 
@@ -18,7 +18,7 @@
 <!--          <div class="right">-->
             <span class="align:right" v-if="data.type=='api'">
               <el-dropdown size="medium">
-                  <i class="el-icon-arrow-down el-icon--right"></i>
+                  <i class="el-icon-more-outline"></i>
                 <el-dropdown-menu slot="dropdown">
                    <el-dropdown-item>
                     <el-tooltip class="item" effect="light" :content="$t('m.edit')" placement="left">
@@ -52,22 +52,56 @@
               </el-dropdown>
             </span>
             <span class="align:right" v-if="data.type=='group'">
-              <el-tooltip :open-delay="500" class="item" effect="light" content="Delete Group" placement="top" v-if="data.children.length == 0">
-                <i class="el-icon-delete" @click="deleteGroup(data.id)" style="color: #c50303"></i>
-              </el-tooltip>
+<!--              <el-tooltip :open-delay="500" class="item" effect="light" content="Delete Group" placement="top" v-if="data.children.length == 0">-->
+<!--                <i class="el-icon-delete" @click="deleteGroup(data.id)" style="color: #c50303"></i>-->
+<!--              </el-tooltip>-->
               <el-tooltip :open-delay="500" class="item" effect="light" :content="$t('m.create_api')" placement="top">
                 <i class="el-icon-circle-plus" @click="$router.push({path: '/api/add', query: {groupId: data.id}});"></i>
               </el-tooltip>
+              <el-dropdown size="medium">
+                  <i class="el-icon-more-outline"></i>
+                <el-dropdown-menu slot="dropdown">
+                   <el-dropdown-item>
+                    <el-tooltip class="item" effect="light" :content="$t('m.edit')" placement="left">
+                      <i class="el-icon-edit" @click="editGroupDialog=true;handleEditGroup(data);"></i>
+                    </el-tooltip>
+                  </el-dropdown-item>
+
+                  <el-dropdown-item v-if="data.children.length == 0">
+                    <el-tooltip class="item" effect="light" :content="$t('m.delete')" placement="left" >
+                      <i class="el-icon-delete" style="color: #c50303" @click="deleteGroup(data.id)"></i>
+                    </el-tooltip>
+                  </el-dropdown-item>
+
+                </el-dropdown-menu>
+              </el-dropdown>
             </span>
 <!--          </div>-->
         </span>
     </el-tree>
 
     <el-dialog :title="$t('m.create_group')" :visible.sync="createDialog">
-      <el-input v-model="groupName"></el-input>
+      <el-form label-width="100px">
+        <el-form-item :label="$t('m.name')">
+          <el-input v-model="groupName"></el-input>
+        </el-form-item>
+      </el-form>
+
       <span slot="footer" class="dialog-footer">
         <el-button @click="createDialog = false">{{ $t('m.cancel') }}</el-button>
         <el-button type="primary" @click="createDialog = false;createGroup()">{{ $t('m.save') }}</el-button>
+      </span>
+    </el-dialog>
+
+    <el-dialog :title="$t('m.edit_group')" :visible.sync="editGroupDialog">
+      <el-form label-width="100px">
+        <el-form-item :label="$t('m.name')">
+          <el-input v-model="groupDetail.name"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="editGroupDialog = false">{{ $t('m.cancel') }}</el-button>
+        <el-button type="primary" @click="editGroupDialog = false;editGroup()">{{ $t('m.save') }}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -81,11 +115,30 @@ export default {
       data: [],
       groupName: null,
       defaultProp: {children: 'children', label: 'name'},
-      createDialog: false
+      createDialog: false,
+      editGroupDialog: false,
+      groupDetail:{
+        id:null,
+        name:null
+      }
     }
   },
   methods: {
-
+    editGroup(){
+      this.axios
+        .post("/group/update/",this.groupDetail)
+        .then((response) => {
+          this.$message.success("Edit Group Success");
+          this.getAllApiTree();
+        })
+        .catch((error) => {
+          this.$message.error("Edit Group Failed");
+        });
+    },
+    handleEditGroup(data){
+      this.groupDetail.id = data.id
+      this.groupDetail.name = data.name
+    },
     deleteAPI(id) {
       this.axios
         .post("/apiConfig/delete/" + id)

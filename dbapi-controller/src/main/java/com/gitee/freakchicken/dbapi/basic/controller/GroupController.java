@@ -33,4 +33,10 @@ public class GroupController {
         List<Group> list = groupService.getAll();
         return list;
     }
+
+    @RequestMapping("/update")
+    public void update(Group group) {
+//        group.setCreateUserId(ThreadContainer.getCurrentThreadUserId());
+        groupService.update(group);
+    }
 }

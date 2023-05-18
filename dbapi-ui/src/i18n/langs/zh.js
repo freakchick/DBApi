@@ -53,6 +53,7 @@ const cn = {
     tool:'工具',
     api_detail: 'API详情',
     create_group: '创建API分组',
+    edit_group: '修改API分组',
     api_group_manage: 'API分组管理',
     export_api_doc: '导出API文档',
     export_api: '导出API',

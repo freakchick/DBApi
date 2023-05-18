@@ -7,6 +7,7 @@ import com.gitee.freakchicken.dbapi.basic.dao.GroupMapper;
 import com.gitee.freakchicken.dbapi.basic.domain.Group;
 import com.gitee.freakchicken.dbapi.basic.util.UUIDUtil;
 import com.gitee.freakchicken.dbapi.common.ResponseDto;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,9 +36,9 @@ public class GroupService {
     @Transactional
     public ResponseDto deleteById(String id) {
         int size = apiConfigMapper.selectCountByGroup(id);
-        if (size > 0){
+        if (size > 0) {
             return ResponseDto.fail("Group is not empty, can not delete");
-        }else{
+        } else {
             groupMapper.deleteById(id);
             clientAuthMapper.deleteByGroupId(id);
             return ResponseDto.successWithMsg("Group delete success");
@@ -55,8 +56,14 @@ public class GroupService {
 
     @Transactional
     public void insertBatch(List<Group> configs) {
-        configs.stream().forEach(t->{
+        configs.stream().forEach(t -> {
             groupMapper.insert(t);
         });
+    }
+
+    @Transactional
+    public void update(Group group) {
+        group.setUpdateTime(DateFormatUtils.format(new Date(), "yyyy-MM-dd hh:mm:ss"));
+        groupMapper.updateById(group);
     }
 }
