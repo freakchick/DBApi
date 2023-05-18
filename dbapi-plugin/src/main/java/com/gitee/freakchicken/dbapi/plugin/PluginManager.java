@@ -24,6 +24,18 @@ public class PluginManager {
 
     public static void loadPlugins() {
 
+        cachePluginMap.clear();
+        transformPluginMap.clear();
+        globalTransformPluginMap.clear();
+        alarmPluginMap.clear();
+        parameterValidatorMap.clear();
+
+        allCachePlugins.clear();
+        allTransformPlugins.clear();
+        allGlobalTransformPlugins.clear();
+        allAlarmPlugins.clear();
+        allParameterValidators.clear();
+
         ServiceLoader<CachePlugin> serviceLoader = ServiceLoader.load(CachePlugin.class);
         Iterator<CachePlugin> CachePlugins = serviceLoader.iterator();
         while (CachePlugins.hasNext()) {
