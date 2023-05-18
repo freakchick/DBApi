@@ -6,7 +6,7 @@ CREATE TABLE `client_auth`
     `client_id` varchar(20) DEFAULT NULL,
     `group_id`  varchar(20) DEFAULT NULL,
     PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 
 DROP TABLE IF EXISTS `api_config`;
@@ -41,8 +41,17 @@ CREATE TABLE `api_plugin_config`
     `plugin_param` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `api_group`;
+DROP TABLE IF EXISTS `api_history`;
+CREATE TABLE `api_history`
+(
+    `id`          int(11) NOT NULL AUTO_INCREMENT,
+    `api_id`      varchar(20) DEFAULT NULL,
+    `content`     text,
+    `create_time` varchar(20) DEFAULT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `api_group`;
 CREATE TABLE `api_group`
 (
     `id`             varchar(255) NOT NULL,
@@ -108,7 +117,7 @@ CREATE TABLE `user`
     `create_time` varchar(20)  DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `client`;
 
