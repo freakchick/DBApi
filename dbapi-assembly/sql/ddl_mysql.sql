@@ -72,6 +72,7 @@ CREATE TABLE `client`
     `name`            varchar(255)          DEFAULT NULL,
     `note`            varchar(1024)         DEFAULT NULL,
     `secret`          varchar(255)          DEFAULT NULL,
+    `public_key`     varchar(1024)         DEFAULT NULL,
     `expire_desc`     varchar(255)          DEFAULT NULL,
     `expire_duration` varchar(255)          DEFAULT NULL,
     `token`           varchar(255)          DEFAULT NULL,
