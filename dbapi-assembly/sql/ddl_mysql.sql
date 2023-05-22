@@ -143,7 +143,7 @@ DROP TABLE IF EXISTS `perm_group_datasource`;
 CREATE TABLE `perm_group_datasource`
 (
     `group_id`      varchar(20) NOT NULL,
-    `datasource_id` varchar(20) DEFAULT NULL,
+    `datasource_id` varchar(20) NOT NULL,
     `type`          int(11) DEFAULT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
