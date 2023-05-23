@@ -33,7 +33,8 @@ public class EmailAlarmPlugin extends AlarmPlugin {
     public void alarm(Exception e, ApiConfig config, HttpServletRequest request, String pluginParam) {
 
         String title = MessageFormat.format("API ERROR: {0}", config.getName());
-        String content = MessageFormat.format("TIME:  {0}\n API_ID:  {5}\nNAME:  {1}\n URL:  {2}\n REMOTE ADDRESS:  {3}\n\n{4}",
+        String content = MessageFormat.format(
+                "TIME:  {0}\n API_ID:  {5}\nNAME:  {1}\n URL:  {2}\n REMOTE ADDRESS:  {3}\n\n{4}",
                 new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS").format(new Date()),
                 config.getName(), request.getRequestURI(), request.getRemoteAddr(), e.toString(), config.getId());
         sendSimpleTextEmail(pluginParam, title, content);
@@ -44,7 +45,7 @@ public class EmailAlarmPlugin extends AlarmPlugin {
             Email email = new SimpleEmail();
             email.setHostName(this.host);
 
-//        email.setSmtpPort(465);
+            // email.setSmtpPort(465);
             email.setAuthenticator(new DefaultAuthenticator(this.username, this.password));
             email.setSSLOnConnect(true);
             email.setCharset("UTF-8");
@@ -68,7 +69,7 @@ public class EmailAlarmPlugin extends AlarmPlugin {
 
     @Override
     public String getDescription() {
-        return "使用该插件，异常信息会发送邮件通知";
+        return "使用该插件，异常信息会发送邮件通知。使用前需要在plugin.properties配置全局参数：发件人的信息。";
     }
 
     @Override

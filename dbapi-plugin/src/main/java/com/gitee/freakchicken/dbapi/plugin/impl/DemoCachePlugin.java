@@ -12,17 +12,17 @@ public class DemoCachePlugin extends CachePlugin {
     }
 
     @Override
-    public void set(ApiConfig config, Map<String, Object> requestParams, Object data) {
+    public void set(ApiConfig config, Map<String, Object> requestParams, Object data, String localPluginParam) {
         System.out.println("--------------");
     }
 
     @Override
-    public void clean(ApiConfig config) {
+    public void clean(ApiConfig config, String localPluginParam) {
         System.out.println("--------------");
     }
 
     @Override
-    public Object get(ApiConfig config, Map<String, Object> requestParams) {
+    public Object get(ApiConfig config, Map<String, Object> requestParams, String localPluginParam) {
         return null;
     }
 
