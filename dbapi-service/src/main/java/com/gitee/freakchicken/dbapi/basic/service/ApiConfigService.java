@@ -26,7 +26,6 @@ import com.baomidou.dynamic.datasource.annotation.DS;
 import com.gitee.freakchicken.dbapi.basic.dao.ApiConfigMapper;
 import com.gitee.freakchicken.dbapi.basic.dao.ApiPluginConfigMapper;
 import com.gitee.freakchicken.dbapi.basic.dao.DataSourceMapper;
-import com.gitee.freakchicken.dbapi.basic.domain.ApiDto;
 import com.gitee.freakchicken.dbapi.basic.util.Constants;
 import com.gitee.freakchicken.dbapi.common.ApiConfig;
 import com.gitee.freakchicken.dbapi.common.ApiPluginConfig;
@@ -142,7 +141,7 @@ public class ApiConfigService {
         if (apiConfig.getCachePlugin() != null) {
             try {
                 CachePlugin cachePlugin = PluginManager.getCachePlugin(apiConfig.getCachePlugin().getPluginName());
-                cachePlugin.clean(apiConfig);
+                cachePlugin.clean(apiConfig, apiConfig.getCachePlugin().getPluginParam());
                 log.debug("clean data cache when delete/update/offline api");
             } catch (Exception e) {
                 log.error("clean cache failed when delete/update/offline api", e);

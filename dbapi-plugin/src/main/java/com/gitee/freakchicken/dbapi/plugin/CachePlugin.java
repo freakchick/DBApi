@@ -19,25 +19,28 @@ public abstract class CachePlugin implements BasePlugin {
     /**
      * 缓存设置
      *
-     * @param config api配置
-     * @param requestParams request参数
-     * @param data   要缓存的数据
+     * @param config           api配置
+     * @param requestParams    request参数
+     * @param data             要缓存的数据
+     * @param localPluginParam 插件的局部参数
      */
-    public abstract void set(ApiConfig config, Map<String, Object> requestParams, Object data);
+    public abstract void set(ApiConfig config, Map<String, Object> requestParams, Object data, String localPluginParam);
 
     /**
      * 清除所有缓存，API修改、删除、下线的时候会触发清除缓存
      *
-     * @param config api配置
+     * @param config           api配置
+     * @param localPluginParam 插件的局部参数
      */
-    public abstract void clean(ApiConfig config);
+    public abstract void clean(ApiConfig config, String localPluginParam);
 
     /**
      * 查询缓存
      *
-     * @param config api配置
-     * @param requestParams request参数
+     * @param config           api配置
+     * @param requestParams    request参数
+     * @param localPluginParam 插件的局部参数
      * @return
      */
-    public abstract Object get(ApiConfig config, Map<String, Object> requestParams);
+    public abstract Object get(ApiConfig config, Map<String, Object> requestParams, String localPluginParam);
 }

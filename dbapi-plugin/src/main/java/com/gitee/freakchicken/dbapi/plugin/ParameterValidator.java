@@ -21,8 +21,9 @@ public abstract class ParameterValidator implements BasePlugin {
      * @param requestParameter API请求参数
      * @param apiConfig        API元数据
      * @param clientId         客户端ID
-     * @param params           插件的局部参数
+     * @param localPluginParam 插件的局部参数
      * @return
      */
-    public abstract boolean validate(Map<String, Object> requestParameter, ApiConfig apiConfig, String clientId, String params);
+    public abstract boolean validate(Map<String, Object> requestParameter, ApiConfig apiConfig, String clientId,
+            String localPluginParam);
 }

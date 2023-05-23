@@ -106,7 +106,7 @@ public class APIServlet extends HttpServlet {
             // get data from cache
             if (cache != null) {
                 CachePlugin cachePlugin = PluginManager.getCachePlugin(cache.getPluginName());
-                Object o = cachePlugin.get(config, requestParam);
+                Object o = cachePlugin.get(config, requestParam, cache.getPluginParam());
                 if (o != null) {
                     return ResponseDto.apiSuccess(o); // 如果缓存有数据直接返回
                 }
@@ -137,7 +137,7 @@ public class APIServlet extends HttpServlet {
             // set data to cache
             if (cache != null) {
                 CachePlugin cachePlugin = PluginManager.getCachePlugin(cache.getPluginName());
-                cachePlugin.set(config, requestParam, result);
+                cachePlugin.set(config, requestParam, result, cache.getPluginParam());
             }
 
             return ResponseDto.apiSuccess(result);

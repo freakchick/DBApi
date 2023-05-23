@@ -15,9 +15,9 @@ public abstract class TransformPlugin implements BasePlugin {
     /**
      * 数据转换逻辑
      *
-     * @param data   if SQL Executor , the data type is List<JSONObject>
-     * @param params 局部转换插件的局部参数
+     * @param data             执行器执行后返回的结果数据
+     * @param localPluginParam 插件的局部参数
      * @return
      */
-    public abstract Object transform(Object data, String params);
+    public abstract Object transform(Object data, String localPluginParam);
 }

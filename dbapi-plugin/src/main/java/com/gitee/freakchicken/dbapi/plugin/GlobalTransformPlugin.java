@@ -17,9 +17,9 @@ public abstract class GlobalTransformPlugin implements BasePlugin {
     /**
      * 数据转换逻辑
      *
-     * @param data   API返回数据
-     * @param params 全局转换插件的局部参数
+     * @param data             API返回数据
+     * @param localPluginParam 全局转换插件的局部参数
      * @return
      */
-    public abstract Object transform(ResponseDto data, String params);
+    public abstract Object transform(ResponseDto data, String localPluginParam);
 }
