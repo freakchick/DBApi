@@ -38,10 +38,10 @@
       <el-form-item :label="$t('m.edit_password')" label-width="100%" style="margin-left:20px; display: inline-block">
         <el-checkbox v-model="detail.edit_password" @change="checked"></el-checkbox>
       </el-form-item>
-      <el-form-item :label="$t('m.sql_query_all_table_name')">
+    <!--   <el-form-item :label="$t('m.sql_query_all_table_name')">
         <el-input v-model="detail.tableSql"></el-input>
         <el-alert type="warning" :title="$t('m.ds_sql_tip')" show-icon style="margin-top: 10px;"></el-alert>
-      </el-form-item>
+      </el-form-item> -->
     </el-form>
 
     <el-button type="primary" @click="connect" plain style="margin: 10px 0;">{{$t('m.test_connection')}}</el-button>
