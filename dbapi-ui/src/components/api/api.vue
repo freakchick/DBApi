@@ -26,10 +26,10 @@
 
           </div>
         </div>
-        <div class="right" >
+        <div class="right">
           <el-dropdown @command="" style="margin-right: 15px">
-            <span class="el-dropdown-link" style="line-height: 30px" >
-              {{$t('m.tool')}}<i class="el-icon-arrow-down"></i>
+            <span class="el-dropdown-link" style="line-height: 30px">
+              {{ $t('m.tool') }}<i class="el-icon-arrow-down"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="item">
@@ -90,23 +90,35 @@
           <el-table-column prop="updateTime" :label="$t('m.update_time')" sortable></el-table-column>
           <el-table-column :label="$t('m.operation')" width="220px">
             <template slot-scope="scope">
-              <el-button plain size="mini" type="info" @click="detail(scope.row.id)" circle><i class="iconfont icon-detail"></i></el-button>
-              <el-button plain size="mini" type="warning" @click="handleEdit(scope.row.id)" circle><i class="el-icon-edit"></i></el-button>
+<!--              <el-button plain size="mini" type="info" @click="detail(scope.row.id)" circle><i class="iconfont icon-detail"></i></el-button>-->
 
-              <el-button plain size="mini" v-if="scope.row.status == 0" type="warning" @click="online(scope.row.id)" circle>
-                <i class="iconfont icon-on_line2"></i>
-              </el-button>
+              <el-tooltip class="item" effect="dark" :content="$t('m.edit')" placement="top">
+                <el-button plain size="mini" type="warning" @click="handleEdit(scope.row.id)" circle><i class="el-icon-edit"></i></el-button>
+              </el-tooltip>
 
-              <el-button plain size="mini" v-if="scope.row.status == 1" type="info" @click="offline(scope.row.id)" circle>
-                <i class="iconfont icon-off_line1"></i>
-              </el-button>
+              <el-tooltip class="item" effect="dark" :content="$t('m.online')" placement="top">
+                <el-button plain size="mini" v-if="scope.row.status == 0" type="warning" @click="online(scope.row.id)" circle>
+                  <i class="iconfont icon-on_line2"></i>
+                </el-button>
+              </el-tooltip>
 
-              <el-button plain size="mini" v-if="scope.row.status == 1" type="primary" @click="httpTest(scope.row.id)" :title="$t('m.request_test')" circle>
-                <i class="iconfont icon-HTTPRequest"></i>
-              </el-button>
-              <el-button plain size="mini" type="danger" @click="handleDelete(scope.row.id)" circle>
-                <i class="el-icon-delete"></i>
-              </el-button>
+              <el-tooltip class="item" effect="dark" :content="$t('m.offline')" placement="top">
+                <el-button plain size="mini" v-if="scope.row.status == 1" type="info" @click="offline(scope.row.id)" circle>
+                  <i class="iconfont icon-off_line1"></i>
+                </el-button>
+              </el-tooltip>
+
+              <el-tooltip class="item" effect="dark" :content="$t('m.request_test')" placement="top">
+                <el-button plain size="mini" v-if="scope.row.status == 1" type="primary" @click="httpTest(scope.row.id)" :title="$t('m.request_test')" circle>
+                  <i class="iconfont icon-HTTPRequest"></i>
+                </el-button>
+              </el-tooltip>
+
+              <el-tooltip class="item" effect="dark" :content="$t('m.delete')" placement="top">
+                <el-button plain size="mini" type="danger" @click="handleDelete(scope.row.id)" circle>
+                  <i class="el-icon-delete"></i>
+                </el-button>
+              </el-tooltip>
             </template>
           </el-table-column>
         </el-table>
