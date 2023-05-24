@@ -35,7 +35,7 @@
           </el-form>
 
           <h4>{{ $t('m.parameters') }}：</h4>
-          <div class="textarea">
+          <div class="textarea" style="margin-bottom: 5px">
             <el-input v-model="jsonParam" :placeholder="$t('m.input_json_param')" type="textarea" rows="10" v-show="contentType === CONTENT_TYPE.JSON"></el-input>
           </div>
           <el-form label-width="200px" style="width: 650px" size="medium" v-show="contentType === CONTENT_TYPE.FORM_URLENCODED">
