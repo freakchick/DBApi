@@ -20,6 +20,9 @@ export default {
   },
   methods: {
     save() {
+      if(!this.$refs.detail.checkValue()){
+        return;
+      }
       const data = this.$refs.detail.detail
       this.axios.post("/datasource/update", {
         "name": data.name,

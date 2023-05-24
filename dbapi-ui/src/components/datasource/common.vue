@@ -120,6 +120,32 @@ export default {
   },
   props: ["id"],
   methods: {
+    isNull(item) {
+      if (typeof item == 'undefined' || item == null || item == '') {
+        return true
+      } else {
+        return false
+      }
+    },
+    checkValue(){
+      if(this.isNull(this.detail.name)){
+        this.$message.warning("Datasource name empty!")
+        return false
+      }
+      if(this.isNull(this.detail.type)){
+        this.$message.warning("Datasource type empty!")
+        return false
+      }
+      if(this.isNull(this.detail.url)){
+        this.$message.warning("Datasource url empty!")
+        return false
+      }
+      if(this.isNull(this.detail.driver)){
+        this.$message.warning("Datasource driver empty!")
+        return false
+      }
+      return true;
+    },
     checked(){
       if (this.detail.edit_password){
         this.detail.password = null;
