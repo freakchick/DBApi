@@ -2,7 +2,7 @@
   <div style="padding: 20px">
     <div class="gap">
       <!--      <router-link to="/token/add">-->
-      <el-button type="primary" icon="el-icon-plus" plain @click="dialogCreateApp = true" size="mini">{{$t('m.create_client')}}</el-button>
+      <el-button type="primary" icon="el-icon-plus" plain @click="dialogCreateApp = true" size="mini">{{ $t('m.create_client') }}</el-button>
       <!--      </router-link>-->
     </div>
 
@@ -16,12 +16,16 @@
 
       <el-table-column :label="$t('m.operation')" width="100px">
         <template slot-scope="scope">
-          <el-button plain size="mini" type="warning" @click="handleAuth(scope.row.id)" circle>
-            <i class="el-icon-lock"></i>
-          </el-button>
-          <el-button plain size="mini" type="danger" @click="handleDelete(scope.row.id)" circle>
-            <i class="el-icon-delete"></i>
-          </el-button>
+          <el-tooltip class="item" effect="dark" :content="$t('m.client_auth_btn_tip')" placement="top">
+            <el-button plain size="mini" type="warning" @click="handleAuth(scope.row.id)" circle>
+              <i class="el-icon-lock"></i>
+            </el-button>
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" :content="$t('m.delete')" placement="top">
+            <el-button plain size="mini" type="danger" @click="handleDelete(scope.row.id)" circle>
+              <i class="el-icon-delete"></i>
+            </el-button>
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
@@ -41,7 +45,7 @@
     <el-alert type="warning" show-icon>
       <div class="tip"></div>
       <div>
-        <pre>{{$t('m.token_tip')}}</pre>
+        <pre>{{ $t('m.token_tip') }}</pre>
         <pre>
 import requests
 headers = {"Authorization": "5ad0dcb4eb03d3b0b7e4b82ae0ba433f"}
@@ -51,8 +55,8 @@ print(re.text)
       </div>
       <el-divider></el-divider>
       <div>
-        <pre>{{$t('m.token_tip2')}}</pre>
-        http://{{ip}}/token/generate?clientId=xxx&secret=xxx
+        <pre>{{ $t('m.token_tip2') }}</pre>
+        http://{{ ip }}/token/generate?clientId=xxx&secret=xxx
       </div>
 
     </el-alert>
@@ -71,8 +75,8 @@ print(re.text)
             <el-radio-button label="1hour">1hour</el-radio-button>
             <el-radio-button label="1day">1day</el-radio-button>
             <el-radio-button label="30day">30day</el-radio-button>
-            <el-radio-button label="once">{{$t('m.once')}}</el-radio-button>
-            <el-radio-button label="forever">{{$t('m.forever')}}</el-radio-button>
+            <el-radio-button label="once">{{ $t('m.once') }}</el-radio-button>
+            <el-radio-button label="forever">{{ $t('m.forever') }}</el-radio-button>
             <!--            <el-radio-button label="300">5min</el-radio-button>-->
             <!--            <el-radio-button label="3600">1hour</el-radio-button>-->
             <!--            <el-radio-button label="86400">1day</el-radio-button>-->
@@ -83,8 +87,8 @@ print(re.text)
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogCreateApp = false">{{$t('m.cancel')}}</el-button>
-        <el-button type="primary" @click="dialogCreateApp = false;create()">{{$t('m.ok')}}</el-button>
+        <el-button @click="dialogCreateApp = false">{{ $t('m.cancel') }}</el-button>
+        <el-button type="primary" @click="dialogCreateApp = false;create()">{{ $t('m.ok') }}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -106,7 +110,7 @@ export default {
         note: null,
         expireDesc: null
       },
-      ip:null
+      ip: null
     }
   },
   methods: {
@@ -161,13 +165,13 @@ export default {
     },
     async getIP() {
       await this.axios
-          .post("/system/getIP")
-          .then((response) => {
-            this.ip = response.data
-          })
-          .catch((error) => {
-            this.$message.error("get ip failed");
-          });
+        .post("/system/getIP")
+        .then((response) => {
+          this.ip = response.data
+        })
+        .catch((error) => {
+          this.$message.error("get ip failed");
+        });
     },
 
   },
@@ -180,7 +184,7 @@ export default {
 
 <style scoped>
 .tip {
-  white-space: pre;
+    white-space: pre;
 }
 
 </style>

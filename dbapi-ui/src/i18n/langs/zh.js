@@ -178,7 +178,9 @@ const cn = {
     top_n_api: '访问次数最多的API',
     top_n_ip: '访问次数最多的客户端IP',
     top_n_duration: '平均访问时长最大的API',
-    settings: '系统设置'
+    settings: '系统设置',
+
+    client_auth_btn_tip: '授权客户端访问API'
   },
   ...zhLocale
 }
