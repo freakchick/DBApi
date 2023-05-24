@@ -144,6 +144,14 @@ export default {
         this.$message.warning("Datasource driver empty!")
         return false
       }
+      if(this.isNull(this.detail.username)){
+        this.$message.warning("Datasource username empty!")
+        return false
+      }
+      if(this.isNull(this.detail.password)){
+        this.$message.warning("Datasource password empty!")
+        return false
+      }
       return true;
     },
     checked(){
