@@ -36,7 +36,7 @@
                       <i class="el-icon-bottom" @click="offline(data.id)"></i>
                     </el-tooltip>
                   </el-dropdown-item>
-                  <el-dropdown-item>
+                  <el-dropdown-item v-if="data.status == 1">
                     <el-tooltip class="item" effect="light" :content="$t('m.request_test')" placement="left">
                       <i class="iconfont icon-HTTPRequest" @click="$router.push({path: '/api/request', query: {id: data.id}});"></i>
                     </el-tooltip>
