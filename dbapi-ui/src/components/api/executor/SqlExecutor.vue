@@ -95,7 +95,7 @@ export default {
     },
     getTaskJson() {
       debugger
-      let sqls = this.$refs.codemirror.map((item, index) => item.code)
+      let sqls = this.$refs.codemirror.map((item, index) => item.coder.getValue())
       let p = this.editableTabs.map((item, index) => {
         return {sqlText: sqls[index], transformPlugin: item.transformPlugin, transformPluginParam: item.transformPluginParam}
       })
@@ -113,7 +113,7 @@ export default {
         return false
       }
       debugger
-      let sqls = this.$refs.codemirror.map((item, index) => item.code)
+      let sqls = this.$refs.codemirror.map((item, index) => item.coder.getValue())
       for (let sql of sqls) {
         console.log(sql, sql.trim())
         if (sql.trim() == '') {
@@ -162,7 +162,7 @@ export default {
 
         this.currentActiveTabName = activeName;
         this.editableTabs = tabs.filter(tab => tab.name !== targetName);
-        this.$store.commit('removeCm', i) // 删除 vuex中 的cmInstance
+        // this.$store.commit('removeCm', i) // 删除 vuex中 的cmInstance
       }
     }
   },
