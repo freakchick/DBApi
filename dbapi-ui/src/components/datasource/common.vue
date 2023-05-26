@@ -155,9 +155,9 @@ export default {
       return true;
     },
     checked(){
-      if (this.detail.edit_password){
-        this.detail.password = null;
-      }
+      // if (this.detail.edit_password){
+      //   this.detail.password = null;
+      // }
     },
     selectDB() {
       this.detail.url = (this.ds[this.detail.type]).url

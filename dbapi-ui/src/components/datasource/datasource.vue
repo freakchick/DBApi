@@ -31,15 +31,19 @@
       <el-table-column :label="$t('m.operation')" width="220px">
         <template slot-scope="scope">
 
-          <el-button plain size="mini" type="info" @click="detail(scope.row.id)" circle>
+          <!-- <el-button plain size="mini" type="info" @click="detail(scope.row.id)" circle>
             <i class="iconfont icon-detail"></i>
-          </el-button>
-          <el-button plain size="mini" type="warning" @click="handleEdit(scope.row.id)" circle>
-            <i class="el-icon-edit"></i>
-          </el-button>
-          <el-button plain size="mini" type="danger" @click="handleDelete(scope.row.id)" circle>
-            <i class="el-icon-delete"></i>
-          </el-button>
+          </el-button> -->
+          <el-tooltip placement="top" effect="dark" :content="$t('m.edit')">
+            <el-button plain size="mini" type="warning" @click="handleEdit(scope.row.id)" circle>
+              <i class="el-icon-edit"></i>
+            </el-button>
+          </el-tooltip>
+          <el-tooltip placement="top" effect="dark" :content="$t('m.delete')">
+            <el-button plain size="mini" type="danger" @click="handleDelete(scope.row.id)" circle>
+              <i class="el-icon-delete"></i>
+            </el-button>
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
