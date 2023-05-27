@@ -5,7 +5,6 @@
 ![](https://img.shields.io/github/stars/freakchick/DBApi.svg?logo=GitHub)
 ![](https://img.shields.io/github/forks/freakchick/DBApi.svg?logo=GitHub)
 ![](https://img.shields.io/github/watchers/freakchick/DBApi.svg?logo=GitHub)
-![](https://img.shields.io/github/license/freakchick/DBApi.svg)
 ![](https://img.shields.io/github/v/release/freakchick/DBApi?label=latest&style=flat-square)
 
 [![EN doc](https://img.shields.io/badge/document-English-blue.svg)](README.md)
@@ -45,20 +44,23 @@
 
 
 ## 软件截图
-![](https://freakchicken.gitee.io/images/dbApi/20220503/api_list.png)
-![](https://freakchicken.gitee.io/images/dbApi/20220313/datasource_add.png)
-![](https://freakchicken.gitee.io/images/dbApi/20220503/api_edit.png)
-![](https://freakchicken.gitee.io/images/dbApi/20220503/api_edit2.png)
-![](https://freakchicken.gitee.io/images/dbApi/20210803/sql_run.png)
+![](https://freakchicken.gitee.io/images/dbApi/20230523/create_ds_page.png)
+![](https://freakchicken.gitee.io/images/dbApi/20230523/ds_page.png)
+![](https://freakchicken.gitee.io/images/dbApi/20230523/group_more.png)
+![](https://freakchicken.gitee.io/images/dbApi/20230523/api_basic.png)
+![](https://freakchicken.gitee.io/images/dbApi/20230523/api_executor.png)
+![](https://freakchicken.gitee.io/images/dbApi/20230523/api_plugin.png)
+![](https://freakchicken.gitee.io/images/dbApi/20230523/sql_debug.png)
+![](https://freakchicken.gitee.io/images/dbApi/20230523/private_api_request.png)
 
-![](https://freakchicken.gitee.io/images/dbApi/20210502/group.png)
-![](https://freakchicken.gitee.io/images/dbApi/20221001/request.png)
+![](https://freakchicken.gitee.io/images/dbApi/20230523/create_client_page.png)
+![](https://freakchicken.gitee.io/images/dbApi/20230523/client_auth_page.png)
 
-![](https://freakchicken.gitee.io/images/dbApi/20221001/app_add.png)
-![](https://freakchicken.gitee.io/images/dbApi/20221001/apps.png)
-![](https://freakchicken.gitee.io/images/dbApi/20221001/auth.png)
-![](https://freakchicken.gitee.io/images/dbApi/20210502/docs.png)
-![](https://freakchicken.gitee.io/images/dbApi/20210803/ip.png)
+![](https://freakchicken.gitee.io/images/dbApi/20230523/ip_firewall.png)
+
+![](https://freakchicken.gitee.io/images/dbApi/20230523/monitor.png)
+![](https://freakchicken.gitee.io/images/dbApi/20230523/api_record_search.png)
+
 
 ## 联系
 
