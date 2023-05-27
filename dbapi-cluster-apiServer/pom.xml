@@ -5,7 +5,7 @@
     <parent>
         <artifactId>dbapi</artifactId>
         <groupId>com.gitee.freakchicken.dbapi</groupId>
-        <version>4.0.0-beta</version>
+        <version>4.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
