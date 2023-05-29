@@ -25,7 +25,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.gitee.freakchicken.dbapi.common.ApiPluginConfig;
-import com.gitee.freakchicken.dbapi.basic.executor.ESExecutor;
 import com.gitee.freakchicken.dbapi.basic.executor.Executor;
 import com.gitee.freakchicken.dbapi.basic.executor.SQLExecutor;
 import com.gitee.freakchicken.dbapi.basic.service.ApiConfigService;
@@ -57,9 +56,6 @@ public class APIServlet extends HttpServlet {
 
     @Autowired
     SQLExecutor SQLExecutor;
-
-    @Autowired
-    ESExecutor ESExecutor;
 
     ApiConfig config;
 
@@ -125,7 +121,7 @@ public class APIServlet extends HttpServlet {
                 else if (type == Constants.API_EXECUTOR_HTTP)
                     executor = SQLExecutor;
                 else if (type == Constants.API_EXECUTOR_ES)
-                    executor = ESExecutor;
+                    executor = SQLExecutor;
                 else
                     throw new RuntimeException("Executor type unknown!");
                 Object res = executor.execute(task, requestParam);
