@@ -57,8 +57,6 @@ public class APIServlet extends HttpServlet {
     @Autowired
     SQLExecutor SQLExecutor;
 
-    ApiConfig config;
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         log.debug("servlet execute");
@@ -69,13 +67,15 @@ public class APIServlet extends HttpServlet {
             out = response.getWriter();
             ResponseDto responseDto = process(servletPath, request, response);
             // 全局数据转换
-            Object res = globalTransform(responseDto);
+            ApiConfig config = (ApiConfig) request.getAttribute("pathApiConfig");
+            Object res = globalTransform(responseDto, config);
             out.append(JSON.toJSONString(res, SerializerFeature.WriteMapNullValue));
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             ResponseDto responseDto = ResponseDto.fail(e.toString());
             // 全局数据转换
-            Object res = globalTransform(responseDto);
+            ApiConfig config = (ApiConfig) request.getAttribute("pathApiConfig");
+            Object res = globalTransform(responseDto, config);
             out.append(JSON.toJSONString(res, SerializerFeature.WriteMapNullValue));
             log.error(e.toString(), e);
         } finally {
@@ -91,11 +91,12 @@ public class APIServlet extends HttpServlet {
 
     public ResponseDto process(String path, HttpServletRequest request, HttpServletResponse response) {
         // // 校验接口是否存在
-        this.config = apiConfigService.getConfig(path);
+        ApiConfig config = apiConfigService.getConfig(path);
         if (config == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return ResponseDto.fail("Api not exists");
         }
+        request.setAttribute("pathApiConfig", config);
         try {
             Map<String, Object> requestParam = getParams(request, config);
             ApiPluginConfig cache = config.getCachePlugin();
@@ -222,12 +223,13 @@ public class APIServlet extends HttpServlet {
 
     /**
      * 全局转换数据
-     * 
+     *
      * @param responseDto
+     * @param config
      * @return
      */
-    private Object globalTransform(ResponseDto responseDto) {
-        if (this.config != null) {
+    private Object globalTransform(ResponseDto responseDto, ApiConfig config) {
+        if (config != null) {
             ApiPluginConfig globalTransformPlugin = config.getGlobalTransformPlugin();
             if (globalTransformPlugin != null) {
                 GlobalTransformPlugin plugin = PluginManager
