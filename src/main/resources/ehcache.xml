@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
+         updateCheck="false">
+    <defaultCache eternal="false" maxElementsInMemory="1000"
+                  overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="600"
+                  timeToLiveSeconds="600" memoryStoreEvictionPolicy="LRU"/>
+    <!--数据源缓存1小时-->
+    <cache name="datasource" eternal="false" maxElementsInMemory="10000"
+           overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="3600"
+           memoryStoreEvictionPolicy="LRU"/>
+    <!--api参数空闲缓存5min-->
+    <cache name="api" eternal="false" maxElementsInMemory="10000"
+           overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="300"
+           memoryStoreEvictionPolicy="LRU"/>
+
+
+</ehcache>
